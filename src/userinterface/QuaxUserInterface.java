@@ -16,11 +16,22 @@ public class QuaxUserInterface {
 	private GridPane octagonGrid;
 	private GridPane rhombusGrid;
 	
+	private GridPane window;
+	private Scene scene;
+	
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
 		
 		initialiseOctagonGrid();
 		initialiseRhombusGrid();
+		
+		initialiseWindow();
+		
+		stage.setScene(scene);
+	}
+	
+	private void initialiseWindow() {
+		this.window = new GridPane()
 	}
 	
 	private void initialiseOctagonGrid() {
@@ -51,12 +62,19 @@ public class QuaxUserInterface {
 		public void setColour(QuaxTileColour colour);
 	}
 	
-	private static class OctagonTile extends Polygon implements Tile {
+	private static class OctagonBase extends Polygon {
 		
 	}
 	
-	private static class RhombusTile extends Rectangle implements Tile {
+	private static class OctagonTile extends OctagonBase implements Tile {
 		
 	}
 	
+	private static class RhombusBase extends Rectangle {
+		
+	}
+	
+	private static class RhombusTile extends RhombusBase implements Tile {
+		
+	}
 }
