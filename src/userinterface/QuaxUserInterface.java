@@ -70,6 +70,12 @@ public class QuaxUserInterface {
 		
 		private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
 		
+		public static final double SIDELEN = sideLength(OCTAGON_WIDTH);
+		
+		public static double sideLength(double width) {
+			return width / (1 + (2 / Math.sqrt(2)));
+		}
+		
 		private static double[] generatePolygonPoints(double width) {
 			double sideLength = width / (1 + (2 / Math.sqrt(2)));
 			double halfSide = sideLength / 2;
@@ -122,11 +128,19 @@ public class QuaxUserInterface {
 	
 	private abstract static class RhombusBase extends Rectangle {
 		
+		public RhombusBase() {
+			super(OctagonBase.SIDELEN, OctagonBase.SIDELEN);
+			this.setRotate(45.0);
+		}
 	}
 	
 	private static class RhombusTile extends RhombusBase implements Tile {
 		
 		private QuaxTileColour colour;
+		
+		public RhombusTile() {
+			super();
+		}
 		
 		public void setColour(QuaxTileColour colour) {
 			this.colour = colour;
