@@ -2,6 +2,7 @@ package userinterface;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -19,6 +20,12 @@ public class QuaxUserInterface {
 	
 	private GridPane octagonGrid;
 	private GridPane rhombusGrid;
+	private StackPane board;
+	
+	// TODO these are temporary assignments for bottom and sidebar - change to appropriate types
+	private StackPane topBar;
+	private StackPane bottomBar;
+	private StackPane sideBar;
 	
 	private GridPane window;
 	private Scene scene;
@@ -36,6 +43,17 @@ public class QuaxUserInterface {
 	
 	private void initialiseWindow() {
 		this.window = new GridPane();
+		
+		this.board = new StackPane(octagonGrid, rhombusGrid);
+		this.window.add(this.board, 0, 1);
+		
+		this.topBar = new StackPane();
+		this.bottomBar = new StackPane();
+		this.sideBar = new StackPane();
+		
+		this.window.add(this.topBar, 0, 0);
+		this.window.add(this.bottomBar, 0, 2);
+		this.window.add(this.sideBar, 1, 0, 3, 1);
 	}
 	
 	private void initialiseOctagonGrid() {
