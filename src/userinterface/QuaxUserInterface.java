@@ -1,5 +1,6 @@
 package userinterface;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -34,7 +35,7 @@ public class QuaxUserInterface {
 	}
 	
 	private void initialiseWindow() {
-		this.window = new GridPane()
+		this.window = new GridPane();
 	}
 	
 	private void initialiseOctagonGrid() {
