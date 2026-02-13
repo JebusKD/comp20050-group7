@@ -1,12 +1,15 @@
 package userinterface;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import types.QuaxTileColour;
 
 public class QuaxUserInterface {
+	
+	private static final double OCTAGON_WIDTH = 50;
 
 	private Stage stage;
 	
@@ -62,15 +65,55 @@ public class QuaxUserInterface {
 		public void setColour(QuaxTileColour colour);
 	}
 	
-	private static class OctagonBase extends Polygon {
+	private abstract static class OctagonBase extends Polygon {
 		
+		private static double[] generatePolygonPoints(double width) {
+			double sideLength = width / (1 + (2 / Math.sqrt(2)));
+			double halfSide = sideLength / 2;
+			double radius = width / 2;
+			
+			return new double[] { -halfSide, radius,
+								  halfSide, radius,
+								  radius, halfSide,
+								  radius, -halfSide,
+								  halfSide, -radius,
+								  -halfSide, -radius,
+								  -radius, -halfSide,
+								  -radius, halfSide };
+		}
+		
+		public OctagonBase(double width) {
+			super(generatePolygonPoints(width));
+		}
 	}
 	
 	private static class OctagonTile extends OctagonBase implements Tile {
 		
+		private QuaxTileColour colour;
+		
+		public OctagonTile() {
+			super(OCTAGON_WIDTH);
+		}
+		
+		public void setColour(QuaxTileColour colour) {
+			this.colour = colour;
+			switch (colour) {
+			case QuaxTileColour.NONE :
+				this.setFill(Color.GRAY);
+				break;
+			case QuaxTileColour.BLACK :
+				this.setFill(Color.BLACK);
+				break;
+			case QuaxTileColour.WHITE :
+				this.setFill(Color.WHITE);
+				break;
+			}
+		}
+		
+		
 	}
 	
-	private static class RhombusBase extends Rectangle {
+	private abstract static class RhombusBase extends Rectangle {
 		
 	}
 	
