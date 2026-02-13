@@ -68,6 +68,8 @@ public class QuaxUserInterface {
 	
 	private abstract static class OctagonBase extends Polygon {
 		
+		private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
+		
 		private static double[] generatePolygonPoints(double width) {
 			double sideLength = width / (1 + (2 / Math.sqrt(2)));
 			double halfSide = sideLength / 2;
@@ -83,6 +85,10 @@ public class QuaxUserInterface {
 								  -radius, halfSide };
 		}
 		
+		public OctagonBase() {
+			super(POINTS);
+		}
+		
 		public OctagonBase(double width) {
 			super(generatePolygonPoints(width));
 		}
@@ -93,7 +99,7 @@ public class QuaxUserInterface {
 		private QuaxTileColour colour;
 		
 		public OctagonTile() {
-			super(OCTAGON_WIDTH);
+			super();
 		}
 		
 		public void setColour(QuaxTileColour colour) {
