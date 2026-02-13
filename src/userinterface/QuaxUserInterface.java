@@ -120,5 +120,21 @@ public class QuaxUserInterface {
 	
 	private static class RhombusTile extends RhombusBase implements Tile {
 		
+		private QuaxTileColour colour;
+		
+		public void setColour(QuaxTileColour colour) {
+			this.colour = colour;
+			switch (colour) {
+			case QuaxTileColour.NONE :
+				this.setFill(Color.GRAY);
+				break;
+			case QuaxTileColour.BLACK :
+				this.setFill(Color.BLACK);
+				break;
+			case QuaxTileColour.WHITE :
+				this.setFill(Color.WHITE);
+				break;
+			}
+		}
 	}
 }
