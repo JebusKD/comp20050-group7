@@ -32,13 +32,19 @@ public class QuaxUserInterface {
 
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
+		
+		initialiseStylesheets();
 
 		initialiseOctagonGrid();
 		initialiseRhombusGrid();
-
+		
 		initialiseWindow();
-
+		
 		stage.setScene(scene);
+	}
+	
+	private void initialiseStylesheets() {
+		scene.getStylesheets().add("stylesheets/tile-styling.css");
 	}
 
 	private void initialiseWindow() {
@@ -126,21 +132,25 @@ public class QuaxUserInterface {
 
 		public OctagonTile() {
 			super();
+			this.getStyleClass().add("tiletype-octagon");
 			this.setColour(QuaxTileColour.NONE);
 		}
 
 		@Override
 		public void setColour(QuaxTileColour colour) {
 			this.colour = colour;
+			this.getStyleClass().remove("tilecolour-none");
+			this.getStyleClass().remove("tilecolour-black");
+			this.getStyleClass().remove("tilecolour-white");
 			switch (colour) {
 			case QuaxTileColour.NONE :
-				this.setFill(Color.GRAY);
+				this.getStyleClass().add("tilecolour-none");
 				break;
 			case QuaxTileColour.BLACK :
-				this.setFill(Color.BLACK);
+				this.getStyleClass().add("tilecolour-black");
 				break;
 			case QuaxTileColour.WHITE :
-				this.setFill(Color.WHITE);
+				this.getStyleClass().add("tilecolour-white");
 				break;
 			}
 		}
@@ -162,21 +172,24 @@ public class QuaxUserInterface {
 
 		public RhombusTile() {
 			super();
+			this.getStyleClass().add("tiletype-rhombus");
 			this.setColour(QuaxTileColour.NONE);
 		}
 
 		@Override
 		public void setColour(QuaxTileColour colour) {
-			this.colour = colour;
+			this.getStyleClass().remove("tilecolour-none");
+			this.getStyleClass().remove("tilecolour-black");
+			this.getStyleClass().remove("tilecolour-white");
 			switch (colour) {
 			case QuaxTileColour.NONE :
-				this.setFill(Color.GRAY);
+				this.getStyleClass().add("tilecolour-none");
 				break;
 			case QuaxTileColour.BLACK :
-				this.setFill(Color.BLACK);
+				this.getStyleClass().add("tilecolour-black");
 				break;
 			case QuaxTileColour.WHITE :
-				this.setFill(Color.WHITE);
+				this.getStyleClass().add("tilecolour-white");
 				break;
 			}
 		}
