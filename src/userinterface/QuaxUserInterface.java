@@ -44,7 +44,7 @@ public class QuaxUserInterface {
 	}
 	
 	private void initialiseStylesheets() {
-		scene.getStylesheets().add("stylesheets/tile-styling.css");
+		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/tile-styling.css").toExternalForm());
 	}
 
 	private void initialiseWindow() {
