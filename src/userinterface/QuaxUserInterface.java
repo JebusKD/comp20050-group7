@@ -126,6 +126,7 @@ public class QuaxUserInterface {
 
 		public OctagonTile() {
 			super();
+			this.setColour(QuaxTileColour.NONE);
 		}
 
 		@Override
@@ -161,6 +162,7 @@ public class QuaxUserInterface {
 
 		public RhombusTile() {
 			super();
+			this.setColour(QuaxTileColour.NONE);
 		}
 
 		@Override
