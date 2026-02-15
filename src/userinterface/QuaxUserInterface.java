@@ -32,13 +32,13 @@ public class QuaxUserInterface {
 
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
-		
-		initialiseStylesheets();
 
 		initialiseOctagonGrid();
 		initialiseRhombusGrid();
 		
 		initialiseWindow();
+		
+		initialiseStylesheets();
 		
 		stage.setScene(scene);
 	}

@@ -1,1 +1,11 @@
-.tilecolour-white
+.tilecolour-none {
+	-fx-fill:gray;
+}
+
+.tilecolour-black {
+	-fx-fill:black;
+}
+
+.tilecolour-white {
+	-fx-fill:white;
+}
