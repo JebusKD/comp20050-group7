@@ -1,5 +1,6 @@
 package userinterface;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -10,7 +11,10 @@ import types.QuaxTileColour;
 
 public class QuaxUserInterface {
 
-	private static final double OCTAGON_WIDTH = 50;
+	private static final double OCTAGON_WIDTH = 100;
+	
+	private static final double OCTAGON_GRID_GAP = 1;
+	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private Stage stage;
 
@@ -66,6 +70,9 @@ public class QuaxUserInterface {
 	private void initialiseOctagonGrid() {
 		octagonGridCells = new OctagonTile[11][11];
 		octagonGrid = new GridPane();
+		octagonGrid.setAlignment(Pos.CENTER);
+		octagonGrid.setVgap(OCTAGON_GRID_GAP);
+		octagonGrid.setHgap(OCTAGON_GRID_GAP);
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
 				OctagonTile newTile = new OctagonTile();
@@ -78,6 +85,9 @@ public class QuaxUserInterface {
 	private void initialiseRhombusGrid() {
 		rhombusGridCells = new RhombusTile[11][11];
 		rhombusGrid = new GridPane();
+		rhombusGrid.setAlignment(Pos.CENTER);
+		rhombusGrid.setVgap(RHOMBUS_GRID_GAP);
+		rhombusGrid.setHgap(RHOMBUS_GRID_GAP);
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				RhombusTile newTile = new RhombusTile();
@@ -87,6 +97,10 @@ public class QuaxUserInterface {
 		}
 	}
 
+	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
+		return (oct_gap) + (oct_width - OctagonBase.sideLength(oct_width));
+	}
+	
 	private static interface Tile {
 		public void setColour(QuaxTileColour colour);
 	}
