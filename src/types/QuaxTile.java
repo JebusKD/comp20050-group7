@@ -20,7 +20,7 @@ public abstract class QuaxTile {
 		return this.group;
 	}
 	
-	public getStrategyValue() {
+	public int getStrategyValue() {
 		return this.strategyValue;
 	}
 	
