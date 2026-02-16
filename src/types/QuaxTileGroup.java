@@ -32,4 +32,10 @@ public class QuaxTileGroup {
 	public boolean isWinningGroup() {
 		return presenceLow && presenceHigh;
 	}
+	
+	public void merge(QuaxTileGroup mergee) {
+		this.members.addAll(mergee.members);
+		this.presenceLow = this.presenceLow && mergee.presenceLow;
+		this.presenceHigh = this.presenceHigh && mergee.presenceHigh;
+	}
 }
