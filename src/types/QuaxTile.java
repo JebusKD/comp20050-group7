@@ -32,6 +32,10 @@ public abstract class QuaxTile {
 		this.group = group;
 	}
 	
+	public boolean isFree() {
+		return this.colour == QuaxTileColour.NONE;
+	}
+	
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
 	}
