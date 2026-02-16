@@ -8,7 +8,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		QuaxUserInterface ui = new QuaxUserInterface(stage);
+		QuaxController controller = new QuaxController(stage);
 
 		stage.show();
 	}
