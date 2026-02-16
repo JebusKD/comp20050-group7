@@ -7,6 +7,8 @@ public class QuaxController {
 
 	public QuaxController(Stage stage) {
 		QuaxUserInterface ui = new QuaxUserInterface(stage);
+		
+		startTwoPlayerGame();
 	}
 	
 }
