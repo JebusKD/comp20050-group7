@@ -1,11 +1,14 @@
 package userinterface;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import types.QuaxTileColour;
 
@@ -32,6 +35,9 @@ public class QuaxUserInterface {
 
 	private GridPane window;
 	private Scene scene;
+	
+	private double sceneWidth;
+	private double sceneHeight;
 
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
@@ -64,7 +70,28 @@ public class QuaxUserInterface {
 		this.window.add(this.bottomBar, 0, 2);
 		this.window.add(this.sideBar, 1, 0, 3, 1);
 
-		this.scene = new Scene(this.window, 720, 480);
+		this.sceneWidth = 720;
+		this.sceneHeight = 480;
+		
+		this.scene = new Scene(this.window, sceneWidth, sceneHeight);
+		
+		this.scene.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number oldVal, Number newVal) {
+				setSceneWidth((double)newVal);
+			}
+			
+		});
+		
+		this.scene.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number oldVal, Number newVal) {
+				setSceneHeight((double)newVal);
+			}
+			
+		});
+		
+		recalculateUIScale();
 	}
 
 	private void initialiseOctagonGrid() {
@@ -96,6 +123,27 @@ public class QuaxUserInterface {
 			}
 		}
 	}
+	
+	private void recalculateUIScale() {
+		double min = Math.min(sceneWidth, sceneHeight);
+		
+		double scaleRatio = min / (11 * OCTAGON_WIDTH);
+		
+		board.setScaleX(scaleRatio);
+		board.setScaleY(scaleRatio);
+		
+		System.out.println(scaleRatio);
+	}
+	
+	private void setSceneWidth(double value) {
+		this.sceneWidth = value;
+		recalculateUIScale();
+	}
+	
+	private void setSceneHeight(double value) {
+		this.sceneHeight = value;
+		recalculateUIScale();
+	}
 
 	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
 		return (oct_gap) + (oct_width - OctagonBase.sideLength(oct_width));
@@ -110,7 +158,7 @@ public class QuaxUserInterface {
 		private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
 
 		public static final double SIDELEN = sideLength(OCTAGON_WIDTH);
-
+		
 		public static double sideLength(double width) {
 			return width / (1 + (2 / Math.sqrt(2)));
 		}
