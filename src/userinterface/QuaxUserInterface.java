@@ -59,16 +59,22 @@ public class QuaxUserInterface {
 	private void initialiseWindow() {
 		this.window = new GridPane();
 
+		// TODO debug, remove
+		window.setGridLinesVisible(true);
+		
 		this.board = new StackPane(octagonGrid, rhombusGrid);
 		this.window.add(this.board, 0, 1);
 
 		this.topBar = new StackPane();
+		topBar.getChildren().add(new Rectangle(50, 50));
 		this.bottomBar = new StackPane();
+		bottomBar.getChildren().add(new Rectangle(50, 50));
 		this.sideBar = new StackPane();
-
+		sideBar.getChildren().add(new Rectangle(50, 680));
+	
 		this.window.add(this.topBar, 0, 0);
 		this.window.add(this.bottomBar, 0, 2);
-		this.window.add(this.sideBar, 1, 0, 3, 1);
+		this.window.add(this.sideBar, 1, 0, 1, 3);
 
 		this.sceneWidth = 720;
 		this.sceneHeight = 480;
@@ -124,14 +130,14 @@ public class QuaxUserInterface {
 		}
 	}
 	
-	private void recalculateUIScale() {
+	private void recalculateUIScale() {/*
 		double min = Math.min(sceneWidth, sceneHeight);
 		
 		double scaleRatio = min / (11 * OCTAGON_WIDTH);
 		
 		board.setScaleX(scaleRatio);
 		board.setScaleY(scaleRatio);
-
+*/
 	}
 	
 	private void setSceneWidth(double value) {
