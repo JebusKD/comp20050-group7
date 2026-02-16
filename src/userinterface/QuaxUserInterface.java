@@ -131,8 +131,7 @@ public class QuaxUserInterface {
 		
 		board.setScaleX(scaleRatio);
 		board.setScaleY(scaleRatio);
-		
-		System.out.println(scaleRatio);
+
 	}
 	
 	private void setSceneWidth(double value) {
