@@ -12,10 +12,12 @@ public class BoardMaking {
     private GridPane rhombusGrid;
     private final double octDiameter = 68;
     private StackPane board;
+    public static int Turn;
 
     public BoardMaking() {
          octagonGrid = new GridPane();
          rhombusGrid = new GridPane();
+         Turn = 1;
 
         makeOctagonalGrid();
         makeRhombusGrid();

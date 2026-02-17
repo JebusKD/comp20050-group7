@@ -27,14 +27,20 @@ public class Octagon extends Polygon{
     }
 
     private void octagonClicked(){
-        if(this.getFill().equals(Color.THISTLE)){
-            this.setFill(Color.BLACK);
+
+        if(BoardMaking.Turn == 1){
+            if(this.getFill().equals(Color.THISTLE)){
+                this.setFill(Color.BLACK);
+                BoardMaking.Turn = 0;
+            }
         }
-        else if(this.getFill().equals(Color.BLACK)){
-            this.setFill(Color.WHITE);
-        }
-        else if(this.getFill().equals(Color.WHITE)){
-            this.setFill(Color.BLACK);
+
+        else if(BoardMaking.Turn == 0){
+            if(this.getFill().equals(Color.THISTLE)){
+                this.setFill(Color.WHITE);
+                BoardMaking.Turn = 1;
+            }
+
         }
 
     }
