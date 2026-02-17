@@ -2,7 +2,9 @@ package controller;
 
 import javafx.stage.Stage;
 import model.QuaxBoard;
+import player.HumanPlayer;
 import player.QuaxPlayer;
+import types.QuaxTileColour;
 import userinterface.QuaxUserInterface;
 
 public class QuaxController {
