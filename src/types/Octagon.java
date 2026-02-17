@@ -10,6 +10,7 @@ public class Octagon extends QuaxTile {
 		this.yPos = y;
 	}
 	
+	@Override
 	public boolean onLow() {
 		if (isFree()) return false;
 		
@@ -18,6 +19,7 @@ public class Octagon extends QuaxTile {
 		else return xPos == 0;
 	}
 	
+	@Override
 	public boolean onHigh() {
 		if (isFree()) return false;
 		
