@@ -10,6 +10,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import model.QuaxBoard;
 import types.QuaxTileColour;
 
 public class QuaxUserInterface {
@@ -130,6 +131,21 @@ public class QuaxUserInterface {
 		}
 	}
 	
+	public void setBoard(QuaxBoard b) {
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				octagonGridCells[i][j].setColour(b.getOctagon(i, j).getColour());
+			}
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				rhombusGridCells[i][j].setColour(b.getRhombus(i, j).getColour());
+			}
+		}
+	}
+	
+	// TODO fix or delete
 	private void recalculateUIScale() {/*
 		double min = Math.min(sceneWidth, sceneHeight);
 		

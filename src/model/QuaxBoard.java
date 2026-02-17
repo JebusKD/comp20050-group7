@@ -24,4 +24,12 @@ public class QuaxBoard {
 			}
 		}
 	}
+	
+	public Octagon getOctagon(int x, int y) {
+		return octagonGrid[x][y];
+	}
+	
+	public Rhombus getRhombus(int x, int y) {
+		return rhombusGrid[x][y];
+	}
 }
