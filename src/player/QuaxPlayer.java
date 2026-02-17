@@ -19,4 +19,6 @@ public abstract class QuaxPlayer {
 			throw new IllegalArgumentException("Player cannot be assigned to no colour.");
 		else this.colour = colour;
 	}
+	
+	public abstract int[] movePrompt();
 }
