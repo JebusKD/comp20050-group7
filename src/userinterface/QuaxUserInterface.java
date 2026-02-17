@@ -1,8 +1,11 @@
 package userinterface;
 
+import controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -12,6 +15,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
+import types.QuaxCoordinateEvent;
 
 public class QuaxUserInterface {
 
@@ -21,7 +25,7 @@ public class QuaxUserInterface {
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private Stage stage;
-
+	
 	private OctagonTile[][] octagonGridCells;
 	private RhombusTile[][] rhombusGridCells;
 
@@ -48,9 +52,12 @@ public class QuaxUserInterface {
 		
 		initialiseWindow();
 		
+		initialiseEventHandlers();
 		initialiseStylesheets();
 		
 		stage.setScene(scene);
+		
+		stage.show();
 	}
 	
 	private void initialiseStylesheets() {
@@ -101,6 +108,17 @@ public class QuaxUserInterface {
 		recalculateUIScale();
 	}
 
+	private void initialiseEventHandlers() {
+		scene.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
+
+			@Override
+			public void handle(QuaxCoordinateEvent coords) {
+				System.out.println("x = " + coords.x() + ", y = " + coords.y());
+			}
+			
+		});
+	}
+	
 	private void initialiseOctagonGrid() {
 		octagonGridCells = new OctagonTile[11][11];
 		octagonGrid = new GridPane();
@@ -168,6 +186,10 @@ public class QuaxUserInterface {
 
 	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
 		return (oct_gap) + (oct_width - OctagonBase.sideLength(oct_width));
+	}
+	
+	public Scene getScene() {
+		return this.scene;
 	}
 	
 	private static interface Tile {

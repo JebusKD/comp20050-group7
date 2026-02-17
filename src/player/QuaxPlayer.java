@@ -1,13 +1,22 @@
 package player;
 
+import controller.QuaxController;
+import javafx.event.Event;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import types.QuaxCoordinate;
+import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
 
 public abstract class QuaxPlayer {
 
 	private QuaxTileColour colour;
 	
-	public QuaxPlayer(QuaxTileColour colour) {
+	private Scene scene;
+	
+	public QuaxPlayer(QuaxTileColour colour, Scene scene) {
 		this.setColour(colour);
+		this.scene = scene;
 	}
 	
 	public QuaxTileColour getColour() {
@@ -20,5 +29,11 @@ public abstract class QuaxPlayer {
 		else this.colour = colour;
 	}
 	
-	public abstract int[] movePrompt();
+	public abstract void movePrompt();
+	
+	protected void submitMove(QuaxCoordinate move) {
+		QuaxCoordinateEvent submission = new QuaxCoordinateEvent(QuaxController.MOVE_SUBMITTED_EVENT, move);
+		
+		Event.fireEvent(scene, submission);
+	}
 }
