@@ -40,6 +40,7 @@ public abstract class QuaxTile {
 		this.strategyValue = value;
 	}
 	
+	public abstract QuaxCoordinate getCoordinates();
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
 	
