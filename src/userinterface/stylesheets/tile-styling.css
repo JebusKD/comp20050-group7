@@ -3,9 +3,9 @@
 }
 
 .tilecolour-black {
-	-fx-fill:midnight-blue;
+	-fx-fill:#191970;
 }
 
 .tilecolour-white {
-	-fx-fill:antique-white;
+	-fx-fill:#fff5ee;
 }
