@@ -19,10 +19,6 @@ public class QuaxCoordinate {
 		return this.y;
 	}
 	
-	public int[] coordinates() {
-		return new int[] {x, y};
-	}
-	
 	public boolean isOctagonMove() {
 		return octagonMove;
 	}
