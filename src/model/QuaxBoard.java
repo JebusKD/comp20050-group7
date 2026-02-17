@@ -3,12 +3,12 @@ package model;
 import types.Octagon;
 import types.Rhombus;
 
-public class Board {
+public class QuaxBoard {
 
 	private Octagon[][] octagonGrid;
 	private Rhombus[][] rhombusGrid;
 	
-	public Board() {
+	public QuaxBoard() {
 		this.octagonGrid = new Octagon[11][11];
 		this.rhombusGrid = new Rhombus[10][10];
 		
