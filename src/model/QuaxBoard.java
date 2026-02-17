@@ -1,6 +1,8 @@
 package model;
 
 import types.Octagon;
+import types.QuaxCoordinate;
+import types.QuaxTileColour;
 import types.Rhombus;
 
 public class QuaxBoard {
@@ -31,5 +33,25 @@ public class QuaxBoard {
 	
 	public Rhombus getRhombus(int x, int y) {
 		return rhombusGrid[x][y];
+	}
+	
+	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
+		if (q.isOctagonMove()) {
+			Octagon tile = getOctagon(q.x(), q.y());
+			if (tile.getColour() != QuaxTileColour.NONE) return false;
+		} else {
+			Rhombus tile = getRhombus(q.x(), q.y());
+			if (tile.getColour() != QuaxTileColour.NONE) return false;
+		}
+		return true;
+	}
+	
+	public void setColour(QuaxCoordinate q, QuaxTileColour c) {
+		if (q.isOctagonMove()) {
+			octagonGrid[q.x()][q.y()].setColour(c);
+		}
+		else {
+			rhombusGrid[q.x()][q.y()].setColour(c);
+		}
 	}
 }

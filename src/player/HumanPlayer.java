@@ -1,7 +1,5 @@
 package player;
 
-import java.util.Scanner;
-
 import controller.QuaxController;
 import javafx.event.Event;
 import javafx.event.EventHandler;

@@ -162,6 +162,12 @@ public class QuaxUserInterface {
 		}
 	}
 	
+	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
+		if (q.isOctagonMove())
+			octagonGridCells[q.x()][q.y()].setColour(c);
+		else rhombusGridCells[q.x()][q.y()].setColour(c);
+	}
+	
 	// TODO fix or delete
 	private void recalculateUIScale() {/*
 		double min = Math.min(sceneWidth, sceneHeight);
