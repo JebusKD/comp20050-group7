@@ -1,9 +1,9 @@
 package types;
 
 public class QuaxCoordinate {
-	private int x;
-	private int y;
-	private boolean octagonMove;
+	private final int x;
+	private final int y;
+	private final boolean octagonMove;
 	
 	public QuaxCoordinate(int x, int y, boolean octagonMove) {
 		this.x = x;
