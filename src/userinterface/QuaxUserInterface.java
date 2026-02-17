@@ -8,9 +8,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
@@ -39,9 +43,10 @@ public class QuaxUserInterface {
 	// TODO these are temporary assignments for bottom and sidebar - change to appropriate types
 	private StackPane topBar;
 	private StackPane bottomBar;
-	private StackPane sideBar;
+	private VBox sideBar;
 
-	private GridPane window;
+	private StackPane window;
+	private GridPane regions;
 	private Scene scene;
 	
 	private double sceneWidth;
@@ -69,24 +74,32 @@ public class QuaxUserInterface {
 	}
 
 	private void initialiseWindow() {
-		this.window = new GridPane();
+		this.regions = new GridPane();
+		this.window = new StackPane(regions);
+		window.setAlignment(Pos.CENTER);
+		regions.setAlignment(Pos.CENTER);
 
 		// TODO debug, remove
-		window.setGridLinesVisible(true);
+		regions.setGridLinesVisible(true);
 		
 		this.board = new StackPane(octagonGrid, rhombusGrid);
-		this.window.add(this.board, 0, 1);
+		this.regions.add(this.board, 0, 1);
 
 		this.topBar = new StackPane();
 		topBar.getChildren().add(new Rectangle(50, 50));
 		this.bottomBar = new StackPane();
 		bottomBar.getChildren().add(new Rectangle(50, 50));
-		this.sideBar = new StackPane();
-		sideBar.getChildren().add(new Rectangle(50, 680));
+		
+		this.sideBar = new VBox();
+		sideBar.getChildren().add(new Button("New 2-Player Game"));
+		sideBar.getChildren().add(new Button("New Game vs. Bot"));
+		sideBar.getChildren().add(new Button("Show Strategy"));
+		sideBar.getChildren().add(new Button("Hide Strategy"));
+		
 	
-		this.window.add(this.topBar, 0, 0);
-		this.window.add(this.bottomBar, 0, 2);
-		this.window.add(this.sideBar, 1, 0, 1, 3);
+		this.regions.add(this.topBar, 0, 0);
+		this.regions.add(this.bottomBar, 0, 2);
+		this.regions.add(this.sideBar, 1, 0, 1, 3);
 
 		this.sceneWidth = 720;
 		this.sceneHeight = 480;
