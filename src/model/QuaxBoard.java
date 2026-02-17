@@ -2,6 +2,7 @@ package model;
 
 import types.Octagon;
 import types.QuaxCoordinate;
+import types.QuaxTile;
 import types.QuaxTileColour;
 import types.Rhombus;
 
@@ -9,6 +10,8 @@ public class QuaxBoard {
 
 	private Octagon[][] octagonGrid;
 	private Rhombus[][] rhombusGrid;
+	
+	private QuaxCoordinate previousMove;
 	
 	public QuaxBoard() {
 		this.octagonGrid = new Octagon[11][11];
@@ -25,6 +28,8 @@ public class QuaxBoard {
 				rhombusGrid[i][j] = new Rhombus(i, j);
 			}
 		}
+		
+		this.previousMove = null;
 	}
 	
 	public Octagon getOctagon(int x, int y) {
@@ -33,6 +38,11 @@ public class QuaxBoard {
 	
 	public Rhombus getRhombus(int x, int y) {
 		return rhombusGrid[x][y];
+	}
+	
+	public QuaxTile getTile(QuaxCoordinate c) {
+		if (c.isOctagonMove()) return octagonGrid[c.x()][c.y()];
+		else return rhombusGrid[c.x()][c.y()];
 	}
 	
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
@@ -48,12 +58,18 @@ public class QuaxBoard {
 		return true;
 	}
 	
-	public void setColour(QuaxCoordinate q, QuaxTileColour c) {
+	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
 		if (q.isOctagonMove()) {
 			octagonGrid[q.x()][q.y()].setColour(c);
+			
 		}
 		else {
 			rhombusGrid[q.x()][q.y()].setColour(c);
 		}
+		this.previousMove = q;
+	}
+	
+	public QuaxCoordinate previousMove() {
+		return previousMove;
 	}
 }

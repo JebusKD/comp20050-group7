@@ -175,6 +175,11 @@ public class QuaxUserInterface {
 		}
 	}
 	
+	public void fetchPreviousMove(QuaxBoard b) {
+		QuaxCoordinate previousMove = b.previousMove();
+		if (previousMove != null) this.setTile(previousMove, b.getTile(previousMove).getColour());
+	}
+	
 	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
 		if (q.isOctagonMove())
 			octagonGridCells[q.x()][q.y()].setColour(c);

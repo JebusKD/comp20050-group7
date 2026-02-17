@@ -69,11 +69,10 @@ public class QuaxController {
 	public void makeMove(QuaxCoordinate coords) {
 		QuaxTileColour c = curPlayer().getColour();
 		if (board.validMove(coords, c)) {
-			System.out.println("in octagon: " + coords.isOctagonMove() + ", x = " + coords.x() + ", y = " + coords.y());
-			board.setColour(coords, c);
+			board.makeMove(coords, c);
 			moveNumber++;
 			
-			ui.setTile(coords, c);
+			ui.fetchPreviousMove(board);
 			
 			curPlayer().movePrompt();
 		}
