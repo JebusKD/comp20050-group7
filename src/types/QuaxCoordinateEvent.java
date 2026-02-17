@@ -9,6 +9,7 @@ public class QuaxCoordinateEvent extends Event {
 	
 	private QuaxCoordinate coord;
 	
+	
 	public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
 		super(t);
 		this.coord = q;
@@ -28,5 +29,9 @@ public class QuaxCoordinateEvent extends Event {
 	
 	public boolean rhombus() {
 		return coord.isRhombusMove();
+	}
+	
+	public QuaxCoordinate coords() {
+		return this.coord;
 	}
 }

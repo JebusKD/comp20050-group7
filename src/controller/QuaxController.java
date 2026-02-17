@@ -1,11 +1,13 @@
 package controller;
 
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import player.HumanPlayer;
 import player.QuaxPlayer;
+import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
 import userinterface.QuaxUserInterface;
@@ -13,6 +15,7 @@ import userinterface.QuaxUserInterface;
 public class QuaxController {
 	
 	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
+	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
 	
 	private QuaxUserInterface ui;
 
@@ -25,6 +28,25 @@ public class QuaxController {
 		ui = new QuaxUserInterface(stage);
 		
 		players = new QuaxPlayer[2];
+		
+		stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
+			@Override
+			public void handle(QuaxCoordinateEvent coords) {
+				
+				if (curPlayer() instanceof HumanPlayer) {
+					makeMove(coords.coords());
+				}
+				
+			}
+			
+		});
+		
+		stage.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
+			@Override
+			public void handle(QuaxCoordinateEvent coords) {
+					makeMove(coords.coords());
+			}
+		});
 		
 		startTwoPlayerGame();
 	}
@@ -44,9 +66,12 @@ public class QuaxController {
 		return players[moveNumber % 2];
 	}
 	
-	private void makeMove(int[] move) {
-		board.getOctagon(move[0], move[1]).setColour(curPlayer().getColour());
+	public void makeMove(QuaxCoordinate coords) {
+		if (board.validMove(coords), curPlayer().getColour()) {
+			System.out.println("in octagon: " + coords.isOctagonMove() + ", x = " + coords.x() + ", y = " + coords.y());
+			moveNumber++;
+		}
+		else throw IllegalArgumentException("Invalid move made.");
 	}
-	
 	
 }

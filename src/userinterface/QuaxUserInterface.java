@@ -3,10 +3,12 @@ package userinterface;
 import controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
@@ -15,6 +17,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
+import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 
 public class QuaxUserInterface {
@@ -43,6 +46,7 @@ public class QuaxUserInterface {
 	
 	private double sceneWidth;
 	private double sceneHeight;
+
 
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
@@ -109,14 +113,7 @@ public class QuaxUserInterface {
 	}
 
 	private void initialiseEventHandlers() {
-		scene.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
-
-			@Override
-			public void handle(QuaxCoordinateEvent coords) {
-				System.out.println("x = " + coords.x() + ", y = " + coords.y());
-			}
-			
-		});
+		
 	}
 	
 	private void initialiseOctagonGrid() {
@@ -125,9 +122,10 @@ public class QuaxUserInterface {
 		octagonGrid.setAlignment(Pos.CENTER);
 		octagonGrid.setVgap(OCTAGON_GRID_GAP);
 		octagonGrid.setHgap(OCTAGON_GRID_GAP);
+		octagonGrid.setPickOnBounds(false);
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
-				OctagonTile newTile = new OctagonTile();
+				OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
 				octagonGridCells[i][j] = newTile;
 				octagonGrid.add(newTile, i, j);
 			}
@@ -140,9 +138,10 @@ public class QuaxUserInterface {
 		rhombusGrid.setAlignment(Pos.CENTER);
 		rhombusGrid.setVgap(RHOMBUS_GRID_GAP);
 		rhombusGrid.setHgap(RHOMBUS_GRID_GAP);
+		rhombusGrid.setPickOnBounds(false);
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				RhombusTile newTile = new RhombusTile();
+				RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
 				rhombusGridCells[i][j] = newTile;
 				rhombusGrid.add(newTile, i, j);
 			}
@@ -194,6 +193,7 @@ public class QuaxUserInterface {
 	
 	private static interface Tile {
 		public void setColour(QuaxTileColour colour);
+		public QuaxCoordinate getCoordinate();
 	}
 
 	private abstract static class OctagonBase extends Polygon {
@@ -233,11 +233,27 @@ public class QuaxUserInterface {
 	private static class OctagonTile extends OctagonBase implements Tile {
 
 		private QuaxTileColour colour;
+		private QuaxCoordinate coordinate;
 
-		public OctagonTile() {
+		public OctagonTile(QuaxCoordinate coordinate) {
 			super();
 			this.getStyleClass().add("tiletype-octagon");
 			this.setColour(QuaxTileColour.NONE);
+			this.coordinate = coordinate;
+			
+			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+				}
+				
+			});
+		}
+		
+		@Override
+		public QuaxCoordinate getCoordinate() {
+			return this.coordinate;
 		}
 
 		@Override
@@ -273,11 +289,27 @@ public class QuaxUserInterface {
 	private static class RhombusTile extends RhombusBase implements Tile {
 
 		private QuaxTileColour colour;
+		private QuaxCoordinate coordinate;
 
-		public RhombusTile() {
+		public RhombusTile(QuaxCoordinate coordinate) {
 			super();
 			this.getStyleClass().add("tiletype-rhombus");
 			this.setColour(QuaxTileColour.NONE);
+			this.coordinate = coordinate;
+			
+			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+				}
+				
+			});
+		}
+		
+		@Override
+		public QuaxCoordinate getCoordinate() {
+			return this.coordinate;
 		}
 
 		@Override
