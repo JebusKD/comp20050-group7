@@ -210,7 +210,24 @@ public class QuaxUserInterface {
 	}
 	
 	private void grantGroupOutline(RhombusTile t, List<QuaxTileGroup> g, QuaxCoordinate c, QuaxBoard b) {
-		t.getStyleClass().remove("tileoutline-1");
+		t.getStyleClass().remove("tileoutline-base");
+		for (int i = 0; i <= 7; i++) {
+			t.getStyleClass().remove("tileoutline-" + i);
+		}
+		
+		QuaxTile t_b = b.getTile(c);
+		QuaxTileGroup g_i = t_b.getGroup();
+		if (g_i != null) {
+			t.getStyleClass().add("tileoutline-base");
+			boolean flag = false;
+			for (int i = 0; i < 7 && !flag; i++) {
+				if (g.get(i) == g_i) {
+					flag = true;
+					t.getStyleClass().add("tileoutline-" + i);
+				}
+			}
+			if (!flag) t.getStyleClass().add("tileoutline-7");
+		}
 	}
 	
 	public void fetchPreviousMove(QuaxBoard b) {
