@@ -35,8 +35,8 @@ public class QuaxTileGroup {
 	}
 	
 	public void merge(QuaxTileGroup mergee) {
-		this.presenceLow = this.presenceLow && mergee.presenceLow;
-		this.presenceHigh = this.presenceHigh && mergee.presenceHigh;
+		this.presenceLow = this.presenceLow || mergee.presenceLow;
+		this.presenceHigh = this.presenceHigh || mergee.presenceHigh;
 		
 		this.members.addAll(mergee.members);
 		for (QuaxTile t : mergee.members) {
