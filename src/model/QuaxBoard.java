@@ -169,6 +169,7 @@ public class QuaxBoard {
 	}
 	
 	public boolean checkForWinningMove() {
+		if (this.previousMove == null) return false;
 		return getTile(this.previousMove).getGroup().isWinningGroup();
 	}
 	
