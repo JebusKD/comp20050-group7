@@ -55,6 +55,8 @@ public class QuaxBoard {
 	}
 	
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
+		if (checkForWinningMove()) return false;
+		
 		/* TODO this fulfils sprint 2, feature 1. */
 		/* It's been temporarily disabled. Simply uncomment when needed. */
 		/* if (q.isOctagonMove()) {
