@@ -72,7 +72,8 @@ public class QuaxController {
 			board.makeMove(coords, c);
 			moveNumber++;
 			
-			ui.fetchPreviousMove(board);
+			ui.setBoard(board);
+			//ui.fetchPreviousMove(board);
 			
 			curPlayer().movePrompt();
 		}
