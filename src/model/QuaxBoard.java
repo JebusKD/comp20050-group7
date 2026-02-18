@@ -68,7 +68,7 @@ public class QuaxBoard {
 	}
 	
 	public QuaxTile[][] neighbours(QuaxCoordinate q) {
-		System.out.println("Neighbours called.");
+		
 		QuaxTile[][] neighbours;
 		if (q.isOctagonMove()) {
 			neighbours = new QuaxTile[3][3];
