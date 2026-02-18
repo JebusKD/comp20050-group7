@@ -1,5 +1,7 @@
 package userinterface;
 
+import java.util.List;
+
 import controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,8 +23,10 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
+import types.QuaxTileGroup;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
+import types.QuaxTile;
 
 public class QuaxUserInterface {
 
@@ -162,17 +166,51 @@ public class QuaxUserInterface {
 	}
 	
 	public void setBoard(QuaxBoard b) {
+		
+		// TODO debug method for groups
+		List<QuaxTileGroup> g = b.getGroups();
+		
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
-				octagonGridCells[i][j].setColour(b.getOctagon(i, j).getColour());
+				OctagonTile o = octagonGridCells[i][j];
+				o.setColour(b.getOctagon(i, j).getColour());
+				grantGroupOutline(o, g, new QuaxCoordinate(i, j, true), b);
 			}
 		}
 		
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				rhombusGridCells[i][j].setColour(b.getRhombus(i, j).getColour());
+				RhombusTile r = rhombusGridCells[i][j];
+				r.setColour(b.getRhombus(i, j).getColour());
+				grantGroupOutline(r, g, new QuaxCoordinate(i, j, false), b);
 			}
 		}
+	}
+	// TODO Remove debug method for visualising groups
+	private void grantGroupOutline(OctagonTile t, List<QuaxTileGroup> g, QuaxCoordinate c, QuaxBoard b) {
+		t.getStyleClass().remove("tileoutline-base");
+		for (int i = 0; i <= 7; i++) {
+			t.getStyleClass().remove("tileoutline-" + i);
+		}
+		
+		QuaxTile t_b = b.getTile(c);
+		QuaxTileGroup g_i = t_b.getGroup();
+		if (g_i != null) {
+			t.getStyleClass().add("tileoutline-base");
+			boolean flag = false;
+			for (int i = 0; i < 7 && !flag; i++) {
+				if (g.get(i) == g_i) {
+					flag = true;
+					t.getStyleClass().add("tileoutline-" + i);
+				}
+			}
+			if (!flag) t.getStyleClass().add("tileoutline-7");
+		}
+		
+	}
+	
+	private void grantGroupOutline(RhombusTile t, List<QuaxTileGroup> g, QuaxCoordinate c, QuaxBoard b) {
+		t.getStyleClass().remove("tileoutline-1");
 	}
 	
 	public void fetchPreviousMove(QuaxBoard b) {

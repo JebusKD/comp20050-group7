@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import types.Octagon;
 import types.QuaxCoordinate;
@@ -159,6 +160,10 @@ public class QuaxBoard {
 		this.previousMove = q;
 		if (checkForWinningMove())
 			System.out.println("Game won!");
+	}
+	
+	public List<QuaxTileGroup> getGroups() {
+		return this.trackedGroups;
 	}
 	
 	public boolean checkForWinningMove() {
