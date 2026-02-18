@@ -157,6 +157,12 @@ public class QuaxBoard {
 		t.setColour(c);
 		assignGroup(t);
 		this.previousMove = q;
+		if (checkForWinningMove())
+			System.out.println("Game won!");
+	}
+	
+	public boolean checkForWinningMove() {
+		return getTile(this.previousMove).getGroup().isWinningGroup();
 	}
 	
 	public QuaxCoordinate previousMove() {
