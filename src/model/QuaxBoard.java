@@ -1,9 +1,12 @@
 package model;
 
+import java.util.ArrayList;
+
 import types.Octagon;
 import types.QuaxCoordinate;
 import types.QuaxTile;
 import types.QuaxTileColour;
+import types.QuaxTileGroup;
 import types.Rhombus;
 
 public class QuaxBoard {
@@ -80,25 +83,47 @@ public class QuaxBoard {
 			if (minusY >= 0) neighbours[1][0] = octagonGrid[q.x()][minusY];
 			if (plusY <= 10) neighbours[1][2] = octagonGrid[q.x()][plusY];
 		}
-		else return null;
+		else {
+			neighbours = new Octagon[2][2];
+			int plusX = q.x() + 1,
+				plusY = q.y() + 1;
+			neighbours[0][0] = octagonGrid[q.x()][q.y()];
+			neighbours[0][1] = octagonGrid[q.x()][plusY];
+			neighbours[1][0] = octagonGrid[plusX][q.y()];
+			neighbours[1][1] = octagonGrid[plusX][plusY];
+		};
 		return neighbours;
 	}
 	
-	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
-		if (q.isOctagonMove()) {
-			Octagon o = octagonGrid[q.x()][q.y()];
-			o.setColour(c);
-			for (QuaxTile[] t_a : neighbours(q)) {
-				for (QuaxTile t : t_a) {
-					System.out.println("tile check");
-					if (t != null) t.setColour(c);
-				}
+	private void assignGroup(QuaxTile newTile, QuaxTile[][] neighbours) {
+		QuaxTileColour c = newTile.getColour();
+		if (c == QuaxTileColour.NONE) throw new IllegalArgumentException("Tile with no colour cannot be a member of a group.");
+		ArrayList<QuaxTileGroup> nearGroups = new ArrayList<QuaxTileGroup>(4);
+		for (QuaxTile[] t_a : neighbours) {
+			for (QuaxTile t : t_a) {
+				if (t.getColour().equals(c) && !(nearGroups.contains(t.getGroup())))
+					nearGroups.add(t.getGroup());
 			}
+		}
+		
+		if (nearGroups.size() == 0)
+			trackGroup(new QuaxTileGroup(newTile));
+		else {
 			
 		}
-		else {
-			rhombusGrid[q.x()][q.y()].setColour(c);
+	}
+	
+	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
+		QuaxTile t;
+		if (q.isOctagonMove()) {
+			t = octagonGrid[q.x()][q.y()];
 		}
+		else {
+			t = rhombusGrid[q.x()][q.y()];
+			
+		}
+		t.setColour(c);
+		assignGroup(t, neighbours(q));
 		this.previousMove = q;
 	}
 	

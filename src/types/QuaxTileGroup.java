@@ -24,6 +24,7 @@ public class QuaxTileGroup {
 	}
 	
 	public void addTile(QuaxTile tile) {
+		tile.setGroup(this);
 		members.addFirst(tile);
 		if (tile.onLow()) presenceLow = true;
 		if (tile.onHigh()) presenceHigh = true;
