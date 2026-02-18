@@ -58,14 +58,14 @@ public class QuaxBoard {
 		if (checkForWinningMove()) return false;
 		
 		/* TODO this fulfils sprint 2, feature 1. */
-		/* It's been temporarily disabled. Simply uncomment when needed. */
-		/* if (q.isOctagonMove()) {
+		// We need to swap the feature roadmap to reflect this.
+		if (q.isOctagonMove()) {
 			Octagon tile = getOctagon(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
 		} else {
 			Rhombus tile = getRhombus(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
-		} */
+		}
 		return true;
 	}
 	
