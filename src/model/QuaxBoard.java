@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import types.Octagon;
 import types.QuaxCoordinate;
@@ -16,9 +17,13 @@ public class QuaxBoard {
 	
 	private QuaxCoordinate previousMove;
 	
+	private LinkedList<QuaxTileGroup> trackedGroups;
+	
 	public QuaxBoard() {
 		this.octagonGrid = new Octagon[11][11];
 		this.rhombusGrid = new Rhombus[10][10];
+		
+		this.trackedGroups = new LinkedList<QuaxTileGroup>();
 		
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
@@ -95,13 +100,17 @@ public class QuaxBoard {
 		return neighbours;
 	}
 	
-	private void assignGroup(QuaxTile newTile, QuaxTile[][] neighbours) {
+	private void assignGroup(QuaxTile newTile) {
+		QuaxTile[][] neighbours = neighbours(newTile.getCoordinates());
+		
 		QuaxTileColour c = newTile.getColour();
 		if (c == QuaxTileColour.NONE) throw new IllegalArgumentException("Tile with no colour cannot be a member of a group.");
+		
 		ArrayList<QuaxTileGroup> nearGroups = new ArrayList<QuaxTileGroup>(4);
+		
 		for (QuaxTile[] t_a : neighbours) {
 			for (QuaxTile t : t_a) {
-				if (t.getColour().equals(c) && !(nearGroups.contains(t.getGroup())))
+				if (t != null && t.getColour().equals(c) && !(nearGroups.contains(t.getGroup())))
 					nearGroups.add(t.getGroup());
 			}
 		}
@@ -109,8 +118,31 @@ public class QuaxBoard {
 		if (nearGroups.size() == 0)
 			trackGroup(new QuaxTileGroup(newTile));
 		else {
-			
+			int maxSize = -1;
+			QuaxTileGroup biggestGroup = null;
+			for (QuaxTileGroup g : nearGroups) {
+				if (g.size() > maxSize) {
+					biggestGroup = g;
+					maxSize = g.size();
+				}
+			}
+			biggestGroup.addTile(newTile);
+			for (QuaxTileGroup g : nearGroups) {
+				if (g != biggestGroup) {
+					biggestGroup.merge(g);
+					untrackGroup(g);
+				}
+			}
 		}
+	}
+	
+	private void trackGroup(QuaxTileGroup g) {
+		this.trackedGroups.addFirst(g);
+		System.out.println("New group tracked. Size = " + g.size());
+	}
+	
+	private void untrackGroup(QuaxTileGroup g) {
+		this.trackedGroups.remove(g);
 	}
 	
 	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
@@ -123,7 +155,7 @@ public class QuaxBoard {
 			
 		}
 		t.setColour(c);
-		assignGroup(t, neighbours(q));
+		assignGroup(t);
 		this.previousMove = q;
 	}
 	
