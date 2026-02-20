@@ -65,7 +65,6 @@ public class QuaxUserInterface {
 		
 		initialiseWindow();
 		
-		initialiseEventHandlers();
 		initialiseStylesheets();
 		
 		stage.setScene(scene);
@@ -114,10 +113,6 @@ public class QuaxUserInterface {
 		
 		this.scene = new Scene(this.window, sceneWidth, sceneHeight);
 
-	}
-
-	private void initialiseEventHandlers() {
-		
 	}
 	
 	private void initialiseOctagonGrid() {
