@@ -15,22 +15,6 @@ import types.QuaxTileColour;
 
 class TestOctagon {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
 	@Test
 	void testOctagonCoordinates1() {
 		QuaxTile t = new Octagon(5, 2);
