@@ -17,6 +17,8 @@ public class QuaxController {
 	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
 	
+	private Stage stage;
+	
 	private QuaxUserInterface ui;
 
 	private QuaxBoard board;
@@ -25,6 +27,7 @@ public class QuaxController {
 	int moveNumber;
 	
 	public QuaxController(Stage stage) {
+		this.stage = stage;
 		ui = new QuaxUserInterface(stage);
 		
 		players = new QuaxPlayer[2];
@@ -55,8 +58,8 @@ public class QuaxController {
 		this.board = new QuaxBoard();
 		ui.setBoard(board);
 		
-		players[0] = new HumanPlayer("Player 1", QuaxTileColour.BLACK, ui.getScene());
-		players[1] = new HumanPlayer("Player 2", QuaxTileColour.WHITE, ui.getScene());
+		players[0] = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
+		players[1] = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
 		moveNumber = 0;
 		
 		curPlayer().movePrompt();

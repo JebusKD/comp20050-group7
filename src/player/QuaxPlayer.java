@@ -12,11 +12,11 @@ public abstract class QuaxPlayer {
 
 	private QuaxTileColour colour;
 	
-	private Scene scene;
+	private Stage stage;
 	
-	public QuaxPlayer(QuaxTileColour colour, Scene scene) {
+	public QuaxPlayer(QuaxTileColour colour, Stage stage) {
 		this.setColour(colour);
-		this.scene = scene;
+		this.stage = stage;
 	}
 	
 	public QuaxTileColour getColour() {
@@ -34,6 +34,6 @@ public abstract class QuaxPlayer {
 	protected void submitMove(QuaxCoordinate move) {
 		QuaxCoordinateEvent submission = new QuaxCoordinateEvent(QuaxController.MOVE_SUBMITTED_EVENT, move);
 		
-		Event.fireEvent(scene, submission);
+		Event.fireEvent(stage, submission);
 	}
 }
