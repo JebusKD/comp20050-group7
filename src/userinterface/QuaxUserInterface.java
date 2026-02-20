@@ -45,8 +45,7 @@ public class QuaxUserInterface {
 	private GridPane octagonGrid;
 	private GridPane rhombusGrid;
 	private StackPane board;
-
-	// TODO these are temporary assignments for bottom and sidebar - change to appropriate types
+	
 	private StackPane topBar;
 	private StackPane bottomBar;
 	private VBox sideBar;
@@ -84,9 +83,6 @@ public class QuaxUserInterface {
 		this.window = new StackPane(regions);
 		window.setAlignment(Pos.CENTER);
 		regions.setAlignment(Pos.CENTER);
-
-		// TODO debug, remove
-		regions.setGridLinesVisible(true);
 		
 		BorderPane boardBackground = new BorderPane();
 		
@@ -126,9 +122,7 @@ public class QuaxUserInterface {
 		this.regions.add(this.board, 0, 1);
 
 		this.topBar = new StackPane();
-		topBar.getChildren().add(new Rectangle(50, 50));
 		this.bottomBar = new StackPane();
-		bottomBar.getChildren().add(new Rectangle(50, 50));
 		
 		this.sideBar = new VBox(10);
 		sideBar.getChildren().add(new Button("New 2-Player Game"));
