@@ -75,6 +75,7 @@ public class QuaxUserInterface {
 	
 	private void initialiseStylesheets() {
 		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/tile-styling.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/board-styling.css").toExternalForm());
 	}
 
 	private void initialiseWindow() {
@@ -86,7 +87,10 @@ public class QuaxUserInterface {
 		// TODO debug, remove
 		regions.setGridLinesVisible(true);
 		
-		this.board = new StackPane(octagonGrid, rhombusGrid);
+		Rectangle boardBackground = new Rectangle(13 * OCTAGON_WIDTH, 13 * OCTAGON_WIDTH);
+		boardBackground.getStyleClass().add("board-background");
+		
+		this.board = new StackPane(boardBackground, octagonGrid, rhombusGrid);
 		this.regions.add(this.board, 0, 1);
 
 		this.topBar = new StackPane();
@@ -316,6 +320,7 @@ public class QuaxUserInterface {
 
 		public OctagonTile(QuaxCoordinate coordinate) {
 			super();
+			this.getStyleClass().add("tile");
 			this.getStyleClass().add("tiletype-octagon");
 			this.setColour(QuaxTileColour.NONE);
 			this.coordinate = coordinate;
@@ -372,6 +377,7 @@ public class QuaxUserInterface {
 
 		public RhombusTile(QuaxCoordinate coordinate) {
 			super();
+			this.getStyleClass().add("tile");
 			this.getStyleClass().add("tiletype-rhombus");
 			this.setColour(QuaxTileColour.NONE);
 			this.coordinate = coordinate;
