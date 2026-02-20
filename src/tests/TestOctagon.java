@@ -196,4 +196,37 @@ class TestOctagon {
 		t.setColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
+	
+	@Test
+	void testIsFree1() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setColour(QuaxTileColour.BLACK);
+		assertFalse(t.isFree());
+	}
+	
+	@Test
+	void testIsFree2() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setColour(QuaxTileColour.WHITE);
+		assertFalse(t.isFree());
+	}
+	
+	@Test
+	void testIsFree3() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setColour(QuaxTileColour.NONE);
+		assertTrue(t.isFree());
+	}
+	
+	@Test
+	void testIsFree4() {
+		QuaxTile t = new Octagon(5, 5);
+		assertTrue(t.isFree());
+	}
+	
+	@Test
+	void testUnassignedGroup() {
+		QuaxTile t = new Octagon(5, 5);
+		assertNull(t.getGroup());
+	}
 }
