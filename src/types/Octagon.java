@@ -20,7 +20,7 @@ public class Octagon extends QuaxTile {
 		
 		if (getColour() == QuaxTileColour.BLACK)
 			return yPos == 10;
-		else return xPos == 10;
+		else return xPos == 0;
 	}
 	
 	@Override
@@ -29,7 +29,7 @@ public class Octagon extends QuaxTile {
 		
 		if (getColour() == QuaxTileColour.BLACK)
 			return yPos == 0;
-		else return xPos == 0;
+		else return xPos == 10;
 	}
 		
 }
