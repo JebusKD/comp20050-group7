@@ -1,13 +1,27 @@
-.tilecolour-none {
-	-fx-fill:gray;
+.tile {
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
 }
 
+.tilecolour-none {
+	-fx-stroke: #cbcacc;
+}
+
+.tilecolour-none.tiletype-rhombus {
+	-fx-fill: #c8c1d4;
+}
+
+.tilecolour-none.tiletype-octagon {
+	-fx-fill: #d0cfd1;
+}
+
+
 .tilecolour-black {
-	-fx-fill:#191970;
+	-fx-fill: #0b090f;
 }
 
 .tilecolour-white {
-	-fx-fill:#fff5ee;
+	-fx-fill: #fff5ee;
 }
 
 .tileoutline-base {

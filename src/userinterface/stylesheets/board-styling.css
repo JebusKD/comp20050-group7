@@ -1,0 +1,11 @@
+.board-background-center {
+	-fx-fill: #eeebf2;
+}
+
+.board-background-white {
+	-fx-fill: white;
+}
+
+.board-background-black {
+	-fx-fill: black;
+}
