@@ -139,7 +139,6 @@ public class QuaxBoard {
 	
 	private void trackGroup(QuaxTileGroup g) {
 		this.trackedGroups.addFirst(g);
-		System.out.println("New group tracked. Size = " + g.size());
 	}
 	
 	private void untrackGroup(QuaxTileGroup g) {
