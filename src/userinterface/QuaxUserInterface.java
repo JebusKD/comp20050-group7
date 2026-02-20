@@ -94,7 +94,7 @@ public class QuaxUserInterface {
 		this.bottomBar = new StackPane();
 		bottomBar.getChildren().add(new Rectangle(50, 50));
 		
-		this.sideBar = new VBox();
+		this.sideBar = new VBox(10);
 		sideBar.getChildren().add(new Button("New 2-Player Game"));
 		sideBar.getChildren().add(new Button("New Game vs. Bot"));
 		sideBar.getChildren().add(new Button("Show Strategy"));
