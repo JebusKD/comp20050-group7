@@ -56,9 +56,7 @@ public class QuaxBoard {
 	
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (checkForWinningMove()) return false;
-		
-		/* TODO this fulfils sprint 2, feature 1. */
-		// We need to swap the feature roadmap to reflect this.
+
 		if (q.isOctagonMove()) {
 			Octagon tile = getOctagon(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
