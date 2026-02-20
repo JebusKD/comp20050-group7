@@ -55,11 +55,19 @@ public class QuaxController {
 	}
 	
 	public void startTwoPlayerGame() {
+		
+		QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
+		QuaxPlayer p2 = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
+		
+		startGame(p1, p2);
+	}
+	
+	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
 		this.board = new QuaxBoard();
 		ui.setBoard(board);
 		
-		players[0] = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
-		players[1] = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
+		players[0] = p1;
+		players[1] = p2;
 		moveNumber = 0;
 		
 		curPlayer().movePrompt();
