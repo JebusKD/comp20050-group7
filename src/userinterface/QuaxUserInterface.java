@@ -13,12 +13,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.QuaxBoard;
@@ -86,8 +88,39 @@ public class QuaxUserInterface {
 		// TODO debug, remove
 		regions.setGridLinesVisible(true);
 		
-		Rectangle boardBackground = new Rectangle(13 * OCTAGON_WIDTH, 13 * OCTAGON_WIDTH);
-		boardBackground.getStyleClass().add("board-background");
+		BorderPane boardBackground = new BorderPane();
+		
+		/*
+		Rectangle boardCenter = new Rectangle(10 * OCTAGON_WIDTH, 10 * OCTAGON_WIDTH);
+		boardCenter.getStyleClass().add("board-background-center");
+		boardBackground.setCenter(boardCenter);
+		*/
+		Rectangle boardLeftBorderBg = new Rectangle(OCTAGON_WIDTH, 10.5 * OCTAGON_WIDTH);
+		boardLeftBorderBg.getStyleClass().add("board-background-white");;
+		
+		StackPane boardLeftBorder = new StackPane(boardLeftBorderBg);
+		boardBackground.setLeft(boardLeftBorder);
+		
+		Rectangle boardRightBorderBg = new Rectangle(OCTAGON_WIDTH, 10.5 * OCTAGON_WIDTH);
+		boardRightBorderBg.getStyleClass().add("board-background-white");
+		
+		StackPane boardRightBorder = new StackPane(boardRightBorderBg);
+		boardBackground.setRight(boardRightBorder);
+		
+		
+		
+		Rectangle boardTopBorderBg = new Rectangle(12 * OCTAGON_WIDTH, OCTAGON_WIDTH/2);
+		boardTopBorderBg.getStyleClass().add("board-background-black");
+		
+		StackPane boardTopBorder = new StackPane(boardTopBorderBg);
+		boardBackground.setTop(boardTopBorder);
+		
+		Rectangle boardBottomBorderBg = new Rectangle(12 * OCTAGON_WIDTH, OCTAGON_WIDTH/2);
+		boardBottomBorderBg.getStyleClass().add("board-background-black");
+		
+		StackPane boardBottomBorder = new StackPane(boardBottomBorderBg);
+		boardBackground.setBottom(boardBottomBorder);
+		
 		
 		this.board = new StackPane(boardBackground, octagonGrid, rhombusGrid);
 		this.regions.add(this.board, 0, 1);
