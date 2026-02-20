@@ -34,7 +34,7 @@ public class QuaxUserInterface {
 
 	private static final double OCTAGON_WIDTH = 60;
 	
-	private static final double OCTAGON_GRID_GAP = 0;
+	private static final double OCTAGON_GRID_GAP = 1;
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private Stage stage;
