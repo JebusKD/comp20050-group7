@@ -70,6 +70,7 @@ public class QuaxUserInterface {
 		
 		stage.setScene(scene);
 		
+		stage.setMaximized(true);
 		stage.show();
 	}
 	
@@ -143,6 +144,7 @@ public class QuaxUserInterface {
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
 				OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
+				newTile.setId("octagon" + i + "-" + j);
 				octagonGridCells[i][j] = newTile;
 				octagonGrid.add(newTile, i, j);
 			}
@@ -159,6 +161,7 @@ public class QuaxUserInterface {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
+				newTile.setId("rhombus" + i + "-" + j);
 				rhombusGridCells[i][j] = newTile;
 				rhombusGrid.add(newTile, i, j);
 			}
