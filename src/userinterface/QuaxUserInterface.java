@@ -113,24 +113,7 @@ public class QuaxUserInterface {
 		this.sceneHeight = 480;
 		
 		this.scene = new Scene(this.window, sceneWidth, sceneHeight);
-		
-		this.scene.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number oldVal, Number newVal) {
-				setSceneWidth((double)newVal);
-			}
-			
-		});
-		
-		this.scene.heightProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number oldVal, Number newVal) {
-				setSceneHeight((double)newVal);
-			}
-			
-		});
-		
-		recalculateUIScale();
+
 	}
 
 	private void initialiseEventHandlers() {
@@ -171,14 +154,10 @@ public class QuaxUserInterface {
 	
 	public void setBoard(QuaxBoard b) {
 		
-		// TODO debug method for groups
-		List<QuaxTileGroup> g = b.getGroups();
-		
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
 				OctagonTile o = octagonGridCells[i][j];
 				o.setColour(b.getOctagon(i, j).getColour());
-				grantGroupOutline(o, g, new QuaxCoordinate(i, j, true), b);
 			}
 		}
 		
@@ -186,53 +165,10 @@ public class QuaxUserInterface {
 			for (int j = 0; j < 10; j++) {
 				RhombusTile r = rhombusGridCells[i][j];
 				r.setColour(b.getRhombus(i, j).getColour());
-				grantGroupOutline(r, g, new QuaxCoordinate(i, j, false), b);
 			}
 		}
 	}
-	// TODO Remove debug method for visualising groups
-	private void grantGroupOutline(OctagonTile t, List<QuaxTileGroup> g, QuaxCoordinate c, QuaxBoard b) {
-		t.getStyleClass().remove("tileoutline-base");
-		for (int i = 0; i <= 7; i++) {
-			t.getStyleClass().remove("tileoutline-" + i);
-		}
-		
-		QuaxTile t_b = b.getTile(c);
-		QuaxTileGroup g_i = t_b.getGroup();
-		if (g_i != null) {
-			t.getStyleClass().add("tileoutline-base");
-			boolean flag = false;
-			for (int i = 0; i < 7 && !flag; i++) {
-				if (g.get(i) == g_i) {
-					flag = true;
-					t.getStyleClass().add("tileoutline-" + i);
-				}
-			}
-			if (!flag) t.getStyleClass().add("tileoutline-7");
-		}
-		
-	}
-	
-	private void grantGroupOutline(RhombusTile t, List<QuaxTileGroup> g, QuaxCoordinate c, QuaxBoard b) {
-		t.getStyleClass().remove("tileoutline-base");
-		for (int i = 0; i <= 7; i++) {
-			t.getStyleClass().remove("tileoutline-" + i);
-		}
-		
-		QuaxTile t_b = b.getTile(c);
-		QuaxTileGroup g_i = t_b.getGroup();
-		if (g_i != null) {
-			t.getStyleClass().add("tileoutline-base");
-			boolean flag = false;
-			for (int i = 0; i < 7 && !flag; i++) {
-				if (g.get(i) == g_i) {
-					flag = true;
-					t.getStyleClass().add("tileoutline-" + i);
-				}
-			}
-			if (!flag) t.getStyleClass().add("tileoutline-7");
-		}
-	}
+
 	
 	public void fetchPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
@@ -243,27 +179,6 @@ public class QuaxUserInterface {
 		if (q.isOctagonMove())
 			octagonGridCells[q.x()][q.y()].setColour(c);
 		else rhombusGridCells[q.x()][q.y()].setColour(c);
-	}
-	
-	// TODO fix or delete
-	private void recalculateUIScale() {/*
-		double min = Math.min(sceneWidth, sceneHeight);
-		
-		double scaleRatio = min / (11 * OCTAGON_WIDTH);
-		
-		board.setScaleX(scaleRatio);
-		board.setScaleY(scaleRatio);
-*/
-	}
-	
-	private void setSceneWidth(double value) {
-		this.sceneWidth = value;
-		recalculateUIScale();
-	}
-	
-	private void setSceneHeight(double value) {
-		this.sceneHeight = value;
-		recalculateUIScale();
 	}
 
 	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
