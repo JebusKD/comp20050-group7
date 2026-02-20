@@ -1,0 +1,30 @@
+package quax.player;
+
+import quax.controller.QuaxController;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import quax.model.QuaxBoard;
+import quax.types.Octagon;
+import quax.types.QuaxCoordinateEvent;
+import quax.types.QuaxTileColour;
+
+public class HumanPlayer extends QuaxPlayer {
+
+    private String name;
+
+    public HumanPlayer(String name, QuaxTileColour colour, Scene scene) {
+        super(colour, scene);
+        this.name = name;
+    }
+
+    @Override
+    public void movePrompt() {
+        System.out.println(name + "'s move.");
+
+
+    }
+
+
+}

@@ -1,0 +1,48 @@
+.tilecolour-none {
+    -fx-fill:gray;
+}
+
+.tilecolour-black {
+    -fx-fill:#191970;
+}
+
+.tilecolour-white {
+    -fx-fill:#fff5ee;
+}
+
+.tileoutline-base {
+    -fx-stroke-type:inside;
+    -fx-stroke-width:3;
+}
+
+.tileoutline-base.tileoutline-0 {
+    -fx-stroke:red;
+}
+
+.tileoutline-base.tileoutline-1 {
+    -fx-stroke:blue;
+}
+
+.tileoutline-base.tileoutline-2 {
+    -fx-stroke:yellow;
+}
+
+.tileoutline-base.tileoutline-3 {
+    -fx-stroke:green;
+}
+
+.tileoutline-base.tileoutline-4 {
+    -fx-stroke:magenta;
+}
+
+.tileoutline-base.tileoutline-5 {
+    -fx-stroke:purple;
+}
+
+.tileoutline-base.tileoutline-6 {
+    -fx-stroke:cyan;
+}
+
+.tileoutline-base.tileoutline-7 {
+    -fx-stroke:gray;
+}

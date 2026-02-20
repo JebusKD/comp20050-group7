@@ -1,0 +1,8 @@
+.button1{
+    -fx-text-fill: #ff4dd2;
+    -fx-background-color: #002699;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+    -fx-font: ARIAL;
+}
