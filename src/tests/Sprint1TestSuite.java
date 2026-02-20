@@ -7,7 +7,8 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @SelectClasses({
 	TestQuaxCoordinate.class,
-	TestOctagon.class
+	TestOctagon.class,
+	TestRhombus.class
 })
 @DisplayName("Sprint 1 Unit Tests")
 class Sprint1TestSuite {
