@@ -9,7 +9,8 @@ import org.junit.platform.suite.api.Suite;
 	TestQuaxCoordinate.class,
 	TestOctagon.class,
 	TestRhombus.class,
-	TestQuaxTileGroup.class
+	TestQuaxTileGroup.class,
+	TestQuaxBoard.class
 })
 @DisplayName("Sprint 1 Unit Tests")
 class Sprint1TestSuite {
