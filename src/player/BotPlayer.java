@@ -11,6 +11,8 @@ import types.QuaxTileColour;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
+	static final int IGNORE_VALUE = Integer.MIN_VALUE;
+	
 	static final Random RNG = new Random();
 
 	public BotPlayer(QuaxTileColour colour, Stage stage) {
@@ -43,10 +45,21 @@ public abstract class BotPlayer extends QuaxPlayer {
 		
 	}
 	
+	public void setAll(QuaxBoard b, int val) {
+		for (QuaxTile t : b) {
+			if (b.validMove(t.getCoordinates(), this.getColour())) {
+				t.setStrategyValue(val);
+			}
+			else {
+				t.setStrategyValue(IGNORE_VALUE);
+			}
+		}
+	}
+	
 	@Override
 	public void movePrompt(QuaxBoard b) {
 		Thread t = new Thread(() -> {
-			submitMove(computeMove(new QuaxBoard(b)));
+			submitMove(computeMove(b));
 		});
 		t.start();
 	}
