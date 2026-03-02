@@ -41,6 +41,36 @@ public class QuaxBoard {
 		this.previousMove = null;
 	}
 	
+	// Copy constructor
+	public QuaxBoard(QuaxBoard b) {
+		this.octagonGrid = new Octagon[11][11];
+		this.rhombusGrid = new Rhombus[10][10];
+		
+		this.trackedGroups = new LinkedList<QuaxTileGroup>();
+		
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				octagonGrid[i][j] = new Octagon(b.octagonGrid[i][j]);
+			}
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				rhombusGrid[i][j] = new Rhombus(b.rhombusGrid[i][j]);
+			}
+		}
+		
+		this.previousMove = b.previousMove;
+		
+		for (QuaxTileGroup g : b.trackedGroups) {
+			QuaxTileGroup newGroup = new QuaxTileGroup();
+			this.trackGroup(newGroup);
+			for (QuaxTile t : g) {
+				newGroup.addTile(getTile(t.getCoordinates()));
+			}
+		}
+	}
+	
 	public Octagon getOctagon(int x, int y) {
 		return octagonGrid[x][y];
 	}
