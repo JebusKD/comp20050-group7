@@ -70,7 +70,7 @@ public class QuaxController {
 		players[1] = p2;
 		moveNumber = 0;
 		
-		curPlayer().movePrompt();
+		curPlayer().movePrompt(board);
 	}
 	
 	public QuaxPlayer curPlayer() {
@@ -85,7 +85,7 @@ public class QuaxController {
 
 			ui.fetchPreviousMove(board);
 			
-			curPlayer().movePrompt();
+			curPlayer().movePrompt(board);
 		}
 	}
 	

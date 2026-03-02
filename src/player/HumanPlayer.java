@@ -20,7 +20,7 @@ public class HumanPlayer extends QuaxPlayer {
 	}
 	
 	@Override
-	public void movePrompt() {
+	public void movePrompt(QuaxBoard b) {
 		System.out.println(name + "'s move.");
 		
 		
