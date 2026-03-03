@@ -36,9 +36,9 @@ import types.QuaxTile;
 
 public class QuaxUserInterface {
 
-	private static final double OCTAGON_WIDTH = 80;
+	private static final double OCTAGON_WIDTH = 57.481;
 	
-	private static final double OCTAGON_GRID_GAP = 1;
+	private static final double OCTAGON_GRID_GAP = 1.04;
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private Stage stage;
@@ -154,9 +154,7 @@ public class QuaxUserInterface {
 		octagonGrid.setVgap(OCTAGON_GRID_GAP);
 		octagonGrid.setHgap(OCTAGON_GRID_GAP);
 		octagonGrid.setPickOnBounds(false);
-		
-		octagonGrid.setGridLinesVisible(true);
-		
+
 		for (int i = 0; i < 11; i++) {
 	         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
 	         octagonGrid.getColumnConstraints().add(column);
@@ -184,8 +182,6 @@ public class QuaxUserInterface {
 		rhombusGrid.setVgap(OCTAGON_GRID_GAP);
 		rhombusGrid.setHgap(OCTAGON_GRID_GAP);
 		rhombusGrid.setPickOnBounds(false);
-		
-		rhombusGrid.setGridLinesVisible(true);
 		
 		rhombusGrid.setPadding(new Insets(RHOMBUS_GRID_GAP, 0, 0, RHOMBUS_GRID_GAP));	
 		
