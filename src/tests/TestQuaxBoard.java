@@ -145,7 +145,7 @@ class TestQuaxBoard {
 		assertNotNull(neighbours[0][1]);
 		assertNotNull(neighbours[0][2]);
 		assertNull(neighbours[1][0]);
-		assertNull(neighbours[1][1]);
+		assertNotNull(neighbours[1][1]);
 		assertNotNull(neighbours[1][2]);
 		assertNull(neighbours[2][0]);
 		assertNotNull(neighbours[2][1]);
@@ -169,5 +169,22 @@ class TestQuaxBoard {
 		assertNotNull(neighbours[1][0]);
 		assertNotNull(neighbours[1][1]);
 		
+	}
+	
+	// Tests that the coordinates of neighbours match up with how
+	// they'd be expected to be viewed on the board.
+	/*
+			r3,3 | o3,3 | r4,3
+			-----+------+-----
+			o2,4 | o3,4 | o4,4
+			-----+------+-----
+			r3,4 | o3,5 | r4,4
+	 */
+	@Test
+	void testNeighboursCoordinates1() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, true));
+		
+		assertEquals(3, neighbours[1][2].getCoordinates().x());
+		assertEquals(5, neighbours[1][2].getCoordinates().y());
 	}
 }
