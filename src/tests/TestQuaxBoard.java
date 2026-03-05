@@ -83,4 +83,91 @@ class TestQuaxBoard {
 		assertEquals(2, neighbours[1].length);
 	}
 
+	// Checks if the colour of neighbouring tiles are correctly read.
+	@Test
+	void testNeighboursColours1() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, true));
+		
+		b.makeMove(new QuaxCoordinate(3, 3, true), QuaxTileColour.BLACK);
+		
+		assertEquals(QuaxTileColour.BLACK, neighbours[1][0].getColour());
+	}
+	
+	// Checks if the colour of neighbouring tiles are correctly read.
+	@Test
+	void testNeighboursColours2() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, false));
+		
+		b.makeMove(new QuaxCoordinate(4, 5, true), QuaxTileColour.WHITE);
+		
+		assertEquals(QuaxTileColour.WHITE, neighbours[1][1].getColour());
+	}
+	
+	// Ensures the correct entries in neighbours are indeed null/not null
+	@Test
+	void testNeighboursStructure1() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 0, true));
+		// Octagon in top-left corner
+		/*
+		  		null | null | null
+		  		-----+------+-----
+		  		null | null | tile
+		  		-----+------+-----
+		  		null | tile | tile
+		 */
+		
+		assertNull(neighbours[0][0]);
+		assertNull(neighbours[0][1]);
+		assertNull(neighbours[0][2]);
+		assertNull(neighbours[1][0]);
+		assertNull(neighbours[1][1]);
+		assertNotNull(neighbours[1][2]);
+		assertNull(neighbours[2][0]);
+		assertNotNull(neighbours[2][1]);
+		assertNotNull(neighbours[2][2]);
+		
+	}
+	
+	// Ensures the correct entries in neighbours are indeed null/not null
+	// Octagon against left border
+			/*
+			  		null | tile | tile
+			  		-----+------+-----
+			  		null | null | tile
+			  		-----+------+-----
+			  		null | tile | tile
+			 */
+	@Test
+	void testNeighboursStructure2() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 1, true));
+		
+		assertNull(neighbours[0][0]);
+		assertNotNull(neighbours[0][1]);
+		assertNotNull(neighbours[0][2]);
+		assertNull(neighbours[1][0]);
+		assertNull(neighbours[1][1]);
+		assertNotNull(neighbours[1][2]);
+		assertNull(neighbours[2][0]);
+		assertNotNull(neighbours[2][1]);
+		assertNotNull(neighbours[2][2]);
+		
+	}
+	
+	// Ensures the correct entries in neighbours are indeed null/not null
+	// Rhombus against top-left (A rhombus should see four adjacent octagons always)
+	/*
+	  		tile | tile
+	  		-----+-----
+	  		tile | tile
+	 */
+	@Test
+	void testNeighboursStructure3() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 0, false));
+		
+		assertNotNull(neighbours[0][0]);
+		assertNotNull(neighbours[0][1]);
+		assertNotNull(neighbours[1][0]);
+		assertNotNull(neighbours[1][1]);
+		
+	}
 }
