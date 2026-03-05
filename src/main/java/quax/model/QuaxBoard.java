@@ -16,6 +16,7 @@ public class QuaxBoard {
     private Octagon[][] octagonGrid;
     private Rhombus[][] rhombusGrid;
 
+
     private QuaxCoordinate previousMove;
 
     private LinkedList<QuaxTileGroup> trackedGroups;
@@ -23,6 +24,7 @@ public class QuaxBoard {
     public QuaxBoard() {
         this.octagonGrid = new Octagon[11][11];
         this.rhombusGrid = new Rhombus[10][10];
+
 
         this.trackedGroups = new LinkedList<QuaxTileGroup>();
 
@@ -63,6 +65,7 @@ public class QuaxBoard {
             Octagon tile = getOctagon(q.x(), q.y());
             if (tile.getColour() != QuaxTileColour.NONE) return false;
         } else {
+            if(!isValidRhombusPlacement(q, t)) return false;
             Rhombus tile = getRhombus(q.x(), q.y());
             if (tile.getColour() != QuaxTileColour.NONE) return false;
         }
@@ -148,16 +151,28 @@ public class QuaxBoard {
         this.trackedGroups.remove(g);
     }
 
+    public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
+        QuaxTile[][] n = neighbours(q);
+
+        if( n[0][0].getColour() == c && n[1][1].getColour() == c){
+            return true;
+        }
+        if( n[1][0].getColour() == c &&  n[0][1].getColour() == c){
+            return true;
+        }
+        return false;
+    }
+
     public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
         QuaxTile t;
         if (q.isOctagonMove()) {
             t = octagonGrid[q.x()][q.y()];
         }
         else {
-            t = rhombusGrid[q.x()][q.y()];
-
+                t = rhombusGrid[q.x()][q.y()];
         }
         t.setColour(c);
+
         assignGroup(t);
         this.previousMove = q;
         if (checkForWinningMove())

@@ -1,13 +1,13 @@
 .tilecolour-none {
-    -fx-fill:gray;
+    -fx-fill:#6160A9;
 }
 
 .tilecolour-black {
-    -fx-fill:#191970;
+    -fx-fill:#000;
 }
 
 .tilecolour-white {
-    -fx-fill:#fff5ee;
+    -fx-fill:#F5FAFB;
 }
 
 .tileoutline-base {
@@ -45,4 +45,10 @@
 
 .tileoutline-base.tileoutline-7 {
     -fx-stroke:gray;
+}
+
+.object{
+    -fx-stroke : #0F496B;
+    -fx-stroke-type:inside;
+    -fx-stroke-width: 3;
 }

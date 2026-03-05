@@ -3,10 +3,12 @@ package quax.userinterface;
 import java.awt.*;
 import java.util.List;
 
+import javafx.geometry.VPos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Text;
 import quax.controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,9 +35,9 @@ import javafx.scene.control.Label;
 
 public class QuaxUserInterface {
 
-    private static final double OCTAGON_WIDTH = 60;
+    private static final double OCTAGON_WIDTH = 57.481;
 
-    private static final double OCTAGON_GRID_GAP = 1;
+    private static final double OCTAGON_GRID_GAP = 1.04;
     private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
     private Stage stage;
@@ -53,6 +55,7 @@ public class QuaxUserInterface {
     private StackPane leftBar;
     private StackPane rightBar;
     private VBox sideBar;
+    private HBox turns;
 
     private Label title;
 
@@ -60,11 +63,15 @@ public class QuaxUserInterface {
 
     private StackPane window;
     private GridPane regions;
-    private BorderPane border;
     private Scene scene;
 
     private double sceneWidth;
     private double sceneHeight;
+
+    private OctagonObject octagonObject;
+    private RhombusObject rhombusObject;
+    private Label labelTurn;
+
 
 
     public QuaxUserInterface(Stage stage) {
@@ -91,90 +98,54 @@ public class QuaxUserInterface {
     }
 
     private void initialiseWindow() {
-        this.regions = new GridPane();
-        //this.window = new StackPane(regions);
-        this.border = new BorderPane();
-        //window.setAlignment(Pos.CENTER);
-        regions.setAlignment(Pos.CENTER);
+        StackPane gridHolder = new StackPane(octagonGrid,rhombusGrid);
+
+        gridHolder.setMaxHeight(Region.USE_PREF_SIZE);
+        gridHolder.setMaxWidth(Region.USE_PREF_SIZE);
+
+        Rectangle gridBackground = createGridBackground(OCTAGON_WIDTH, OCTAGON_GRID_GAP);
+       // gridBackground.getStyleClass().add("background-rectangle");
+        gridBackground.setFill(Color.OLDLACE);
+
+        double hourglassGap = OCTAGON_WIDTH/4;
+        Polygon hourglassBorder = new Polygon(calculateHourglassPoints(OCTAGON_WIDTH,OCTAGON_GRID_GAP,hourglassGap));
+        hourglassBorder.setFill(Color.BLACK);
+
+        Rectangle behindHourglassBorder = createBehindHourglass(OCTAGON_WIDTH,OCTAGON_GRID_GAP,hourglassGap);
+        behindHourglassBorder.setFill(Color.WHITE);
 
         Stop[] stops = new Stop[]{
                 new Stop(0, Color.NAVY),
                 new Stop(1, Color.BLUEVIOLET),
         };
 
-        LinearGradient lgl = new LinearGradient(1,0,0,1,true, CycleMethod.NO_CYCLE,stops);
+        LinearGradient lgl = new LinearGradient(1,0,1,1,true, CycleMethod.NO_CYCLE,stops);
 
-        this.stack = new StackPane();
-        Rectangle rectangle = new Rectangle(750,750);
+        Rectangle rectangle = new Rectangle(730,730); //the multicoloured border around the board
         rectangle.setFill(lgl);
 
-        Rectangle rectangle2 = new Rectangle(700,700);
-        rectangle2.setFill(Color.WHITE);
 
-        // TODO debug, remove
-        //regions.setGridLinesVisible(true);
+        GridPane boardWithCoords = initialiseCoordsImage();
 
-        this.board = new StackPane(octagonGrid, rhombusGrid);
-        this.regions.add(this.board, 1, 1);
+        this.board = new StackPane(rectangle,behindHourglassBorder,hourglassBorder,gridBackground,boardWithCoords,gridHolder);
 
-        this.topBar = new StackPane();
-        Rectangle rec = new Rectangle(680, 20);
-        rec.setFill(Color.BLACK);
-        topBar.getChildren().add(rec);
-
-        this.bottomBar = new StackPane();
-        Rectangle rec2 = new Rectangle(680, 20);
-        rec2.setFill(Color.BLACK);
-        bottomBar.getChildren().add(rec2);
-
-        this.leftBar = new StackPane();
-        Rectangle rec3 = new Rectangle(20, 710);
-        rec3.setFill(Color.WHITE);
-        leftBar.getChildren().add(rec3);
-
-        this.rightBar = new StackPane();
-        Rectangle rec4 = new Rectangle(20, 710);
-        rec4.setFill(Color.WHITE);
-        rightBar.getChildren().add(rec4);
-
-        this.sideBar = new VBox(10);
-
-        Button twoPlayer = new Button("New 2-Player Game");
-        Button botGame = new Button("New Game vs. Bot");
-        Button strat = new Button("Show Strategy");
-        Button hideStrat = new Button("Hide Strategy");
-
-        twoPlayer.getStyleClass().add("button1");
-
-        sideBar.getChildren().add(twoPlayer);
-        sideBar.getChildren().add(botGame);
-        sideBar.getChildren().add(strat);
-        sideBar.getChildren().add(hideStrat);
-
-
-
-        this.regions.add(this.topBar, 1, 0);
-        this.regions.add(this.bottomBar, 1, 2);
-        this.regions.add(this.rightBar, 2, 0, 1, 3);
-        this.regions.add(this.leftBar, 0, 0, 1, 3);
-
-        stack.getChildren().addAll(rectangle,rectangle2,regions);
+        this.sideBar = initialiseButtons();
+        this.turns = initialisePlayerTurn();
+        turns.getStyleClass().add("hbox-custom");
+        sideBar.getChildren().add(turns);
+        sideBar.getStyleClass().add("vbox");
 
         GridPane outer = new GridPane();
 
-         this.title = new Label("Quax Game");
-         title.getStyleClass().add("title-label");
-
-        Label PlayerTurn = new Label("Player Turn");
+        this.title = new Label("Quax");
+        title.getStyleClass().add("custom-title");
 
 
         outer.add(title,0,0);
-        outer.add(stack,0,1);
+        outer.add(board,0,1);
         outer.add(this.sideBar,1,1);
-        outer.add(PlayerTurn,0,2);
 
         outer.setAlignment(Pos.CENTER);
-
 
 
         this.sceneWidth = 720;
@@ -205,17 +176,66 @@ public class QuaxUserInterface {
 
     }
 
+    private GridPane initialiseCoordsImage(){
+        GridPane coordGrid = new GridPane();
+
+        for(int i = 0; i < 11; i++){
+            Label letterCoordTop = new Label(String.valueOf((char) ('A' + i)));
+            Label letterCoordBottom = new Label(String.valueOf((char) ('A' + i)));
+
+            letterCoordTop.setPrefWidth(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+            letterCoordTop.getStyleClass().add("coordinate-letter-style");
+            letterCoordTop.setAlignment(Pos.CENTER);
+
+            letterCoordBottom.setPrefWidth(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+            letterCoordBottom.getStyleClass().add("coordinate-letter-style");
+            letterCoordBottom.setAlignment(Pos.CENTER);
+
+            letterCoordTop.setPadding(new Insets(20,0,0,20));
+            letterCoordBottom.setPadding(new Insets(5,5,0,5));
+            coordGrid.add(letterCoordTop,i+1,0);
+            coordGrid.add(letterCoordBottom,i+1,12);
+        }
+
+        for(int j =0;j < 11; j++){
+            Label numCoordLeft = new Label(String.valueOf(11 -j));
+            Label numCoordRight = new Label(String.valueOf(11-j));
+            numCoordLeft.getStyleClass().add("coordinate-number-style");
+            numCoordLeft.setPrefHeight(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+            numCoordLeft.setPadding(new Insets(20,0,0,20));
+
+            numCoordRight.getStyleClass().add("coordinate-number-style");
+            numCoordRight.setPrefHeight(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+            numCoordRight.setPadding(new Insets(5,0,0,5));
+
+            coordGrid.add(numCoordLeft,0,j + 1);
+            coordGrid.add(numCoordRight,12,j+ 1);
+        }
+        return coordGrid;
+    }
+
     private void initialiseOctagonGrid() {
         octagonGridCells = new OctagonTile[11][11];
         octagonGrid = new GridPane();
-        octagonGrid.setAlignment(Pos.CENTER);
+        octagonGrid.setAlignment(Pos.TOP_LEFT);
         octagonGrid.setVgap(OCTAGON_GRID_GAP);
         octagonGrid.setHgap(OCTAGON_GRID_GAP);
         octagonGrid.setPickOnBounds(false);
+
+        for (int i = 0; i < 11; i++) {
+            ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+            octagonGrid.getColumnConstraints().add(column);
+        }
+
+        for (int i = 0; i < 11; i++) {
+            RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+            octagonGrid.getRowConstraints().add(row);
+        }
+
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
                 OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
-               newTile.setId("octagon" + i + "_" + j);
+                newTile.setId("octagon" + i + "-" + j);
                 octagonGridCells[i][j] = newTile;
                 octagonGrid.add(newTile, i, j);
             }
@@ -225,19 +245,87 @@ public class QuaxUserInterface {
     private void initialiseRhombusGrid() {
         rhombusGridCells = new RhombusTile[11][11];
         rhombusGrid = new GridPane();
-        rhombusGrid.setAlignment(Pos.CENTER);
-        rhombusGrid.setVgap(RHOMBUS_GRID_GAP);
-        rhombusGrid.setHgap(RHOMBUS_GRID_GAP);
+        rhombusGrid.setAlignment(Pos.TOP_LEFT);
+        rhombusGrid.setVgap(OCTAGON_GRID_GAP);
+        rhombusGrid.setHgap(OCTAGON_GRID_GAP);
         rhombusGrid.setPickOnBounds(false);
+
+        rhombusGrid.setPadding(new Insets(RHOMBUS_GRID_GAP, 0, 0, RHOMBUS_GRID_GAP));
+
+        for (int i = 0; i < 10; i++) {
+            ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+            rhombusGrid.getColumnConstraints().add(column);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+            row.setValignment(VPos.TOP);
+            rhombusGrid.getRowConstraints().add(row);
+        }
+
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
-                newTile.setId("rhombus" + i + "_" + j);
+                newTile.setId("rhombus" + i + "-" + j);
                 rhombusGridCells[i][j] = newTile;
                 rhombusGrid.add(newTile, i, j);
             }
         }
     }
+
+    private VBox initialiseButtons(){
+        VBox sideBar = new VBox(10);
+
+        Button strat = new Button("Show Strategy");
+        Button hideStrat = new Button("Hide Strategy");
+        Button PieRule = new Button("PieRule");
+
+        PieRule.setOnMouseClicked(event -> {
+            PieRule.setDisable(true);
+            PieRule.setVisible(false);
+        });
+
+        strat.getStyleClass().add("button3");
+        hideStrat.getStyleClass().add("button3");
+        PieRule.getStyleClass().add("button3");
+
+        sideBar.getChildren().addAll(strat,hideStrat,PieRule);
+
+        return sideBar;
+    }
+
+    private HBox initialisePlayerTurn(){
+       HBox playerTurn = new HBox(5);
+       octagonObject = new OctagonObject(40);
+       rhombusObject = new RhombusObject();
+       if(octagonObject.getFill() == null){
+           octagonObject.setFill(Color.BLACK);
+       }
+       if(rhombusObject.getFill() == null){
+           rhombusObject.setFill(Color.BLACK);
+       }
+
+        labelTurn = new Label("BLACK to play");
+        labelTurn.getStyleClass().add("turn-label");
+
+        playerTurn.getChildren().addAll(labelTurn,octagonObject,rhombusObject);
+        return playerTurn;
+    }
+
+    private void initialisePlayerTurnHelper(QuaxTileColour c,OctagonObject o,RhombusObject r,Label labelTurn){
+        if(c == QuaxTileColour.WHITE){
+           o.setColour(QuaxTileColour.BLACK);
+           r.setColour(QuaxTileColour.BLACK);
+           labelTurn.setText("BLACK to play");
+       }
+        else{
+            o.setColour(QuaxTileColour.WHITE);
+            r.setColour(QuaxTileColour.WHITE);
+            labelTurn.setText("WHITE to play");
+        }
+        labelTurn.getStyleClass().add("turn-label");
+    }
+
 
     public void setBoard(QuaxBoard b) {
 
@@ -251,6 +339,7 @@ public class QuaxUserInterface {
                 grantGroupOutline(o, g, new QuaxCoordinate(i, j, true), b);
             }
         }
+
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -306,7 +395,30 @@ public class QuaxUserInterface {
 
     public void fetchPreviousMove(QuaxBoard b) {
         QuaxCoordinate previousMove = b.previousMove();
-        if (previousMove != null) this.setTile(previousMove, b.getTile(previousMove).getColour());
+        if(previousMove == null){
+            initialisePlayerTurnHelper(QuaxTileColour.BLACK,octagonObject,rhombusObject,labelTurn);
+        }
+        if (previousMove != null) {
+            this.setTile(previousMove, b.getTile(previousMove).getColour());
+            initialisePlayerTurnHelper(b.getTile(previousMove).getColour(),octagonObject,rhombusObject,labelTurn);
+
+        }
+    }
+
+    public static Rectangle createGridBackground(double octagonWidth,double octagonGridGap){
+        double gridBackgroundSize = (10*octagonWidth) + OctagonBase.sideLength(octagonWidth) + (10 * octagonGridGap);
+
+        return new Rectangle(gridBackgroundSize,gridBackgroundSize,gridBackgroundSize,gridBackgroundSize);
+    }
+
+    public static double[] calculateHourglassPoints(double oct_width,double oct_grid_gap,double gap){
+        double distance = (5.7 * oct_width) + (4.7 * oct_grid_gap) + gap;
+        return new double[]{-distance,distance,distance,distance,-distance,-distance,distance,-distance};
+    }
+
+    public static Rectangle createBehindHourglass(double octagonWidth,double octagonGridGap,double hourglassGap){
+        double size = (octagonWidth * 11.4) + (9.4 * octagonGridGap) + (2*hourglassGap);
+        return new Rectangle(size,size);
     }
 
     public void setTile(QuaxCoordinate q, QuaxTileColour c) {
@@ -337,7 +449,9 @@ public class QuaxUserInterface {
     }
 
     private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
-        return (oct_gap) + (oct_width - OctagonBase.sideLength(oct_width));
+        double sidelen = OctagonBase.sideLength(oct_width);
+        double diagonalHeight = (oct_width - sidelen) / 2;
+        return sidelen + diagonalHeight + (oct_gap/2);
     }
 
     public Scene getScene() {
@@ -380,6 +494,63 @@ public class QuaxUserInterface {
 
         public OctagonBase(double width) {
             super(generatePolygonPoints(width));
+        }
+    }
+
+    private static class OctagonObject extends OctagonBase {
+        private QuaxTileColour colour;
+
+        public OctagonObject(double width) {
+            super(width);
+            this.getStyleClass().add("tilecolour-black");
+            this.setColour(QuaxTileColour.BLACK);
+        }
+
+        public void setColour(QuaxTileColour colour) {
+            this.colour = colour;
+            this.getStyleClass().remove("tilecolour-none");
+            this.getStyleClass().remove("tilecolour-black");
+            this.getStyleClass().remove("tilecolour-white");
+            switch (colour) {
+                case QuaxTileColour.NONE :
+                    this.getStyleClass().addAll("tilecolour-none","object");
+                    break;
+                case QuaxTileColour.BLACK :
+                    this.getStyleClass().addAll("tilecolour-black","object");
+                    break;
+                case QuaxTileColour.WHITE :
+                    this.getStyleClass().addAll("tilecolour-white","object");
+                    break;
+            }
+        }
+
+    }
+
+    private static class RhombusObject extends RhombusBase{
+        private QuaxTileColour colour;
+
+        public RhombusObject() {
+            super();
+            this.getStyleClass().add("tilecolour-black");
+            this.setColour(QuaxTileColour.BLACK);
+        }
+
+        public void setColour(QuaxTileColour colour) {
+            this.colour = colour;
+            this.getStyleClass().remove("tilecolour-none");
+            this.getStyleClass().remove("tilecolour-black");
+            this.getStyleClass().remove("tilecolour-white");
+            switch (colour) {
+                case QuaxTileColour.NONE :
+                    this.getStyleClass().addAll("tilecolour-none","object");
+                    break;
+                case QuaxTileColour.BLACK :
+                    this.getStyleClass().addAll("tilecolour-black","object");
+                    break;
+                case QuaxTileColour.WHITE :
+                    this.getStyleClass().addAll("tilecolour-white","object");
+                    break;
+            }
         }
     }
 
@@ -431,11 +602,17 @@ public class QuaxUserInterface {
 
     }
 
-    private abstract static class RhombusBase extends Rectangle {
+    private abstract static class RhombusBase extends Polygon {
 
         public RhombusBase() {
-            super(OctagonBase.SIDELEN, OctagonBase.SIDELEN);
-            this.setRotate(45.0);
+            this((OCTAGON_WIDTH - OctagonBase.SIDELEN) / 2);
+        }
+
+        public RhombusBase(double radius) {
+            super(-radius, 0,
+                    0, radius,
+                    radius, 0,
+                    0, -radius);
         }
     }
 
