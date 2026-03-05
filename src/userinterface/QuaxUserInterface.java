@@ -7,14 +7,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,9 +36,9 @@ import types.QuaxTile;
 
 public class QuaxUserInterface {
 
-	private static final double OCTAGON_WIDTH = 40;
+	private static final double OCTAGON_WIDTH = 57.481;
 	
-	private static final double OCTAGON_GRID_GAP = 1;
+	private static final double OCTAGON_GRID_GAP = 1.04;
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private Stage stage;
@@ -146,10 +150,21 @@ public class QuaxUserInterface {
 	private void initialiseOctagonGrid() {
 		octagonGridCells = new OctagonTile[11][11];
 		octagonGrid = new GridPane();
-		octagonGrid.setAlignment(Pos.CENTER);
+		octagonGrid.setAlignment(Pos.TOP_LEFT);
 		octagonGrid.setVgap(OCTAGON_GRID_GAP);
 		octagonGrid.setHgap(OCTAGON_GRID_GAP);
 		octagonGrid.setPickOnBounds(false);
+
+		for (int i = 0; i < 11; i++) {
+	         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+	         octagonGrid.getColumnConstraints().add(column);
+	     }
+		
+		for (int i = 0; i < 11; i++) {
+	         RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+	         octagonGrid.getRowConstraints().add(row);
+	     }
+		
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 11; j++) {
 				OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
@@ -163,10 +178,24 @@ public class QuaxUserInterface {
 	private void initialiseRhombusGrid() {
 		rhombusGridCells = new RhombusTile[11][11];
 		rhombusGrid = new GridPane();
-		rhombusGrid.setAlignment(Pos.CENTER);
-		rhombusGrid.setVgap(RHOMBUS_GRID_GAP);
-		rhombusGrid.setHgap(RHOMBUS_GRID_GAP);
+		rhombusGrid.setAlignment(Pos.TOP_LEFT);
+		rhombusGrid.setVgap(OCTAGON_GRID_GAP);
+		rhombusGrid.setHgap(OCTAGON_GRID_GAP);
 		rhombusGrid.setPickOnBounds(false);
+		
+		rhombusGrid.setPadding(new Insets(RHOMBUS_GRID_GAP, 0, 0, RHOMBUS_GRID_GAP));	
+		
+		for (int i = 0; i < 10; i++) {
+	         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+	         rhombusGrid.getColumnConstraints().add(column);
+	     }
+		
+		for (int i = 0; i < 10; i++) {
+	         RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+	         row.setValignment(VPos.TOP);
+	         rhombusGrid.getRowConstraints().add(row);
+	     }
+		
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
@@ -207,7 +236,9 @@ public class QuaxUserInterface {
 	}
 
 	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
-		return (oct_gap) + (oct_width - OctagonBase.sideLength(oct_width));
+		double sidelen = OctagonBase.sideLength(oct_width);
+		double diagonalHeight = (oct_width - sidelen) / 2;
+		return sidelen + diagonalHeight + (oct_gap/2);
 	}
 	
 	public Scene getScene() {
@@ -302,11 +333,17 @@ public class QuaxUserInterface {
 
 	}
 
-	private abstract static class RhombusBase extends Rectangle {
+	private abstract static class RhombusBase extends Polygon {
 
 		public RhombusBase() {
-			super(OctagonBase.SIDELEN, OctagonBase.SIDELEN);
-			this.setRotate(45.0);
+			this((OCTAGON_WIDTH - OctagonBase.SIDELEN) / 2);
+		}
+		
+		public RhombusBase(double radius) {
+			super(-radius, 0,
+				   0, radius,
+				   radius, 0,
+				   0, -radius);
 		}
 	}
 
