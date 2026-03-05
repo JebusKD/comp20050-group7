@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;
+import types.QuaxTile;
 import types.QuaxTileColour;
 
 class TestQuaxBoard {
@@ -61,6 +62,25 @@ class TestQuaxBoard {
 			b.makeMove(new QuaxCoordinate(6, i, true), QuaxTileColour.BLACK);
 		}
 		assertFalse(b.validMove(new QuaxCoordinate(8, 8, true), QuaxTileColour.BLACK));
+	}
+	
+	// Checks if a correctly-sized array is created for octagon's neighbours.
+	@Test
+	void testNeighboursArraySize1() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(5, 5, true));
+		assertEquals(3, neighbours.length);
+		assertEquals(3, neighbours[0].length);
+		assertEquals(3, neighbours[1].length);
+		assertEquals(3, neighbours[2].length);
+	}
+	
+	// Checks if a correctly-sized array is created for rhombus's neighbours.
+	@Test
+	void testNeighboursArraySize2() {
+		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(4, 3, false));
+		assertEquals(2, neighbours.length);
+		assertEquals(2, neighbours[0].length);
+		assertEquals(2, neighbours[1].length);
 	}
 
 }
