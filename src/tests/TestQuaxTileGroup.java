@@ -138,6 +138,7 @@ class TestQuaxTileGroup {
 		assertEquals(1, g1.size());
 	}
 	
+	@Test
 	void testMerge2() {
 		QuaxTileGroup g1 = new QuaxTileGroup(new Octagon(0, 1));
 		QuaxTileGroup g2 = new QuaxTileGroup(new Octagon(5, 6));
