@@ -1,5 +1,7 @@
 package quax.userinterface;
 
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,20 +31,24 @@ public class QuaxUITest {
     }
 
     @Test
-    void ButtonExists(FxRobot robot) {
-        assertNotNull(robot.lookup("New 2-Player Game").query());
+    void ShowStrategyButtonExists(FxRobot robot) {
+        assertNotNull(robot.lookup("Show Strategy").query());
+    }
+
+    @Test
+    void HideStrategyButtonExists(FxRobot robot) {
+        assertNotNull(robot.lookup("Hide Strategy").query());
+    }
+
+    @Test
+    void PieRuleButtonExists(FxRobot robot){
+        assertNotNull(robot.lookup("PieRule").query());
     }
 
     @Test
     void OctagonClicked(FxRobot robot) {
-        robot.clickOn("#octagon5_5");
+        robot.clickOn("#octagon5-5");
         assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
-    }
-
-    @Test
-    void RhombusClicked(FxRobot robot){
-        robot.clickOn("#rhombus5_5");
-        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getRhombus(5,5).getColour());
     }
 
     @Test
@@ -54,7 +60,52 @@ public class QuaxUITest {
         }
 
 
-        robot.clickOn("#octagon0_10");
+        robot.clickOn("#octagon0-10");
         assertEquals(true,controller.getBoard().checkForWinningMove());
     }
+
+    @Test
+    void InvalidRhombusPlacement(FxRobot robot){
+        QuaxBoard board = controller.getBoard();
+        robot.clickOn("#rhombus5-5");
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
+    }
+
+    @Test
+    void validRhombusPlacement(FxRobot robot){
+        QuaxBoard board = controller.getBoard();
+        board.makeMove(new QuaxCoordinate(5, 5, true), QuaxTileColour.BLACK);
+        board.makeMove(new QuaxCoordinate(5,6, true), QuaxTileColour.BLACK);
+        board.makeMove(new QuaxCoordinate(6, 6, true), QuaxTileColour.BLACK);
+        board.makeMove(new QuaxCoordinate(1, 6, true), QuaxTileColour.BLACK);
+        robot.clickOn("#rhombus5-5");
+        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
+    }
+
+    @Test
+    void OctagonObjectDisplayExists(FxRobot robot){
+        Node turnOct = robot.lookup("#Octagon-object").query();
+        assertEquals(true,robot.lookup("#Octagon-object").query().isVisible());
+    }
+
+    @Test
+    void RhombusObjectDisplayExists(FxRobot robot){
+        Node turnRhom = robot.lookup("#Rhombus-object").query();
+        assertEquals(true,robot.lookup("#Rhombus-object").query().isVisible());
+    }
+
+    @Test
+    void TurnOctagonObject_ChangesColour(FxRobot robot){
+        robot.clickOn("#octagon5-5");
+        Node turnOct = robot.lookup("#Octagon-object").query();
+        assertTrue(turnOct.getStyleClass().contains("tilecolour-white"));
+    }
+
+    @Test
+    void TurnRhombusObject_ChangesColour(FxRobot robot){
+        robot.clickOn("#octagon5-5");
+        Node turnRhombus = robot.lookup("#Rhombus-object").query();
+        assertTrue(turnRhombus.getStyleClass().contains("tilecolour-white"));
+    }
+
 }
