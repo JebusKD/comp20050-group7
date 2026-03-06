@@ -61,11 +61,24 @@ public class QuaxBoard {
 			Octagon tile = getOctagon(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
 		} else {
+			if(!isValidRhombusPlacement(q, t)) return false;
 			Rhombus tile = getRhombus(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
 		}
 		return true;
 	}
+	
+	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
+        QuaxTile[][] n = neighbours(q);
+
+        if( n[0][0].getColour() == c && n[1][1].getColour() == c){
+            return true;
+        }
+        if( n[1][0].getColour() == c &&  n[0][1].getColour() == c){
+            return true;
+        }
+        return false;
+    }
 	
 	public QuaxTile[][] neighbours(QuaxCoordinate q) {
 		
