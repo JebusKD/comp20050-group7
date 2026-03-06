@@ -35,6 +35,52 @@ class TestQuaxBoard {
 		
 		assertEquals(b.getTile(new QuaxCoordinate(2, 3, true)).getColour(), QuaxTileColour.WHITE);
 	}
+	
+	@Test
+	void testOccupiedTile1() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE));
+	}
+	
+	@Test
+	void testOccupiedTile2() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK));
+	}
+	
+	@Test
+	void testOccupiedTile3() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
+		b.makeMove(new QuaxCoordinate(3, 4, true), QuaxTileColour.WHITE);
+		b.makeMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.WHITE);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.WHITE));
+	}
+	
+	@Test
+	void testOccupiedTile4() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK));
+	}
+	
+	@Test
+	void testOccupiedTile5() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE));
+	}
+	
+	@Test
+	void testOccupiedTile6() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK);
+		b.makeMove(new QuaxCoordinate(3, 4, true), QuaxTileColour.BLACK);
+		b.makeMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.BLACK);
+		
+		assertFalse(b.validMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.BLACK));
+	}
 
 	@Test
 	void testWinningBoard1() {
