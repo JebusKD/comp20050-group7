@@ -42,7 +42,7 @@ import types.QuaxTile;
 
 public class QuaxUserInterface {
 
-	private static final double OCTAGON_WIDTH = 60;
+	private static final double OCTAGON_WIDTH = 40;
 	
 	private static final double OCTAGON_GRID_GAP = 1;
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
@@ -123,7 +123,7 @@ public class QuaxUserInterface {
         };
 		
 		LinearGradient lgl = new LinearGradient(1,0,1,1,true, CycleMethod.NO_CYCLE,stops);
-		Rectangle rectangle = new Rectangle(730,730); //the multicoloured border around the board
+		Rectangle rectangle = new Rectangle(OCTAGON_WIDTH*12+(10*OCTAGON_GRID_GAP),OCTAGON_WIDTH*12+(10*OCTAGON_GRID_GAP)); //the multicoloured border around the board
         rectangle.setFill(lgl);
 		
         GridPane boardWithCoords = initialiseCoordsImage();
