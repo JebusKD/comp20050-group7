@@ -109,4 +109,8 @@ public class QuaxController {
 		}
 	}
 	
+	public QuaxBoard getBoard() {
+		return this.board;
+	}
+	
 }

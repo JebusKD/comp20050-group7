@@ -31,5 +31,17 @@ class TestQuaxCoordinate {
 		QuaxTile t = b.getRhombus(6, 4);
 		assertTrue(t.getCoordinates().isRhombusMove());
 	}
+	
+	@Test
+	void testX() {
+		QuaxTile t = b.getOctagon(3,  6);
+		assertEquals(3, t.getCoordinates().x());
+	}
+	
+	@Test
+	void testY() {
+		QuaxTile t = b.getOctagon(3,  6);
+		assertEquals(6, t.getCoordinates().y());
+	}
 
 }

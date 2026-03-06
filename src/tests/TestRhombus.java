@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import types.Rhombus;
+import types.Octagon;
 import types.QuaxCoordinate;
 import types.QuaxTile;
 import types.QuaxTileColour;
@@ -228,5 +229,12 @@ class TestRhombus {
 	void testUnassignedGroup() {
 		QuaxTile t = new Rhombus(5, 5);
 		assertNull(t.getGroup());
+	}
+	
+	@Test
+	void testStrategyValue() {
+		QuaxTile t = new Rhombus(3, 2);
+		t.setStrategyValue(6);
+		assertEquals(6, t.getStrategyValue());
 	}
 }
