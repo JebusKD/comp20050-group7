@@ -6,7 +6,8 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-	TestBoardCopying.class
+	TestBoardCopying.class,
+	TestRhombusPlacement.class
 })
 @DisplayName("Sprint 2 Unit Tests")
 class Sprint2TestSuite {
