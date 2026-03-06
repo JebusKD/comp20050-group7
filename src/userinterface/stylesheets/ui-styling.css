@@ -41,12 +41,13 @@
 .coordinate-letter-style{
     -fx-font-family : Arial;
     -fx-font-weight: bolder;
+	-fx-font-size: 10px;
     -fx-text-fill: #FFFF;
 }
 
 .coordinate-number-style{
     -fx-font-family : Arial;
     -fx-font-weight: bolder;
-    -fx-font-size: 15px;
+    -fx-font-size: 12px;
     -fx-text-fill: #000;
 }
