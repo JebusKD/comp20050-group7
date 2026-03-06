@@ -53,10 +53,10 @@ public class TestRhombusPlacement {
 	// Ensures rhombic tiles can be placed in an instance where both players can place a rhombus.
 	@Test
 	void testRhombusPlacement5() {
-		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.BLACK);
+		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.WHITE);
-		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.WHITE);
+		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.WHITE);
 		
 		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
@@ -105,10 +105,10 @@ public class TestRhombusPlacement {
 	// Ensures rhombic tiles can be placed in an instance where both players can place a rhombus.
 	@Test
 	void testRhombusPlacement11() {
-		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.WHITE);
+		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.BLACK);
-		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.BLACK);
+		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.BLACK);
 		
 		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
