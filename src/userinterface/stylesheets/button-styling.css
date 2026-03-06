@@ -1,0 +1,35 @@
+.button1{
+    -fx-text-fill: #ff4dd2;
+    -fx-background-color: #002699;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+    -fx-font: ARIAL;
+}
+
+.button2{
+    -fx-background-color:
+    linear-gradient(#5C7FFF,#62E4F8),
+    #B33BCE,
+    radial-gradient(center 30% 30%,radius 200%, #e6e6e6,#7A4ED8);
+    -fx-background-radius :30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-text-fill : #121516;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 10 20 10 20;
+
+}
+
+.button3{
+    -fx-background-color:
+            linear-gradient(#4981D6, #306CC5),
+            radial-gradient(center 50% -40%, radius 200%, #3665AC 45%,#2657A0 50%);
+    -fx-background-radius: 20, 25;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #FFFFFFFF;
+    -fx-padding: 10 20 10 20;
+    -fx-font-weight: EXTRA_BOLD;
+    -fx-font-size: 15px;
+}

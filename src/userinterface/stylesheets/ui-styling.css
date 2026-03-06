@@ -1,0 +1,53 @@
+.turn-label{
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-family : "Georgia";
+}
+
+.rectangle-colour{
+    -fx-fill: #FFFF
+}
+
+.hbox-custom{
+    -fx-background-radius: 5.0;
+    -fx-background-color: #91D5FF;
+    -fx-padding: 15;
+}
+
+.vbox{
+    -fx-border-color: #000;
+    -fx-border-width: 3px;
+    -fx-padding: 10;
+    -fx-spacing: 8;
+    -fx-background-color:#9F99ED;
+}
+
+.custom-title{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 35px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.board-border{
+    -fx-border-color: #000
+}
+
+.background-rectangle{
+    -fx-background-color: #DDC9F1;
+}
+
+.coordinate-letter-style{
+    -fx-font-family : Arial;
+    -fx-font-weight: bolder;
+	-fx-font-size: 10px;
+    -fx-text-fill: #FFFF;
+}
+
+.coordinate-number-style{
+    -fx-font-family : Arial;
+    -fx-font-weight: bolder;
+    -fx-font-size: 12px;
+    -fx-text-fill: #000;
+}
