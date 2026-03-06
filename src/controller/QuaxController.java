@@ -1,10 +1,13 @@
 package controller;
 
+import java.util.Random;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import model.QuaxBoard;
+import player.BogoBot;
 import player.HumanPlayer;
 import player.QuaxPlayer;
 import types.QuaxCoordinate;
@@ -13,6 +16,8 @@ import types.QuaxTileColour;
 import userinterface.QuaxUserInterface;
 
 public class QuaxController {
+	
+	static final Random RNG = new Random();
 	
 	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
@@ -51,7 +56,7 @@ public class QuaxController {
 			}
 		});
 		
-		startTwoPlayerGame();
+		startGameAgainstBot();
 	}
 	
 	public void startTwoPlayerGame() {
@@ -71,6 +76,21 @@ public class QuaxController {
 		moveNumber = 0;
 		
 		curPlayer().movePrompt(board);
+	}
+	
+	public void startGameAgainstBot() {
+		if (RNG.nextInt() % 2 == 0) {
+			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.BLACK, stage);
+			QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE, stage);
+			
+			startGame(human, bot);
+		}
+		else {
+			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.WHITE, stage);
+			QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK, stage);
+			
+			startGame(bot, human);
+		}
 	}
 	
 	public QuaxPlayer curPlayer() {
