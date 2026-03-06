@@ -155,6 +155,8 @@ public class QuaxUserInterface {
 	}
 	
 	private GridPane initialiseCoordsImage(){
+		double paddingValue = OCTAGON_WIDTH / 12;
+		
         GridPane coordGrid = new GridPane();
         
         coordGrid.setAlignment(Pos.CENTER);
@@ -169,6 +171,9 @@ public class QuaxUserInterface {
         
         GridPane topCoords = new GridPane();
         GridPane bottomCoords = new GridPane();
+        
+        topCoords.setPadding(new Insets(0, 0, paddingValue, 0));
+    	bottomCoords.setPadding(new Insets(paddingValue, 0, 0, 0));
         
         topCoords.setHgap(OCTAGON_GRID_GAP);
         topCoords.setAlignment(Pos.CENTER);
@@ -208,6 +213,9 @@ public class QuaxUserInterface {
 
         GridPane leftCoords = new GridPane();
         GridPane rightCoords = new GridPane();
+        
+        leftCoords.setPadding(new Insets(0, paddingValue, 0, 0));
+    	rightCoords.setPadding(new Insets(0, 0, 0, paddingValue));
         
         leftCoords.setVgap(OCTAGON_GRID_GAP);
         leftCoords.setAlignment(Pos.CENTER);
