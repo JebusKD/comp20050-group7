@@ -3,6 +3,7 @@ package player;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
@@ -58,10 +59,9 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	@Override
 	public void movePrompt(QuaxBoard b) {
-		Thread t = new Thread(() -> {
+		Platform.runLater(() -> {
 			submitMove(computeMove(b));
 		});
-		t.start();
 	}
 	
 }
