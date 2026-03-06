@@ -94,6 +94,9 @@ public class QuaxUserInterface {
 	private void initialiseStylesheets() {
 		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/tile-styling.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/board-styling.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/ui-styling.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/button-styling.css").toExternalForm());
+	
 	}
 
 	private void initialiseWindow() {
@@ -139,19 +142,15 @@ public class QuaxUserInterface {
         title.getStyleClass().add("custom-title");
 		
         outer.add(title,0,0);
-        outer.add(stack,0,1);
+        outer.add(board,0,1);
         outer.add(this.sideBar,1,1);
 
         outer.setAlignment(Pos.CENTER);
         
-		this.regions.add(this.topBar, 0, 0);
-		this.regions.add(this.bottomBar, 0, 2);
-		this.regions.add(this.sideBar, 1, 0, 1, 3);
-
 		this.sceneWidth = 720;
 		this.sceneHeight = 480;
 		
-		this.scene = new Scene(this.window, sceneWidth, sceneHeight);
+		this.scene = new Scene(outer, sceneWidth, sceneHeight);
 
 	}
 	
