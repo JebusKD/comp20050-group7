@@ -127,7 +127,7 @@ public class QuaxUserInterface {
         rectangle.setFill(lgl);
 		
         GridPane boardWithCoords = initialiseCoordsImage();
-        
+
         this.board = new StackPane(rectangle,behindHourglassBorder,hourglassBorder,gridBackground,boardWithCoords,gridHolder);
 		
         this.sideBar = initialiseButtons();
@@ -156,39 +156,88 @@ public class QuaxUserInterface {
 	
 	private GridPane initialiseCoordsImage(){
         GridPane coordGrid = new GridPane();
-
+        
+        coordGrid.setAlignment(Pos.CENTER);
+        
+        coordGrid.getColumnConstraints().add(new ColumnConstraints());
+        coordGrid.getColumnConstraints().add(new ColumnConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
+        coordGrid.getColumnConstraints().add(new ColumnConstraints());
+        
+        coordGrid.getRowConstraints().add(new RowConstraints());
+        coordGrid.getRowConstraints().add(new RowConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
+        coordGrid.getRowConstraints().add(new RowConstraints());
+        
+        GridPane topCoords = new GridPane();
+        GridPane bottomCoords = new GridPane();
+        
+        topCoords.setHgap(OCTAGON_GRID_GAP);
+        topCoords.setAlignment(Pos.CENTER);
+        bottomCoords.setHgap(OCTAGON_GRID_GAP);
+        bottomCoords.setAlignment(Pos.CENTER);
+        
         for(int i = 0; i < 11; i++){
+        	
+        	topCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
+        	bottomCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
+        	
             Label letterCoordTop = new Label(String.valueOf((char) ('A' + i)));
             Label letterCoordBottom = new Label(String.valueOf((char) ('A' + i)));
 
-            letterCoordTop.setPrefWidth(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+        	StackPane topCoordPane = new StackPane(letterCoordTop);
+        	StackPane bottomCoordPane = new StackPane(letterCoordBottom);
+            
+            letterCoordTop.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            letterCoordTop.setPrefHeight(Region.USE_COMPUTED_SIZE);
             letterCoordTop.getStyleClass().add("coordinate-letter-style");
             letterCoordTop.setAlignment(Pos.CENTER);
 
-            letterCoordBottom.setPrefWidth(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
+            letterCoordBottom.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            letterCoordBottom.setPrefHeight(Region.USE_COMPUTED_SIZE);
             letterCoordBottom.getStyleClass().add("coordinate-letter-style");
             letterCoordBottom.setAlignment(Pos.CENTER);
-
+/*
             letterCoordTop.setPadding(new Insets(20,0,0,20));
             letterCoordBottom.setPadding(new Insets(5,5,0,5));
-            coordGrid.add(letterCoordTop,i+1,0);
-            coordGrid.add(letterCoordBottom,i+1,12);
+  */          
+            topCoords.add(topCoordPane,i,0);
+            bottomCoords.add(bottomCoordPane,i,0);
         }
+        
+        coordGrid.add(topCoords, 1, 0);
+        coordGrid.add(bottomCoords, 1, 2);
+
+        GridPane leftCoords = new GridPane();
+        GridPane rightCoords = new GridPane();
+        
+        leftCoords.setVgap(OCTAGON_GRID_GAP);
+        leftCoords.setAlignment(Pos.CENTER);
+        rightCoords.setVgap(OCTAGON_GRID_GAP);
+        rightCoords.setAlignment(Pos.CENTER);
 
         for(int j =0;j < 11; j++){
+        	leftCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
+        	rightCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
+        	
             Label numCoordLeft = new Label(String.valueOf(11 -j));
             Label numCoordRight = new Label(String.valueOf(11-j));
             numCoordLeft.getStyleClass().add("coordinate-number-style");
-            numCoordLeft.setPrefHeight(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
-            numCoordLeft.setPadding(new Insets(20,0,0,20));
+            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            //numCoordLeft.setPadding(new Insets(20,0,0,20));
 
             numCoordRight.getStyleClass().add("coordinate-number-style");
-            numCoordRight.setPrefHeight(OCTAGON_WIDTH + OCTAGON_GRID_GAP);
-            numCoordRight.setPadding(new Insets(5,0,0,5));
+            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            //numCoordRight.setPadding(new Insets(5,0,0,5));
+            
+            StackPane leftCoordPane = new StackPane(numCoordLeft);
+        	StackPane rightCoordPane = new StackPane(numCoordRight);
 
-            coordGrid.add(numCoordLeft,0,j + 1);
-            coordGrid.add(numCoordRight,12,j+ 1);
+            leftCoords.add(numCoordLeft,0,j);
+            rightCoords.add(numCoordRight,0,j);
         }
+        
+        coordGrid.add(leftCoords, 0, 1);
+        coordGrid.add(rightCoords, 2, 1);
+        
         return coordGrid;
     }
 	
