@@ -12,6 +12,12 @@ public abstract class QuaxTile {
 		this.strategyValue = 0;
 	}
 	
+	public QuaxTile(QuaxTile t) {
+		this.colour = t.colour;
+		this.strategyValue = t.strategyValue;
+		this.group = null; // Groups aren't copied, add in the board after the fact.
+	}
+	
 	public QuaxTileColour getColour() {
 		return this.colour;
 	}

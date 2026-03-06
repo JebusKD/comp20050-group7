@@ -6,8 +6,15 @@ public class Rhombus extends QuaxTile {
 	private final int yPos;
 	
 	public Rhombus(int x, int y) {
+		super();
 		this.xPos = x;
 		this.yPos = y;
+	}
+	
+	public Rhombus(Rhombus r) {
+		super(r);
+		this.xPos = r.xPos;
+		this.yPos = r.yPos;
 	}
 	
 	public QuaxCoordinate getCoordinates() {
