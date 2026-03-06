@@ -1,8 +1,9 @@
 package types;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class QuaxTileGroup {
+public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	private LinkedList<QuaxTile> members;
 	private boolean presenceLow; // Group presence on a or 1 rank
@@ -43,4 +44,9 @@ public class QuaxTileGroup {
 			t.setGroup(this);
 		}
 	}
+	
+	public Iterator<QuaxTile> iterator() {
+		return members.iterator();
+	}
+
 }

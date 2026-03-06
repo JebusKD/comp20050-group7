@@ -4,6 +4,7 @@ import controller.QuaxController;
 import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.QuaxBoard;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
@@ -29,7 +30,7 @@ public abstract class QuaxPlayer {
 		else this.colour = colour;
 	}
 	
-	public abstract void movePrompt();
+	public abstract void movePrompt(QuaxBoard b);
 	
 	protected void submitMove(QuaxCoordinate move) {
 		QuaxCoordinateEvent submission = new QuaxCoordinateEvent(QuaxController.MOVE_SUBMITTED_EVENT, move);

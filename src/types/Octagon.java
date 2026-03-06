@@ -6,8 +6,15 @@ public class Octagon extends QuaxTile {
 	private final int yPos;
 	
 	public Octagon(int x, int y) {
+		super();
 		this.xPos = x;
 		this.yPos = y;
+	}
+	
+	public Octagon(Octagon o) {
+		super(o);
+		this.xPos = o.xPos;
+		this.yPos = o.yPos;
 	}
 	
 	public QuaxCoordinate getCoordinates() {

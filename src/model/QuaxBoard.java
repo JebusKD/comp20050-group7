@@ -1,8 +1,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import types.Octagon;
 import types.QuaxCoordinate;
@@ -11,7 +13,7 @@ import types.QuaxTileColour;
 import types.QuaxTileGroup;
 import types.Rhombus;
 
-public class QuaxBoard {
+public class QuaxBoard implements Iterable<QuaxTile> {
 
 	private Octagon[][] octagonGrid;
 	private Rhombus[][] rhombusGrid;
@@ -41,6 +43,36 @@ public class QuaxBoard {
 		this.previousMove = null;
 	}
 	
+	// Copy constructor
+	public QuaxBoard(QuaxBoard b) {
+		this.octagonGrid = new Octagon[11][11];
+		this.rhombusGrid = new Rhombus[10][10];
+		
+		this.trackedGroups = new LinkedList<QuaxTileGroup>();
+		
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				octagonGrid[i][j] = new Octagon(b.octagonGrid[i][j]);
+			}
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				rhombusGrid[i][j] = new Rhombus(b.rhombusGrid[i][j]);
+			}
+		}
+		
+		this.previousMove = b.previousMove;
+		
+		for (QuaxTileGroup g : b.trackedGroups) {
+			QuaxTileGroup newGroup = new QuaxTileGroup();
+			this.trackGroup(newGroup);
+			for (QuaxTile t : g) {
+				newGroup.addTile(getTile(t.getCoordinates()));
+			}
+		}
+	}
+	
 	public Octagon getOctagon(int x, int y) {
 		return octagonGrid[x][y];
 	}
@@ -61,11 +93,24 @@ public class QuaxBoard {
 			Octagon tile = getOctagon(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
 		} else {
+			if(!isValidRhombusPlacement(q, t)) return false;
 			Rhombus tile = getRhombus(q.x(), q.y());
 			if (tile.getColour() != QuaxTileColour.NONE) return false;
 		}
 		return true;
 	}
+	
+	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
+        QuaxTile[][] n = neighbours(q);
+
+        if( n[0][0].getColour() == c && n[1][1].getColour() == c){
+            return true;
+        }
+        if( n[1][0].getColour() == c &&  n[0][1].getColour() == c){
+            return true;
+        }
+        return false;
+    }
 	
 	public QuaxTile[][] neighbours(QuaxCoordinate q) {
 		
@@ -172,5 +217,44 @@ public class QuaxBoard {
 	
 	public QuaxCoordinate previousMove() {
 		return previousMove;
+	}
+	
+	public Iterator<QuaxTile> iterator() {
+		return new QuaxBoardIterator(this);
+	}
+	
+	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
+		private static final int MAX_ELEMENTS = 221;
+		
+		private int cursor;
+		private ArrayList<QuaxTile> elements;
+		
+		public QuaxBoardIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<QuaxTile>(MAX_ELEMENTS);
+			
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 11; j++) {
+					this.elements.add(source.getOctagon(i, j));
+				}
+				for (int j = 0; j < 10; j++) {
+					this.elements.add(source.getRhombus(i, j));
+				}
+			}
+			for (int j = 0; j < 11; j++) {
+				this.elements.add(source.getOctagon(10, j));
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < MAX_ELEMENTS;
+		}
+		
+		@Override
+		public QuaxTile next() {
+			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+			return elements.get(cursor++);
+		}
 	}
 }
