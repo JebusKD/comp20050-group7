@@ -334,7 +334,9 @@ public class QuaxUserInterface {
     private HBox initialisePlayerTurn(){
        HBox playerTurn = new HBox(5);
        octagonObject = new OctagonObject(40);
+       octagonObject.setId("Octagon-object");
        rhombusObject = new RhombusObject();
+       rhombusObject.setId("Rhombus-object");
        if(octagonObject.getFill() == null){
            octagonObject.setFill(Color.BLACK);
        }
