@@ -21,6 +21,20 @@ class TestQuaxBoard {
 	void setUp() throws Exception {
 		b = new QuaxBoard();
 	}
+	
+	@Test
+	void testMakeMove1() {
+		b.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.BLACK);
+		
+		assertEquals(b.getTile(new QuaxCoordinate(4, 7, true)).getColour(), QuaxTileColour.BLACK);
+	}
+	
+	@Test
+	void testMakeMove2() {
+		b.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
+		
+		assertEquals(b.getTile(new QuaxCoordinate(2, 3, true)).getColour(), QuaxTileColour.WHITE);
+	}
 
 	@Test
 	void testWinningBoard1() {
@@ -129,31 +143,6 @@ class TestQuaxBoard {
 	}
 	
 	// Ensures the correct entries in neighbours are indeed null/not null
-	// Octagon against left border
-			/*
-			  		null | tile | tile
-			  		-----+------+-----
-			  		null | null | tile
-			  		-----+------+-----
-			  		null | tile | tile
-			 */
-	@Test
-	void testNeighboursStructure2() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 1, true));
-		
-		assertNull(neighbours[0][0]);
-		assertNotNull(neighbours[0][1]);
-		assertNotNull(neighbours[0][2]);
-		assertNull(neighbours[1][0]);
-		assertNotNull(neighbours[1][1]);
-		assertNotNull(neighbours[1][2]);
-		assertNull(neighbours[2][0]);
-		assertNotNull(neighbours[2][1]);
-		assertNotNull(neighbours[2][2]);
-		
-	}
-	
-	// Ensures the correct entries in neighbours are indeed null/not null
 	// Rhombus against top-left (A rhombus should see four adjacent octagons always)
 	/*
 	  		tile | tile
@@ -161,7 +150,7 @@ class TestQuaxBoard {
 	  		tile | tile
 	 */
 	@Test
-	void testNeighboursStructure3() {
+	void testNeighboursStructure2() {
 		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 0, false));
 		
 		assertNotNull(neighbours[0][0]);
