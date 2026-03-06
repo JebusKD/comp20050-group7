@@ -229,4 +229,11 @@ class TestOctagon {
 		QuaxTile t = new Octagon(5, 5);
 		assertNull(t.getGroup());
 	}
+	
+	@Test
+	void testStrategyValue() {
+		QuaxTile t = new Octagon(3, 2);
+		t.setStrategyValue(5);
+		assertEquals(5, t.getStrategyValue());
+	}
 }
