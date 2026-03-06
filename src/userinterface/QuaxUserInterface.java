@@ -222,17 +222,19 @@ public class QuaxUserInterface {
             Label numCoordRight = new Label(String.valueOf(11-j));
             numCoordLeft.getStyleClass().add("coordinate-number-style");
             numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
             //numCoordLeft.setPadding(new Insets(20,0,0,20));
 
             numCoordRight.getStyleClass().add("coordinate-number-style");
             numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
             //numCoordRight.setPadding(new Insets(5,0,0,5));
             
             StackPane leftCoordPane = new StackPane(numCoordLeft);
         	StackPane rightCoordPane = new StackPane(numCoordRight);
 
-            leftCoords.add(numCoordLeft,0,j);
-            rightCoords.add(numCoordRight,0,j);
+            leftCoords.add(leftCoordPane,0,j);
+            rightCoords.add(rightCoordPane,0,j);
         }
         
         coordGrid.add(leftCoords, 0, 1);
