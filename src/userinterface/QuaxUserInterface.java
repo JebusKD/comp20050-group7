@@ -391,8 +391,13 @@ public class QuaxUserInterface {
 		return this.scene;
 	}
 	
-	private static interface Tile {
-		public void setColour(QuaxTileColour colour);
+	private static interface Tile extends Styleable {
+		default public void setColour(QuaxTileColour colour) {
+			this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+										   QuaxTileColour.WHITE.tilecolourStyle(),
+										   QuaxTileColour.NONE.tilecolourStyle());
+			this.getStyleClass().add(colour.tilecolourStyle());
+        }
 		public QuaxCoordinate getCoordinate();
 	}
 
@@ -457,13 +462,6 @@ public class QuaxUserInterface {
 			return this.coordinate;
 		}
 
-		@Override
-		public void setColour(QuaxTileColour colour) {
-			this.getStyleClass().removeAll("tilecolour-none", "tilecolour-black", "tilecolour-white");
-			this.getStyleClass().add(colour.tilecolourStyle());
-		}
-
-
 	}
 
 	private abstract static class RhombusBase extends Polygon {
@@ -505,12 +503,6 @@ public class QuaxUserInterface {
 		@Override
 		public QuaxCoordinate getCoordinate() {
 			return this.coordinate;
-		}
-
-		@Override
-		public void setColour(QuaxTileColour colour) {
-			this.getStyleClass().removeAll("tilecolour-none", "tilecolour-black", "tilecolour-white");
-			this.getStyleClass().add(colour.tilecolourStyle());
 		}
 	}
 
@@ -558,7 +550,8 @@ public class QuaxUserInterface {
     		default public void setColour(QuaxTileColour colour) {
     			if (colour == QuaxTileColour.NONE) throw new IllegalArgumentException();
     			else {
-    				this.getStyleClass().removeAll("tilecolour-black", "tilecolour-white");
+    				this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+							   					   QuaxTileColour.WHITE.tilecolourStyle());
     				this.getStyleClass().add(colour.tilecolourStyle());
     			}
             }
