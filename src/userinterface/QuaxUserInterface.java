@@ -546,13 +546,14 @@ public class QuaxUserInterface {
     	private static final double HBOX_SPACING = 5;
     	private static final double OCTAGON_OBJECT_WIDTH = 40;
     	
-    	private OctagonObject octagonObject;
-    	private RhombusObject rhombusObject;
+    	private OctagonTurnIndicator octagonIndicator;
+    	private RhombusTurnIndicator rhombusIndicator;
     	private TurnText turnText;
     	private HBox turnTracker;
     	
     	public PlayerTurnIndicator() {
     		this.turnTracker = createTurnTracker();
+    		this.setColour(QuaxTileColour.BLACK);
     	}
     	
     	public HBox getTurnTracker() {
@@ -560,8 +561,8 @@ public class QuaxUserInterface {
     	};
     	
     	public void setColour(QuaxTileColour colour) {
-    		this.octagonObject.setColour(colour);
-    		this.rhombusObject.setColour(colour);
+    		this.octagonIndicator.setColour(colour);
+    		this.rhombusIndicator.setColour(colour);
     		this.turnText.setColour(colour);
     	}
     	
@@ -569,17 +570,17 @@ public class QuaxUserInterface {
     		HBox box = new HBox(HBOX_SPACING);
     		createComponents();
     		box.getStyleClass().add("hbox-custom");
-    		box.getChildren().addAll(turnText, octagonObject, rhombusObject);
+    		box.getChildren().addAll(turnText, octagonIndicator, rhombusIndicator);
     		return box;
     	}
     	
     	private void createComponents() {
-    		this.octagonObject = new OctagonObject();
-    		this.rhombusObject = new RhombusObject();
+    		this.octagonIndicator = new OctagonTurnIndicator();
+    		this.rhombusIndicator = new RhombusTurnIndicator();
     		this.turnText = new TurnText();
     	}
     	
-    	private static interface ObjectInterface extends Styleable {
+    	private static interface TurnIndicatorShape extends Styleable {
     		default public void setColour(QuaxTileColour colour) {
                 this.getStyleClass().removeAll("tilecolour-black", "tilecolour-white");
                 switch (colour) {
@@ -595,14 +596,12 @@ public class QuaxUserInterface {
             }
     	}
     	
-    	private static class OctagonObject extends OctagonBase implements ObjectInterface {
-            private QuaxTileColour colour;
-
-            public OctagonObject() {
+    	private static class OctagonTurnIndicator extends OctagonBase implements TurnIndicatorShape {
+            public OctagonTurnIndicator() {
             	this(OCTAGON_OBJECT_WIDTH);
             }
             
-            public OctagonObject(double width) {
+            public OctagonTurnIndicator(double width) {
                 super(width);
                 this.setId("Octagon-object");
                 this.getStyleClass().add("object");
@@ -611,12 +610,11 @@ public class QuaxUserInterface {
 
         }
 
-        private static class RhombusObject extends RhombusBase implements ObjectInterface {
-            public RhombusObject() {
+        private static class RhombusTurnIndicator extends RhombusBase implements TurnIndicatorShape {
+            public RhombusTurnIndicator() {
                 super();
                 this.setId("Rhombus-object");
                 this.getStyleClass().add("object");
-                this.setColour(QuaxTileColour.BLACK);
             }
         }
         
@@ -624,15 +622,18 @@ public class QuaxUserInterface {
         	public TurnText() {
         		super();
         		this.getStyleClass().add("turn-label");
-        		this.setColour(QuaxTileColour.BLACK);
         	}
         	
         	public void setColour(QuaxTileColour colour) {
-        		if (colour == QuaxTileColour.BLACK) {
-        			this.setText("BLACK to play");
-        		}
-        		else {
-        			this.setText("WHITE to play");
+        		switch (colour) {
+        			case BLACK :
+        				this.setText("BLACK to play");
+        				break;
+        			case WHITE :
+        				this.setText("WHITE to play");
+        				break;
+        			default :
+        				throw new IllegalArgumentException("Cannot be set to none.");
         		}
         	}
         }
