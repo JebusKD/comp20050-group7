@@ -17,6 +17,7 @@ public class Rhombus extends QuaxTile {
 		this.yPos = r.yPos;
 	}
 	
+	@Override
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPos, yPos, false);
 	}

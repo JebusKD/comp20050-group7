@@ -17,6 +17,7 @@ public class Octagon extends QuaxTile {
 		this.yPos = o.yPos;
 	}
 	
+	@Override
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPos, yPos, true);
 	}
