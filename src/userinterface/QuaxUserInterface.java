@@ -581,19 +581,16 @@ public class QuaxUserInterface {
     	
     	private static interface ObjectInterface extends Styleable {
     		default public void setColour(QuaxTileColour colour) {
-                this.getStyleClass().remove("tilecolour-none");
-                this.getStyleClass().remove("tilecolour-black");
-                this.getStyleClass().remove("tilecolour-white");
+                this.getStyleClass().removeAll("tilecolour-black", "tilecolour-white");
                 switch (colour) {
-                    case QuaxTileColour.NONE :
-                        this.getStyleClass().add("tilecolour-none");
-                        break;
                     case QuaxTileColour.BLACK :
                         this.getStyleClass().add("tilecolour-black");
                         break;
                     case QuaxTileColour.WHITE :
                         this.getStyleClass().add("tilecolour-white");
                         break;
+                    default :
+                        throw new IllegalArgumentException("Cannot be set to NONE.");
                 }
             }
     	}
