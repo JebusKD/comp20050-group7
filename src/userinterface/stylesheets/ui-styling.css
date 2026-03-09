@@ -51,3 +51,9 @@
     -fx-font-size: 12px;
     -fx-text-fill: #000;
 }
+
+.turn-indicator-shape {
+    -fx-stroke : #0F496B;
+    -fx-stroke-type:inside;
+    -fx-stroke-width: 3;
+}

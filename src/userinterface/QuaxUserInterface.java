@@ -603,8 +603,8 @@ public class QuaxUserInterface {
             
             public OctagonTurnIndicator(double width) {
                 super(width);
-                this.setId("Octagon-object");
-                this.getStyleClass().add("object");
+                this.setId("Octagon-object"); // TODO Change this ID - also needs to be done in UI test
+                this.getStyleClass().add("turn-indicator-shape");
                 this.setColour(QuaxTileColour.BLACK);
             }
 
@@ -613,8 +613,8 @@ public class QuaxUserInterface {
         private static class RhombusTurnIndicator extends RhombusBase implements TurnIndicatorShape {
             public RhombusTurnIndicator() {
                 super();
-                this.setId("Rhombus-object");
-                this.getStyleClass().add("object");
+                this.setId("Rhombus-object"); // TODO Change this ID - also needs to be done in UI test
+                this.getStyleClass().add("turn-indicator-shape");
             }
         }
         
