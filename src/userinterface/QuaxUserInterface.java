@@ -5,6 +5,7 @@ import java.util.List;
 import controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.Styleable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -59,7 +60,8 @@ public class QuaxUserInterface {
 	private StackPane topBar;
 	private StackPane bottomBar;
 	private VBox sideBar;
-	private HBox turns;
+	
+	private PlayerTurnIndicator turnIndicator;
 	
 	private Label title;
 	private StackPane stack;
@@ -70,10 +72,6 @@ public class QuaxUserInterface {
 	
 	private double sceneWidth;
 	private double sceneHeight;
-	
-	private OctagonObject octagonObject;
-    private RhombusObject rhombusObject;
-    private Label labelTurn;
 
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
@@ -131,9 +129,9 @@ public class QuaxUserInterface {
         this.board = new StackPane(rectangle,behindHourglassBorder,hourglassBorder,gridBackground,boardWithCoords,gridHolder);
 		
         this.sideBar = initialiseButtons();
-        this.turns = initialisePlayerTurn();
-        turns.getStyleClass().add("hbox-custom");
-        sideBar.getChildren().add(turns);
+        this.turnIndicator = new PlayerTurnIndicator();
+        
+        sideBar.getChildren().add(this.turnIndicator.getTurnTracker());
         sideBar.getStyleClass().add("vbox");
         
         GridPane outer = new GridPane();
@@ -326,38 +324,9 @@ public class QuaxUserInterface {
         return sideBar;
     }
 
-    private HBox initialisePlayerTurn(){
-       HBox playerTurn = new HBox(5);
-       octagonObject = new OctagonObject(40);
-       octagonObject.setId("Octagon-object");
-       rhombusObject = new RhombusObject();
-       rhombusObject.setId("Rhombus-object");
-       if(octagonObject.getFill() == null){
-           octagonObject.setFill(Color.BLACK);
-       }
-       if(rhombusObject.getFill() == null){
-           rhombusObject.setFill(Color.BLACK);
-       }
-
-        labelTurn = new Label("BLACK to play");
-        labelTurn.getStyleClass().add("turn-label");
-
-        playerTurn.getChildren().addAll(labelTurn,octagonObject,rhombusObject);
-        return playerTurn;
-    }
-
-    private void initialisePlayerTurnHelper(QuaxTileColour c,OctagonObject o,RhombusObject r,Label labelTurn){
-        if(c == QuaxTileColour.WHITE){
-           o.setColour(QuaxTileColour.BLACK);
-           r.setColour(QuaxTileColour.BLACK);
-           labelTurn.setText("BLACK to play");
-       }
-        else{
-            o.setColour(QuaxTileColour.WHITE);
-            r.setColour(QuaxTileColour.WHITE);
-            labelTurn.setText("WHITE to play");
-        }
-        labelTurn.getStyleClass().add("turn-label");
+    private PlayerTurnIndicator createPlayerTurnIndicator(){
+       PlayerTurnIndicator playerTurnIndicator = new PlayerTurnIndicator();
+        return playerTurnIndicator;
     }
 	
 	public void setBoard(QuaxBoard b) {
@@ -396,11 +365,12 @@ public class QuaxUserInterface {
 	public void fetchPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
 		if(previousMove == null){
-            initialisePlayerTurnHelper(QuaxTileColour.BLACK,octagonObject,rhombusObject,labelTurn);
+            this.turnIndicator.setColour(QuaxTileColour.BLACK);
         }
         if (previousMove != null) {
-            this.setTile(previousMove, b.getTile(previousMove).getColour());
-            initialisePlayerTurnHelper(b.getTile(previousMove).getColour(),octagonObject,rhombusObject,labelTurn);
+        	QuaxTileColour colour = b.getTile(previousMove).getColour();
+            this.setTile(previousMove, colour);
+            this.turnIndicator.setColour(colour.flip());
 
         }
 	}
@@ -569,60 +539,106 @@ public class QuaxUserInterface {
 		}
 	}
 	
-	private static class OctagonObject extends OctagonBase {
-        private QuaxTileColour colour;
 
-        public OctagonObject(double width) {
-            super(width);
-            this.getStyleClass().add("tilecolour-black");
-            this.setColour(QuaxTileColour.BLACK);
+    
+    private static class PlayerTurnIndicator {
+    	
+    	private static final double HBOX_SPACING = 5;
+    	private static final double OCTAGON_OBJECT_WIDTH = 40;
+    	
+    	private OctagonObject octagonObject;
+    	private RhombusObject rhombusObject;
+    	private TurnText turnText;
+    	private HBox turnTracker;
+    	
+    	public PlayerTurnIndicator() {
+    		this.turnTracker = createTurnTracker();
+    	}
+    	
+    	public HBox getTurnTracker() {
+    		return this.turnTracker;
+    	};
+    	
+    	public void setColour(QuaxTileColour colour) {
+    		this.octagonObject.setColour(colour);
+    		this.rhombusObject.setColour(colour);
+    		this.turnText.setColour(colour);
+    	}
+    	
+    	private HBox createTurnTracker() {
+    		HBox box = new HBox(HBOX_SPACING);
+    		createComponents();
+    		box.getStyleClass().add("hbox-custom");
+    		box.getChildren().addAll(turnText, octagonObject, rhombusObject);
+    		return box;
+    	}
+    	
+    	private void createComponents() {
+    		this.octagonObject = new OctagonObject();
+    		this.rhombusObject = new RhombusObject();
+    		this.turnText = new TurnText();
+    	}
+    	
+    	private static interface ObjectInterface extends Styleable {
+    		default public void setColour(QuaxTileColour colour) {
+                this.getStyleClass().remove("tilecolour-none");
+                this.getStyleClass().remove("tilecolour-black");
+                this.getStyleClass().remove("tilecolour-white");
+                switch (colour) {
+                    case QuaxTileColour.NONE :
+                        this.getStyleClass().add("tilecolour-none");
+                        break;
+                    case QuaxTileColour.BLACK :
+                        this.getStyleClass().add("tilecolour-black");
+                        break;
+                    case QuaxTileColour.WHITE :
+                        this.getStyleClass().add("tilecolour-white");
+                        break;
+                }
+            }
+    	}
+    	
+    	private static class OctagonObject extends OctagonBase implements ObjectInterface {
+            private QuaxTileColour colour;
+
+            public OctagonObject() {
+            	this(OCTAGON_OBJECT_WIDTH);
+            }
+            
+            public OctagonObject(double width) {
+                super(width);
+                this.setId("Octagon-object");
+                this.getStyleClass().add("object");
+                this.setColour(QuaxTileColour.BLACK);
+            }
+
         }
 
-        public void setColour(QuaxTileColour colour) {
-            this.colour = colour;
-            this.getStyleClass().remove("tilecolour-none");
-            this.getStyleClass().remove("tilecolour-black");
-            this.getStyleClass().remove("tilecolour-white");
-            switch (colour) {
-                case QuaxTileColour.NONE :
-                    this.getStyleClass().addAll("tilecolour-none","object");
-                    break;
-                case QuaxTileColour.BLACK :
-                    this.getStyleClass().addAll("tilecolour-black","object");
-                    break;
-                case QuaxTileColour.WHITE :
-                    this.getStyleClass().addAll("tilecolour-white","object");
-                    break;
+        private static class RhombusObject extends RhombusBase implements ObjectInterface {
+            public RhombusObject() {
+                super();
+                this.setId("Rhombus-object");
+                this.getStyleClass().add("object");
+                this.setColour(QuaxTileColour.BLACK);
             }
         }
-
-    }
-
-    private static class RhombusObject extends RhombusBase{
-        private QuaxTileColour colour;
-
-        public RhombusObject() {
-            super();
-            this.getStyleClass().add("tilecolour-black");
-            this.setColour(QuaxTileColour.BLACK);
+        
+        private static class TurnText extends Label {
+        	public TurnText() {
+        		super();
+        		this.getStyleClass().add("turn-label");
+        		this.setColour(QuaxTileColour.BLACK);
+        	}
+        	
+        	public void setColour(QuaxTileColour colour) {
+        		if (colour == QuaxTileColour.BLACK) {
+        			this.setText("BLACK to play");
+        		}
+        		else {
+        			this.setText("WHITE to play");
+        		}
+        	}
         }
-
-        public void setColour(QuaxTileColour colour) {
-            this.colour = colour;
-            this.getStyleClass().remove("tilecolour-none");
-            this.getStyleClass().remove("tilecolour-black");
-            this.getStyleClass().remove("tilecolour-white");
-            switch (colour) {
-                case QuaxTileColour.NONE :
-                    this.getStyleClass().addAll("tilecolour-none","object");
-                    break;
-                case QuaxTileColour.BLACK :
-                    this.getStyleClass().addAll("tilecolour-black","object");
-                    break;
-                case QuaxTileColour.WHITE :
-                    this.getStyleClass().addAll("tilecolour-white","object");
-                    break;
-            }
-        }
+    	
     }
 }
