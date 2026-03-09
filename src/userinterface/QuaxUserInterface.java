@@ -5,6 +5,7 @@ import java.util.List;
 import controller.QuaxController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.css.Styleable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -48,6 +49,13 @@ public class QuaxUserInterface {
 	private static final double OCTAGON_GRID_GAP = 1;
 	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
+	private static final String[] STYLESHEETS = new String[] {
+		"/userinterface/stylesheets/tile-styling.css",
+		"/userinterface/stylesheets/board-styling.css",
+		"/userinterface/stylesheets/ui-styling.css",
+		"/userinterface/stylesheets/button-styling.css"
+	};
+	
 	private Stage stage;
 	
 	private OctagonTile[][] octagonGridCells;
@@ -93,11 +101,10 @@ public class QuaxUserInterface {
 	}
 	
 	private void initialiseStylesheets() {
-		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/tile-styling.css").toExternalForm());
-		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/board-styling.css").toExternalForm());
-		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/ui-styling.css").toExternalForm());
-		scene.getStylesheets().add(getClass().getResource("/userinterface/stylesheets/button-styling.css").toExternalForm());
-	
+		ObservableList<String> sheets = scene.getStylesheets();
+		for (String stylesheet : STYLESHEETS) {
+			sheets.add(getClass().getResource(stylesheet).toExternalForm());
+		}
 	}
 
 	private void initialiseWindow() {
