@@ -459,21 +459,8 @@ public class QuaxUserInterface {
 
 		@Override
 		public void setColour(QuaxTileColour colour) {
-			this.colour = colour;
-			this.getStyleClass().remove("tilecolour-none");
-			this.getStyleClass().remove("tilecolour-black");
-			this.getStyleClass().remove("tilecolour-white");
-			switch (colour) {
-			case QuaxTileColour.NONE :
-				this.getStyleClass().add("tilecolour-none");
-				break;
-			case QuaxTileColour.BLACK :
-				this.getStyleClass().add("tilecolour-black");
-				break;
-			case QuaxTileColour.WHITE :
-				this.getStyleClass().add("tilecolour-white");
-				break;
-			}
+			this.getStyleClass().removeAll("tilecolour-none", "tilecolour-black", "tilecolour-white");
+			this.getStyleClass().add(colour.tilecolourStyle());
 		}
 
 
@@ -522,23 +509,10 @@ public class QuaxUserInterface {
 
 		@Override
 		public void setColour(QuaxTileColour colour) {
-			this.getStyleClass().remove("tilecolour-none");
-			this.getStyleClass().remove("tilecolour-black");
-			this.getStyleClass().remove("tilecolour-white");
-			switch (colour) {
-			case QuaxTileColour.NONE :
-				this.getStyleClass().add("tilecolour-none");
-				break;
-			case QuaxTileColour.BLACK :
-				this.getStyleClass().add("tilecolour-black");
-				break;
-			case QuaxTileColour.WHITE :
-				this.getStyleClass().add("tilecolour-white");
-				break;
-			}
+			this.getStyleClass().removeAll("tilecolour-none", "tilecolour-black", "tilecolour-white");
+			this.getStyleClass().add(colour.tilecolourStyle());
 		}
 	}
-	
 
     
     private static class PlayerTurnIndicator {
@@ -582,17 +556,11 @@ public class QuaxUserInterface {
     	
     	private static interface TurnIndicatorShape extends Styleable {
     		default public void setColour(QuaxTileColour colour) {
-                this.getStyleClass().removeAll("tilecolour-black", "tilecolour-white");
-                switch (colour) {
-                    case QuaxTileColour.BLACK :
-                        this.getStyleClass().add("tilecolour-black");
-                        break;
-                    case QuaxTileColour.WHITE :
-                        this.getStyleClass().add("tilecolour-white");
-                        break;
-                    default :
-                        throw new IllegalArgumentException("Cannot be set to NONE.");
-                }
+    			if (colour == QuaxTileColour.NONE) throw new IllegalArgumentException();
+    			else {
+    				this.getStyleClass().removeAll("tilecolour-black", "tilecolour-white");
+    				this.getStyleClass().add(colour.tilecolourStyle());
+    			}
             }
     	}
     	
