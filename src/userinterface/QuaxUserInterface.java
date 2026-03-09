@@ -83,8 +83,11 @@ public class QuaxUserInterface {
 		
 		initialiseStylesheets();
 		
+		setupStage();
+	}
+	
+	private void setupStage() {
 		stage.setScene(scene);
-		
 		stage.setMaximized(true);
 		stage.show();
 	}
