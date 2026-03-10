@@ -2,7 +2,6 @@ package player;
 
 import controller.QuaxController;
 import javafx.event.Event;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
