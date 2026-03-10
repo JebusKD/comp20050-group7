@@ -415,7 +415,7 @@ public class QuaxUserInterface {
 			return rhombusGrid;
 		}
 		
-		private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
+		private static double calculateRhombusGridGap(double oct_width, double oct_gap) {
 			double sidelen = OctagonBase.sideLength(oct_width);
 			double diagonalHeight = (oct_width - sidelen) / 2;
 			return sidelen + diagonalHeight + (oct_gap/2);
