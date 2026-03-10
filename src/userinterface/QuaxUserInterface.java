@@ -57,9 +57,7 @@ public class QuaxUserInterface {
 	};
 	
 	private Stage stage;
-	
-	private StackPane topBar;
-	private StackPane bottomBar;
+
 	private VBox sideBar;
 	
 	private UserInterfaceBoard board;
@@ -67,10 +65,7 @@ public class QuaxUserInterface {
 	private PlayerTurnIndicator turnIndicator;
 	
 	private Label title;
-	private StackPane stack;
 
-	private StackPane window;
-	private GridPane regions;
 	private Scene scene;
 	
 	private double sceneWidth;
@@ -127,10 +122,6 @@ public class QuaxUserInterface {
 
 	}
 	
-	
-	
-	
-	
 	private VBox initialiseButtons(){
         VBox sideBar = new VBox(10);
 
@@ -146,29 +137,6 @@ public class QuaxUserInterface {
 
         return sideBar;
     }
-
-    private PlayerTurnIndicator createPlayerTurnIndicator(){
-       PlayerTurnIndicator playerTurnIndicator = new PlayerTurnIndicator();
-        return playerTurnIndicator;
-    }
-
-    /*// TODO Delete?
-	public void setBoard(QuaxBoard b) {
-		
-		for (int i = 0; i < 11; i++) {
-			for (int j = 0; j < 11; j++) {
-				OctagonTile o = octagonGridCells[i][j];
-				o.setColour(b.getOctagon(i, j).getColour());
-			}
-		}
-		
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				RhombusTile r = rhombusGridCells[i][j];
-				r.setColour(b.getRhombus(i, j).getColour());
-			}
-		}
-	}*/
 	
 	public void fetchPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
