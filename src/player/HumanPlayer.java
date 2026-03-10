@@ -1,13 +1,7 @@
 package player;
 
-import controller.QuaxController;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.QuaxBoard;
-import types.Octagon;
-import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
 
 public class HumanPlayer extends QuaxPlayer {
