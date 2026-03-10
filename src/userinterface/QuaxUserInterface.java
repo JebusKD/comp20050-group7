@@ -34,9 +34,7 @@ import types.QuaxTile;
 public class QuaxUserInterface {
 
 	private static final double OCTAGON_WIDTH = 40;
-	
 	private static final double OCTAGON_GRID_GAP = 1;
-	private static final double RHOMBUS_GRID_GAP = calculateRhombusGridGap(OCTAGON_GRID_GAP, OCTAGON_WIDTH);
 
 	private static final String[] STYLESHEETS = new String[] {
 		"/userinterface/stylesheets/tile-styling.css",
@@ -151,12 +149,6 @@ public class QuaxUserInterface {
 		board.setBoard(b);
 	}
 
-	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
-		double sidelen = OctagonBase.sideLength(oct_width);
-		double diagonalHeight = (oct_width - sidelen) / 2;
-		return sidelen + diagonalHeight + (oct_gap/2);
-	}
-	
 	public Scene getScene() {
 		return this.scene;
 	}
@@ -397,7 +389,9 @@ public class QuaxUserInterface {
 			rhombusGrid.setHgap(OCTAGON_GRID_GAP);
 			rhombusGrid.setPickOnBounds(false);
 			
-			rhombusGrid.setPadding(new Insets(RHOMBUS_GRID_GAP, 0, 0, RHOMBUS_GRID_GAP));	
+			double rhombusGridGap = calculateRhombusGridGap(OCTAGON_WIDTH, OCTAGON_GRID_GAP);
+			
+			rhombusGrid.setPadding(new Insets(rhombusGridGap, 0, 0, rhombusGridGap));	
 			
 			for (int i = 0; i < 10; i++) {
 		         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
@@ -419,6 +413,12 @@ public class QuaxUserInterface {
 				}
 			}
 			return rhombusGrid;
+		}
+		
+		private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
+			double sidelen = OctagonBase.sideLength(oct_width);
+			double diagonalHeight = (oct_width - sidelen) / 2;
+			return sidelen + diagonalHeight + (oct_gap/2);
 		}
 		
 		private static interface Tile extends Styleable {
