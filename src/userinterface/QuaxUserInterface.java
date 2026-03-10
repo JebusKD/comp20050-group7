@@ -62,6 +62,8 @@ public class QuaxUserInterface {
 	private StackPane bottomBar;
 	private VBox sideBar;
 	
+	private UserInterfaceBoard board;
+	
 	private PlayerTurnIndicator turnIndicator;
 	
 	private Label title;
@@ -77,7 +79,7 @@ public class QuaxUserInterface {
 	public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
 
-		createBoard();
+		this.board = new UserInterfaceBoard();
 		
 		initialiseWindow();
 		
@@ -100,31 +102,7 @@ public class QuaxUserInterface {
 	}
 
 	private void initialiseWindow() {
-        Rectangle gridBackground = createGridBackground(OCTAGON_WIDTH, OCTAGON_GRID_GAP);
-       // gridBackground.getStyleClass().add("background-rectangle");
-        gridBackground.setFill(Color.OLDLACE);
 
-        double hourglassGap = OCTAGON_WIDTH/4;
-        Polygon hourglassBorder = new Polygon(calculateHourglassPoints(OCTAGON_WIDTH,OCTAGON_GRID_GAP,hourglassGap));
-        hourglassBorder.setFill(Color.BLACK);
-
-        Rectangle behindHourglassBorder = createBehindHourglass(OCTAGON_WIDTH,OCTAGON_GRID_GAP,hourglassGap);
-        behindHourglassBorder.setFill(Color.WHITE);
-		BorderPane boardBackground = new BorderPane();
-		
-		Stop[] stops = new Stop[]{
-                new Stop(0, Color.NAVY),
-                new Stop(1, Color.BLUEVIOLET),
-        };
-		
-		LinearGradient lgl = new LinearGradient(1,0,1,1,true, CycleMethod.NO_CYCLE,stops);
-		Rectangle rectangle = new Rectangle(OCTAGON_WIDTH*12+(10*OCTAGON_GRID_GAP),OCTAGON_WIDTH*12+(10*OCTAGON_GRID_GAP)); //the multicoloured border around the board
-        rectangle.setFill(lgl);
-		
-        GridPane boardWithCoords = initialiseCoordsImage();
-
-        this.board = new StackPane(rectangle,behindHourglassBorder,hourglassBorder,gridBackground,boardWithCoords,gridHolder);
-		
         this.sideBar = initialiseButtons();
         this.turnIndicator = new PlayerTurnIndicator();
         
@@ -137,7 +115,7 @@ public class QuaxUserInterface {
         title.getStyleClass().add("custom-title");
 		
         outer.add(title,0,0);
-        outer.add(board,0,1);
+        outer.add(board.getBoard(),0,1);
         outer.add(this.sideBar,1,1);
 
         outer.setAlignment(Pos.CENTER);
@@ -149,102 +127,7 @@ public class QuaxUserInterface {
 
 	}
 	
-	private GridPane initialiseCoordsImage(){
-		double paddingValue = OCTAGON_WIDTH / 12;
-		
-        GridPane coordGrid = new GridPane();
-        
-        coordGrid.setAlignment(Pos.CENTER);
-        
-        coordGrid.getColumnConstraints().add(new ColumnConstraints());
-        coordGrid.getColumnConstraints().add(new ColumnConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
-        coordGrid.getColumnConstraints().add(new ColumnConstraints());
-        
-        coordGrid.getRowConstraints().add(new RowConstraints());
-        coordGrid.getRowConstraints().add(new RowConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
-        coordGrid.getRowConstraints().add(new RowConstraints());
-        
-        GridPane topCoords = new GridPane();
-        GridPane bottomCoords = new GridPane();
-        
-        topCoords.setPadding(new Insets(0, 0, paddingValue, 0));
-    	bottomCoords.setPadding(new Insets(paddingValue, 0, 0, 0));
-        
-        topCoords.setHgap(OCTAGON_GRID_GAP);
-        topCoords.setAlignment(Pos.CENTER);
-        bottomCoords.setHgap(OCTAGON_GRID_GAP);
-        bottomCoords.setAlignment(Pos.CENTER);
-        
-        for(int i = 0; i < 11; i++){
-        	
-        	topCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
-        	bottomCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
-        	
-            Label letterCoordTop = new Label(String.valueOf((char) ('A' + i)));
-            Label letterCoordBottom = new Label(String.valueOf((char) ('A' + i)));
-
-        	StackPane topCoordPane = new StackPane(letterCoordTop);
-        	StackPane bottomCoordPane = new StackPane(letterCoordBottom);
-            
-            letterCoordTop.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            letterCoordTop.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            letterCoordTop.getStyleClass().add("coordinate-letter-style");
-            letterCoordTop.setAlignment(Pos.CENTER);
-
-            letterCoordBottom.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            letterCoordBottom.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            letterCoordBottom.getStyleClass().add("coordinate-letter-style");
-            letterCoordBottom.setAlignment(Pos.CENTER);
-/*
-            letterCoordTop.setPadding(new Insets(20,0,0,20));
-            letterCoordBottom.setPadding(new Insets(5,5,0,5));
-  */          
-            topCoords.add(topCoordPane,i,0);
-            bottomCoords.add(bottomCoordPane,i,0);
-        }
-        
-        coordGrid.add(topCoords, 1, 0);
-        coordGrid.add(bottomCoords, 1, 2);
-
-        GridPane leftCoords = new GridPane();
-        GridPane rightCoords = new GridPane();
-        
-        leftCoords.setPadding(new Insets(0, paddingValue, 0, 0));
-    	rightCoords.setPadding(new Insets(0, 0, 0, paddingValue));
-        
-        leftCoords.setVgap(OCTAGON_GRID_GAP);
-        leftCoords.setAlignment(Pos.CENTER);
-        rightCoords.setVgap(OCTAGON_GRID_GAP);
-        rightCoords.setAlignment(Pos.CENTER);
-
-        for(int j =0;j < 11; j++){
-        	leftCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
-        	rightCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
-        	
-            Label numCoordLeft = new Label(String.valueOf(11 -j));
-            Label numCoordRight = new Label(String.valueOf(11-j));
-            numCoordLeft.getStyleClass().add("coordinate-number-style");
-            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            //numCoordLeft.setPadding(new Insets(20,0,0,20));
-
-            numCoordRight.getStyleClass().add("coordinate-number-style");
-            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            //numCoordRight.setPadding(new Insets(5,0,0,5));
-            
-            StackPane leftCoordPane = new StackPane(numCoordLeft);
-        	StackPane rightCoordPane = new StackPane(numCoordRight);
-
-            leftCoords.add(leftCoordPane,0,j);
-            rightCoords.add(rightCoordPane,0,j);
-        }
-        
-        coordGrid.add(leftCoords, 0, 1);
-        coordGrid.add(rightCoords, 2, 1);
-        
-        return coordGrid;
-    }
+	
 	
 	
 	
@@ -287,22 +170,6 @@ public class QuaxUserInterface {
 		}
 	}*/
 	
-	public static Rectangle createGridBackground(double octagonWidth,double octagonGridGap){
-        double gridBackgroundSize = (10*octagonWidth) + OctagonBase.sideLength(octagonWidth) + (10 * octagonGridGap);
-
-        return new Rectangle(gridBackgroundSize,gridBackgroundSize,gridBackgroundSize,gridBackgroundSize);
-    }
-
-    public static double[] calculateHourglassPoints(double oct_width,double oct_grid_gap,double gap){
-        double distance = (5.7 * oct_width) + (4.7 * oct_grid_gap) + gap;
-        return new double[]{-distance,distance,distance,distance,-distance,-distance,distance,-distance};
-    }
-
-    public static Rectangle createBehindHourglass(double octagonWidth,double octagonGridGap,double hourglassGap){
-        double size = (octagonWidth * 11.4) + (9.4 * octagonGridGap) + (2*hourglassGap);
-        return new Rectangle(size,size);
-    }
-	
 	public void fetchPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
 		if(previousMove == null){
@@ -317,9 +184,14 @@ public class QuaxUserInterface {
 	}
 	
 	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-		if (q.isOctagonMove())
+		board.setTile(q, c);
+		/*if (q.isOctagonMove())
 			octagonGridCells[q.x()][q.y()].setColour(c);
-		else rhombusGridCells[q.x()][q.y()].setColour(c);
+		else rhombusGridCells[q.x()][q.y()].setColour(c);*/
+	}
+	
+	public void setBoard(QuaxBoard b) {
+		board.setBoard(b);
 	}
 
 	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
@@ -340,14 +212,185 @@ public class QuaxUserInterface {
 		
 		public UserInterfaceBoard() {
 			this.board = new StackPane(
+				createGradientBackground(),
+				createBehindHourglass(),
+				createHourglass(),
+				createGridBackground(),
+				createBoardCoordinates(),
 				createGrid()
 			);
 		}
 		
 		public StackPane getBoard() {
 			return this.board;
-		};
+		}
 		
+		public void setBoard(QuaxBoard b) {
+			for (QuaxTile t : b) {
+				setTile(t.getCoordinates(), t.getColour());
+			}
+		}
+		
+		public void setTile(QuaxCoordinate q, QuaxTileColour c) {
+			if (q.isOctagonMove())
+				octagonGridCells[q.x()][q.y()].setColour(c);
+			else rhombusGridCells[q.x()][q.y()].setColour(c);
+		}
+		
+		private static Rectangle createGridBackground(){
+			return createGridBackground(OCTAGON_WIDTH, OCTAGON_GRID_GAP);
+		}
+		
+		private static Rectangle createGridBackground(double octagonWidth,double octagonGridGap){
+	        double size = (10*octagonWidth) + OctagonBase.sideLength(octagonWidth) + (10 * octagonGridGap);
+	        
+	        Rectangle background = new Rectangle(size, size);
+	        background.setFill(Color.OLDLACE);
+	        
+	        return background;
+	    }
+		
+		// TODO Remove "Magic number", add hourglass gap as a constant.
+		private static Polygon createHourglass() {
+			return createHourglass(OCTAGON_WIDTH, OCTAGON_GRID_GAP, OCTAGON_WIDTH/4);
+		}
+
+	    private static Polygon createHourglass(double oct_width,double oct_grid_gap,double gap){
+	        double distance = (5.7 * oct_width) + (4.7 * oct_grid_gap) + gap;
+	        Polygon hourglass = new Polygon(-distance,distance,
+	        						         distance,distance,
+	        						        -distance,-distance,
+	        						         distance,-distance);
+	        hourglass.setFill(Color.BLACK);
+	        return hourglass;
+	    }
+	    
+	 // TODO Remove "Magic number", add hourglass gap as a constant.
+	    private static Rectangle createBehindHourglass() {
+	    	return createBehindHourglass(OCTAGON_WIDTH, OCTAGON_GRID_GAP, OCTAGON_WIDTH/4);
+	    }
+
+	    private static Rectangle createBehindHourglass(double octagonWidth,double octagonGridGap,double hourglassGap){
+	        double size = (octagonWidth * 11.4) + (9.4 * octagonGridGap) + (2*hourglassGap);
+	        Rectangle background = new Rectangle(size, size);
+	        background.setFill(Color.WHITE);
+	        
+	        return background;
+	    }
+	    
+	    // TODO might be a 'magic number' scenario, fix.
+	    private static Rectangle createGradientBackground() {
+	    	return createGradientBackground(OCTAGON_WIDTH*12+(10*OCTAGON_GRID_GAP));
+	    };
+		
+	    private static Rectangle createGradientBackground(double size) {
+	    	Stop[] stops = new Stop[]{
+	                new Stop(0, Color.NAVY),
+	                new Stop(1, Color.BLUEVIOLET),
+	        };
+			
+			LinearGradient lgl = new LinearGradient(1,0,1,1,true, CycleMethod.NO_CYCLE,stops);
+			Rectangle background = new Rectangle(size, size); //the multicoloured border around the board
+	        background.setFill(lgl);
+	        
+	        return background;
+	    }
+	    
+	    // TODO magic numbers galore, also loaded function, break into pieces?
+	    private static GridPane createBoardCoordinates(){
+			double paddingValue = OCTAGON_WIDTH / 12;
+			
+	        GridPane coordGrid = new GridPane();
+	        
+	        coordGrid.setAlignment(Pos.CENTER);
+	        
+	        coordGrid.getColumnConstraints().add(new ColumnConstraints());
+	        coordGrid.getColumnConstraints().add(new ColumnConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
+	        coordGrid.getColumnConstraints().add(new ColumnConstraints());
+	        
+	        coordGrid.getRowConstraints().add(new RowConstraints());
+	        coordGrid.getRowConstraints().add(new RowConstraints((11*OCTAGON_WIDTH)+(10*OCTAGON_GRID_GAP)));
+	        coordGrid.getRowConstraints().add(new RowConstraints());
+	        
+	        GridPane topCoords = new GridPane();
+	        GridPane bottomCoords = new GridPane();
+	        
+	        topCoords.setPadding(new Insets(0, 0, paddingValue, 0));
+	    	bottomCoords.setPadding(new Insets(paddingValue, 0, 0, 0));
+	        
+	        topCoords.setHgap(OCTAGON_GRID_GAP);
+	        topCoords.setAlignment(Pos.CENTER);
+	        bottomCoords.setHgap(OCTAGON_GRID_GAP);
+	        bottomCoords.setAlignment(Pos.CENTER);
+	        
+	        for(int i = 0; i < 11; i++){
+	        	
+	        	topCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
+	        	bottomCoords.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
+	        	
+	            Label letterCoordTop = new Label(String.valueOf((char) ('A' + i)));
+	            Label letterCoordBottom = new Label(String.valueOf((char) ('A' + i)));
+
+	        	StackPane topCoordPane = new StackPane(letterCoordTop);
+	        	StackPane bottomCoordPane = new StackPane(letterCoordBottom);
+	            
+	            letterCoordTop.setPrefWidth(Region.USE_COMPUTED_SIZE);
+	            letterCoordTop.setPrefHeight(Region.USE_COMPUTED_SIZE);
+	            letterCoordTop.getStyleClass().add("coordinate-letter-style");
+	            letterCoordTop.setAlignment(Pos.CENTER);
+
+	            letterCoordBottom.setPrefWidth(Region.USE_COMPUTED_SIZE);
+	            letterCoordBottom.setPrefHeight(Region.USE_COMPUTED_SIZE);
+	            letterCoordBottom.getStyleClass().add("coordinate-letter-style");
+	            letterCoordBottom.setAlignment(Pos.CENTER);
+
+	            topCoords.add(topCoordPane,i,0);
+	            bottomCoords.add(bottomCoordPane,i,0);
+	        }
+	        
+	        coordGrid.add(topCoords, 1, 0);
+	        coordGrid.add(bottomCoords, 1, 2);
+
+	        GridPane leftCoords = new GridPane();
+	        GridPane rightCoords = new GridPane();
+	        
+	        leftCoords.setPadding(new Insets(0, paddingValue, 0, 0));
+	    	rightCoords.setPadding(new Insets(0, 0, 0, paddingValue));
+	        
+	        leftCoords.setVgap(OCTAGON_GRID_GAP);
+	        leftCoords.setAlignment(Pos.CENTER);
+	        rightCoords.setVgap(OCTAGON_GRID_GAP);
+	        rightCoords.setAlignment(Pos.CENTER);
+
+	        for(int j =0;j < 11; j++){
+	        	leftCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
+	        	rightCoords.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
+	        	
+	            Label numCoordLeft = new Label(String.valueOf(11 -j));
+	            Label numCoordRight = new Label(String.valueOf(11-j));
+	            numCoordLeft.getStyleClass().add("coordinate-number-style");
+	            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+	            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
+	            //numCoordLeft.setPadding(new Insets(20,0,0,20));
+
+	            numCoordRight.getStyleClass().add("coordinate-number-style");
+	            numCoordLeft.setPrefHeight(Region.USE_COMPUTED_SIZE);
+	            numCoordLeft.setPrefWidth(Region.USE_COMPUTED_SIZE);
+	            //numCoordRight.setPadding(new Insets(5,0,0,5));
+	            
+	            StackPane leftCoordPane = new StackPane(numCoordLeft);
+	        	StackPane rightCoordPane = new StackPane(numCoordRight);
+
+	            leftCoords.add(leftCoordPane,0,j);
+	            rightCoords.add(rightCoordPane,0,j);
+	        }
+	        
+	        coordGrid.add(leftCoords, 0, 1);
+	        coordGrid.add(rightCoords, 2, 1);
+	        
+	        return coordGrid;
+	    }
+	    
 		private StackPane createGrid() {
 			StackPane gridStack = new StackPane(
 					createOctagonGrid(),
