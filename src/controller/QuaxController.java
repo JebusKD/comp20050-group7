@@ -29,7 +29,9 @@ public class QuaxController {
 	private QuaxBoard board;
 	
 	private QuaxPlayer[] players;
-	int moveNumber;
+	private int moveNumber;
+	
+	private boolean pieRuleDone;
 	
 	public QuaxController(Stage stage) {
 		this.stage = stage;
@@ -74,6 +76,7 @@ public class QuaxController {
 		players[0] = p1;
 		players[1] = p2;
 		moveNumber = 0;
+		pieRuleDone = false;
 		
 		curPlayer().movePrompt(board);
 	}
@@ -113,4 +116,12 @@ public class QuaxController {
 		return this.board;
 	}
 	
+	public void doPieRule() {
+		if (moveNumber == 1 && !pieRuleDone) {
+			QuaxPlayer held = players[0];
+			players[0] = players[1];
+			players[1] = held;
+			pieRuleDone = true;
+		}
+	}
 }
