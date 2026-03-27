@@ -103,7 +103,7 @@ public class QuaxController {
 			board.makeMove(coords, c);
 			moveNumber++;
 
-			ui.fetchPreviousMove(board);
+			ui.updateFromPreviousMove(board);
 			
 			curPlayer().movePrompt(board);
 		}

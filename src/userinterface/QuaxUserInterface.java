@@ -50,8 +50,6 @@ public class QuaxUserInterface {
 	private UserInterfaceBoard board;
 	
 	private PlayerTurnIndicator turnIndicator;
-	
-	private Label title;
 
 	private Scene scene;
 	
@@ -93,7 +91,7 @@ public class QuaxUserInterface {
         
         GridPane outer = new GridPane();
         
-        this.title = new Label("Quax");
+        Label title = new Label("Quax");
         title.getStyleClass().add("custom-title");
 		
         outer.add(title,0,0);
@@ -125,7 +123,7 @@ public class QuaxUserInterface {
         return sideBar;
     }
 	
-	public void fetchPreviousMove(QuaxBoard b) {
+	public void updateFromPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
 		if(previousMove == null){
             this.turnIndicator.setColour(QuaxTileColour.BLACK);
