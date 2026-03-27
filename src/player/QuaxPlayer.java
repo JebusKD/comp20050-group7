@@ -11,7 +11,6 @@ import types.QuaxTileColour;
 public abstract class QuaxPlayer {
 
 	private QuaxTileColour colour;
-	
 	private Stage stage;
 	
 	public QuaxPlayer(QuaxTileColour colour, Stage stage) {

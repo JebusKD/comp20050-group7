@@ -31,5 +31,4 @@ public class Rhombus extends QuaxTile {
 	public boolean onHigh() {
 		return false;
 	}
-
 }

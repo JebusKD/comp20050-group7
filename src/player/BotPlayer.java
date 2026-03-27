@@ -13,7 +13,6 @@ import types.QuaxTileColour;
 public abstract class BotPlayer extends QuaxPlayer {
 	
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
-	
 	static final Random RNG = new Random();
 
 	public BotPlayer(QuaxTileColour colour, Stage stage) {
@@ -22,8 +21,9 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	protected abstract QuaxCoordinate computeMove(QuaxBoard b);
 	
-	/* Given a QuaxBoard b containing strategy values, chooses the move with
-	 	the highest strategy value and returns it. If there is a tie, chooses
+	/*
+	    Given a QuaxBoard b containing strategy values, chooses the move with
+	    the highest strategy value and returns it. If there is a tie, chooses
 	 	one move at random of the highest strategy values.
 	 */
 	public static QuaxCoordinate decideMove(QuaxBoard b) {
