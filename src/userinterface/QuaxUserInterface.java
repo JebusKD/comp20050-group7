@@ -36,6 +36,7 @@ import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
 import types.QuaxTileGroup;
+import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTile;
@@ -70,6 +71,8 @@ public class QuaxUserInterface {
 	
 	private double sceneWidth;
 	private double sceneHeight;
+	
+	private Button pieRuleButton;
 	
 	private OctagonObject octagonObject;
     private RhombusObject rhombusObject;
@@ -315,13 +318,17 @@ public class QuaxUserInterface {
 
         Button strat = new Button("Show Strategy");
         Button hideStrat = new Button("Hide Strategy");
-        Button PieRule = new Button("PieRule");
+        pieRuleButton = new Button("PieRule");
 
+        pieRuleButton.setOnMouseClicked(event -> {
+        	pieRuleButton.fireEvent(new ButtonClickEvent(QuaxController.PIE_RULE_CLICKED_EVENT));
+        });
+        
         strat.getStyleClass().add("button3");
         hideStrat.getStyleClass().add("button3");
-        PieRule.getStyleClass().add("button3");
+        pieRuleButton.getStyleClass().add("button3");
 
-        sideBar.getChildren().addAll(strat,hideStrat,PieRule);
+        sideBar.getChildren().addAll(strat,hideStrat,pieRuleButton);
 
         return sideBar;
     }
@@ -419,6 +426,11 @@ public class QuaxUserInterface {
 	
 	public Scene getScene() {
 		return this.scene;
+	}
+	
+	public void setPieRuleVisibility(boolean value) {
+		pieRuleButton.setDisable(!value);
+        pieRuleButton.setVisible(value);
 	}
 	
 	private static interface Tile {

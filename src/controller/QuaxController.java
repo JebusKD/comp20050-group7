@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Random;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -10,6 +11,7 @@ import model.QuaxBoard;
 import player.BogoBot;
 import player.HumanPlayer;
 import player.QuaxPlayer;
+import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
@@ -21,6 +23,7 @@ public class QuaxController {
 	
 	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
+	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<ButtonClickEvent>("pieRuleClickedEvent");
 	
 	private Stage stage;
 	
@@ -58,6 +61,17 @@ public class QuaxController {
 			}
 		});
 		
+		stage.addEventHandler(QuaxController.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+			@Override
+			public void handle(ButtonClickEvent event) {
+				if (curPlayer() instanceof HumanPlayer && doPieRule()) {
+					ui.setPieRuleVisibility(false);
+					
+					curPlayer().movePrompt(board);
+				}
+			}
+		});
+		
 		startGameAgainstBot();
 	}
 	
@@ -78,6 +92,7 @@ public class QuaxController {
 		moveNumber = 0;
 		pieRuleDone = false;
 		
+		ui.setPieRuleVisibility(true);
 		curPlayer().movePrompt(board);
 	}
 	
@@ -116,12 +131,16 @@ public class QuaxController {
 		return this.board;
 	}
 	
-	public void doPieRule() {
+	public boolean doPieRule() {
 		if (moveNumber == 1 && !pieRuleDone) {
 			QuaxPlayer held = players[0];
 			players[0] = players[1];
 			players[1] = held;
+			players[0].setColour(QuaxTileColour.BLACK);
+			players[1].setColour(QuaxTileColour.WHITE);
 			pieRuleDone = true;
+			return true;
 		}
+		else return false;
 	}
 }
