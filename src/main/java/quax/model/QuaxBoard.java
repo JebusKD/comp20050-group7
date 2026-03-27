@@ -1,8 +1,6 @@
 package quax.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import quax.types.Octagon;
 import quax.types.QuaxCoordinate;
@@ -11,7 +9,7 @@ import quax.types.QuaxTileColour;
 import quax.types.QuaxTileGroup;
 import quax.types.Rhombus;
 
-public class QuaxBoard {
+public class QuaxBoard implements Iterable<QuaxTile> {
 
     private Octagon[][] octagonGrid;
     private Rhombus[][] rhombusGrid;
@@ -190,5 +188,45 @@ public class QuaxBoard {
 
     public QuaxCoordinate previousMove() {
         return previousMove;
+    }
+
+    public Iterator<QuaxTile> iterator() {
+        return new QuaxBoardIterator(this);
+    }
+
+
+    public static class QuaxBoardIterator implements Iterator<QuaxTile> {
+        private static final int MAX_ELEMENTS = 221;
+
+        private int cursor;
+        private ArrayList<QuaxTile> elements;
+
+        public QuaxBoardIterator(QuaxBoard source) {
+            this.cursor = 0;
+            this.elements = new ArrayList<QuaxTile>(MAX_ELEMENTS);
+
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 11; j++) {
+                    this.elements.add(source.getOctagon(i, j));
+                }
+                for (int j = 0; j < 10; j++) {
+                    this.elements.add(source.getRhombus(i, j));
+                }
+            }
+            for (int j = 0; j < 11; j++) {
+                this.elements.add(source.getOctagon(10, j));
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < MAX_ELEMENTS;
+        }
+
+        @Override
+        public QuaxTile next() {
+            if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+            return elements.get(cursor++);
+        }
     }
 }

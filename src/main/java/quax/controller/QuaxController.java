@@ -79,7 +79,11 @@ public class QuaxController {
           //  ui.setBoard(board);
             ui.fetchPreviousMove(board);
 
-            curPlayer().movePrompt();
+            if(board.checkForWinningMove()){
+                ui.WinLabel(c);
+            }else {
+                curPlayer().movePrompt();
+            }
         }
     }
 

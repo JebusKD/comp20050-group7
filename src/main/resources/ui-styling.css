@@ -5,6 +5,15 @@
     -fx-font-family : "Georgia";
 }
 
+.win-label{
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-family : "Georgia";
+    -fx-background-color: #91D5FF;
+
+}
+
 .rectangle-colour{
     -fx-fill: #FFFF
 }
@@ -25,7 +34,7 @@
 
 .custom-title{
     -fx-font-family : "Georgia";
-    -fx-font-size: 35px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
