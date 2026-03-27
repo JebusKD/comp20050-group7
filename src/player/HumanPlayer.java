@@ -11,7 +11,7 @@ import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
 
 public class HumanPlayer extends QuaxPlayer {
-	
+
 	private String name;
 	
 	public HumanPlayer(String name, QuaxTileColour colour, Stage stage) {
@@ -22,9 +22,5 @@ public class HumanPlayer extends QuaxPlayer {
 	@Override
 	public void movePrompt(QuaxBoard b) {
 		System.out.println(name + "'s move.");
-		
-		
 	}
-	
-	
 }

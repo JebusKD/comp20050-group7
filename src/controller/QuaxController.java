@@ -1,8 +1,6 @@
 package controller;
 
 import java.util.Random;
-
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
@@ -19,8 +17,8 @@ public class QuaxController {
 	
 	static final Random RNG = new Random();
 	
-	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
-	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
+	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
+	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 	
 	private Stage stage;
 	
@@ -37,19 +35,17 @@ public class QuaxController {
 		
 		players = new QuaxPlayer[2];
 		
-		stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
+		stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<>() {
 			@Override
 			public void handle(QuaxCoordinateEvent coords) {
 				
 				if (curPlayer() instanceof HumanPlayer) {
 					makeMove(coords.coords());
 				}
-				
 			}
-			
 		});
 		
-		stage.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<QuaxCoordinateEvent>() {
+		stage.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<>() {
 			@Override
 			public void handle(QuaxCoordinateEvent coords) {
 					makeMove(coords.coords());
@@ -57,8 +53,10 @@ public class QuaxController {
 		});
 		
 		startGameAgainstBot();
+        //startTwoPlayerGame();
 	}
-	
+
+    // Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		
 		QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
@@ -103,10 +101,9 @@ public class QuaxController {
 			board.makeMove(coords, c);
 			moveNumber++;
 
-			ui.fetchPreviousMove(board);
+			ui.updateFromPreviousMove(board);
 			
 			curPlayer().movePrompt(board);
 		}
 	}
-	
 }

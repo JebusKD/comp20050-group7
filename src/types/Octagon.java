@@ -38,5 +38,4 @@ public class Octagon extends QuaxTile {
 			return yPos == 0;
 		else return xPos == 10;
 	}
-		
 }

@@ -1,21 +1,14 @@
 package userinterface;
 
-import java.util.List;
-
 import controller.QuaxController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -30,15 +23,11 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
-import types.QuaxTileGroup;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
-import types.QuaxTile;
 
 public class QuaxUserInterface {
 
@@ -55,17 +44,11 @@ public class QuaxUserInterface {
 	private GridPane octagonGrid;
 	private GridPane rhombusGrid;
 	private StackPane board;
-	
-	private StackPane topBar;
-	private StackPane bottomBar;
+
 	private VBox sideBar;
 	private HBox turns;
 	
 	private Label title;
-	private StackPane stack;
-
-	private StackPane window;
-	private GridPane regions;
 	private Scene scene;
 	
 	private double sceneWidth;
@@ -200,10 +183,7 @@ public class QuaxUserInterface {
             letterCoordBottom.setPrefHeight(Region.USE_COMPUTED_SIZE);
             letterCoordBottom.getStyleClass().add("coordinate-letter-style");
             letterCoordBottom.setAlignment(Pos.CENTER);
-/*
-            letterCoordTop.setPadding(new Insets(20,0,0,20));
-            letterCoordBottom.setPadding(new Insets(5,5,0,5));
-  */          
+
             topCoords.add(topCoordPane,i,0);
             bottomCoords.add(bottomCoordPane,i,0);
         }
@@ -252,7 +232,7 @@ public class QuaxUserInterface {
     }
 	
 	private void initialiseOctagonGrid() {
-		octagonGridCells = new OctagonTile[11][11];
+		octagonGridCells = new OctagonTile[QuaxBoard.MAX_OCTAGONS][QuaxBoard.MAX_OCTAGONS];
 		octagonGrid = new GridPane();
 		octagonGrid.setAlignment(Pos.TOP_LEFT);
 		octagonGrid.setVgap(OCTAGON_GRID_GAP);
@@ -280,7 +260,7 @@ public class QuaxUserInterface {
 	}
 
 	private void initialiseRhombusGrid() {
-		rhombusGridCells = new RhombusTile[11][11];
+		rhombusGridCells = new RhombusTile[QuaxBoard.MAX_RHOMBUSES][QuaxBoard.MAX_RHOMBUSES];
 		rhombusGrid = new GridPane();
 		rhombusGrid.setAlignment(Pos.TOP_LEFT);
 		rhombusGrid.setVgap(OCTAGON_GRID_GAP);
@@ -393,7 +373,7 @@ public class QuaxUserInterface {
         return new Rectangle(size,size);
     }
 	
-	public void fetchPreviousMove(QuaxBoard b) {
+	public void updateFromPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
 		if(previousMove == null){
             initialisePlayerTurnHelper(QuaxTileColour.BLACK,octagonObject,rhombusObject,labelTurn);
@@ -411,10 +391,10 @@ public class QuaxUserInterface {
 		else rhombusGridCells[q.x()][q.y()].setColour(c);
 	}
 
-	private static double calculateRhombusGridGap(double oct_gap, double oct_width) {
-		double sidelen = OctagonBase.sideLength(oct_width);
-		double diagonalHeight = (oct_width - sidelen) / 2;
-		return sidelen + diagonalHeight + (oct_gap/2);
+	private static double calculateRhombusGridGap(double octagonGap, double octagonWidth) {
+		double octagonSideLength = OctagonBase.sideLength(octagonWidth);
+		double octagonDiagonalHeight = (octagonWidth - octagonSideLength) / 2;
+		return octagonSideLength + octagonDiagonalHeight + (octagonGap /2);
 	}
 	
 	public Scene getScene() {
@@ -430,7 +410,7 @@ public class QuaxUserInterface {
 
 		private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
 
-		public static final double SIDELEN = sideLength(OCTAGON_WIDTH);
+		public static final double SIDE_LENGTH = sideLength(OCTAGON_WIDTH);
 		
 		public static double sideLength(double width) {
 			return width / (1 + (2 / Math.sqrt(2)));
@@ -512,7 +492,7 @@ public class QuaxUserInterface {
 	private abstract static class RhombusBase extends Polygon {
 
 		public RhombusBase() {
-			this((OCTAGON_WIDTH - OctagonBase.SIDELEN) / 2);
+			this((OCTAGON_WIDTH - OctagonBase.SIDE_LENGTH) / 2);
 		}
 		
 		public RhombusBase(double radius) {
