@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import quax.model.QuaxBoard;
+import quax.player.BogoBot;
 import quax.player.HumanPlayer;
 import quax.player.QuaxPlayer;
 import quax.types.QuaxCoordinate;
@@ -12,11 +13,16 @@ import quax.types.QuaxCoordinateEvent;
 import quax.types.QuaxTileColour;
 import quax.userinterface.QuaxUserInterface;
 
+import java.util.Random;
+
 public class QuaxController {
+
+    static final Random RNG = new Random();
 
     public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<QuaxCoordinateEvent>("quaxMoveSubmittedEvent");
     public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<QuaxCoordinateEvent>("tileClickedEvent");
 
+    private Stage stage;
     private QuaxUserInterface ui;
 
     private QuaxBoard board;
@@ -25,6 +31,7 @@ public class QuaxController {
     int moveNumber;
 
     public QuaxController(Stage stage) {
+        this.stage = stage;
         ui = new QuaxUserInterface(stage);
 
         players = new QuaxPlayer[2];
@@ -48,18 +55,40 @@ public class QuaxController {
             }
         });
 
-        startTwoPlayerGame();
+        startGameAgainstBot();
     }
 
     public void startTwoPlayerGame() {
+        QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
+        QuaxPlayer p2 = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
+
+        startGame(p1, p2);
+    }
+
+    private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
         this.board = new QuaxBoard();
         ui.setBoard(board);
 
-        players[0] = new HumanPlayer("Player 1", QuaxTileColour.BLACK, ui.getScene());
-        players[1] = new HumanPlayer("Player 2", QuaxTileColour.WHITE, ui.getScene());
+        players[0] = p1;
+        players[1] = p2;
         moveNumber = 0;
 
-        curPlayer().movePrompt();
+        curPlayer().movePrompt(board);
+    }
+
+    public void startGameAgainstBot() {
+        if (RNG.nextInt() % 2 == 0) {
+            QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.BLACK, stage);
+            QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE, stage);
+
+            startGame(human, bot);
+        }
+        else {
+            QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.WHITE, stage);
+            QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK, stage);
+
+            startGame(bot, human);
+        }
     }
 
     public QuaxBoard getBoard() {
@@ -82,7 +111,7 @@ public class QuaxController {
             if(board.checkForWinningMove()){
                 ui.WinLabel(c);
             }else {
-                curPlayer().movePrompt();
+                curPlayer().movePrompt(board);
             }
         }
     }

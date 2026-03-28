@@ -125,6 +125,11 @@ public class QuaxUserInterface {
         Button hideStrat = new Button("Hide Strategy");
         Button PieRule = new Button("PieRule");
 
+        PieRule.setOnMouseClicked(event ->{
+            PieRule.setDisable(true);
+            PieRule.setVisible(false);
+        });
+
         strat.getStyleClass().add("button3");
         hideStrat.getStyleClass().add("button3");
         PieRule.getStyleClass().add("button3");
