@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	private LinkedList<QuaxTile> groupMembers;
-    // TODO rename variables
+    // TODO rename variables --> Maybe onLeftCol_BottomRow and onRightCol_TopRow
 	private boolean presenceLow; // Group presence on a or 1 rank
 	private boolean presenceHigh; // Group presence on k or 11 rank
 	
@@ -28,8 +28,13 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	public void addTile(QuaxTile tile) {
 		tile.setGroup(this);
 		groupMembers.addFirst(tile);
-		if (tile.onLow()) presenceLow = true;
-		if (tile.onHigh()) presenceHigh = true;
+		if (tile.onLow()) {
+            presenceLow = true;
+        }
+
+		if (tile.onHigh()) {
+            presenceHigh = true;
+        }
 	}
 	
 	public boolean isWinningGroup() {
