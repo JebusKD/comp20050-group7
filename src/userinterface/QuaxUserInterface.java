@@ -504,6 +504,14 @@ public class QuaxUserInterface {
 		}
 		
 		private static class BoardStrategyOverlay {
+			
+			private static final double OVERLAY_ALPHA = 0.3;
+			private static final double HUE_MINIMUM = 0;
+			private static final double HUE_MAXIMUM = 120;
+			private static final double SATURATION_MINIMUM = 0.5;
+			private static final double SATURATION_MAXIMUM = 0.8;
+			private static final double BRIGHTNESS_MINIMUM = 0.5;
+			private static final double BRIGHTNESS_MAXIMUM = 0.9;
 		
 			private OctagonStrategyTile[][] octagonGridStrategyCells;
 			private RhombusStrategyTile[][] rhombusGridStrategyCells;
@@ -531,7 +539,20 @@ public class QuaxUserInterface {
 			}
 			
 			public void setColours(QuaxBoard b) {
-				for (
+				int[] stratRange = b.getStrategyValueRange();
+				QuaxCoordinate previousMove = b.previousMove();
+				
+				for (int i = 0; i < 11; i++) {
+					for (int j = 0; j < 11; j++) {
+						if (previousMove.x() == i && previousMove.y() == j) {
+							octagonGridStrategyCells[i][j].getStyleClass().add("strategy-overlay-previousmove");
+						}
+						else {
+							octagonGridStrategyCells[i][j].getStyleClass().remove("strategy-overlay-previousmove");
+						}
+						octagonGridStrategyCells[i][j].setColourFromStrategyValue(b.getOctagon(i, j).getStrategyValue(), stratRange);
+					}
+				}
 			}
 			
 			private GridPane createOctagonStrategyGrid() {
@@ -597,6 +618,19 @@ public class QuaxUserInterface {
 				return rhombusGrid;
 			}
 			
+			private static Color calculateColourFromStrategyValue(int strategyValue, int[] strategyRange) {
+				
+				double strategyMultiplier = (strategyValue - strategyRange[0]) / (1.0 * (strategyRange[1] - strategyRange[0])),
+							     hueDelta = strategyMultiplier * (BoardStrategyOverlay.HUE_MAXIMUM - BoardStrategyOverlay.HUE_MINIMUM),
+						  saturationDelta = strategyMultiplier * (BoardStrategyOverlay.SATURATION_MAXIMUM - BoardStrategyOverlay.SATURATION_MINIMUM),
+						  brightnessDelta = strategyMultiplier * (BoardStrategyOverlay.BRIGHTNESS_MAXIMUM - BoardStrategyOverlay.BRIGHTNESS_MINIMUM);
+			
+				return Color.hsb(BoardStrategyOverlay.HUE_MINIMUM + hueDelta,
+								 BoardStrategyOverlay.SATURATION_MINIMUM + saturationDelta, 
+								 BoardStrategyOverlay.BRIGHTNESS_MINIMUM + brightnessDelta,
+								 BoardStrategyOverlay.OVERLAY_ALPHA);
+			}
+			
 			private static interface StrategyOverlayTile extends Styleable {
 				
 			}
@@ -610,6 +644,10 @@ public class QuaxUserInterface {
 					this.getStyleClass().add("tiletype-octagon");
 					this.coordinate = coordinate;
 				}
+				
+				public void setColourFromStrategyValue(int strategyValue, int[] strategyRange) {
+					this.setFill(calculateColourFromStrategyValue(strategyValue, strategyRange));
+				}
 			}
 			
 			private static class RhombusStrategyTile extends RhombusBase implements StrategyOverlayTile {
@@ -620,6 +658,10 @@ public class QuaxUserInterface {
 					this.getStyleClass().add("strategy-overlay-tile");
 					this.getStyleClass().add("tiletype-rhombus");
 					this.coordinate = coordinate;
+				}
+				
+				public void setColourFromStrategyValue(int strategyValue, int[] strategyRange) {
+					this.setFill(calculateColourFromStrategyValue(strategyValue, strategyRange));
 				}
 			}
 		
