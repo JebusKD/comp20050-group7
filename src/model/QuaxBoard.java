@@ -23,6 +23,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	
 	private QuaxCoordinate previousMove;
 	
+	private int moveNumber;
+	private boolean pieRuleDone;
+	
 	private LinkedList<QuaxTileGroup> trackedGroups;
 	
 	public QuaxBoard() {
@@ -30,6 +33,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
+		
+		this.moveNumber = 0;
+		this.pieRuleDone = false;
 		
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
@@ -52,6 +58,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.rhombusGrid = new Rhombus[10][10];
 		
 		this.trackedGroups = new LinkedList<>();
+		
+		this.moveNumber = b.moveNumber;
+		this.pieRuleDone = b.pieRuleDone;
 		
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
@@ -151,6 +160,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return neighbours;
 	}
 	
+	public int getMoveNumber() {
+		return this.moveNumber;
+	}
+	
 	private void assignGroup(QuaxTile newTile) {
 		QuaxTile[][] neighbours = neighbours(newTile.getCoordinates());
 		
@@ -208,8 +221,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		t.setColour(c);
 		assignGroup(t);
 		this.previousMove = q;
-		if (checkForWinningMove())
-			System.out.println("Game won!");
+		this.moveNumber++;
+	}
+	
+	public boolean attemptPieRule() {
+		if (pieRuleDone == false && moveNumber == 1) {
+			pieRuleDone = true;
+			moveNumber++;
+			return true;
+		} else return false;
 	}
 	
 	public List<QuaxTileGroup> getGroups() {

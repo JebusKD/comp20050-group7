@@ -32,9 +32,6 @@ public class QuaxController {
 	private QuaxBoard board;
 	
 	private QuaxPlayer[] players;
-	private int moveNumber;
-	
-	private boolean pieRuleDone;
 	
 	public QuaxController(Stage stage) {
 		this.stage = stage;
@@ -88,8 +85,6 @@ public class QuaxController {
 		
 		players[0] = p1;
 		players[1] = p2;
-		moveNumber = 0;
-		pieRuleDone = false;
 		
 		ui.setPieRuleVisibility(true);
 		curPlayer().movePrompt(board);
@@ -111,14 +106,13 @@ public class QuaxController {
 	}
 	
 	public QuaxPlayer curPlayer() {
-		return players[moveNumber % 2];
+		return players[board.getMoveNumber() % 2];
 	}
 	
 	public void makeMove(QuaxCoordinate coords) {
 		QuaxTileColour c = curPlayer().getColour();
 		if (board.validMove(coords, c)) {
 			board.makeMove(coords, c);
-			moveNumber++;
 
 			ui.updateFromPreviousMove(board);
 			
@@ -137,13 +131,9 @@ public class QuaxController {
 	}
 
 	public boolean doPieRule() {
-		if (moveNumber == 1 && !pieRuleDone) {
-			QuaxPlayer held = players[0];
-			players[0] = players[1];
-			players[1] = held;
-			players[0].setColour(QuaxTileColour.BLACK);
-			players[1].setColour(QuaxTileColour.WHITE);
-			pieRuleDone = true;
+		if (board.attemptPieRule()) {
+			players[0].setColour(QuaxTileColour.WHITE);
+			players[1].setColour(QuaxTileColour.BLACK);
 			return true;
 		}
 		else return false;
