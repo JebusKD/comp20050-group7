@@ -104,6 +104,7 @@ public class QuaxController {
 			
 			if (board.checkForWinningMove()) {
 				ui.showWinLabel(c);
+				ui.hideTurnTracker();
 			}
 			else {
 				curPlayer().movePrompt(board);

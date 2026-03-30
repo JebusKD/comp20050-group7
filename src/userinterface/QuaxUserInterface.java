@@ -135,6 +135,10 @@ public class QuaxUserInterface {
         winLabel.setVisible(true);       
     }
 	
+	public void hideTurnTracker() {
+		turnIndicator.getTurnTracker().setVisible(false);
+	}
+	
 	public void updateFromPreviousMove(QuaxBoard b) {
 		QuaxCoordinate previousMove = b.previousMove();
 		if(previousMove == null){
