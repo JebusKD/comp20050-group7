@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.Random;
+
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
@@ -8,6 +11,7 @@ import model.QuaxBoard;
 import player.BogoBot;
 import player.HumanPlayer;
 import player.QuaxPlayer;
+import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
@@ -16,9 +20,10 @@ import userinterface.QuaxUserInterface;
 public class QuaxController {
 	
 	static final Random RNG = new Random();
-	
+
 	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
+	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
 	
 	private Stage stage;
 	
@@ -27,7 +32,9 @@ public class QuaxController {
 	private QuaxBoard board;
 	
 	private QuaxPlayer[] players;
-	int moveNumber;
+	private int moveNumber;
+	
+	private boolean pieRuleDone;
 	
 	public QuaxController(Stage stage) {
 		this.stage = stage;
@@ -52,6 +59,17 @@ public class QuaxController {
 			}
 		});
 		
+		stage.addEventHandler(QuaxController.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+			@Override
+			public void handle(ButtonClickEvent event) {
+				if (curPlayer() instanceof HumanPlayer && doPieRule()) {
+					ui.setPieRuleVisibility(false);
+					
+					curPlayer().movePrompt(board);
+				}
+			}
+		});
+		
 		startGameAgainstBot();
 	}
 
@@ -71,7 +89,9 @@ public class QuaxController {
 		players[0] = p1;
 		players[1] = p2;
 		moveNumber = 0;
+		pieRuleDone = false;
 		
+		ui.setPieRuleVisibility(true);
 		curPlayer().movePrompt(board);
 	}
 	
@@ -114,6 +134,19 @@ public class QuaxController {
 
 	public QuaxBoard getBoard() {
 		return this.board;
+	}
+
+	public boolean doPieRule() {
+		if (moveNumber == 1 && !pieRuleDone) {
+			QuaxPlayer held = players[0];
+			players[0] = players[1];
+			players[1] = held;
+			players[0].setColour(QuaxTileColour.BLACK);
+			players[1].setColour(QuaxTileColour.WHITE);
+			pieRuleDone = true;
+			return true;
+		}
+		else return false;
 	}
 
 }
