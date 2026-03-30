@@ -172,15 +172,20 @@ public class QuaxUserInterface {
 
 		private StackPane board;
 		
+		private BoardStrategyOverlay strategyOverlay;
+		
 		public UserInterfaceBoard() {
+			this.strategyOverlay = new BoardStrategyOverlay();
 			this.board = new StackPane(
 				createGradientBackground(),
 				createBehindHourglass(),
 				createHourglass(),
 				createGridBackground(),
 				createBoardCoordinates(),
-				createGrid()
+				createGrid(),
+				strategyOverlay.getOverlay()
 			);
+			strategyOverlay.setVisible(true);
 		}
 		
 		public StackPane getBoard() {
@@ -395,7 +400,7 @@ public class QuaxUserInterface {
 		}
 
 		private GridPane createRhombusGrid() {
-			rhombusGridCells = new RhombusTile[11][11];
+			rhombusGridCells = new RhombusTile[10][10];
 			GridPane rhombusGrid = new GridPane();
 			rhombusGrid.setAlignment(Pos.TOP_LEFT);
 			rhombusGrid.setVgap(OCTAGON_GRID_GAP);
@@ -496,6 +501,128 @@ public class QuaxUserInterface {
 			public QuaxCoordinate getCoordinate() {
 				return this.coordinate;
 			}
+		}
+		
+		private static class BoardStrategyOverlay {
+		
+			private OctagonStrategyTile[][] octagonGridStrategyCells;
+			private RhombusStrategyTile[][] rhombusGridStrategyCells;
+			private StackPane overlay;
+			
+			public BoardStrategyOverlay() {
+				overlay = new StackPane(
+					createOctagonStrategyGrid(),
+					createRhombusStrategyGrid()
+				);
+				
+				overlay.setMaxHeight(Region.USE_PREF_SIZE);
+		        overlay.setMaxWidth(Region.USE_PREF_SIZE);
+		        overlay.setMouseTransparent(true);
+				
+				setVisible(false);
+			}
+			
+			public StackPane getOverlay() {
+				return this.overlay;
+			}
+			
+			public void setVisible(boolean visibility) {
+				overlay.setVisible(visibility);
+			}
+			
+			public void setColours(QuaxBoard b) {
+				for (
+			}
+			
+			private GridPane createOctagonStrategyGrid() {
+				octagonGridStrategyCells = new OctagonStrategyTile[11][11];
+				GridPane octagonGrid = new GridPane();
+				octagonGrid.setAlignment(Pos.TOP_LEFT);
+				octagonGrid.setVgap(OCTAGON_GRID_GAP);
+				octagonGrid.setHgap(OCTAGON_GRID_GAP);
+				octagonGrid.setPickOnBounds(false);
+
+				for (int i = 0; i < 11; i++) {
+			         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+			         octagonGrid.getColumnConstraints().add(column);
+			     }
+				
+				for (int i = 0; i < 11; i++) {
+			         RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+			         octagonGrid.getRowConstraints().add(row);
+			     }
+				
+				for (int i = 0; i < 11; i++) {
+					for (int j = 0; j < 11; j++) {
+						OctagonStrategyTile newTile = new OctagonStrategyTile(new QuaxCoordinate(i, j, true));
+						newTile.setId("octagon-overlay" + i + "-" + j);
+						octagonGridStrategyCells[i][j] = newTile;
+						octagonGrid.add(newTile, i, j);
+					}
+				}
+				return octagonGrid;
+			}
+			
+			private GridPane createRhombusStrategyGrid() {
+				rhombusGridStrategyCells = new RhombusStrategyTile[10][10];
+				GridPane rhombusGrid = new GridPane();
+				rhombusGrid.setAlignment(Pos.TOP_LEFT);
+				rhombusGrid.setVgap(OCTAGON_GRID_GAP);
+				rhombusGrid.setHgap(OCTAGON_GRID_GAP);
+				rhombusGrid.setPickOnBounds(false);
+				
+				double rhombusGridGap = calculateRhombusGridGap(OCTAGON_WIDTH, OCTAGON_GRID_GAP);
+				
+				rhombusGrid.setPadding(new Insets(rhombusGridGap, 0, 0, rhombusGridGap));	
+				
+				for (int i = 0; i < 10; i++) {
+			         ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+			         rhombusGrid.getColumnConstraints().add(column);
+			     }
+				
+				for (int i = 0; i < 10; i++) {
+			         RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+			         row.setValignment(VPos.TOP);
+			         rhombusGrid.getRowConstraints().add(row);
+			     }
+				
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < 10; j++) {
+						RhombusStrategyTile newTile = new RhombusStrategyTile(new QuaxCoordinate(i, j, false));
+						newTile.setId("rhombus-overlay" + i + "-" + j);
+						rhombusGridStrategyCells[i][j] = newTile;
+						rhombusGrid.add(newTile, i, j);
+					}
+				}
+				return rhombusGrid;
+			}
+			
+			private static interface StrategyOverlayTile extends Styleable {
+				
+			}
+			
+			private static class OctagonStrategyTile extends OctagonBase implements StrategyOverlayTile {
+				private QuaxCoordinate coordinate;
+				
+				public OctagonStrategyTile(QuaxCoordinate coordinate) {
+					super();
+					this.getStyleClass().add("strategy-overlay-tile");
+					this.getStyleClass().add("tiletype-octagon");
+					this.coordinate = coordinate;
+				}
+			}
+			
+			private static class RhombusStrategyTile extends RhombusBase implements StrategyOverlayTile {
+				private QuaxCoordinate coordinate;
+				
+				public RhombusStrategyTile(QuaxCoordinate coordinate) {
+					super();
+					this.getStyleClass().add("strategy-overlay-tile");
+					this.getStyleClass().add("tiletype-rhombus");
+					this.coordinate = coordinate;
+				}
+			}
+		
 		}
 		
 	}
