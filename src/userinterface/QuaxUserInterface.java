@@ -27,7 +27,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxTileColour;
-import types.QuaxTileGroup;
 import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
