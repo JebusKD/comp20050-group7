@@ -50,6 +50,9 @@ public class QuaxUserInterface {
 	private UserInterfaceBoard board;
 	
 	private PlayerTurnIndicator turnIndicator;
+	
+	private Label winLabel;
+	private boolean winMsg = false;
 
 	private Scene scene;
 	
@@ -86,7 +89,11 @@ public class QuaxUserInterface {
         this.sideBar = initialiseButtons();
         this.turnIndicator = new PlayerTurnIndicator();
         
-        sideBar.getChildren().add(this.turnIndicator.getTurnTracker());
+        this.winLabel = new Label("_ wins");
+        winLabel.setVisible(false);
+        winLabel.getStyleClass().add("win-label");
+        
+        sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel);
         sideBar.getStyleClass().add("vbox");
         
         GridPane outer = new GridPane();
@@ -121,6 +128,11 @@ public class QuaxUserInterface {
         sideBar.getChildren().addAll(strat,hideStrat,PieRule);
 
         return sideBar;
+    }
+	
+	public void showWinLabel(QuaxTileColour c){
+        winLabel.setText(c + " wins");
+        winLabel.setVisible(true);       
     }
 	
 	public void updateFromPreviousMove(QuaxBoard b) {

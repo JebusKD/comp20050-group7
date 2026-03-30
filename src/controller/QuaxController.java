@@ -102,7 +102,12 @@ public class QuaxController {
 
 			ui.updateFromPreviousMove(board);
 			
-			curPlayer().movePrompt(board);
+			if (board.checkForWinningMove()) {
+				ui.showWinLabel(c);
+			}
+			else {
+				curPlayer().movePrompt(board);
+			}
 		}
 	}
 
