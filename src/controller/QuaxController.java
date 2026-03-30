@@ -49,6 +49,7 @@ public class QuaxController {
 			@Override
 			public void handle(QuaxCoordinateEvent coords) {
 					makeMove(coords.coords());
+					ui.updateOverlay(board);
 			}
 		});
 		

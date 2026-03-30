@@ -12,7 +12,7 @@ import types.QuaxTileColour;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
-	static final int IGNORE_VALUE = Integer.MIN_VALUE;
+	public static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
 
 	public BotPlayer(QuaxTileColour colour, Stage stage) {

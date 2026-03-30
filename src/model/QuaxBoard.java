@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import player.BotPlayer;
 import types.Octagon;
 import types.QuaxCoordinate;
 import types.QuaxTile;
@@ -223,6 +224,23 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	
 	public QuaxCoordinate previousMove() {
 		return previousMove;
+	}
+	
+	public int[] getStrategyValueRange() {
+		int[] arr = new int[] {BotPlayer.IGNORE_VALUE, BotPlayer.IGNORE_VALUE};
+		int strategyValue;
+		for (QuaxTile t : this) {
+			strategyValue = t.getStrategyValue();
+			if (strategyValue != BotPlayer.IGNORE_VALUE) {
+				if (arr[1] == BotPlayer.IGNORE_VALUE || strategyValue > arr[1]) {
+					arr[1] = strategyValue;
+				}
+				else if (arr[0] == BotPlayer.IGNORE_VALUE || strategyValue < arr[0]) {
+					arr[0] = strategyValue;
+				}
+			}
+		}
+		return arr;
 	}
 	
 	public Iterator<QuaxTile> iterator() {

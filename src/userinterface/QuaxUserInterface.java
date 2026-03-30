@@ -26,6 +26,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.QuaxBoard;
+import player.BotPlayer;
 import types.QuaxTileColour;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
@@ -129,6 +130,10 @@ public class QuaxUserInterface {
         return sideBar;
     }
 	
+	public void updateOverlay(QuaxBoard b) {
+		board.updateOverlay(b);
+	}
+	
 	public void showWinLabel(QuaxTileColour c){
         winLabel.setText(c + " wins");
         winLabel.setVisible(true);       
@@ -202,6 +207,10 @@ public class QuaxUserInterface {
 			if (q.isOctagonMove())
 				octagonGridCells[q.x()][q.y()].setColour(c);
 			else rhombusGridCells[q.x()][q.y()].setColour(c);
+		}
+		
+		public void updateOverlay(QuaxBoard b) {
+			strategyOverlay.setColours(b);
 		}
 		
 		private static Rectangle createGridBackground(){
@@ -550,7 +559,33 @@ public class QuaxUserInterface {
 						else {
 							octagonGridStrategyCells[i][j].getStyleClass().remove("strategy-overlay-previousmove");
 						}
-						octagonGridStrategyCells[i][j].setColourFromStrategyValue(b.getOctagon(i, j).getStrategyValue(), stratRange);
+						
+						if (b.getOctagon(i, j).getStrategyValue() == BotPlayer.IGNORE_VALUE || ( b.getOctagon(i, j).getColour() != QuaxTileColour.NONE && b.getOctagon(i, j).getCoordinates() != b.previousMove() )) {
+							octagonGridStrategyCells[i][j].setVisible(false);
+						}
+						else {
+							octagonGridStrategyCells[i][j].setVisible(true);
+							octagonGridStrategyCells[i][j].setColourFromStrategyValue(b.getOctagon(i, j).getStrategyValue(), stratRange);
+						}
+					}
+				}
+				
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < 10; j++) {
+						if (previousMove.x() == i && previousMove.y() == j) {
+							rhombusGridStrategyCells[i][j].getStyleClass().add("strategy-overlay-previousmove");
+						}
+						else {
+							rhombusGridStrategyCells[i][j].getStyleClass().remove("strategy-overlay-previousmove");
+						}
+						
+						if (b.getRhombus(i, j).getStrategyValue() == BotPlayer.IGNORE_VALUE || ( b.getRhombus(i, j).getColour() != QuaxTileColour.NONE && b.getRhombus(i, j).getCoordinates() != b.previousMove() )) {
+							rhombusGridStrategyCells[i][j].setVisible(false);
+						}
+						else {
+							rhombusGridStrategyCells[i][j].setVisible(true);
+							rhombusGridStrategyCells[i][j].setColourFromStrategyValue(b.getRhombus(i, j).getStrategyValue(), stratRange);
+						}
 					}
 				}
 			}
