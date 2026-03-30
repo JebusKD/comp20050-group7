@@ -52,7 +52,6 @@ public class QuaxUserInterface {
 	private PlayerTurnIndicator turnIndicator;
 	
 	private Label winLabel;
-	private boolean winMsg = false;
 
 	private Scene scene;
 	
