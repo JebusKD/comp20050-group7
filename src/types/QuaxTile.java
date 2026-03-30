@@ -11,7 +11,8 @@ public abstract class QuaxTile {
 		this.group = null;
 		this.strategyValue = 0;
 	}
-	
+
+    // TODO - Keep/Remove Comment?
 	public QuaxTile(QuaxTile t) {
 		this.colour = t.colour;
 		this.strategyValue = t.strategyValue;
@@ -49,5 +50,4 @@ public abstract class QuaxTile {
 	public abstract QuaxCoordinate getCoordinates();
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
-	
 }

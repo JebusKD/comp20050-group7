@@ -23,9 +23,12 @@ public abstract class QuaxPlayer {
 	}
 	
 	public void setColour(QuaxTileColour colour) {
-		if (colour == QuaxTileColour.NONE)
-			throw new IllegalArgumentException("Player cannot be assigned to no colour.");
-		else this.colour = colour;
+		if (colour == QuaxTileColour.NONE) {
+            throw new IllegalArgumentException("Player cannot be assigned to no colour.");
+        }
+		else {
+            this.colour = colour;
+        }
 	}
 	
 	public abstract void movePrompt(QuaxBoard b);
