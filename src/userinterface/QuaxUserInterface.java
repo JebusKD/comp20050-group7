@@ -34,7 +34,7 @@ import types.QuaxTile;
 import static model.QuaxBoard.MAX_OCTAGONS;
 import static model.QuaxBoard.MAX_RHOMBUSES;
 
-public class QuaxUserInterface {
+public class QuaxUserInterface implements UserInterface {
 
 	private static final double OCTAGON_WIDTH = 40;
 	private static final double OCTAGON_GRID_GAP = 1;
@@ -126,15 +126,18 @@ public class QuaxUserInterface {
         return sideBar;
     }
 	
+	@Override
 	public void showWinLabel(QuaxTileColour c){
         winLabel.setText(c + " wins");
         winLabel.setVisible(true);       
     }
 	
+	@Override
 	public void hideTurnTracker() {
 		turnIndicator.getTurnTracker().setVisible(false);
 	}
 	
+	@Override
 	public void updateFromPreviousMove(QuaxBoard board) {
 		QuaxCoordinate previousMove = board.previousMove();
 		if (previousMove == null) {
@@ -147,21 +150,24 @@ public class QuaxUserInterface {
         }
 	}
 	
+	@Override
 	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
 		board.setTile(q, c);
 	}
 	
+	@Override
 	public void setBoard(QuaxBoard b) {
 		board.setBoard(b);
+	}
+	
+	@Override
+	public void setPieRuleVisibility(boolean value) {
+		pieRuleButton.setDisable(!value);
+        pieRuleButton.setVisible(value);
 	}
 
 	public Scene getScene() {
 		return this.scene;
-	}
-	
-	public void setPieRuleVisibility(boolean value) {
-		pieRuleButton.setDisable(!value);
-        pieRuleButton.setVisible(value);
 	}
 	
 	private static class UserInterfaceBoard {

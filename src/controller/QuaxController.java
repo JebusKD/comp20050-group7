@@ -15,14 +15,16 @@ import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
+import userinterface.EmptyUserInterface;
 import userinterface.QuaxEventHandler;
 import userinterface.QuaxUserInterface;
+import userinterface.UserInterface;
 
 public class QuaxController {
 	
 	static final Random RNG = new Random();
 
-	private final QuaxUserInterface ui;
+	private final UserInterface ui;
 
 	private QuaxBoard board;
 	
@@ -33,7 +35,7 @@ public class QuaxController {
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 		players = new QuaxPlayer[2];
 		
-		this.ui = null;
+		this.ui = new EmptyUserInterface();
 		
 		this.executor = new SingleThreadExecutor();
 		
@@ -70,10 +72,8 @@ public class QuaxController {
 		p1.setController(this);
 		p2.setController(this);
 		
-		if (ui != null) {
-			ui.setBoard(board);
-			ui.setPieRuleVisibility(true);
-		}
+		ui.setBoard(board);
+		ui.setPieRuleVisibility(true);
 	
 		curPlayer().movePrompt(board);
 	}
@@ -106,9 +106,9 @@ public class QuaxController {
 		if (board.validMove(coords, c)) {
 			board.makeMove(coords, c);
 
-			if (ui != null) ui.updateFromPreviousMove(board);
+			ui.updateFromPreviousMove(board);
 			
-			if (board.checkForWinningMove() && ui != null) {
+			if (board.checkForWinningMove()) {
 				ui.showWinLabel(c);
 				ui.hideTurnTracker();
 			}
