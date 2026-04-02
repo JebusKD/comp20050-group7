@@ -6,11 +6,9 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-	Sprint1TestSuite.class,
-	Sprint2TestSuite.class,
-	Sprint3TestSuite.class
+	TestSingleThreadedGame.class
 })
-@DisplayName("Quax Unit Tests")
-class QuaxTestSuite {
+@DisplayName("Sprint 3 Unit Tests")
+class Sprint3TestSuite {
 	
 }
