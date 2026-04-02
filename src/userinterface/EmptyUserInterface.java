@@ -4,6 +4,8 @@ import model.QuaxBoard;
 import types.QuaxCoordinate;
 import types.QuaxTileColour;
 
+/* User Interface used in cases where JavaFX is not known to be running.
+ * Disables all JavaFX-specific methods. */
 public class EmptyUserInterface implements UserInterface {
 
 	@Override
