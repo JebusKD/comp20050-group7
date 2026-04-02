@@ -21,9 +21,6 @@ public class QuaxController {
 	
 	static final Random RNG = new Random();
 
-	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
-	
 	private final QuaxUserInterface ui;
 
 	private QuaxBoard board;
@@ -49,7 +46,7 @@ public class QuaxController {
 		
 		this.executor = new JavaFXThreadedExecutor();
 		
-		stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<>() {
+		stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
 			@Override
 			public void handle(QuaxCoordinateEvent coords) {
 				
@@ -59,7 +56,7 @@ public class QuaxController {
 			}
 		});
 		
-		stage.addEventHandler(QuaxController.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+		stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
 			@Override
 			public void handle(ButtonClickEvent event) {
 				if (curPlayer() instanceof HumanPlayer && doPieRule()) {
