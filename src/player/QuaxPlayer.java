@@ -11,11 +11,14 @@ import types.QuaxTileColour;
 public abstract class QuaxPlayer {
 
 	private QuaxTileColour colour;
-	private Stage stage;
+	private QuaxController controller;
 	
-	public QuaxPlayer(QuaxTileColour colour, Stage stage) {
+	public QuaxPlayer(QuaxTileColour colour) {
 		this.setColour(colour);
-		this.stage = stage;
+	}
+	
+	public void setController(QuaxController controller) {
+		this.controller = controller;
 	}
 	
 	public QuaxTileColour getColour() {

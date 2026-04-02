@@ -1,7 +1,9 @@
 package controller;
 
 import java.util.Random;
+import java.util.concurrent.Executor;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -21,7 +23,6 @@ public class QuaxController {
 	
 	static final Random RNG = new Random();
 
-	public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
 	
@@ -32,6 +33,12 @@ public class QuaxController {
 	private QuaxBoard board;
 	
 	private QuaxPlayer[] players;
+	
+	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
+		players = new QuaxPlayer[2];
+		
+		startGame(p1, p2);
+	}
 	
 	public QuaxController(Stage stage) {
 		this.stage = stage;
@@ -73,20 +80,26 @@ public class QuaxController {
     // TODO Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		
-		QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
-		QuaxPlayer p2 = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
+		QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK);
+		QuaxPlayer p2 = new HumanPlayer("Player 2", QuaxTileColour.WHITE);
 		
 		startGame(p1, p2);
 	}
 	
 	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
 		this.board = new QuaxBoard();
-		ui.setBoard(board);
 		
 		players[0] = p1;
 		players[1] = p2;
 		
-		ui.setPieRuleVisibility(true);
+		p1.setController(this);
+		p2.setController(this);
+		
+		if (ui != null) {
+			ui.setBoard(board);
+			ui.setPieRuleVisibility(true);
+		}
+	
 		curPlayer().movePrompt(board);
 	}
 	
@@ -137,6 +150,18 @@ public class QuaxController {
 			return true;
 		}
 		else return false;
+	}
+	
+	public static class SingleThreadExecutor implements Executor {
+		public void execute(Runnable r) {
+			r.run();
+		}
+	}
+	
+	public static class JavaFXThreadedExecutor implements Executor {
+		public void execute(Runnable r) {
+			Platform.runLater(r);
+		}
 	}
 
 }
