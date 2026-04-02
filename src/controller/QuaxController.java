@@ -4,21 +4,11 @@ import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.stage.Stage;
 import model.QuaxBoard;
-import player.BogoBot;
-import player.HumanPlayer;
-import player.QuaxPlayer;
-import types.ButtonClickEvent;
-import types.QuaxCoordinate;
-import types.QuaxCoordinateEvent;
-import types.QuaxTileColour;
-import userinterface.EmptyUserInterface;
-import userinterface.QuaxEventHandler;
-import userinterface.QuaxUserInterface;
-import userinterface.UserInterface;
+import player.*;
+import types.*;
+import userinterface.*;
 
 public class QuaxController {
 	
