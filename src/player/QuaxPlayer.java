@@ -37,8 +37,6 @@ public abstract class QuaxPlayer {
 	public abstract void movePrompt(QuaxBoard b);
 	
 	protected void submitMove(QuaxCoordinate move) {
-		QuaxCoordinateEvent submission = new QuaxCoordinateEvent(QuaxController.MOVE_SUBMITTED_EVENT, move);
-		
-		Event.fireEvent(stage, submission);
+		controller.makeMove(move);
 	}
 }
