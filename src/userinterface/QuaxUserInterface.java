@@ -114,7 +114,7 @@ public class QuaxUserInterface {
         pieRuleButton = new Button("PieRule");
 
         pieRuleButton.setOnMouseClicked(event -> {
-        	pieRuleButton.fireEvent(new ButtonClickEvent(QuaxController.PIE_RULE_CLICKED_EVENT));
+        	pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
         
         strat.getStyleClass().add("button3");
@@ -447,7 +447,7 @@ public class QuaxUserInterface {
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
-						fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
 					}
 				});
 			}
@@ -471,7 +471,7 @@ public class QuaxUserInterface {
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
-						fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
 					}
 				});
 			}

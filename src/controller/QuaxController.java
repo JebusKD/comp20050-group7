@@ -15,6 +15,7 @@ import types.ButtonClickEvent;
 import types.QuaxCoordinate;
 import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
+import userinterface.QuaxEventHandler;
 import userinterface.QuaxUserInterface;
 
 public class QuaxController {
@@ -46,26 +47,7 @@ public class QuaxController {
 		
 		this.executor = new JavaFXThreadedExecutor();
 		
-		stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
-			@Override
-			public void handle(QuaxCoordinateEvent coords) {
-				
-				if (curPlayer() instanceof HumanPlayer) {
-					makeMove(coords.coords());
-				}
-			}
-		});
-		
-		stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
-			@Override
-			public void handle(ButtonClickEvent event) {
-				if (curPlayer() instanceof HumanPlayer && doPieRule()) {
-					ui.setPieRuleVisibility(false);
-					
-					curPlayer().movePrompt(board);
-				}
-			}
-		});
+		QuaxEventHandler.setup(this, stage);
 		
 		startGameAgainstBot();
 	}
@@ -120,9 +102,9 @@ public class QuaxController {
 		if (board.validMove(coords, c)) {
 			board.makeMove(coords, c);
 
-			ui.updateFromPreviousMove(board);
+			if (ui != null) ui.updateFromPreviousMove(board);
 			
-			if (board.checkForWinningMove()) {
+			if (board.checkForWinningMove() && ui != null) {
 				ui.showWinLabel(c);
 				ui.hideTurnTracker();
 			}
@@ -147,6 +129,10 @@ public class QuaxController {
 	
 	public Executor getExecutor() {
 		return this.executor;
+	}
+	
+	public void setPieRuleVisibility(boolean visibility) {
+		ui.setPieRuleVisibility(visibility);
 	}
 	
 	public static class SingleThreadExecutor implements Executor {
