@@ -1,5 +1,7 @@
 package player;
 
+import java.util.concurrent.Executor;
+
 import controller.QuaxController;
 import javafx.event.Event;
 import javafx.stage.Stage;
@@ -19,6 +21,10 @@ public abstract class QuaxPlayer {
 	
 	public void setController(QuaxController controller) {
 		this.controller = controller;
+	}
+	
+	protected Executor getExecutor() {
+		return controller.getExecutor();
 	}
 	
 	public QuaxTileColour getColour() {

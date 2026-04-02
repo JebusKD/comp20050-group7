@@ -15,8 +15,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
 
-	public BotPlayer(QuaxTileColour colour, Stage stage) {
-		super(colour, stage);
+	public BotPlayer(QuaxTileColour colour) {
+		super(colour);
 	}
 	
 	protected abstract QuaxCoordinate computeMove(QuaxBoard b);
@@ -58,7 +58,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	@Override
 	public void movePrompt(QuaxBoard b) {
-		Platform.runLater(() -> {
+		this.getExecutor().execute(() -> {
 			submitMove(computeMove(b));
 		});
 	}
