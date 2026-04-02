@@ -19,8 +19,8 @@ class TestPieRule {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		p1 = new HumanPlayer(QuaxTileColour.BLACK);
-		p2 = new HumanPlayer(QuaxTileColour.WHITE);
+		p1 = new HumanPlayer();
+		p2 = new HumanPlayer();
 		controller = new QuaxController(p1, p2);
 	}
 	

@@ -6,8 +6,8 @@ import types.QuaxTileColour;
 
 public class BogoBot extends BotPlayer {
 
-	public BogoBot(QuaxTileColour colour) {
-		super(colour);
+	public BogoBot() {
+		super();
 	}
 
 	@Override

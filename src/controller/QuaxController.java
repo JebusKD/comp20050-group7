@@ -57,24 +57,20 @@ public class QuaxController {
     // TODO Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		
-		QuaxPlayer p1 = new HumanPlayer(QuaxTileColour.BLACK);
-		QuaxPlayer p2 = new HumanPlayer(QuaxTileColour.WHITE);
+		QuaxPlayer p1 = new HumanPlayer();
+		QuaxPlayer p2 = new HumanPlayer();
 		
 		startGame(p1, p2);
 	}
 	
 	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-		if (p1.getColour() != QuaxTileColour.BLACK) {
-			throw new IllegalArgumentException("Player 1's colour should always be black.");
-		}
-		if (p2.getColour() != QuaxTileColour.WHITE) {
-			throw new IllegalArgumentException("Player 2's colour should always be white.");
-		}
-		
 		this.board = new QuaxBoard();
 		
 		players[0] = p1;
 		players[1] = p2;
+		
+		p1.setColour(QuaxTileColour.BLACK);
+		p2.setColour(QuaxTileColour.WHITE);
 		
 		p1.setController(this);
 		p2.setController(this);
@@ -86,16 +82,13 @@ public class QuaxController {
 	}
 	
 	public void startGameAgainstBot() {
+		QuaxPlayer human = new HumanPlayer();
+		QuaxPlayer bot = new BogoBot();
+		
 		if (RNG.nextInt() % 2 == 0) {
-			QuaxPlayer human = new HumanPlayer(QuaxTileColour.BLACK);
-			QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE);
-			
 			startGame(human, bot);
 		}
 		else {
-			QuaxPlayer human = new HumanPlayer(QuaxTileColour.WHITE);
-			QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK);
-			
 			startGame(bot, human);
 		}
 	}

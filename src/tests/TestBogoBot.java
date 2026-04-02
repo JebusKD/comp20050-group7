@@ -13,8 +13,8 @@ public class TestBogoBot {
 	
 	@Test
 	void testBogoBot1() {
-		HumanPlayer human = new HumanPlayer(QuaxTileColour.BLACK);
-		BogoBot bot = new BogoBot(QuaxTileColour.WHITE);
+		HumanPlayer human = new HumanPlayer();
+		BogoBot bot = new BogoBot();
 		
 		QuaxController controller = new QuaxController(human, bot);
 		
@@ -23,8 +23,8 @@ public class TestBogoBot {
 	
 	@Test
 	void testBogoBot2() {
-		HumanPlayer human = new HumanPlayer(QuaxTileColour.WHITE);
-		BogoBot bot = new BogoBot(QuaxTileColour.BLACK);
+		HumanPlayer human = new HumanPlayer();
+		BogoBot bot = new BogoBot();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -33,8 +33,8 @@ public class TestBogoBot {
 	
 	@Test
 	void testBogoBotPieRule() {
-		HumanPlayer human = new HumanPlayer(QuaxTileColour.WHITE);
-		BogoBot bot = new BogoBot(QuaxTileColour.BLACK);
+		HumanPlayer human = new HumanPlayer();
+		BogoBot bot = new BogoBot();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -46,8 +46,8 @@ public class TestBogoBot {
 
 	@Test
 	void testBogoBotVersusBogoBot() {
-		BogoBot b1 = new BogoBot(QuaxTileColour.BLACK);
-		BogoBot b2 = new BogoBot(QuaxTileColour.WHITE);
+		BogoBot b1 = new BogoBot();
+		BogoBot b2 = new BogoBot();
 		
 		/* Creating a QuaxController automatically starts the game - and
 		 * in our instance we have two Bogo Bots who will keep making

@@ -13,8 +13,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
 
-	public BotPlayer(QuaxTileColour colour) {
-		super(colour);
+	public BotPlayer() {
+		super();
 	}
 	
 	protected abstract QuaxCoordinate computeMove(QuaxBoard b);

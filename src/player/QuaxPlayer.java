@@ -12,8 +12,9 @@ public abstract class QuaxPlayer {
 	private QuaxTileColour colour;
 	private QuaxController controller;
 	
-	public QuaxPlayer(QuaxTileColour colour) {
-		this.setColour(colour);
+	public QuaxPlayer() {
+		this.colour = null;
+		this.controller = null;
 	}
 	
 	public void setController(QuaxController controller) {
@@ -21,16 +22,26 @@ public abstract class QuaxPlayer {
 	}
 	
 	protected Executor getExecutor() {
-		return controller.getExecutor();
+		if (controller == null) {
+			throw new IllegalStateException("Player not initialised to a controller.");
+		}
+		else {
+			return controller.getExecutor();
+		}
 	}
 	
 	public QuaxTileColour getColour() {
-		return this.colour;
+		if (this.colour == null) {
+			throw new IllegalStateException("Player not initialised to a controller.");
+		}
+		else {
+			return this.colour;
+		}
 	}
 	
 	public void setColour(QuaxTileColour colour) {
-		if (colour == QuaxTileColour.NONE) {
-            throw new IllegalArgumentException("Player cannot be assigned to no colour.");
+		if (colour == QuaxTileColour.NONE || colour == null) {
+            throw new IllegalArgumentException("Invalid colour assigned to player " + colour);
         }
 		else {
             this.colour = colour;
