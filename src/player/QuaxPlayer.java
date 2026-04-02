@@ -3,11 +3,8 @@ package player;
 import java.util.concurrent.Executor;
 
 import controller.QuaxController;
-import javafx.event.Event;
-import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
-import types.QuaxCoordinateEvent;
 import types.QuaxTileColour;
 
 public abstract class QuaxPlayer {

@@ -1,14 +1,13 @@
 package player;
 
-import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
 import types.QuaxTileColour;
 
 public class BogoBot extends BotPlayer {
 
-	public BogoBot(QuaxTileColour colour, Stage stage) {
-		super(colour, stage);
+	public BogoBot(QuaxTileColour colour) {
+		super(colour);
 	}
 
 	@Override

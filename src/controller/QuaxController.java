@@ -4,8 +4,6 @@ import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
@@ -106,14 +104,14 @@ public class QuaxController {
 	
 	public void startGameAgainstBot() {
 		if (RNG.nextInt() % 2 == 0) {
-			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.BLACK, stage);
-			QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE, stage);
+			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.BLACK);
+			QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE);
 			
 			startGame(human, bot);
 		}
 		else {
-			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.WHITE, stage);
-			QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK, stage);
+			QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.WHITE);
+			QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK);
 			
 			startGame(bot, human);
 		}
