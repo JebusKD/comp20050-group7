@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import model.QuaxBoard;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
+import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
