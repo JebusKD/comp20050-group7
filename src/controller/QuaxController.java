@@ -56,13 +56,6 @@ public class QuaxController {
 			}
 		});
 		
-		stage.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<>() {
-			@Override
-			public void handle(QuaxCoordinateEvent coords) {
-					makeMove(coords.coords());
-			}
-		});
-		
 		stage.addEventHandler(QuaxController.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
 			@Override
 			public void handle(ButtonClickEvent event) {
