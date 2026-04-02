@@ -2,7 +2,6 @@ package player;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;
-import types.QuaxTileColour;
 
 public class BogoBot extends BotPlayer {
 
