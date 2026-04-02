@@ -4,8 +4,7 @@ import java.util.concurrent.Executor;
 
 import controller.QuaxController;
 import model.QuaxBoard;
-import types.QuaxCoordinate;
-import types.QuaxTileColour;
+import types.*;
 
 public abstract class QuaxPlayer {
 
