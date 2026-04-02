@@ -6,12 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import types.Octagon;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
-import types.QuaxTileGroup;
-import types.Rhombus;
+import types.*;
 
 public class QuaxBoard implements Iterable<QuaxTile> {
 
