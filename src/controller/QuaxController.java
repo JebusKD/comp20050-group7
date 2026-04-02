@@ -24,7 +24,6 @@ public class QuaxController {
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
 	
-	private final Stage stage;
 	private final QuaxUserInterface ui;
 
 	private QuaxBoard board;
@@ -36,7 +35,6 @@ public class QuaxController {
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 		players = new QuaxPlayer[2];
 		
-		this.stage = null;
 		this.ui = null;
 		
 		this.executor = new SingleThreadExecutor();
@@ -45,7 +43,6 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage) {
-		this.stage = stage;
 		ui = new QuaxUserInterface(stage);
 		
 		players = new QuaxPlayer[2];
