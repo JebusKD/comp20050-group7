@@ -1,7 +1,6 @@
 package player;
 
 import model.QuaxBoard;
-import types.QuaxTileColour;
 
 public class HumanPlayer extends QuaxPlayer {
 
