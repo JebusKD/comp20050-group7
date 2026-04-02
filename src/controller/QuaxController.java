@@ -26,16 +26,22 @@ public class QuaxController {
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 	public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
 	
-	private Stage stage;
-	
-	private QuaxUserInterface ui;
+	private final Stage stage;
+	private final QuaxUserInterface ui;
 
 	private QuaxBoard board;
 	
-	private QuaxPlayer[] players;
+	private final QuaxPlayer[] players;
+	
+	private final Executor executor;
 	
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 		players = new QuaxPlayer[2];
+		
+		this.stage = null;
+		this.ui = null;
+		
+		this.executor = new SingleThreadExecutor();
 		
 		startGame(p1, p2);
 	}
@@ -45,6 +51,8 @@ public class QuaxController {
 		ui = new QuaxUserInterface(stage);
 		
 		players = new QuaxPlayer[2];
+		
+		this.executor = new JavaFXThreadedExecutor();
 		
 		stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<>() {
 			@Override
@@ -143,6 +151,10 @@ public class QuaxController {
 			return true;
 		}
 		else return false;
+	}
+	
+	public Executor getExecutor() {
+		return this.executor;
 	}
 	
 	public static class SingleThreadExecutor implements Executor {
