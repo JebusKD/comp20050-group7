@@ -94,7 +94,11 @@ public class QuaxController {
 	}
 	
 	public QuaxPlayer curPlayer() {
-		return players[board.getMoveNumber() % 2];
+		return players[getMoveNumber() % 2];
+	}
+	
+	public int getMoveNumber() {
+		return board.getMoveNumber();
 	}
 	
 	public void makeMove(QuaxCoordinate coords) {
