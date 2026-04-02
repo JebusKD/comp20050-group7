@@ -6,7 +6,7 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-	TestSingleThreadedGame.class
+	TestPieRule.class
 })
 @DisplayName("Sprint 3 Unit Tests")
 class Sprint3TestSuite {

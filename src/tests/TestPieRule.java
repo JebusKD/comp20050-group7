@@ -11,7 +11,7 @@ import player.QuaxPlayer;
 import types.QuaxCoordinate;
 import types.QuaxTileColour;
 
-class TestSingleThreadedGame {
+class TestPieRule {
 
 	QuaxController controller;
 	
