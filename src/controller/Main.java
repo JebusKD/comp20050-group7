@@ -7,7 +7,7 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		QuaxController controller = new QuaxController(stage);
+		new QuaxController(stage);
 	}
 
 	public static void main(String[] args) {
