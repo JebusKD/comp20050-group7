@@ -25,8 +25,6 @@ public class QuaxEventHandler {
 			public void handle(ButtonClickEvent event) {
 				if (controller.curPlayer() instanceof HumanPlayer && controller.doPieRule()) {
 					controller.setPieRuleVisibility(false);
-					
-					controller.curPlayer().movePrompt(controller.getBoard());
 				}
 			}
 		});

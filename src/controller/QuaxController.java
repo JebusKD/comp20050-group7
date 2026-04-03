@@ -116,6 +116,7 @@ public class QuaxController {
 		if (board.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
 			players[1].setColour(QuaxTileColour.BLACK);
+			curPlayer().movePrompt(getBoard());
 			return true;
 		}
 		else return false;
