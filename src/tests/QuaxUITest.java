@@ -6,17 +6,13 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
-import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
+
 import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.base.WindowMatchers.isShowing;
-import  org.testfx.api.FxAssert;
 import model.QuaxBoard;
-import types.QuaxCoordinate;
-import types.QuaxTile;
 import types.QuaxTileColour;
 
 
@@ -111,9 +107,10 @@ public class QuaxUITest {
     }
 
     @Test
-    void PieRuleButtonInvisibleOnceClicked(FxRobot robot){
+    void PieRuleButtonInvisibleOnceClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
         robot.clickOn("#PieRule");
+        WaitForAsyncUtils.waitForFxEvents();
         assertFalse(robot.lookup("#PieRule").query().isVisible());
     }
 
@@ -121,8 +118,7 @@ public class QuaxUITest {
     void PieRuleButtonLocked(FxRobot robot){
         robot.clickOn("#octagon5-5");
         robot.clickOn("#octagon0-0");
-        robot.clickOn("#PieRule");
-        assertTrue(robot.lookup("#PieRule").query().isVisible());//Pie rule should not be activated
+        assertFalse(robot.lookup("#PieRule").query().isVisible());//Pie rule should disappear
 
     }
 

@@ -35,25 +35,22 @@ public class BotUiTest {
 
     @Test
     public void BotMovesIfFirst_AND_DoesNotMoveIfSecond(FxRobot robot)  {
-        //if bot goes first, then its move number should be one upon opening the stage (cos it started the game)
-        if(controller.curPlayer() instanceof BotPlayer){
-            assertEquals(1,controller.getBoard().getMoveNumber());
-        }
-        else{
-            assertEquals(0,controller.getBoard().getMoveNumber());
-        }
+    	// Wait for the bot to make a move, after that, ensure it's no longer the bot's turn.
+    	WaitForAsyncUtils.waitForFxEvents();
+    	assertFalse(controller.curPlayer() instanceof BotPlayer);
     }
 
     //https://testfx.github.io/TestFX/docs/javadoc/testfx-core/javadoc/org.testfx/org/testfx/util/WaitForAsyncUtils.html
 
     @Test
     public void BotAlwaysMakesMove(FxRobot robot){
-        if(controller.curPlayer() instanceof HumanPlayer){
-            robot.clickOn("#octagon5-5");
-            WaitForAsyncUtils.waitForFxEvents();
-            assertEquals(2,controller.getBoard().getMoveNumber()); //robot went after human
-        }
-        else{
+    	WaitForAsyncUtils.waitForFxEvents();
+    	if (controller.curPlayer().getColour() == QuaxTileColour.BLACK) { // Human goes first
+    		robot.clickOn("#octagon5-5");
+    		WaitForAsyncUtils.waitForFxEvents();
+    		assertEquals(2,controller.getBoard().getMoveNumber()); //robot went after human
+    	}
+		else{
             assertEquals(1,controller.getBoard().getMoveNumber()); //robot is BLACK so has moved
         }
     }
