@@ -54,9 +54,9 @@ public class TestBogoBot {
 		BogoBot bot = new BogoBot();
 		
 		QuaxController controller = new QuaxController(bot, human);
-		System.out.println("mn = " + controller.getMoveNumber());
+
 		controller.doPieRule();
-		System.out.println("mn = " + controller.getMoveNumber());
+		
 		// After the human uses the Pie rule, Bogo bot should immediately make another move.
 		assertEquals(3, controller.getMoveNumber());
 	}
