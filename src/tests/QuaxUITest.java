@@ -66,7 +66,6 @@ public class QuaxUITest {
         assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
     }
 
-    //this is passing when it shouldn't
     @Test
     void validRhombusPlacement(FxRobot robot){
         QuaxBoard board = controller.getBoard();
