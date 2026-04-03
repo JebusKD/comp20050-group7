@@ -33,7 +33,7 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage) {
-		this(stage, false);
+		this(stage, true);
 	}
 	
 	public QuaxController(Stage stage, boolean againstBot) {
