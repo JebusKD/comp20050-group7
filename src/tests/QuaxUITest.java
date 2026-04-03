@@ -13,7 +13,7 @@ import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.WindowMatchers.isShowing;
-import org.testfx.api.FxAssert;
+import  org.testfx.api.FxAssert;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
 import types.QuaxTile;
@@ -23,11 +23,11 @@ import types.QuaxTileColour;
 @ExtendWith(ApplicationExtension.class)
 public class QuaxUITest {
 
-    private QuaxController controller;
+	private QuaxController controller;
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage);
+        controller = new QuaxController(stage,false);//human v human game for testing
     }
 
     @Test
@@ -53,15 +53,14 @@ public class QuaxUITest {
 
     @Test
     void WinningMove(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
 
-        for (int i = 0; i < 10; i++) {
-            board.makeMove(new QuaxCoordinate(0, i, true), QuaxTileColour.BLACK);
+        for(int i = 0; i < 10;i++){
+            robot.clickOn("#octagon5-" + i);
+            robot.clickOn("#octagon1-" + i);
         }
 
-
-        robot.clickOn("#octagon0-10");
-        assertEquals(true,controller.getBoard().checkForWinningMove());
+        robot.clickOn("#octagon5-10");
+        assertTrue(controller.getBoard().checkForWinningMove());
     }
 
     @Test
@@ -71,13 +70,16 @@ public class QuaxUITest {
         assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
     }
 
+    //this is passing when it shouldn't
     @Test
     void validRhombusPlacement(FxRobot robot){
         QuaxBoard board = controller.getBoard();
-        board.makeMove(new QuaxCoordinate(5, 5, true), QuaxTileColour.BLACK);
-        board.makeMove(new QuaxCoordinate(5,6, true), QuaxTileColour.BLACK);
-        board.makeMove(new QuaxCoordinate(6, 6, true), QuaxTileColour.BLACK);
-        board.makeMove(new QuaxCoordinate(1, 6, true), QuaxTileColour.BLACK);
+
+        robot.clickOn("#octagon5-5");//Black goes first
+        robot.clickOn("#octagon0-0");//just have white turn click somehwere else
+        robot.clickOn("#octagon6-6");
+        robot.clickOn("#octagon0-1");
+
         robot.clickOn("#rhombus5-5");
         assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
     }
@@ -85,13 +87,13 @@ public class QuaxUITest {
     @Test
     void OctagonObjectDisplayExists(FxRobot robot){
         Node turnOct = robot.lookup("#Octagon-object").query();
-        assertEquals(true,robot.lookup("#Octagon-object").query().isVisible());
+        assertTrue(turnOct.isVisible());
     }
 
     @Test
     void RhombusObjectDisplayExists(FxRobot robot){
         Node turnRhom = robot.lookup("#Rhombus-object").query();
-        assertEquals(true,robot.lookup("#Rhombus-object").query().isVisible());
+        assertTrue(turnRhom.isVisible());
     }
 
     @Test
@@ -106,6 +108,59 @@ public class QuaxUITest {
         robot.clickOn("#octagon5-5");
         Node turnRhombus = robot.lookup("#Rhombus-object").query();
         assertTrue(turnRhombus.getStyleClass().contains("tilecolour-white"));
+    }
+
+    @Test
+    void PieRuleButtonInvisibleOnceClicked(FxRobot robot){
+        robot.clickOn("#octagon5-5");
+        robot.clickOn("#PieRule");
+        assertFalse(robot.lookup("#PieRule").query().isVisible());
+    }
+
+    @Test
+    void PieRuleButtonLocked(FxRobot robot){
+        robot.clickOn("#octagon5-5");
+        robot.clickOn("#octagon0-0");
+        robot.clickOn("#PieRule");
+        assertTrue(robot.lookup("#PieRule").query().isVisible());//Pie rule should not be activated
+
+    }
+
+    @Test
+    void PieRuleSwapsPlayerColours(FxRobot robot){
+        robot.clickOn("#octagon5-5"); //player one makes move
+        robot.clickOn("#PieRule"); //player two clicks PieRule
+
+        //player one should now be the colour player two started out as
+        assertEquals(QuaxTileColour.WHITE,controller.getPlayerColour(0));
+        //player two should now be the colour player one started out as
+        assertEquals(QuaxTileColour.BLACK,controller.getPlayerColour(1));
+
+    }
+
+    @Test
+    void NumberCoordsExist(FxRobot robot){
+        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //theres 22 of each coordinate type, all with the same styling
+    }
+
+
+    @Test
+    void LetterCoordsExist(FxRobot robot){
+        assertEquals(22, robot.lookup(".coordinate-letter-style").queryAll().size());
+    }
+
+    @Test
+    void WinLabelIsDisplayed(FxRobot robot){
+        QuaxBoard board = controller.getBoard();
+
+        for(int i = 0; i < 10;i++){
+            robot.clickOn("#octagon5-" + i);
+            robot.clickOn("#octagon1-" + i);
+        }
+
+        robot.clickOn("#octagon5-10");
+        Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
+        assertEquals("BLACK wins",winLabel.getText());
     }
 
 }

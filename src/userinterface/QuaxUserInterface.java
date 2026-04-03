@@ -117,6 +117,7 @@ public class QuaxUserInterface implements UserInterface {
         	pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
         
+        pieRuleButton.setId("PieRule");
         setPieRuleVisibility(false);
         
         strat.getStyleClass().add("button3");

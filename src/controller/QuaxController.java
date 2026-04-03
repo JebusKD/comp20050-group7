@@ -33,6 +33,10 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage) {
+		this(stage, true);
+	}
+	
+	public QuaxController(Stage stage, boolean againstBot) {
 		ui = new QuaxUserInterface(stage);
 		
 		players = new QuaxPlayer[2];
@@ -41,7 +45,8 @@ public class QuaxController {
 		
 		QuaxEventHandler.setup(this, stage);
 		
-		startGameAgainstBot();
+		if (againstBot) startGameAgainstBot();
+		else startTwoPlayerGame();
 	}
 
     // TODO Keep for testing - Remove on final submission
@@ -84,6 +89,12 @@ public class QuaxController {
 	
 	public QuaxPlayer curPlayer() {
 		return players[getMoveNumber() % 2];
+	}
+	
+	// for testing purposes
+	public QuaxTileColour getPlayerColour(int i){
+		if (i == 0 || i == 1) return players[i].getColour();
+		else throw new IllegalArgumentException("Only players 0 and 1 exist.");
 	}
 	
 	public int getMoveNumber() {
