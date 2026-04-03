@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import controller.QuaxController;
 import player.BogoBot;
 import player.HumanPlayer;
+import types.QuaxTile;
 import types.QuaxTileColour;
 
 public class TestBogoBot {
@@ -32,14 +33,30 @@ public class TestBogoBot {
 	}
 	
 	@Test
-	void testBogoBotPieRule() {
+	void testBogoBot3() {
 		HumanPlayer human = new HumanPlayer();
 		BogoBot bot = new BogoBot();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
-		controller.doPieRule();
+		int count = 0;
+		for (QuaxTile t : controller.getBoard()) {
+			if (t.getColour() == QuaxTileColour.BLACK) {
+				count++;
+			}
+		}
+		assertEquals(1, count);
+	}
+	
+	@Test
+	void testBogoBotPieRule() {
+		HumanPlayer human = new HumanPlayer();
+		BogoBot bot = new BogoBot();
 		
+		QuaxController controller = new QuaxController(bot, human);
+		System.out.println("mn = " + controller.getMoveNumber());
+		controller.doPieRule();
+		System.out.println("mn = " + controller.getMoveNumber());
 		// After the human uses the Pie rule, Bogo bot should immediately make another move.
 		assertEquals(3, controller.getMoveNumber());
 	}
