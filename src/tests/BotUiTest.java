@@ -34,10 +34,18 @@ public class BotUiTest {
     }
 
     @Test
-    public void BotMovesIfFirst_AND_DoesNotMoveIfSecond(FxRobot robot)  {
+    public void BotMovesIfFirstOrNotIfSecond(FxRobot robot)  {
     	// Wait for the bot to make a move, after that, ensure it's no longer the bot's turn.
     	WaitForAsyncUtils.waitForFxEvents();
+    	// Bot should automatically make a move if possible, so should always be the human's turn.
     	assertFalse(controller.curPlayer() instanceof BotPlayer);
+    	if (controller.curPlayer().getColour() == QuaxTileColour.BLACK) { // Human goes first
+    		assertEquals(0,controller.getBoard().getMoveNumber()); //robot has not moved
+    	}
+    	else { // Otherwise, bot moves first and makes exactly one move.
+    		assertEquals(1,controller.getBoard().getMoveNumber());
+    	}
+  
     }
 
     //https://testfx.github.io/TestFX/docs/javadoc/testfx-core/javadoc/org.testfx/org/testfx/util/WaitForAsyncUtils.html
