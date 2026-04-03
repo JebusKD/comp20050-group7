@@ -161,11 +161,11 @@ public class QuaxUITest {
     void WinLabelIsDisplayedWhite(FxRobot robot){
     	robot.clickOn("#octagon8-0"); // Waste Black's first move
         for(int i = 0; i < 10;i++){
-            robot.clickOn("#octagon5-" + i);
-            robot.clickOn("#octagon1-" + i);
+            robot.clickOn("#octagon" + i + "-3");
+            robot.clickOn("#octagon" + i + "-6");
         }
 
-        robot.clickOn("#octagon5-10");
+        robot.clickOn("#octagon10-3");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
         assertEquals("WHITE wins",winLabel.getText());
     }
