@@ -10,6 +10,12 @@ public class Rhombus extends QuaxTile {
         this.yPos = y;
     }
 
+    public Rhombus(Rhombus r) {
+        super(r);
+        this.xPos = r.xPos;
+        this.yPos = r.yPos;
+    }
+
     public QuaxCoordinate getCoordinates() {
         return new QuaxCoordinate(xPos, yPos, false);
     }

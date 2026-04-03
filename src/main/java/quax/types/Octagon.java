@@ -10,6 +10,12 @@ public class Octagon extends QuaxTile {
         this.yPos = y;
     }
 
+    public Octagon(Octagon o) {
+        super(o);
+        this.xPos = o.xPos;
+        this.yPos = o.yPos;
+    }
+
     public QuaxCoordinate getCoordinates() {
         return new QuaxCoordinate(xPos, yPos, true);
     }
