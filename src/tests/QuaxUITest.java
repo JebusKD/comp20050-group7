@@ -146,9 +146,7 @@ public class QuaxUITest {
     }
 
     @Test
-    void WinLabelIsDisplayed(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
-
+    void WinLabelIsDisplayedBlack(FxRobot robot){
         for(int i = 0; i < 10;i++){
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
@@ -157,6 +155,19 @@ public class QuaxUITest {
         robot.clickOn("#octagon5-10");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
         assertEquals("BLACK wins",winLabel.getText());
+    }
+    
+    @Test
+    void WinLabelIsDisplayedWhite(FxRobot robot){
+    	robot.clickOn("#octagon8-0"); // Waste Black's first move
+        for(int i = 0; i < 10;i++){
+            robot.clickOn("#octagon5-" + i);
+            robot.clickOn("#octagon1-" + i);
+        }
+
+        robot.clickOn("#octagon5-10");
+        Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
+        assertEquals("WHITE wins",winLabel.getText());
     }
 
 }
