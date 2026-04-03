@@ -33,7 +33,7 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage) {
-		this(stage, true);
+		this(stage, false);
 	}
 	
 	public QuaxController(Stage stage, boolean againstBot) {
@@ -126,6 +126,7 @@ public class QuaxController {
 		if (board.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
 			players[1].setColour(QuaxTileColour.BLACK);
+			ui.setPieRuleVisibility(false);
 			curPlayer().movePrompt(getBoard());
 			return true;
 		}

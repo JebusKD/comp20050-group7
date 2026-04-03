@@ -245,11 +245,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public boolean attemptPieRule() {
-		if (pieRuleDone == false && moveNumber == 1) {
+		if (isPieRuleValid()) {
 			pieRuleDone = true;
 			moveNumber++;
 			return true;
 		} else return false;
+	}
+	
+	public boolean isPieRuleValid() {
+		return moveNumber == 1 && !pieRuleDone;
 	}
 	
 	public List<QuaxTileGroup> getGroups() {

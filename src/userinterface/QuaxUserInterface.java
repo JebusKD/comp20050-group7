@@ -150,7 +150,7 @@ public class QuaxUserInterface implements UserInterface {
         	QuaxTileColour colour = board.getTile(previousMove).getColour();
             this.setTile(previousMove, colour);
             this.turnIndicator.setColour(colour.flip());
-            if (board.getMoveNumber() == 1) {
+            if (board.isPieRuleValid()) {
             	this.setPieRuleVisibility(true);
             } else {
             	this.setPieRuleVisibility(false);
@@ -166,7 +166,7 @@ public class QuaxUserInterface implements UserInterface {
 	@Override
 	public void setBoard(QuaxBoard b) {
 		board.setBoard(b);
-		if (b.getMoveNumber() == 1) {
+		if (b.isPieRuleValid()) {
 			setPieRuleVisibility(true);
 		}
 		else {
