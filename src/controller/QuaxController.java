@@ -66,7 +66,6 @@ public class QuaxController {
 		p2.setController(this);
 		
 		ui.setBoard(board);
-		ui.setPieRuleVisibility(true);
 	
 		curPlayer().movePrompt(board);
 	}

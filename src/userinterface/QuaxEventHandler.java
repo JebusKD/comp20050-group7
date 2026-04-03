@@ -23,8 +23,8 @@ public class QuaxEventHandler {
 		stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
 			@Override
 			public void handle(ButtonClickEvent event) {
-				if (controller.curPlayer() instanceof HumanPlayer && controller.doPieRule()) {
-					controller.setPieRuleVisibility(false);
+				if (controller.curPlayer() instanceof HumanPlayer) {
+					controller.doPieRule();
 				}
 			}
 		});
