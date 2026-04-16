@@ -12,9 +12,3 @@
     -fx-fill:#fff5ee;
     -fx-fill:#F5FAFB;
 }
-
-.object{
-    -fx-stroke : #0F496B;
-    -fx-stroke-type:inside;
-    -fx-stroke-width: 3;
-}

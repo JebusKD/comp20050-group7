@@ -2,23 +2,24 @@ package types;
 
 public class Rhombus extends QuaxTile {
 
-	private final int xPos;
-	private final int yPos;
+	private final int xPosition;
+	private final int yPosition;
 	
 	public Rhombus(int x, int y) {
 		super();
-		this.xPos = x;
-		this.yPos = y;
+		this.xPosition = x;
+		this.yPosition = y;
 	}
 	
 	public Rhombus(Rhombus r) {
 		super(r);
-		this.xPos = r.xPos;
-		this.yPos = r.yPos;
+		this.xPosition = r.xPosition;
+		this.yPosition = r.yPosition;
 	}
 	
+	@Override
 	public QuaxCoordinate getCoordinates() {
-		return new QuaxCoordinate(xPos, yPos, false);
+		return new QuaxCoordinate(xPosition, yPosition, false);
 	}
 	
 	@Override
@@ -30,5 +31,4 @@ public class Rhombus extends QuaxTile {
 	public boolean onHigh() {
 		return false;
 	}
-
 }

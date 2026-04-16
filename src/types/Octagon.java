@@ -2,41 +2,49 @@ package types;
 
 public class Octagon extends QuaxTile {
 
-	private final int xPos;
-	private final int yPos;
+	private final int xPosition;
+	private final int yPosition;
 	
 	public Octagon(int x, int y) {
 		super();
-		this.xPos = x;
-		this.yPos = y;
+		this.xPosition = x;
+		this.yPosition = y;
 	}
 	
 	public Octagon(Octagon o) {
 		super(o);
-		this.xPos = o.xPos;
-		this.yPos = o.yPos;
+		this.xPosition = o.xPosition;
+		this.yPosition = o.yPosition;
 	}
 	
+	@Override
 	public QuaxCoordinate getCoordinates() {
-		return new QuaxCoordinate(xPos, yPos, true);
+		return new QuaxCoordinate(xPosition, yPosition, true);
 	}
 	
 	@Override
 	public boolean onLow() {
-		if (isFree()) return false;
+		if (isFree()) {
+            return false;
+        }
 		
-		if (getColour() == QuaxTileColour.BLACK)
-			return yPos == 10;
-		else return xPos == 0;
+		if (getColour() == QuaxTileColour.BLACK) {
+            return yPosition == 10;
+        }
+
+		return xPosition == 0;
 	}
 	
 	@Override
 	public boolean onHigh() {
-		if (isFree()) return false;
+		if (isFree()) {
+            return false;
+        }
 		
-		if (getColour() == QuaxTileColour.BLACK)
-			return yPos == 0;
-		else return xPos == 10;
+		if (getColour() == QuaxTileColour.BLACK) {
+            return yPosition == 0;
+        }
+
+        return xPosition == 10;
 	}
-		
 }

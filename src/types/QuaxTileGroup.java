@@ -5,12 +5,13 @@ import java.util.LinkedList;
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
-	private LinkedList<QuaxTile> members;
+	private LinkedList<QuaxTile> groupMembers;
+    // TODO rename variables --> Maybe onLeftCol_BottomRow and onRightCol_TopRow
 	private boolean presenceLow; // Group presence on a or 1 rank
 	private boolean presenceHigh; // Group presence on k or 11 rank
 	
 	public QuaxTileGroup() {
-		this.members = new LinkedList<QuaxTile>();
+		this.groupMembers = new LinkedList<>();
 		this.presenceLow = false;
 		this.presenceHigh = false;
 	}
@@ -21,14 +22,19 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 	
 	public int size() {
-		return members.size();
+		return groupMembers.size();
 	}
 	
 	public void addTile(QuaxTile tile) {
 		tile.setGroup(this);
-		members.addFirst(tile);
-		if (tile.onLow()) presenceLow = true;
-		if (tile.onHigh()) presenceHigh = true;
+		groupMembers.addFirst(tile);
+		if (tile.onLow()) {
+            presenceLow = true;
+        }
+
+		if (tile.onHigh()) {
+            presenceHigh = true;
+        }
 	}
 	
 	public boolean isWinningGroup() {
@@ -39,14 +45,14 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		this.presenceLow = this.presenceLow || mergee.presenceLow;
 		this.presenceHigh = this.presenceHigh || mergee.presenceHigh;
 		
-		this.members.addAll(mergee.members);
-		for (QuaxTile t : mergee.members) {
+		this.groupMembers.addAll(mergee.groupMembers);
+		for (QuaxTile t : mergee.groupMembers) {
 			t.setGroup(this);
 		}
 	}
 	
 	public Iterator<QuaxTile> iterator() {
-		return members.iterator();
+		return groupMembers.iterator();
 	}
 
 }

@@ -5,6 +5,15 @@
     -fx-font-family : "Georgia";
 }
 
+.win-label{
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-family : "Georgia";
+    -fx-background-color: #91D5FF;
+
+}
+
 .rectangle-colour{
     -fx-fill: #FFFF
 }
@@ -50,4 +59,10 @@
     -fx-font-weight: bolder;
     -fx-font-size: 12px;
     -fx-text-fill: #000;
+}
+
+.turn-indicator-shape {
+    -fx-stroke : #0F496B;
+    -fx-stroke-type:inside;
+    -fx-stroke-width: 3;
 }
