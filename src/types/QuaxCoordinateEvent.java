@@ -5,7 +5,8 @@ import javafx.event.EventType;
 
 public class QuaxCoordinateEvent extends Event {
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-	
+
+	// TODO - Remove?
 	private static final long serialVersionUID = 1L;
 
 	private QuaxCoordinate coord;
@@ -22,7 +23,8 @@ public class QuaxCoordinateEvent extends Event {
 	public int y() {
 		return coord.y();
 	}
-	
+
+	// TODO - Remove unused methods
 	public boolean octagon() {
 		return coord.isOctagonMove();
 	}

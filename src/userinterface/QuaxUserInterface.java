@@ -24,7 +24,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import controller.QuaxController;
+
 import model.QuaxBoard;
 import types.QuaxTileColour;
 import types.ButtonClickEvent;
@@ -116,7 +116,6 @@ public class QuaxUserInterface implements UserInterface {
         pieRuleButton.setOnMouseClicked(event -> {
         	pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
-        
         pieRuleButton.setId("PieRule");
         setPieRuleVisibility(false);
         
@@ -150,9 +149,11 @@ public class QuaxUserInterface implements UserInterface {
         	QuaxTileColour colour = board.getTile(previousMove).getColour();
             this.setTile(previousMove, colour);
             this.turnIndicator.setColour(colour.flip());
+			// TODO - return visibility?
             if (board.isPieRuleValid()) {
             	this.setPieRuleVisibility(true);
-            } else {
+            }
+			else {
             	this.setPieRuleVisibility(false);
             }
 		}
@@ -166,6 +167,7 @@ public class QuaxUserInterface implements UserInterface {
 	@Override
 	public void setBoard(QuaxBoard b) {
 		board.setBoard(b);
+		// TODO - return visibility(valid)?
 		if (b.isPieRuleValid()) {
 			setPieRuleVisibility(true);
 		}
@@ -242,7 +244,7 @@ public class QuaxUserInterface implements UserInterface {
 	    
 	    // TODO Remove "Magic number", add hourglass gap as a constant.
 	    private static Rectangle createBehindHourglass(){
-	        double size = (OCTAGON_WIDTH * 11.4) + (9.4 * OCTAGON_GRID_GAP) + (2*OCTAGON_WIDTH/4);
+	        double size = (OCTAGON_WIDTH * 11.4) + (9.4 * OCTAGON_GRID_GAP) + (OCTAGON_WIDTH/2);
 	        Rectangle background = new Rectangle(size, size);
 	        background.setFill(Color.WHITE);
 	        

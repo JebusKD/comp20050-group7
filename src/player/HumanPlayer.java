@@ -9,6 +9,5 @@ public class HumanPlayer extends QuaxPlayer {
 	}
 	
 	@Override
-	public void movePrompt(QuaxBoard b) {
-	}
+	public void movePrompt(QuaxBoard b) {}
 }

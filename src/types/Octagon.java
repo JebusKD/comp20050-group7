@@ -21,7 +21,8 @@ public class Octagon extends QuaxTile {
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPosition, yPosition, true);
 	}
-	
+
+	//TODO - Too many returns?
 	@Override
 	public boolean onLow() {
 		if (isFree()) {
@@ -34,7 +35,8 @@ public class Octagon extends QuaxTile {
 
 		return xPosition == 0;
 	}
-	
+
+	//TODO - Too many returns?
 	@Override
 	public boolean onHigh() {
 		if (isFree()) {

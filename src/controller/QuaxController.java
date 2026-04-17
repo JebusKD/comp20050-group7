@@ -5,6 +5,7 @@ import java.util.concurrent.Executor;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+
 import model.QuaxBoard;
 import player.*;
 import types.*;
@@ -13,20 +14,15 @@ import userinterface.*;
 public class QuaxController {
 	
 	static final Random RNG = new Random();
+	private final Executor executor;
 
 	private final UserInterface ui;
-
 	private QuaxBoard board;
-	
 	private final QuaxPlayer[] players;
-	
-	private final Executor executor;
-	
+
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-		players = new QuaxPlayer[2];
-		
+		this.players = new QuaxPlayer[2];
 		this.ui = new EmptyUserInterface();
-		
 		this.executor = new SingleThreadExecutor();
 		
 		startGame(p1, p2);
@@ -37,21 +33,22 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage, boolean againstBot) {
-		ui = new QuaxUserInterface(stage);
-		
-		players = new QuaxPlayer[2];
-		
+		this.players = new QuaxPlayer[2];
+		this.ui = new QuaxUserInterface(stage);
 		this.executor = new JavaFXThreadedExecutor();
 		
 		QuaxEventHandler.setup(this, stage);
 		
-		if (againstBot) startGameAgainstBot();
-		else startTwoPlayerGame();
+		if (againstBot) {
+			startGameAgainstBot();
+		}
+		else {
+			startTwoPlayerGame();
+		}
 	}
 
     // TODO Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
-		
 		QuaxPlayer p1 = new HumanPlayer();
 		QuaxPlayer p2 = new HumanPlayer();
 		
@@ -60,9 +57,8 @@ public class QuaxController {
 	
 	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
 		this.board = new QuaxBoard();
-		
-		players[0] = p1;
-		players[1] = p2;
+		this.players[0] = p1;
+		this.players[1] = p2;
 		
 		p1.setColour(QuaxTileColour.BLACK);
 		p2.setColour(QuaxTileColour.WHITE);
@@ -93,8 +89,12 @@ public class QuaxController {
 	
 	// for testing purposes
 	public QuaxTileColour getPlayerColour(int i){
-		if (i == 0 || i == 1) return players[i].getColour();
-		else throw new IllegalArgumentException("Only players 0 and 1 exist.");
+		if (i == 0 || i == 1) {
+			return players[i].getColour();
+		}
+		else {
+			throw new IllegalArgumentException("Only players 0 and 1 exist.");
+		}
 	}
 	
 	public int getMoveNumber() {
@@ -126,17 +126,20 @@ public class QuaxController {
 		if (board.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
 			players[1].setColour(QuaxTileColour.BLACK);
+
 			ui.setPieRuleVisibility(false);
 			curPlayer().movePrompt(getBoard());
 			return true;
 		}
-		else return false;
+
+		return false;
 	}
 	
 	public Executor getExecutor() {
 		return this.executor;
 	}
-	
+
+	// TODO - what is this for?
 	public void setPieRuleVisibility(boolean visibility) {
 		ui.setPieRuleVisibility(visibility);
 	}
@@ -152,5 +155,4 @@ public class QuaxController {
 			Platform.runLater(r);
 		}
 	}
-
 }

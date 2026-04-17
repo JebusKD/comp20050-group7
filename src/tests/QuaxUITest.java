@@ -71,7 +71,7 @@ public class QuaxUITest {
         QuaxBoard board = controller.getBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
-        robot.clickOn("#octagon0-0");//just have white turn click somehwere else
+        robot.clickOn("#octagon0-0");//just have white turn click somewhere else
         robot.clickOn("#octagon6-6");
         robot.clickOn("#octagon0-1");
 

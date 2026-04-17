@@ -25,7 +25,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 	public static QuaxCoordinate decideMove(QuaxBoard board) {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
 		int maxVal = board.getOctagon(0, 0).getStrategyValue();
-		
+
+		//TODO - getMaxStrategyValue()?
 		for (QuaxTile tile : board) {
 			int stratVal = tile.getStrategyValue();
 			if (stratVal > maxVal) {

@@ -3,11 +3,13 @@ package userinterface;
 import controller.QuaxController;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+
 import player.HumanPlayer;
 import types.ButtonClickEvent;
 import types.QuaxCoordinateEvent;
 
 public class QuaxEventHandler {
+
 	public static void setup(QuaxController controller, Stage stage) {
 		
 		stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
@@ -28,7 +30,6 @@ public class QuaxEventHandler {
 				}
 			}
 		});
-		
 	}
 	
 }

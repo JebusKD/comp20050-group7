@@ -12,7 +12,8 @@ public class QuaxCoordinate {
 		this.y = y;
 		this.octagonMove = octagonMove;
 	}
-	
+
+	// TODO - Method names?
 	public int x() {
 		return this.x;
 	}

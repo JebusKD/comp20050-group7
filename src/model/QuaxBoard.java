@@ -17,7 +17,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private Rhombus[][] rhombusGrid;
 	
 	private QuaxCoordinate previousMove;
-	
 	private int moveNumber;
 	private boolean pieRuleDone;
 	
@@ -70,7 +69,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 		
 		this.previousMove = b.previousMove;
-		
+
+		// TODO - Have initialiseGroup() method?
 		for (QuaxTileGroup g : b.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
 			this.trackGroup(newGroup);
@@ -89,10 +89,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public QuaxTile getTile(QuaxCoordinate c) {
-		if (c.isOctagonMove()) return octagonGrid[c.x()][c.y()];
-		else return rhombusGrid[c.x()][c.y()];
+		if (c.isOctagonMove()) {
+			return octagonGrid[c.x()][c.y()];
+		}
+		else {
+			return rhombusGrid[c.x()][c.y()];
+		}
 	}
-	
+
+	// TODO - Too many returns?
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (checkForWinningMove()) {
             return false;
@@ -100,12 +105,12 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		if (q.isOctagonMove()) {
 			Octagon tile = getOctagon(q.x(), q.y());
-			if (tile.getColour() != QuaxTileColour.NONE){
+			if (tile.getColour() != QuaxTileColour.NONE) {
                 return false;
             }
 		}
         else {
-			if(!isValidRhombusPlacement(q, t)) {
+			if (!isValidRhombusPlacement(q, t)) {
                 return false;
             }
 			Rhombus tile = getRhombus(q.x(), q.y());
@@ -113,6 +118,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
                 return false;
             }
 		}
+
 		return true;
 	}
 	
@@ -134,10 +140,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		QuaxTile[][] neighbours;
 		if (q.isOctagonMove()) {
 			neighbours = new QuaxTile[3][3];
-			int minusX = q.x() - 1,
-				plusX = q.x() + 1,
-				minusY = q.y() - 1,
-				plusY = q.y() + 1;
+			int minusX = q.x() - 1, plusX = q.x() + 1, minusY = q.y() - 1, plusY = q.y() + 1;
 
 			if (minusX >= 0) {
 				if (minusY >= 0) {
@@ -158,22 +161,23 @@ public class QuaxBoard implements Iterable<QuaxTile> {
                     neighbours[2][2] = rhombusGrid[q.x()][q.y()];
                 }
 			}
+
 			if (minusY >= 0) {
                 neighbours[1][0] = octagonGrid[q.x()][minusY];
             }
+
 			if (plusY <= MAX_RHOMBUSES) {
                 neighbours[1][2] = octagonGrid[q.x()][plusY];
             }
 		}
 		else {
 			neighbours = new Octagon[2][2];
-			int plusX = q.x() + 1,
-				plusY = q.y() + 1;
 			neighbours[0][0] = octagonGrid[q.x()][q.y()];
-			neighbours[0][1] = octagonGrid[q.x()][plusY];
-			neighbours[1][0] = octagonGrid[plusX][q.y()];
-			neighbours[1][1] = octagonGrid[plusX][plusY];
+			neighbours[0][1] = octagonGrid[q.x()][q.y() + 1];
+			neighbours[1][0] = octagonGrid[q.x() + 1][q.y()];
+			neighbours[1][1] = octagonGrid[q.x() + 1][q.y() + 1];
 		}
+
 		return neighbours;
 	}
 
@@ -194,12 +198,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		
 		for (QuaxTile[] tileArray : neighbours) {
 			for (QuaxTile tile : tileArray) {
-				if (tile != null && tile.getColour().equals(c) && !(nearGroups.contains(tile.getGroup())))
+				if (tile != null && tile.getColour().equals(c) && !(nearGroups.contains(tile.getGroup()))) {
 					nearGroups.add(tile.getGroup());
+				}
 			}
 		}
 		
-		if (nearGroups.isEmpty()){
+		if (nearGroups.isEmpty()) {
             trackGroup(new QuaxTileGroup(newTile));
         }
 		else {
@@ -249,7 +254,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			pieRuleDone = true;
 			moveNumber++;
 			return true;
-		} else return false;
+		}
+		return false;
 	}
 	
 	public boolean isPieRuleValid() {
@@ -305,7 +311,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		
 		@Override
 		public QuaxTile next() {
-			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+			if (!hasNext()) {
+				throw new NoSuchElementException("No more elements in iteration.");
+			}
 			return elements.get(cursor++);
 		}
 	}

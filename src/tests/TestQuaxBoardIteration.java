@@ -31,8 +31,9 @@ public class TestQuaxBoardIteration {
 	void testIterationOctagonCount() {
 		int count = 0;
 		for (QuaxTile t : b) {
-			if (t.getCoordinates().isOctagonMove())
+			if (t.getCoordinates().isOctagonMove()) {
 				count++;
+			}
 		}
 		assertEquals(121, count);
 	}
@@ -41,8 +42,9 @@ public class TestQuaxBoardIteration {
 	void testIterationRhombusCount() {
 		int count = 0;
 		for (QuaxTile t : b) {
-			if (t.getCoordinates().isRhombusMove())
+			if (t.getCoordinates().isRhombusMove()) {
 				count++;
+			}
 		}
 		assertEquals(100, count);
 	}

@@ -58,7 +58,7 @@ public class BotUiTest {
     		WaitForAsyncUtils.waitForFxEvents();
     		assertEquals(2,controller.getBoard().getMoveNumber()); //robot went after human
     	}
-		else{
+		else {
             assertEquals(1,controller.getBoard().getMoveNumber()); //robot is BLACK so has moved
         }
     }
