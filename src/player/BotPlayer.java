@@ -12,7 +12,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
 	private static final long MIN_THINKING_TIME = 1000;
-	private static final long MAX_THINKING_TIME = 4000;
+	private static final long MAX_THINKING_TIME = 9000;
 	
 	private boolean interrupt;
 	private QuaxBoard submissionBoard;
