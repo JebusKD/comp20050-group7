@@ -12,6 +12,7 @@ public class BogoBot extends BotPlayer {
 	@Override
 	protected void computeMove() {
         setAll(getSubmissionBoard(), 1);
+        while (!isInterrupted());
         decideMove();
     }
 }

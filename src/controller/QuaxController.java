@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import player.*;
@@ -26,8 +27,8 @@ public class QuaxController {
 		players = new QuaxPlayer[2];
 		
 		this.ui = new EmptyUserInterface();
-		
 		this.executor = new SingleThreadExecutor();
+		
 		
 		startGame(p1, p2);
 	}
@@ -47,6 +48,10 @@ public class QuaxController {
 		
 		if (againstBot) startGameAgainstBot();
 		else startTwoPlayerGame();
+	}
+	
+	private void initialiseJavaFX() {
+		
 	}
 
     // TODO Keep for testing - Remove on final submission
@@ -149,7 +154,7 @@ public class QuaxController {
 	
 	public static class JavaFXThreadedExecutor implements Executor {
 		public void execute(Runnable r) {
-			Platform.runLater(r);
+			new Thread(r).start();
 		}
 	}
 

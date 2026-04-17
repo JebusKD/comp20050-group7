@@ -3,6 +3,7 @@ package player;
 import java.util.concurrent.Executor;
 
 import controller.QuaxController;
+import javafx.application.Platform;
 import model.QuaxBoard;
 import types.*;
 
@@ -50,6 +51,12 @@ public abstract class QuaxPlayer {
 	public abstract void movePrompt(QuaxBoard b);
 	
 	protected void submitMove(QuaxCoordinate move) {
-		controller.makeMove(move);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				controller.makeMove(move);
+			}
+		});
 	}
 }
