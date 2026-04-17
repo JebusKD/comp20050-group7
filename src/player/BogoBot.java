@@ -10,8 +10,8 @@ public class BogoBot extends BotPlayer {
 	}
 
 	@Override
-	protected QuaxCoordinate computeMove(QuaxBoard board) {
-        setAll(board, 1);
-        return decideMove(board);
+	protected void computeMove() {
+        setAll(getSubmissionBoard(), 1);
+        decideMove();
     }
 }
