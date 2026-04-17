@@ -10,13 +10,14 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
+
+import bot.BotPlayer;
 import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.WindowMatchers.isShowing;
 import  org.testfx.api.FxAssert;
 import model.QuaxBoard;
-import player.BotPlayer;
 import player.HumanPlayer;
 import types.QuaxCoordinate;
 import types.QuaxTile;

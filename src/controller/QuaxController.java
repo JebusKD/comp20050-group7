@@ -3,6 +3,7 @@ package controller;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
+import bot.BogoBot;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;

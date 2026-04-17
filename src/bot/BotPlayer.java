@@ -1,10 +1,11 @@
-package player;
+package bot;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Platform;
 import model.QuaxBoard;
+import player.QuaxPlayer;
 import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
@@ -17,6 +18,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	private boolean interrupt;
 	private QuaxBoard submissionBoard;
 	private long startThinkingTime;
+	//private List<BotStrategyElement> strategyElements;
 
 	public BotPlayer() {
 		super();

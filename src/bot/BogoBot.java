@@ -1,4 +1,4 @@
-package player;
+package bot;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;

@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import bot.BogoBot;
 import controller.QuaxController;
-import player.BogoBot;
 import player.HumanPlayer;
 import types.QuaxTile;
 import types.QuaxTileColour;

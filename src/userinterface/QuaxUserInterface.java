@@ -34,6 +34,8 @@ import types.QuaxTile;
 import static model.QuaxBoard.MAX_OCTAGONS;
 import static model.QuaxBoard.MAX_RHOMBUSES;
 
+import bot.BotPlayer;
+
 public class QuaxUserInterface implements UserInterface {
 
 	private static final double OCTAGON_WIDTH = 40;
@@ -56,6 +58,8 @@ public class QuaxUserInterface implements UserInterface {
 	private Scene scene;
 	
 	private Button pieRuleButton;
+	
+	private BotPlayer botReference;
 
     public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
@@ -178,6 +182,11 @@ public class QuaxUserInterface implements UserInterface {
 	public void setPieRuleVisibility(boolean value) {
 		pieRuleButton.setDisable(!value);
         pieRuleButton.setVisible(value);
+	}
+	
+	@Override
+	public void setBotReference(BotPlayer b) {
+		this.botReference = b;
 	}
 
 	public Scene getScene() {
