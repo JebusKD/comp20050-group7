@@ -66,7 +66,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	}
 	
 	public boolean isInterrupted() {
-		return this.interrupt;
+		return this.interrupt || System.currentTimeMillis() - startThinkingTime < MAX_THINKING_TIME;
 	}
 	
 	protected QuaxBoard getSubmissionBoard() {
