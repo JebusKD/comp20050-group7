@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import player.*;
+import bot.BotPlayer;
 import types.*;
 import userinterface.*;
 
@@ -50,10 +51,6 @@ public class QuaxController {
 		if (againstBot) startGameAgainstBot();
 		else startTwoPlayerGame();
 	}
-	
-	private void initialiseJavaFX() {
-		
-	}
 
     // TODO Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
@@ -82,8 +79,8 @@ public class QuaxController {
 	}
 	
 	public void startGameAgainstBot() {
-		QuaxPlayer human = new HumanPlayer();
-		QuaxPlayer bot = new BogoBot();
+		HumanPlayer human = new HumanPlayer();
+		BotPlayer bot = new BogoBot();
 		
 		if (RNG.nextInt() % 2 == 0) {
 			startGame(human, bot);
@@ -91,6 +88,7 @@ public class QuaxController {
 		else {
 			startGame(bot, human);
 		}
+		ui.setBotReference(bot);
 	}
 	
 	public QuaxPlayer curPlayer() {
