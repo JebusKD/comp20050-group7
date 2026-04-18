@@ -24,10 +24,16 @@ public abstract class BotPlayer extends QuaxPlayer {
 	 	one move at random of the highest strategy values.
 	 */
 	public static QuaxCoordinate decideMove(QuaxBoard board) {
+		ArrayList<QuaxCoordinate> candidateMoves = getMaxStrategyValue(board);
+		
+		int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
+		return candidateMoves.get(index);
+	}
+
+	private static ArrayList<QuaxCoordinate> getMaxStrategyValue(QuaxBoard board) {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
 		int maxVal = board.getOctagon(0, 0).getStrategyValue();
 
-		//TODO - getMaxStrategyValue()?
 		for (QuaxTile tile : board) {
 			int stratVal = tile.getStrategyValue();
 			if (stratVal > maxVal) {
@@ -38,9 +44,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 				candidateMoves.add(tile.getCoordinates());
 			}
 		}
-		
-		int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
-		return candidateMoves.get(index);
+
+		return candidateMoves;
 	}
 	
 	public void setAll(QuaxBoard board, int value) {
