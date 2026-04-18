@@ -13,11 +13,10 @@ public abstract class QuaxTile {
 		this.strategyValue = 0;
 	}
 
-    // TODO - Keep/Remove Comment?
 	public QuaxTile(QuaxTile t) {
 		this.colour = t.colour;
 		this.strategyValue = t.strategyValue;
-		this.group = null; // Groups aren't copied, add in the board after the fact.
+		this.group = null; // Don't copy tile group, added in the board after object is constructed
 	}
 	
 	public QuaxTileColour getColour() {
@@ -49,6 +48,15 @@ public abstract class QuaxTile {
 	}
 
 	public abstract QuaxCoordinate getCoordinates();
+
+
+	protected boolean isBlack() {
+		return getColour() == QuaxTileColour.BLACK;
+	}
+	protected boolean isWhite() {
+		return getColour() == QuaxTileColour.WHITE;
+	}
+
 	// TODO - Rename methods?
 	public abstract boolean onLow();
 	public abstract boolean onHigh();

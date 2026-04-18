@@ -23,31 +23,21 @@ public class Octagon extends QuaxTile {
 		return new QuaxCoordinate(xPosition, yPosition, true);
 	}
 
-	//TODO - Too many returns?
 	@Override
 	public boolean onLow() {
 		if (isFree()) {
             return false;
         }
-		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 10;
-        }
 
-		return xPosition == 0;
+		return (xPosition == 0 && isWhite()) || (yPosition == 10 && isBlack());
 	}
 
-	//TODO - Too many returns?
 	@Override
 	public boolean onHigh() {
 		if (isFree()) {
             return false;
         }
-		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 0;
-        }
 
-        return xPosition == 10;
+		return (xPosition == 10 && isWhite()) || (yPosition == 0 && isBlack());
 	}
 }
