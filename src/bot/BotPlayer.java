@@ -34,7 +34,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	 * between two cells with the greatest strategy values, chooses
 	 * one at random.
 	 */
-	protected void decideMove() {
+	private void decideMove() {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
 		int maxVal = submissionBoard.getOctagon(0, 0).getStrategyValue();
 		
@@ -115,6 +115,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		this.submissionBoard = new QuaxBoard(b);
 		this.getExecutor().execute(() -> {
 			computeMove();
+			decideMove();
 		});
 	}
 }

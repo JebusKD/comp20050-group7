@@ -18,7 +18,5 @@ public class BogoBot extends BotPlayer {
 		List<QuaxCoordinate> winners = findImmediateWins(getSubmissionBoard());
 		if (!winners.isEmpty())
         	setCoordinatesStrategy(getSubmissionBoard(), winners, 10);
-        
-        decideMove();
     }
 }
