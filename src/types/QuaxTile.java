@@ -5,7 +5,8 @@ public abstract class QuaxTile {
 	private QuaxTileColour colour;
 	private QuaxTileGroup group;
 	private int strategyValue;
-	
+
+
 	public QuaxTile() {
 		this.colour = QuaxTileColour.NONE;
 		this.group = null;
@@ -46,8 +47,9 @@ public abstract class QuaxTile {
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
 	}
-	
+
 	public abstract QuaxCoordinate getCoordinates();
+	// TODO - Rename methods?
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
 }

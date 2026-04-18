@@ -4,10 +4,11 @@ import javafx.event.Event;
 import javafx.event.EventType;
 
 public class QuaxCoordinateEvent extends Event {
+
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 
-	// TODO - Remove?
-	private static final long serialVersionUID = 1L;
+	// TODO - Remove unused constant
+	//private static final long serialVersionUID = 1L;
 
 	private QuaxCoordinate coord;
 	

@@ -12,12 +12,14 @@ import types.*;
 import userinterface.*;
 
 public class QuaxController {
+
 	static final Random RNG = new Random();
 	private final Executor executor;
 
 	private final UserInterface userInterface;
 	private QuaxBoard board;
 	private final QuaxPlayer[] players;
+
 
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 		this.players = new QuaxPlayer[2];

@@ -11,11 +11,9 @@ import types.QuaxCoordinateEvent;
 public class QuaxEventHandler {
 
 	public static void setup(QuaxController controller, Stage stage) {
-		
 		stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
 			@Override
 			public void handle(QuaxCoordinateEvent coords) {
-				
 				if (controller.curPlayer() instanceof HumanPlayer) {
 					controller.makeMove(coords.coords());
 				}
@@ -31,5 +29,4 @@ public class QuaxEventHandler {
 			}
 		});
 	}
-	
 }

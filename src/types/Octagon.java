@@ -4,7 +4,8 @@ public class Octagon extends QuaxTile {
 
 	private final int xPosition;
 	private final int yPosition;
-	
+
+
 	public Octagon(int x, int y) {
 		super();
 		this.xPosition = x;

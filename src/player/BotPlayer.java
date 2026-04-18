@@ -7,9 +7,10 @@ import model.QuaxBoard;
 import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
-	
+
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
+
 
 	public BotPlayer() {
 		super();

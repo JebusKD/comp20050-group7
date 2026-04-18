@@ -10,7 +10,8 @@ public abstract class QuaxPlayer {
 
 	private QuaxTileColour colour;
 	private QuaxController controller;
-	
+
+
 	public QuaxPlayer() {
 		this.colour = null;
 		this.controller = null;

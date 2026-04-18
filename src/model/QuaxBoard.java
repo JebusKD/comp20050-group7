@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import types.*;
 
 public class QuaxBoard implements Iterable<QuaxTile> {
+
     public static final int MAX_OCTAGONS = 11;
     public static final int MAX_RHOMBUSES = 10;
 

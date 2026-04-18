@@ -1,10 +1,12 @@
 package types;
 
 public class QuaxCoordinate {
+
 	private final int x;
 	private final int y;
 	private final boolean octagonMove;
-	
+
+
 	// TODO Flag argument, see clean code "Error Handling"
 	// Change this constructor to private and construct via static methods
 	public QuaxCoordinate(int x, int y, boolean octagonMove) {
@@ -13,7 +15,6 @@ public class QuaxCoordinate {
 		this.octagonMove = octagonMove;
 	}
 
-	// TODO - Method names?
 	public int x() {
 		return this.x;
 	}
