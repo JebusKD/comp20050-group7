@@ -1,6 +1,8 @@
 package bot;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import javafx.application.Platform;
@@ -10,8 +12,8 @@ import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
-	static final int IGNORE_VALUE = Integer.MIN_VALUE;
-	static final Random RNG = new Random();
+	protected static final int IGNORE_VALUE = Integer.MIN_VALUE;
+	protected static final Random RNG = new Random();
 	private static final long MIN_THINKING_TIME = 1000;
 	private static final long MAX_THINKING_TIME = 9000;
 	
@@ -32,7 +34,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	 * between two cells with the greatest strategy values, chooses
 	 * one at random.
 	 */
-	public void decideMove() {
+	protected void decideMove() {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
 		int maxVal = submissionBoard.getOctagon(0, 0).getStrategyValue();
 		
@@ -54,7 +56,28 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 	}
 	
-	public void setAll(QuaxBoard board, int value) {
+	protected static LinkedList<QuaxCoordinate> findImmediateWins(QuaxBoard b) {
+		LinkedList<QuaxCoordinate> winners = new LinkedList<>();
+		for (QuaxTile t : b) {
+			if (t.isFree()) {
+				QuaxBoard tempCopy = new QuaxBoard(b);
+				
+				tempCopy.makeMove(t.getCoordinates());
+				
+				if (tempCopy.checkForWinningMove())
+					winners.add(t.getCoordinates());
+			}
+		}
+		return winners;
+	}
+	
+	protected static void setCoordinatesStrategy(QuaxBoard b, List<QuaxCoordinate> coords, int value) {
+		for (QuaxCoordinate c : coords) {
+			b.getTile(c).setStrategyValue(value);
+		}
+	}
+	
+	protected void setAll(QuaxBoard board, int value) {
 		for (QuaxTile tile : board) {
 			if (board.validMove(tile.getCoordinates(), this.getColour())) {
                 tile.setStrategyValue(value);

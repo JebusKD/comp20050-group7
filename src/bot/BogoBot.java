@@ -1,5 +1,7 @@
 package bot;
 
+import java.util.List;
+
 import model.QuaxBoard;
 import types.QuaxCoordinate;
 
@@ -11,8 +13,12 @@ public class BogoBot extends BotPlayer {
 
 	@Override
 	protected void computeMove() {
-        setAll(getSubmissionBoard(), 1);
-        while (!isInterrupted());
+		setAll(getSubmissionBoard(), 1);
+		
+		List<QuaxCoordinate> winners = findImmediateWins(getSubmissionBoard());
+		if (!winners.isEmpty())
+        	setCoordinatesStrategy(getSubmissionBoard(), winners, 10);
+        
         decideMove();
     }
 }

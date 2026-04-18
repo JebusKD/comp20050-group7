@@ -47,6 +47,14 @@ public abstract class QuaxTile {
 		this.strategyValue = value;
 	}
 	
+	public boolean isRhombus() {
+		return this.getCoordinates().isRhombusMove();
+	}
+	
+	public boolean isOctagon() {
+		return this.getCoordinates().isOctagonMove();
+	}
+	
 	public abstract QuaxCoordinate getCoordinates();
 	public abstract boolean onLow();
 	public abstract boolean onHigh();

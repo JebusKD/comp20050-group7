@@ -180,6 +180,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public int getMoveNumber() {
 		return this.moveNumber;
 	}
+	
+	public QuaxTileColour currentPlayerColour() {
+		if (pieRuleDone)
+			return moveNumber % 2 == 0 ? QuaxTileColour.WHITE : QuaxTileColour.BLACK;
+		else
+			return moveNumber % 2 == 1 ? QuaxTileColour.WHITE : QuaxTileColour.BLACK;
+	}
 
     // TODO - Change neighbours variable name, also too long
 	private void assignGroup(QuaxTile newTile) {
@@ -242,6 +249,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		assignGroup(tile);
 		this.previousMove = q;
 		this.moveNumber++;
+	}
+	
+	public void makeMove(QuaxCoordinate q) {
+		makeMove(q, currentPlayerColour());
 	}
 	
 	public boolean attemptPieRule() {
