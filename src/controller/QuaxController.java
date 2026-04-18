@@ -12,17 +12,16 @@ import types.*;
 import userinterface.*;
 
 public class QuaxController {
-	
 	static final Random RNG = new Random();
 	private final Executor executor;
 
-	private final UserInterface ui;
+	private final UserInterface userInterface;
 	private QuaxBoard board;
 	private final QuaxPlayer[] players;
 
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 		this.players = new QuaxPlayer[2];
-		this.ui = new EmptyUserInterface();
+		this.userInterface = new EmptyUserInterface();
 		this.executor = new SingleThreadExecutor();
 		
 		startGame(p1, p2);
@@ -34,7 +33,7 @@ public class QuaxController {
 	
 	public QuaxController(Stage stage, boolean againstBot) {
 		this.players = new QuaxPlayer[2];
-		this.ui = new QuaxUserInterface(stage);
+		this.userInterface = new QuaxUserInterface(stage);
 		this.executor = new JavaFXThreadedExecutor();
 		
 		QuaxEventHandler.setup(this, stage);
@@ -66,7 +65,7 @@ public class QuaxController {
 		p1.setController(this);
 		p2.setController(this);
 		
-		ui.setBoard(board);
+		userInterface.setBoard(board);
 	
 		curPlayer().movePrompt(board);
 	}
@@ -106,11 +105,11 @@ public class QuaxController {
 		if (board.validMove(coords, c)) {
 			board.makeMove(coords, c);
 
-			ui.updateFromPreviousMove(board);
+			userInterface.updateFromPreviousMove(board);
 			
 			if (board.checkForWinningMove()) {
-				ui.showWinLabel(c);
-				ui.hideTurnTracker();
+				userInterface.showWinLabel(c);
+				userInterface.hideTurnTracker();
 			}
 			else {
 				curPlayer().movePrompt(board);
@@ -122,17 +121,14 @@ public class QuaxController {
 		return this.board;
 	}
 
-	public boolean doPieRule() {
+	public void doPieRule() {
 		if (board.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
 			players[1].setColour(QuaxTileColour.BLACK);
 
-			ui.setPieRuleVisibility(false);
+			userInterface.setPieRuleVisibility(false);
 			curPlayer().movePrompt(getBoard());
-			return true;
 		}
-
-		return false;
 	}
 	
 	public Executor getExecutor() {
@@ -141,7 +137,7 @@ public class QuaxController {
 
 	// TODO - what is this for?
 	public void setPieRuleVisibility(boolean visibility) {
-		ui.setPieRuleVisibility(visibility);
+		userInterface.setPieRuleVisibility(visibility);
 	}
 	
 	public static class SingleThreadExecutor implements Executor {
