@@ -6,14 +6,14 @@ import java.util.LinkedList;
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	private LinkedList<QuaxTile> groupMembers;
-    // TODO rename variables --> Maybe onLeftCol_BottomRow and onRightCol_TopRow
-	private boolean presenceLow; // Group presence on a or 1 rank
-	private boolean presenceHigh; // Group presence on k or 11 rank
-	
+	private boolean onColumnA_Row1;
+	private boolean onColumnK_Row11;
+
+
 	public QuaxTileGroup() {
 		this.groupMembers = new LinkedList<>();
-		this.presenceLow = false;
-		this.presenceHigh = false;
+		this.onColumnA_Row1 = false;
+		this.onColumnK_Row11 = false;
 	}
 	
 	public QuaxTileGroup(QuaxTile initialMember) {
@@ -29,21 +29,21 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		tile.setGroup(this);
 		groupMembers.addFirst(tile);
 		if (tile.onLow()) {
-            presenceLow = true;
+            onColumnA_Row1 = true;
         }
 
 		if (tile.onHigh()) {
-            presenceHigh = true;
+            onColumnK_Row11 = true;
         }
 	}
 	
 	public boolean isWinningGroup() {
-		return presenceLow && presenceHigh;
+		return onColumnA_Row1 && onColumnK_Row11;
 	}
 	
 	public void merge(QuaxTileGroup mergee) {
-		this.presenceLow = this.presenceLow || mergee.presenceLow;
-		this.presenceHigh = this.presenceHigh || mergee.presenceHigh;
+		this.onColumnA_Row1 = this.onColumnA_Row1 || mergee.onColumnA_Row1;
+		this.onColumnK_Row11 = this.onColumnK_Row11 || mergee.onColumnK_Row11;
 		
 		this.groupMembers.addAll(mergee.groupMembers);
 		for (QuaxTile t : mergee.groupMembers) {
@@ -54,5 +54,4 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	public Iterator<QuaxTile> iterator() {
 		return groupMembers.iterator();
 	}
-
 }
