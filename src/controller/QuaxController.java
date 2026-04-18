@@ -137,11 +137,6 @@ public class QuaxController {
 		return this.executor;
 	}
 
-	// TODO - what is this for?
-	public void setPieRuleVisibility(boolean visibility) {
-		userInterface.setPieRuleVisibility(visibility);
-	}
-	
 	public static class SingleThreadExecutor implements Executor {
 		public void execute(Runnable r) {
 			r.run();
