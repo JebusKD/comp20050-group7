@@ -41,13 +41,15 @@ public abstract class BotPlayer extends QuaxPlayer {
 		int maxVal = submissionBoard.getOctagon(0, 0).getStrategyValue();
 		
 		for (QuaxTile tile : submissionBoard) {
-			int stratVal = tile.getStrategyValue();
-			if (stratVal > maxVal) {
-				candidateMoves.clear();
-				maxVal = stratVal;
-			}
-			if (stratVal == maxVal) {
-				candidateMoves.add(tile.getCoordinates());
+			if (!tile.isFree()) {
+				int stratVal = tile.getStrategyValue();
+				if (stratVal > maxVal) {
+					candidateMoves.clear();
+					maxVal = stratVal;
+				}
+				if (stratVal == maxVal) {
+					candidateMoves.add(tile.getCoordinates());
+				}
 			}
 		}
 		
