@@ -38,7 +38,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	 */
 	private void decideMove() {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
-		int maxVal = submissionBoard.getOctagon(0, 0).getStrategyValue();
+		int maxVal = Integer.MIN_VALUE;
 		
 		for (QuaxTile tile : submissionBoard) {
 			if (!tile.isFree()) {
