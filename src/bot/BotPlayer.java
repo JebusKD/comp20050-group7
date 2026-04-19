@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.IntUnaryOperator;
 
 import javafx.application.Platform;
 import model.QuaxBoard;
@@ -117,5 +119,21 @@ public abstract class BotPlayer extends QuaxPlayer {
 			computeMove();
 			decideMove();
 		});
+	}
+	
+	protected static interface StrategyOperation {
+		public Set<QuaxTile> getTargets();
+		public IntUnaryOperator getOperation();
+		public void execute(QuaxBoard b);
+	}
+	
+	protected static abstract class AbstractStrategyOperation implements StrategyOperation {
+		
+		public void execute(QuaxBoard b) {
+			for (QuaxTile t : getTargets()) {
+				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
+			}
+		}
+		
 	}
 }

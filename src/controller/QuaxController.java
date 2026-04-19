@@ -3,13 +3,12 @@ package controller;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
-import bot.BogoBot;
+import bot.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.QuaxBoard;
 import player.*;
-import bot.BotPlayer;
 import types.*;
 import userinterface.*;
 
@@ -80,7 +79,7 @@ public class QuaxController {
 	
 	public void startGameAgainstBot() {
 		HumanPlayer human = new HumanPlayer();
-		BotPlayer bot = new BogoBot();
+		BotPlayer bot = new PathBot();
 		
 		if (RNG.nextInt() % 2 == 0) {
 			startGame(human, bot);

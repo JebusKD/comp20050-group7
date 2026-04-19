@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -280,6 +281,33 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	
 	public QuaxCoordinate previousMove() {
 		return previousMove;
+	}
+	
+	/* Returns a set of QuaxTiles that form a "circle"
+	 * around a given center point.
+	 * 
+	 * Size determines how big this shape is, if the center is
+	 * an octagon is creates a different shape than a rhombus.
+	 * 
+	 */
+	public LinkedHashSet<QuaxTile> tileCircle(QuaxCoordinate center, int size) {
+		LinkedHashSet<QuaxTile> set = new LinkedHashSet<QuaxTile>();
+		
+		set.add(getTile(center));
+		
+		while (size > 0) {
+			size--;
+			for (QuaxTile t : set) {
+				for (QuaxTile[] nr : neighbours(t.getCoordinates())) {
+					for (QuaxTile n : nr) {
+						if (n != null) {
+							set.add(n);
+						}
+					}
+				}
+			}
+		}
+		return set;
 	}
 	
 	public Iterator<QuaxTile> iterator() {
