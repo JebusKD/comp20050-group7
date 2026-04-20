@@ -150,6 +150,18 @@ public abstract class BotPlayer extends QuaxPlayer {
 			result.removeAll(o2.getTargets());
 			return result;
 		}
+		
+		public default SimpleStrategyOperation unionTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+			return new SimpleStrategyOperation(unionTargets(o1, o2), op);
+		}
+		
+		public default SimpleStrategyOperation intersectTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+			return new SimpleStrategyOperation(intersectTargets(o1, o2), op);
+		}
+		
+		public default SimpleStrategyOperation differenceTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+			return new SimpleStrategyOperation(differenceTargets(o1, o2), op);
+		}
 	}
 	
 	protected static abstract class AbstractStrategyOperation implements StrategyOperation {
