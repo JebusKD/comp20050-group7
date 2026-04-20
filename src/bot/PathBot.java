@@ -34,7 +34,7 @@ public class PathBot extends BotPlayer {
 	@Override
 	protected void computeMove() {
 		setAll(getSubmissionBoard(), 1);
-		StrategyOperation op = new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), 3, (prevValue) -> 3);
+		StrategyOperation op = new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), 1, (prevValue) -> 3);
 		op.execute(getSubmissionBoard());
 	}
 }

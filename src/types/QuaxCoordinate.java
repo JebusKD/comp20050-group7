@@ -51,7 +51,7 @@ public class QuaxCoordinate {
 			}
 			for (int i = 0; i <= 3; i++) {
 				if (validRhombusCoordinates(x - (i % 2), y - (i / 2)))
-					neighbours.add(new QuaxCoordinate(x - (i % 2), y - (i / 2), true));
+					neighbours.add(new QuaxCoordinate(x - (i % 2), y - (i / 2), false));
 			}
 		}
 		else {

@@ -42,7 +42,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		int maxVal = Integer.MIN_VALUE;
 		
 		for (QuaxTile tile : submissionBoard) {
-			if (tile.isFree()) {
+			if (tile.isFree() && submissionBoard.validMove(tile.getCoordinates())) {
 				int stratVal = tile.getStrategyValue();
 				if (stratVal > maxVal) {
 					candidateMoves.clear();
@@ -217,6 +217,44 @@ public abstract class BotPlayer extends QuaxPlayer {
 			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
 				targets.add(n);
 			}
+		}
+		
+		@Override
+		public Set<QuaxCoordinate> getTargets() {
+			return this.targets;
+		}
+
+		@Override
+		public IntUnaryOperator getOperation() {
+			return this.operation;
+		}
+	}
+	
+	protected static class DotStrategyOperation extends AbstractStrategyOperation {
+		private HashSet<QuaxCoordinate> targets;
+		private IntUnaryOperator operation;
+		private QuaxCoordinate center;
+		
+		public DotStrategyOperation(QuaxCoordinate center, IntUnaryOperator operation) {
+			
+			this.targets = new HashSet<QuaxCoordinate>();
+			setCenter(center);
+			setOperation(operation);
+			
+		}
+		
+		private void recalculateOperation() {
+			targets.clear();
+			targets.add(center);
+		}
+		
+		public void setOperation(IntUnaryOperator operation) {
+			this.operation = operation;
+		}
+		
+		public void setCenter(QuaxCoordinate center) {
+			this.center = center;
+			recalculateOperation();
 		}
 		
 		@Override

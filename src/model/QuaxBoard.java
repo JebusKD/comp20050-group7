@@ -117,6 +117,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return true;
 	}
 	
+	public boolean validMove(QuaxCoordinate q) {
+		return validMove(q, currentPlayerColour());
+	}
+	
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
         QuaxTile[][] n = neighbours(q);
 
