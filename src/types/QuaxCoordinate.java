@@ -28,4 +28,14 @@ public class QuaxCoordinate {
 	public boolean isRhombusMove() {
 		return !octagonMove;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		else if (o instanceof QuaxCoordinate c)
+			return this.x == c.x &&
+				   this.y == c.y &&
+				   this.octagonMove == c.octagonMove;
+		else return false;
+	}
 }
