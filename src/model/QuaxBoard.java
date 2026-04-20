@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import types.*;
@@ -61,7 +60,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.moveNumber = b.moveNumber;
 		this.pieRuleDone = b.pieRuleDone;
 		this.previousMove = b.previousMove;
-		
+
+		for (int i = 0; i < MAX_OCTAGONS; i++) {
+			for (int j = 0; j < MAX_OCTAGONS; j++) {
+				octagonGrid[i][j] = new Octagon(b.octagonGrid[i][j]);
+			}
+		}
+
 		for (int i = 0; i < MAX_RHOMBUSES; i++) {
 			for (int j = 0; j < MAX_RHOMBUSES; j++) {
 				rhombusGrid[i][j] = new Rhombus(b.rhombusGrid[i][j]);
@@ -141,12 +146,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
         QuaxTile[][] n = neighbours(q);
 
-        if (n[0][0].getColour() == c && n[1][1].getColour() == c) {
+        if ((n[0][0].getColour() == c && n[1][1].getColour() == c)
+				|| n[1][0].getColour() == c &&  n[0][1].getColour() == c ) {
             return true;
         }
-        if (n[1][0].getColour() == c &&  n[0][1].getColour() == c) {
-            return true;
-        }
+
         return false;
     }
 
