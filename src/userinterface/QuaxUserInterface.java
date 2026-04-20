@@ -83,6 +83,7 @@ public class QuaxUserInterface implements UserInterface {
 		}
 	}
 
+	// TODO - Decompose?
 	private void initialiseWindow() {
         VBox sideBar = initialiseButtons();
         this.turnIndicator = new PlayerTurnIndicator();
@@ -93,11 +94,11 @@ public class QuaxUserInterface implements UserInterface {
         
         sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel);
         sideBar.getStyleClass().add("vbox");
-        
+
+		Label title = new Label("Quax (Human V Bot)");
+		title.getStyleClass().add("custom-title");
+
         GridPane outer = new GridPane();
-        
-        Label title = new Label("Quax");
-        title.getStyleClass().add("custom-title");
 		
         outer.add(title,0,0);
         outer.add(board.getBoard(),0,1);
@@ -106,7 +107,8 @@ public class QuaxUserInterface implements UserInterface {
 		
 		this.scene = new Scene(outer);
 	}
-	
+
+	// TODO - Decompose?
 	private VBox initialiseButtons(){
         VBox sideBar = new VBox(10);
         Button strat = new Button("Show Strategy");
@@ -141,12 +143,13 @@ public class QuaxUserInterface implements UserInterface {
 	
 	@Override
 	public void updateFromPreviousMove(QuaxBoard board) {
-		QuaxCoordinate previousMove = board.previousMove();
 		if (board.isStartingMove()) {
             this.turnIndicator.setColour(QuaxTileColour.BLACK);
         }
 		else {
+			QuaxCoordinate previousMove = board.previousMove();
         	QuaxTileColour colour = board.getTile(previousMove).getColour();
+
             this.setTile(previousMove, colour);
             this.turnIndicator.setColour(colour.flip());
 			setPieRuleVisibility(board.isPieRuleValid());
@@ -265,7 +268,7 @@ public class QuaxUserInterface implements UserInterface {
 		private static GridPane createBoardCoordinates() {
 	        GridPane coordGrid = new GridPane();
 	        coordGrid.setAlignment(Pos.CENTER);
-	        setGridRowsColumns(coordGrid);
+	        setCoordinateGridRowsColumns(coordGrid);
 
 	        GridPane topCoords = new GridPane();
 	        GridPane bottomCoords = new GridPane();
@@ -284,7 +287,7 @@ public class QuaxUserInterface implements UserInterface {
 	        return coordGrid;
 	    }
 
-		private static void setGridRowsColumns(GridPane coordinateGrid) {
+		private static void setCoordinateGridRowsColumns(GridPane coordinateGrid) {
 			// Create left and right coordinate columns, with the board accounting for the centre column
 			coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
 			coordinateGrid.getColumnConstraints().add(new ColumnConstraints((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
@@ -295,6 +298,7 @@ public class QuaxUserInterface implements UserInterface {
 			coordinateGrid.getRowConstraints().add(new RowConstraints());
 		}
 
+		// TODO - Decompose?
 		private static void setTopBottomCoordinateGrid(GridPane top, GridPane bottom) {
 			positionColumns(top, bottom);
 
@@ -326,11 +330,11 @@ public class QuaxUserInterface implements UserInterface {
 			bottom.setAlignment(Pos.CENTER);
 		}
 
-		private static void styleColumnLabel(Label coordinateLabel) {
-			coordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
-			coordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-			coordinateLabel.getStyleClass().add("coordinate-letter-style");
-			coordinateLabel.setAlignment(Pos.CENTER);
+		private static void styleColumnLabel(Label letterCoordinateLabel) {
+			letterCoordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+			letterCoordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			letterCoordinateLabel.getStyleClass().add("coordinate-letter-style");
+			letterCoordinateLabel.setAlignment(Pos.CENTER);
 		}
 
 		private static void setLeftRightCoordinateGrid(GridPane left, GridPane right) {
@@ -370,7 +374,7 @@ public class QuaxUserInterface implements UserInterface {
 			coordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
 		}
 
-
+		// TODO - Decompose?
 		private GridPane createOctagonGrid() {
 			octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
 			GridPane octagonGrid = new GridPane();
@@ -403,6 +407,7 @@ public class QuaxUserInterface implements UserInterface {
 			boardTiles.setPickOnBounds(false);
 		}
 
+		// TODO - Decompose?
 		private GridPane createRhombusGrid() {
 			rhombusGridCells = new RhombusTile[MAX_RHOMBUSES][MAX_RHOMBUSES];
 			GridPane rhombusGrid = new GridPane();
@@ -531,7 +536,6 @@ public class QuaxUserInterface implements UserInterface {
 			super(generatePolygonPoints(width));
 		}
 	}
-
 
 	private abstract static class RhombusBase extends Polygon {
 
