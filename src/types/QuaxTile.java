@@ -9,8 +9,8 @@ public abstract class QuaxTile {
 
 	public QuaxTile() {
 		this.colour = QuaxTileColour.NONE;
-		this.group = null;
 		this.strategyValue = 0;
+		this.group = null;
 	}
 
 	public QuaxTile(QuaxTile t) {
