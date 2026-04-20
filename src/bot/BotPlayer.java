@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Vector;
 import java.util.function.IntUnaryOperator;
 
 import javafx.application.Platform;
@@ -176,6 +177,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
 			}
 		}
+
 	}
 	
 	protected static class SimpleStrategyOperation extends AbstractStrategyOperation {
@@ -200,6 +202,81 @@ public abstract class BotPlayer extends QuaxPlayer {
 		@Override
 		public IntUnaryOperator getOperation() {
 			return operation;
+		}
+	}
+	
+	protected static class OctagonLineStrategyOperation extends AbstractStrategyOperation {
+		private HashSet<QuaxCoordinate> targets;
+		private QuaxCoordinate[] points;
+		private int width;
+		private IntUnaryOperator operation;
+		
+		public OctagonLineStrategyOperation(Collection<QuaxCoordinate> points, int width, IntUnaryOperator operation) {
+			this.targets = new HashSet<QuaxCoordinate>();
+			this.points = new QuaxCoordinate[2];
+			if ((this.width = width) <= 0 || (width > 10)) throw new IllegalArgumentException("Input width must be in the range [0, 10], inclusive.");
+			
+			setPoints(points);
+			setOperation(operation);
+		}
+		
+		public void setPoints(Collection<QuaxCoordinate> points) {
+			if (points == null) throw new IllegalArgumentException("Input points array cannot be null.");
+			else if (points.size() != 2) throw new IllegalArgumentException("Input points array must contain exactly two coordinates.");
+			
+			int index = 0;
+			for (QuaxCoordinate p : points) {
+				if (p.isRhombusMove()) throw new IllegalArgumentException("Input points cannot contain a rhombic tile's coordinate.");
+				this.points[index++] = p;
+			}
+			
+			if (this.points[0].equals(this.points[1])) throw new IllegalArgumentException("Input points cannot be the same.");
+			else if (arePointsMisaligned()) throw new IllegalArgumentException("Input points must form a vertical or horizontal line on the board.");
+			
+			recalculateOperation();
+		}
+		
+		public void setWidth(int width) {
+			if ((this.width = width) <= 0 || (width > 10)) throw new IllegalArgumentException("Input width must be in the range [0, 10], inclusive.");
+			recalculateOperation();
+		}
+		
+		private void recalculateOperation() {
+			boolean flag = false;
+			int direction;
+			if (arePointsHorizontal()) {
+				direction = points[0].x() < points[1].x() ? 1 : -1;
+			
+				for (int i = points[0].x(); !flag; i += direction) {
+					if (points[0].x() == points[1].x()) flag = true;
+					
+					for (int j = 1; j < width; j++) {
+						 
+					}
+				}
+			} else {
+				
+			}
+		}
+		
+		private boolean arePointsMisaligned() {
+			return points[0].x() != points[1].x() && points[0].y() != points[1].y();
+		}
+		
+		public boolean arePointsHorizontal() {
+			return points[0].x() != points[1].x();
+		}
+		
+		public Set<QuaxCoordinate> getTargets() {
+			return this.targets;
+		}
+		
+		public IntUnaryOperator getOperation() {
+			return this.operation;
+		}
+		
+		public void setOperation(IntUnaryOperator operation) {
+			this.operation = operation;
 		}
 	}
 	
