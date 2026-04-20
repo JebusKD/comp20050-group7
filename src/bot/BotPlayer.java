@@ -1,6 +1,7 @@
 package bot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +42,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		int maxVal = Integer.MIN_VALUE;
 		
 		for (QuaxTile tile : submissionBoard) {
-			if (!tile.isFree()) {
+			if (tile.isFree()) {
 				int stratVal = tile.getStrategyValue();
 				if (stratVal > maxVal) {
 					candidateMoves.clear();
@@ -124,18 +125,108 @@ public abstract class BotPlayer extends QuaxPlayer {
 	}
 	
 	protected static interface StrategyOperation {
-		public Set<QuaxTile> getTargets();
+		public Set<QuaxCoordinate> getTargets();
 		public IntUnaryOperator getOperation();
 		public void execute(QuaxBoard b);
+		
+		public default Set<QuaxCoordinate> unionTargets(StrategyOperation o1, StrategyOperation o2) {
+			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
+			result.addAll(o1.getTargets());
+			result.addAll(o2.getTargets());
+			return result;
+		}
+		
+		public default Set<QuaxCoordinate> intersectTargets(StrategyOperation o1, StrategyOperation o2) {
+			HashSet<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
+			result.addAll(o1.getTargets());
+			result.retainAll(o2.getTargets());
+			return result;
+		}
+		
+		public default Set<QuaxCoordinate> differenceTargets(StrategyOperation o1, StrategyOperation o2) {
+			HashSet<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
+			result.addAll(o1.getTargets());
+			result.removeAll(o2.getTargets());
+			return result;
+		}
 	}
 	
 	protected static abstract class AbstractStrategyOperation implements StrategyOperation {
 		
 		public void execute(QuaxBoard b) {
-			for (QuaxTile t : getTargets()) {
+			if (b == null) throw new IllegalArgumentException("Input board cannot be null.");
+			if (getTargets() == null) throw new NullPointerException("Targets set cannot be null at execution.");
+			if (getOperation() == null) throw new NullPointerException("Operation cannot be null at execution.");
+			
+			for (QuaxCoordinate c : getTargets()) {
+				QuaxTile t = b.getTile(c);
 				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
 			}
 		}
+	}
+	
+	protected static class SprawlStrategyOperation extends AbstractStrategyOperation {
+
+		private HashSet<QuaxCoordinate> targets;
+		private IntUnaryOperator operation;
+		private int size;
+		private QuaxCoordinate center;
 		
+		public SprawlStrategyOperation(QuaxCoordinate center, int size, IntUnaryOperator operation) {
+			
+			this.targets = new HashSet<QuaxCoordinate>();
+			this.center = center;
+			setSize(size);
+			setOperation(operation);
+			recalculateOperation();
+		}
+		
+		public void setSize(int size) {
+			if (size < 0) throw new IllegalArgumentException("Size of operation cannot be negative.");
+			this.size = size;
+			recalculateOperation();
+		}
+		
+		public void setCenter(QuaxCoordinate center) {
+			this.center = center;
+			recalculateOperation();
+		}
+		
+		public void setOperation(IntUnaryOperator operation) {
+			this.operation = operation;
+		}
+		
+		private void recalculateOperation() {
+			int prevCount = 1;
+			targets.clear();
+			targets.add(center);
+			for (int i = 0; i < size; i++) {
+				
+				Set<QuaxCoordinate> copy = new HashSet<QuaxCoordinate>(targets);
+				
+				for (QuaxCoordinate c : copy) {
+					targetNeighbours(c);
+				}
+				
+				if (prevCount == targets.size()) break;
+				prevCount = targets.size();
+			}
+		}
+		
+		private void targetNeighbours(QuaxCoordinate c) {
+			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
+				targets.add(n);
+			}
+		}
+		
+		@Override
+		public Set<QuaxCoordinate> getTargets() {
+			return this.targets;
+		}
+
+		@Override
+		public IntUnaryOperator getOperation() {
+			return this.operation;
+		}
 	}
 }

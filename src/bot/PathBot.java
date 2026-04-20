@@ -2,6 +2,7 @@ package bot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntUnaryOperator;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;
@@ -27,11 +28,13 @@ public class PathBot extends BotPlayer {
 	public PathBot() {
 		super();
 		
-		pathLength = 0;
+		//pathLength = 0;
 	}
 
 	@Override
 	protected void computeMove() {
-		
-    }
+		setAll(getSubmissionBoard(), 1);
+		StrategyOperation op = new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), 3, (prevValue) -> 3);
+		op.execute(getSubmissionBoard());
+	}
 }
