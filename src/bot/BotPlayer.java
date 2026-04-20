@@ -1,6 +1,7 @@
 package bot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -162,6 +163,31 @@ public abstract class BotPlayer extends QuaxPlayer {
 				QuaxTile t = b.getTile(c);
 				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
 			}
+		}
+	}
+	
+	protected static class SimpleStrategyOperation extends AbstractStrategyOperation {
+		private HashSet<QuaxCoordinate> targets;
+		private IntUnaryOperator operation;
+		
+		public SimpleStrategyOperation(Collection<QuaxCoordinate> targets) {
+			this.targets = new HashSet<QuaxCoordinate>();
+			this.targets.addAll(targets);
+		}
+		
+		public SimpleStrategyOperation(Collection<QuaxCoordinate> targets, IntUnaryOperator operation) {
+			this(targets);
+			this.operation = operation;
+		}
+
+		@Override
+		public Set<QuaxCoordinate> getTargets() {
+			return targets;
+		}
+
+		@Override
+		public IntUnaryOperator getOperation() {
+			return operation;
 		}
 	}
 	
