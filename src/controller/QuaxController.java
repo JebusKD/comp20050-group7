@@ -108,14 +108,19 @@ public class QuaxController {
 			board.makeMove(coords, c);
 
 			userInterface.updateFromPreviousMove(board);
-			
-			if (board.checkForWinningMove()) {
-				userInterface.showWinLabel(c);
-				userInterface.hideTurnTracker();
-			}
-			else {
-				curPlayer().movePrompt(board);
-			}
+
+			didMoveWin(c);
+		}
+	}
+
+	// TODO - Rename method?
+	private void didMoveWin(QuaxTileColour c) {
+		if (board.checkForWinningMove()) {
+			userInterface.showWinLabel(c);
+			userInterface.hideTurnTracker();
+		}
+		else {
+			curPlayer().movePrompt(board);
 		}
 	}
 
