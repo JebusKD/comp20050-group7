@@ -43,6 +43,9 @@ public class PathBot extends BotPlayer {
 			if (centerSprawl(2, null).blackContents(getSubmissionBoard()) == 1) {
 				doPieRule();
 			}
+			else {
+				
+			}
 		}
 		
 	}

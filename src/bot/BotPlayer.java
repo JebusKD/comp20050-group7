@@ -224,12 +224,24 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public default int totalContents() {
 			return this.contents(new QuaxBoard()).getTotalCount();
 		}
+		// TODO Get rid of unused/unneeded set operations
+		public static Set<QuaxCoordinate> unionTargets(Collection<QuaxCoordinate> o1, Collection<QuaxCoordinate> o2) {
+			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
+			result.addAll(o1);
+			result.addAll(o2);
+			return result;
+		}
+		
+		public static Set<QuaxCoordinate> unionTargets(Collection<QuaxCoordinate> o1, StrategyOperation o2) {
+			return unionTargets(o1, o2.getTargets());
+		}
+		
+		public static Set<QuaxCoordinate> unionTargets(StrategyOperation o1, Collection<QuaxCoordinate> o2) {
+			return unionTargets(o1.getTargets(), o2);
+		}
 		
 		public static Set<QuaxCoordinate> unionTargets(StrategyOperation o1, StrategyOperation o2) {
-			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
-			result.addAll(o1.getTargets());
-			result.addAll(o2.getTargets());
-			return result;
+			return unionTargets(o1.getTargets(), o2.getTargets());
 		}
 		
 		public static Set<QuaxCoordinate> intersectTargets(StrategyOperation o1, StrategyOperation o2) {
@@ -286,6 +298,11 @@ public abstract class BotPlayer extends QuaxPlayer {
 			return this.targets;
 		}
 		
+		protected void targetsAddIfValidOctagon(int x, int y) {
+			if (QuaxCoordinate.validOctagonCoordinates(x, y))
+				targetsAdd(new QuaxCoordinate(x, y, true));
+		}
+		
 		protected void targetsClear() {
 			this.targets.clear();
 		}
@@ -326,11 +343,66 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 	
-	protected static class OctagonSquareStrategyOperation extends AbstractStrategyOperation {
+	protected static class OctagonSquareStrategyOperation extends GeneralAbstractStrategyOperation {
 		private int size;
+		private QuaxCoordinate center;
 		
 		public OctagonSquareStrategyOperation(QuaxCoordinate center, int size, IntUnaryOperator operation) {
-			
+			super();
+			if (size < 0 || size > 10) throw new IllegalArgumentException("Input size must be in the range [0, 10], inclusive.");
+			this.size = size;
+			setCenter(center);
+			setOperation(operation);
+		}
+		
+		public void setCenter(QuaxCoordinate center) {
+			this.center = center;
+			recalculateOperation();
+		}
+		
+		public void setSize(int size) {
+			if ((this.size = size) < 0 || (size > 10)) throw new IllegalArgumentException("Input size must be in the range [0, 10], inclusive.");
+			recalculateOperation();
+		}
+		
+		private void recalculateOperation() {
+			targetsClear();
+			if (center.isOctagonMove()) {
+				targetsAdd(center);
+				for (int i = 1; i < size; i++) {
+					addCornersOctagonCenter(i);
+					for (int j = -1; j <= 1; j += 2) {
+						addHorizontalSideOctagonCenter(i, j);
+						addVerticalSideOctagonCenter(i, j);
+					}
+				}
+			}
+		}
+		
+		private void addCornersOctagonCenter(int deviation) {
+			for (int i = 0; i < 4; i++) {
+				int x = center.x() + ((i % 2) == 0 ?  -deviation : deviation),
+					y = center.y() + ((i / 2) == 0 ?  -deviation : deviation);
+				targetsAddIfValidOctagon(x, y);
+			}
+		}
+		
+		private void addHorizontalSideOctagonCenter(int deviation, int side) {
+			int y = center.y() + (side * deviation);
+			targetsAddIfValidOctagon(center.x(), y);
+			for (int i = 1; i < size; i++) {
+				targetsAddIfValidOctagon(center.x() + i, y);
+				targetsAddIfValidOctagon(center.x() - i, y);
+			}
+		}
+		
+		private void addVerticalSideOctagonCenter(int deviation, int side) {
+			int x = center.x() + (side * deviation);
+			targetsAddIfValidOctagon(x, center.y());
+			for (int i = 1; i < size; i++) {
+				targetsAddIfValidOctagon(x, center.y() + i);
+				targetsAddIfValidOctagon(x, center.y() - i);
+			}
 		}
 		
 	}
@@ -394,20 +466,16 @@ public abstract class BotPlayer extends QuaxPlayer {
 		private void buildVerticalRow(int x, int y) {
 			targetsAdd(new QuaxCoordinate(x, y, true));
 			for (int i = 1; i < width; i++) {
-				if (QuaxCoordinate.validOctagonCoordinates(x, y+i))
-						targetsAdd(new QuaxCoordinate(x, y+i, true));
-				if (QuaxCoordinate.validOctagonCoordinates(x, y-i))
-					targetsAdd(new QuaxCoordinate(x, y-i, true));
+				targetsAddIfValidOctagon(x, y+i);
+				targetsAddIfValidOctagon(x, y-i);
 			}
 		}
 		
 		private void buildHorizontalRow(int x, int y) {
 			targetsAdd(new QuaxCoordinate(x, y, true));
 			for (int i = 1; i < width; i++) {
-				if (QuaxCoordinate.validOctagonCoordinates(x+i, y))
-						targetsAdd(new QuaxCoordinate(x+i, y, true));
-				if (QuaxCoordinate.validOctagonCoordinates(x-i, y))
-					targetsAdd(new QuaxCoordinate(x-i, y, true));
+				targetsAddIfValidOctagon(x+i, y);
+				targetsAddIfValidOctagon(x-i, y);
 			}
 		}
 		
@@ -489,6 +557,43 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public void setCenter(QuaxCoordinate center) {
 			this.center = center;
 			recalculateOperation();
+		}
+	}
+	
+	protected static class AuraStrategyOperation extends GeneralAbstractStrategyOperation {
+		private int sprawlSize;
+		private HashSet<QuaxCoordinate> basis;
+		
+		public AuraStrategyOperation(StrategyOperation basis, int sprawlSize, IntUnaryOperator operation) {
+			this(basis.getTargets(), sprawlSize, operation);
+		}
+		
+		public AuraStrategyOperation(Collection<QuaxCoordinate> basis, int sprawlSize, IntUnaryOperator operation) {
+			super();
+			if ((this.sprawlSize) < 0) throw new IllegalArgumentException("Size of operation cannot be negative.");
+			
+			setBasis(basis);
+			setOperation(operation);
+		}
+		
+		public void setBasis(StrategyOperation basis) {
+			setBasis(basis.getTargets());
+		}
+		
+		public void setBasis(Collection<QuaxCoordinate> basis) {
+			if (basis.size() == 0) throw new IllegalArgumentException("Basis of operation cannot be empty.");
+			this.basis = new HashSet<>(basis);
+			recalculateOperation();
+		}
+		
+		private void recalculateOperation() {
+			targetsClear();
+			
+			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
+			for (QuaxCoordinate c : basis) {
+				result = StrategyOperation.unionTargets(result, new SprawlStrategyOperation(c, this.sprawlSize, null));
+			}
+			this.targetsAddAll(result);			
 		}
 	}
 }
