@@ -2,10 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import types.Octagon;
@@ -82,14 +78,14 @@ class TestOctagon {
 	void testOnLow2() {
 		QuaxTile t = new Octagon(3, 10);
 		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
+		assertTrue(t.onLow());
 	}
 	
 	@Test
 	void testOnLow3() {
 		QuaxTile t = new Octagon(3, 10);
 		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
+		assertTrue(t.onLow());
 	}
 	
 	@Test
@@ -103,7 +99,7 @@ class TestOctagon {
 	void testOnLow5() {
 		QuaxTile t = new Octagon(0, 4);
 		t.setColour(QuaxTileColour.WHITE);
-		assertTrue(t.onLow());
+		assertFalse(t.onLow());
 	}
 	
 	@Test
@@ -145,14 +141,14 @@ class TestOctagon {
 	void testOnHigh2() {
 		QuaxTile t = new Octagon(3, 0);
 		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
+		assertTrue(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh3() {
 		QuaxTile t = new Octagon(3, 0);
 		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
+		assertTrue(t.onHigh());
 	}
 	
 	@Test
@@ -166,7 +162,7 @@ class TestOctagon {
 	void testOnHigh5() {
 		QuaxTile t = new Octagon(10, 4);
 		t.setColour(QuaxTileColour.WHITE);
-		assertTrue(t.onHigh());
+		assertFalse(t.onHigh());
 	}
 	
 	@Test
@@ -195,6 +191,133 @@ class TestOctagon {
 		QuaxTile t = new Octagon(4, 6);
 		t.setColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
+	}
+
+
+	@Test
+	void testOnLeft1() {
+		QuaxTile t = new Octagon(3, 10);
+		t.setColour(QuaxTileColour.BLACK);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft2() {
+		QuaxTile t = new Octagon(5, 10);
+		t.setColour(QuaxTileColour.WHITE);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft3() {
+		QuaxTile t = new Octagon(0, 10);
+		t.setColour(QuaxTileColour.NONE);
+		assertTrue(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft4() {
+		QuaxTile t = new Octagon(0, 4);
+		t.setColour(QuaxTileColour.BLACK);
+		assertTrue(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft5() {
+		QuaxTile t = new Octagon(8, 4);
+		t.setColour(QuaxTileColour.WHITE);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft6() {
+		QuaxTile t = new Octagon(10, 4);
+		t.setColour(QuaxTileColour.NONE);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft7() {
+		QuaxTile t = new Octagon(4, 6);
+		t.setColour(QuaxTileColour.BLACK);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft8() {
+		QuaxTile t = new Octagon(0, 6);
+		t.setColour(QuaxTileColour.WHITE);
+		assertTrue(t.onLeft());
+	}
+
+	@Test
+	void testOnLeft9() {
+		QuaxTile t = new Octagon(4, 6);
+		t.setColour(QuaxTileColour.NONE);
+		assertFalse(t.onLeft());
+	}
+
+	@Test
+	void testOnRight1() {
+		QuaxTile t = new Octagon(3, 0);
+		t.setColour(QuaxTileColour.BLACK);
+		assertFalse(t.onRight());
+	}
+
+	@Test
+	void testOnRight2() {
+		QuaxTile t = new Octagon(10, 0);
+		t.setColour(QuaxTileColour.WHITE);
+		assertTrue(t.onRight());
+	}
+
+	@Test
+	void testOnRight3() {
+		QuaxTile t = new Octagon(3, 0);
+		t.setColour(QuaxTileColour.NONE);
+		assertFalse(t.onRight());
+	}
+
+	@Test
+	void testOnRight4() {
+		QuaxTile t = new Octagon(10, 4);
+		t.setColour(QuaxTileColour.BLACK);
+		assertTrue(t.onRight());
+	}
+
+	@Test
+	void testOnRight5() {
+		QuaxTile t = new Octagon(10, 4);
+		t.setColour(QuaxTileColour.WHITE);
+		assertTrue(t.onRight());
+	}
+
+	@Test
+	void testOnRight6() {
+		QuaxTile t = new Octagon(10, 4);
+		t.setColour(QuaxTileColour.NONE);
+		assertTrue(t.onRight());
+	}
+
+	@Test
+	void testOnRight7() {
+		QuaxTile t = new Octagon(4, 6);
+		t.setColour(QuaxTileColour.BLACK);
+		assertFalse(t.onRight());
+	}
+
+	@Test
+	void testOnRight8() {
+		QuaxTile t = new Octagon(4, 6);
+		t.setColour(QuaxTileColour.WHITE);
+		assertFalse(t.onRight());
+	}
+
+	@Test
+	void testOnRight9() {
+		QuaxTile t = new Octagon(4, 6);
+		t.setColour(QuaxTileColour.NONE);
+		assertFalse(t.onRight());
 	}
 	
 	@Test

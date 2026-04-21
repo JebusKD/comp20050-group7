@@ -55,7 +55,8 @@ public abstract class QuaxTile {
 		return getColour() == QuaxTileColour.WHITE;
 	}
 
-	// TODO - Rename methods?
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
+	public abstract boolean onLeft();
+	public abstract boolean onRight();
 }

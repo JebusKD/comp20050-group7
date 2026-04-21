@@ -31,4 +31,14 @@ public class Rhombus extends QuaxTile {
 	public boolean onHigh() {
 		return false;
 	}
+
+	@Override
+	public boolean onLeft() {
+		return false;
+	}
+
+	@Override
+	public boolean onRight() {
+		return false;
+	}
 }

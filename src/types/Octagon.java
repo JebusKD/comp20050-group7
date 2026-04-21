@@ -25,19 +25,21 @@ public class Octagon extends QuaxTile {
 
 	@Override
 	public boolean onLow() {
-		if (isFree()) {
-            return false;
-        }
-
-		return (xPosition == 0 && isWhite()) || (yPosition == 10 && isBlack());
+		return yPosition == 10;
 	}
 
 	@Override
 	public boolean onHigh() {
-		if (isFree()) {
-            return false;
-        }
+		return yPosition == 0;
+	}
 
-		return (xPosition == 10 && isWhite()) || (yPosition == 0 && isBlack());
+	@Override
+	public boolean onLeft() {
+		return xPosition == 0;
+	}
+
+	@Override
+	public boolean onRight() {
+		return xPosition == 10;
 	}
 }
