@@ -3,13 +3,16 @@ package bot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.function.IntUnaryOperator;
 
+import bot.BotPlayer.SimpleStrategyOperation;
 import javafx.application.Platform;
 import model.QuaxBoard;
 import player.QuaxPlayer;
@@ -70,6 +73,16 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 	}
 	
+	protected static boolean attemptImmediateWin(QuaxBoard board) {
+		List<QuaxCoordinate> winners = findImmediateWins(board);
+		if (!winners.isEmpty()) {
+			setAll(board, 0);
+	        setCoordinatesStrategy(board, winners, 100);
+	        return true;
+		}
+		return false;
+	}
+	
 	protected static LinkedList<QuaxCoordinate> findImmediateWins(QuaxBoard b) {
 		LinkedList<QuaxCoordinate> winners = new LinkedList<>();
 		for (QuaxTile t : b) {
@@ -91,9 +104,9 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 	
-	protected void setAll(QuaxBoard board, int value) {
+	protected static void setAll(QuaxBoard board, int value) {
 		for (QuaxTile tile : board) {
-			if (board.validMove(tile.getCoordinates(), this.getColour())) {
+			if (board.validMove(tile.getCoordinates())) {
                 tile.setStrategyValue(value);
 			}
 			else {
@@ -143,6 +156,76 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	protected static StrategyOperation centerSprawl(int size, IntUnaryOperator operation) {
 		return new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), size, operation);
+	}
+	
+	protected static StrategyOperation boardOperation() {
+		return new BoardStrategyOperation(null);
+	}
+	
+	protected static int weakRhombusCount(QuaxBoard board) {
+		int count = 0;
+		Iterator<QuaxTile> iterator = board.rhombusIterator();
+		
+		while (iterator.hasNext()) {
+			QuaxCoordinate coord = iterator.next().getCoordinates();
+			
+			if (board.isValidForBoth(coord)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	protected static class BoardPermutations implements Iterable<QuaxBoard> {
+		private final ArrayList<QuaxBoard> boards;
+		
+		public BoardPermutations(QuaxBoard original) {
+			this.boards = new ArrayList<>(221);
+			
+			for (QuaxTile t : original) {
+				if (original.validMove(t)) {
+					QuaxBoard newBoard = new QuaxBoard(original);
+					newBoard.makeMove(t);
+					boards.add(newBoard);
+				}
+			}
+		}
+		
+		public int size() {
+			return boards.size();
+		}
+		
+		public QuaxBoard get(int i) {
+			return boards.get(i);
+		};
+		
+		@Override
+		public Iterator<QuaxBoard> iterator() {
+			return new BoardPermuter(this);
+		}
+		
+		public static class BoardPermuter implements Iterator<QuaxBoard> {
+
+			private final BoardPermutations permutations;
+			private int cursor;
+			
+			public BoardPermuter(BoardPermutations permutations) {
+				if ((this.permutations = permutations) == null) throw new IllegalArgumentException("Cannot be constructed with null permutations.");
+				this.cursor = 0;
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return cursor < permutations.size();
+			}
+
+			@Override
+			public QuaxBoard next() {
+				if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+				return permutations.get(cursor++);
+			}
+			
+		}
 	}
 	
 	protected static class TileCounts {
@@ -200,6 +283,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public Set<QuaxCoordinate> getTargets();
 		public IntUnaryOperator getOperation();
 		public void execute(QuaxBoard b);
+		public StrategyOperation invertTargets();
 		
 		public default StrategyOperation auraClone(QuaxCoordinate c) {
 			throw new UnsupportedOperationException("Not supported as an aura.");
@@ -228,6 +312,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public default int totalContents() {
 			return this.contents(new QuaxBoard()).getTotalCount();
 		}
+		
 		// TODO Get rid of unused/unneeded set operations
 		public static Set<QuaxCoordinate> unionTargets(Collection<QuaxCoordinate> o1, Collection<QuaxCoordinate> o2) {
 			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
@@ -293,8 +378,14 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 			for (QuaxCoordinate c : getTargets()) {
 				QuaxTile t = b.getTile(c);
-				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
+				if (t.getStrategyValue() != IGNORE_VALUE)
+					t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
 			}
+		}
+		
+		@Override
+		public final StrategyOperation invertTargets() {
+			return new SimpleStrategyOperation(StrategyOperation.differenceTargets(boardOperation(), this), getOperation());
 		}
 		
 		@Override
@@ -344,6 +435,14 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public SimpleStrategyOperation(Collection<QuaxCoordinate> targets, IntUnaryOperator operation) {
 			this(targets);
 			setOperation(operation);
+		}
+		
+		// Creates and immediately executes a simple strategy operation.
+		public static void simpleExecution(QuaxBoard board, Collection<QuaxCoordinate> targets, IntUnaryOperator operation) {
+			new SimpleStrategyOperation(
+					targets,
+					operation
+					).execute(board);
 		}
 
 	}
@@ -643,8 +742,14 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 		}
 		
+		public void setColour(QuaxTileColour colour) {
+			this.colour = colour;
+			recalculateOperation();
+		}
+		
 		public void setBoard(QuaxBoard board) {
 			if ((this.board = board) == null) throw new IllegalArgumentException("board cannot be null.");
+			recalculateOperation();
 		}
 		
 		private void recalculateOperation() {
@@ -653,6 +758,34 @@ public abstract class BotPlayer extends QuaxPlayer {
 				if (t.getColour() == this.colour) {
 					targetsAdd(t.getCoordinates());
 				}
+			}
+		}
+	}
+	
+	protected static class BoardStrategyOperation extends GeneralAbstractStrategyOperation {
+		public BoardStrategyOperation(IntUnaryOperator operation) {
+			super();
+			populateTargets();
+			setOperation(operation);
+		}
+		
+		private void populateTargets() {
+			populateOctagonRow(0);
+			for (int y = 0; y < 10; ) {
+				populateRhombusRow(y);
+				populateOctagonRow(++y);
+			}
+		}
+		
+		private void populateOctagonRow(int y) {
+			for (int x = 0; x < 11; x++) {
+				targetsAdd(new QuaxCoordinate(x, y, true));
+			}
+		}
+		
+		private void populateRhombusRow(int y) {
+			for (int x = 0; x < 10; x++) {
+				targetsAdd(new QuaxCoordinate(x, y, false));
 			}
 		}
 	}

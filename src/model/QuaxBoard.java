@@ -98,6 +98,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return getTile(c).getColour();
 	}
 	
+	public boolean validMove(QuaxTile t) {
+		return validMove(t.getCoordinates());
+	}
+	
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (checkForWinningMove()) {
             return false;
@@ -260,7 +264,12 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.trackedGroups.remove(g);
 	}
 	
+	public void makeMove(QuaxTile t) {
+		makeMove(t.getCoordinates());
+	}
+	
 	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
+		if (!validMove(q, c)) throw new IllegalArgumentException("Invalid move.");
 		QuaxTile tile;
 		if (q.isOctagonMove()) {
 			tile = octagonGrid[q.x()][q.y()];
