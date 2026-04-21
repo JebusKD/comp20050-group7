@@ -13,7 +13,6 @@ import types.QuaxCoordinate;
  * on building that path. It will keep distance with the other player
  * where possible.
  * 
- * If path is empty, tries to place centrally.
  * Tries to expand close to existing path.
  * If opponent is near the path, it will reinforce it.
  * If opponent blocks the path, it redirects itself.
@@ -30,13 +29,19 @@ public class PathBot extends BotPlayer {
 
 	@Override
 	protected void computeMove() {
-		setAll(getSubmissionBoard(), 1);
-		StrategyOperation op = new OctagonLineStrategyOperation(
-				twoOctagonVectorPoints(5, 10, 5, 0),
-				2,
-				prev -> 3
-				);
-								
-		op.execute(getSubmissionBoard());
+		
+		if (getSubmissionBoard().getMoveNumber() == 0) {
+			// Starting as black and need to consider starting location.
+			setAll(getSubmissionBoard(), 0);
+			// Place centrally.
+			centerSprawl(2, (prevValue) -> 1).execute(getSubmissionBoard());
+		}
+		else if (getSubmissionBoard().getMoveNumber() == 1) {
+			// Starting as white and need to consider the pie rule.
+			
+			// If opponent has placed centrally, use the pie rule.
+			if (
+		}
+		
 	}
 }

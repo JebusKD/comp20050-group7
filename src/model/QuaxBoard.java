@@ -94,6 +94,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		else return rhombusGrid[c.x()][c.y()];
 	}
 	
+	public QuaxTileColour getTileColour(QuaxCoordinate c) {
+		return getTile(c).getColour();
+	}
+	
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (checkForWinningMove()) {
             return false;

@@ -133,41 +133,111 @@ public abstract class BotPlayer extends QuaxPlayer {
 		return result;
 	}
 	
+	protected static StrategyOperation centerSprawl(int size, IntUnaryOperator operation) {
+		return new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), size, operation);
+	}
+	
+	protected static class TileCounts {
+		private final int blackCount;
+		private final int whiteCount;
+		private final int freeCount;
+		
+		public TileCounts(QuaxBoard b, Set<QuaxCoordinate> targets) {
+			int blackCount = 0;
+			int whiteCount = 0;
+			int freeCount = 0;
+			
+			for (QuaxCoordinate c : targets) {
+				switch (b.getTileColour(c)) {
+				case BLACK:
+					blackCount++;
+					break;
+				case WHITE:
+					whiteCount++;
+					break;
+				case NONE:
+					freeCount++;
+					break;
+				}
+			}
+			
+			this.blackCount = blackCount;
+			this.whiteCount = whiteCount;
+			this.freeCount = freeCount;
+		}
+		
+		public int getBlackCount() {
+			return this.blackCount;
+		}
+		
+		public int getWhiteCount() {
+			return this.whiteCount;
+		}
+		
+		public int getOccupiedCount() {
+			return blackCount + whiteCount;
+		}
+		
+		public int getFreeCount() {
+			return this.freeCount;
+		}
+		
+		public int getTotalCount() {
+			return getOccupiedCount() + getFreeCount();
+		}
+	}
+	
 	protected static interface StrategyOperation {
 		public Set<QuaxCoordinate> getTargets();
 		public IntUnaryOperator getOperation();
 		public void execute(QuaxBoard b);
 		
-		public default Set<QuaxCoordinate> unionTargets(StrategyOperation o1, StrategyOperation o2) {
+		public default TileCounts contents(QuaxBoard b) {
+			return new TileCounts(b, getTargets());
+		}
+		
+		public default int blackContents(QuaxBoard b) {
+			return this.contents(b).getBlackCount();
+		}
+		
+		public default int whiteContents(QuaxBoard b) {
+			return this.contents(b).getWhiteCount();
+		}
+		
+		public default int noneContents(QuaxBoard b) {
+			return this.contents(b).getFreeCount();
+		}
+		
+		public static Set<QuaxCoordinate> unionTargets(StrategyOperation o1, StrategyOperation o2) {
 			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
 			result.addAll(o1.getTargets());
 			result.addAll(o2.getTargets());
 			return result;
 		}
 		
-		public default Set<QuaxCoordinate> intersectTargets(StrategyOperation o1, StrategyOperation o2) {
+		public static Set<QuaxCoordinate> intersectTargets(StrategyOperation o1, StrategyOperation o2) {
 			HashSet<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
 			result.addAll(o1.getTargets());
 			result.retainAll(o2.getTargets());
 			return result;
 		}
 		
-		public default Set<QuaxCoordinate> differenceTargets(StrategyOperation o1, StrategyOperation o2) {
+		public static Set<QuaxCoordinate> differenceTargets(StrategyOperation o1, StrategyOperation o2) {
 			HashSet<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
 			result.addAll(o1.getTargets());
 			result.removeAll(o2.getTargets());
 			return result;
 		}
 		
-		public default SimpleStrategyOperation unionTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+		public static SimpleStrategyOperation unionTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
 			return new SimpleStrategyOperation(unionTargets(o1, o2), op);
 		}
 		
-		public default SimpleStrategyOperation intersectTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+		public static SimpleStrategyOperation intersectTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
 			return new SimpleStrategyOperation(intersectTargets(o1, o2), op);
 		}
 		
-		public default SimpleStrategyOperation differenceTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
+		public static SimpleStrategyOperation differenceTargets(StrategyOperation o1, StrategyOperation o2, IntUnaryOperator op) {
 			return new SimpleStrategyOperation(differenceTargets(o1, o2), op);
 		}
 	}
