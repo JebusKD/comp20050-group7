@@ -121,7 +121,7 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				weakTiles,
-				(prevValue) -> prevValue - strength);
+				(prevValue) -> prevValue + strength);
 	}
 
 }

@@ -48,6 +48,10 @@ public abstract class QuaxPlayer {
         }
 	}
 	
+	public QuaxTileColour opponentColour() {
+		return getColour().flip();
+	}
+	
 	public abstract void movePrompt(QuaxBoard b);
 	
 	protected void submitPieRule() {
