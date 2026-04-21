@@ -47,7 +47,7 @@ public class QuaxController {
 		}
 	}
 
-    // TODO Keep for testing - Remove on final submission
+    // TODO - Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		QuaxPlayer p1 = new HumanPlayer();
 		QuaxPlayer p2 = new HumanPlayer();
@@ -71,7 +71,6 @@ public class QuaxController {
 		curPlayer().movePrompt(board);
 	}
 
-	// TODO - Update new BotPlayer()
 	public void startGameAgainstBot() {
 		QuaxPlayer human = new HumanPlayer();
 		QuaxPlayer bot = new BogoBot();
@@ -109,7 +108,6 @@ public class QuaxController {
 		}
 	}
 
-	// TODO - Rename method?
 	private void didMoveWin(QuaxTileColour c) {
 		if (board.checkForWinningMove()) {
 			userInterface.showWinLabel(c);
