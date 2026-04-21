@@ -28,10 +28,10 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	public void addTile(QuaxTile tile) {
 		tile.setGroup(this);
 		groupMembers.addFirst(tile);
+
 		if (tile.onLow()) {
             onColumnA_Row1 = true;
         }
-
 		if (tile.onHigh()) {
             onColumnK_Row11 = true;
         }

@@ -39,17 +39,15 @@ public abstract class QuaxTile {
 		this.group = group;
 	}
 	
-	public boolean isFree() {
-		return this.colour == QuaxTileColour.NONE;
-	}
-	
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
 	}
 
 	public abstract QuaxCoordinate getCoordinates();
 
-
+	public boolean isFree() {
+		return getColour() == QuaxTileColour.NONE;
+	}
 	protected boolean isBlack() {
 		return getColour() == QuaxTileColour.BLACK;
 	}

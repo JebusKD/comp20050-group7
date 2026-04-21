@@ -2,9 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -127,7 +124,7 @@ class TestQuaxBoard {
 	// Checks if a correctly-sized array is created for octagon's neighbours.
 	@Test
 	void testNeighboursArraySize1() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(5, 5, true));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(5, 5, true));
 		assertEquals(3, neighbours.length);
 		assertEquals(3, neighbours[0].length);
 		assertEquals(3, neighbours[1].length);
@@ -137,7 +134,7 @@ class TestQuaxBoard {
 	// Checks if a correctly-sized array is created for rhombus's neighbours.
 	@Test
 	void testNeighboursArraySize2() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(4, 3, false));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(4, 3, false));
 		assertEquals(2, neighbours.length);
 		assertEquals(2, neighbours[0].length);
 		assertEquals(2, neighbours[1].length);
@@ -146,7 +143,7 @@ class TestQuaxBoard {
 	// Checks if the colour of neighbouring tiles are correctly read.
 	@Test
 	void testNeighboursColours1() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, true));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(3, 4, true));
 		
 		b.makeMove(new QuaxCoordinate(3, 3, true), QuaxTileColour.BLACK);
 		
@@ -156,7 +153,7 @@ class TestQuaxBoard {
 	// Checks if the colour of neighbouring tiles are correctly read.
 	@Test
 	void testNeighboursColours2() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, false));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(3, 4, false));
 		
 		b.makeMove(new QuaxCoordinate(4, 5, true), QuaxTileColour.WHITE);
 		
@@ -166,7 +163,7 @@ class TestQuaxBoard {
 	// Ensures the correct entries in neighbours are indeed null/not null
 	@Test
 	void testNeighboursStructure1() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 0, true));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(0, 0, true));
 		// Octagon in top-left corner
 		/*
 		  		null | null | null
@@ -197,7 +194,7 @@ class TestQuaxBoard {
 	 */
 	@Test
 	void testNeighboursStructure2() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(0, 0, false));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(0, 0, false));
 		
 		assertNotNull(neighbours[0][0]);
 		assertNotNull(neighbours[0][1]);
@@ -217,7 +214,7 @@ class TestQuaxBoard {
 	 */
 	@Test
 	void testNeighboursCoordinates1() {
-		QuaxTile[][] neighbours = b.neighbours(new QuaxCoordinate(3, 4, true));
+		QuaxTile[][] neighbours = b.getNeighbours(new QuaxCoordinate(3, 4, true));
 		
 		assertEquals(3, neighbours[1][2].getCoordinates().x());
 		assertEquals(5, neighbours[1][2].getCoordinates().y());
