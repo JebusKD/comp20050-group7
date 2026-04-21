@@ -259,9 +259,18 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 	
-	protected static abstract class AbstractStrategyOperation implements StrategyOperation {
+	// TODO See if AbstractStrategyOperation can do more.
+	protected static abstract class GeneralAbstractStrategyOperation implements StrategyOperation {
 		
-		public void execute(QuaxBoard b) {
+		private HashSet<QuaxCoordinate> targets;
+		private IntUnaryOperator operation;
+		
+		public GeneralAbstractStrategyOperation() {
+			this.targets = new HashSet<QuaxCoordinate>();
+			this.operation = null;
+		}
+		
+		public final void execute(QuaxBoard b) {
 			if (b == null) throw new IllegalArgumentException("Input board cannot be null.");
 			if (getTargets() == null) throw new NullPointerException("Targets set cannot be null at execution.");
 			if (getOperation() == null) throw new NullPointerException("Operation cannot be null at execution.");
@@ -271,42 +280,67 @@ public abstract class BotPlayer extends QuaxPlayer {
 				t.setStrategyValue( getOperation().applyAsInt(t.getStrategyValue()) );
 			}
 		}
+		
+		@Override
+		public Set<QuaxCoordinate> getTargets() {
+			return this.targets;
+		}
+		
+		protected void targetsClear() {
+			this.targets.clear();
+		}
+		
+		protected int targetsSize() {
+			return targets.size();
+		}
+			
+		protected void targetsAdd(QuaxCoordinate c) {
+			targets.add(c);
+		}
+		
+		protected void targetsAddAll(Collection<QuaxCoordinate> c) {
+			targets.addAll(c);
+		}
+		
+		@Override
+		public IntUnaryOperator getOperation() {
+			return this.operation;
+		}
+		
+		protected void setOperation(IntUnaryOperator operation) {
+			this.operation = operation;
+		}
 
 	}
 	
-	protected static class SimpleStrategyOperation extends AbstractStrategyOperation {
-		private HashSet<QuaxCoordinate> targets;
-		private IntUnaryOperator operation;
+	protected static class SimpleStrategyOperation extends GeneralAbstractStrategyOperation {
 		
 		public SimpleStrategyOperation(Collection<QuaxCoordinate> targets) {
-			this.targets = new HashSet<QuaxCoordinate>();
-			this.targets.addAll(targets);
+			super();
+			targetsAddAll(targets);
 		}
 		
 		public SimpleStrategyOperation(Collection<QuaxCoordinate> targets, IntUnaryOperator operation) {
 			this(targets);
-			this.operation = operation;
-		}
-
-		@Override
-		public Set<QuaxCoordinate> getTargets() {
-			return targets;
-		}
-
-		@Override
-		public IntUnaryOperator getOperation() {
-			return operation;
+			setOperation(operation);
 		}
 	}
 	
-	protected static class OctagonLineStrategyOperation extends AbstractStrategyOperation {
-		private HashSet<QuaxCoordinate> targets;
+	protected static class OctagonSquareStrategyOperation extends AbstractStrategyOperation {
+		private int size;
+		
+		public OctagonSquareStrategyOperation(QuaxCoordinate center, int size, IntUnaryOperator operation) {
+			
+		}
+		
+	}
+	
+	protected static class OctagonLineStrategyOperation extends GeneralAbstractStrategyOperation {
 		private QuaxCoordinate[] points;
 		private int width;
-		private IntUnaryOperator operation;
 		
 		public OctagonLineStrategyOperation(Collection<QuaxCoordinate> points, int width, IntUnaryOperator operation) {
-			this.targets = new HashSet<QuaxCoordinate>();
+			super();
 			this.points = new QuaxCoordinate[2];
 			if ((this.width = width) <= 0 || (width > 10)) throw new IllegalArgumentException("Input width must be in the range [0, 10], inclusive.");
 			
@@ -336,7 +370,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 		
 		private void recalculateOperation() {
-			targets.clear();
+			targetsClear();
 			boolean flag = false;
 			int direction,
 				fixed;
@@ -358,22 +392,22 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 		
 		private void buildVerticalRow(int x, int y) {
-			targets.add(new QuaxCoordinate(x, y, true));
+			targetsAdd(new QuaxCoordinate(x, y, true));
 			for (int i = 1; i < width; i++) {
 				if (QuaxCoordinate.validOctagonCoordinates(x, y+i))
-						targets.add(new QuaxCoordinate(x, y+i, true));
+						targetsAdd(new QuaxCoordinate(x, y+i, true));
 				if (QuaxCoordinate.validOctagonCoordinates(x, y-i))
-					targets.add(new QuaxCoordinate(x, y-i, true));
+					targetsAdd(new QuaxCoordinate(x, y-i, true));
 			}
 		}
 		
 		private void buildHorizontalRow(int x, int y) {
-			targets.add(new QuaxCoordinate(x, y, true));
+			targetsAdd(new QuaxCoordinate(x, y, true));
 			for (int i = 1; i < width; i++) {
 				if (QuaxCoordinate.validOctagonCoordinates(x+i, y))
-						targets.add(new QuaxCoordinate(x+i, y, true));
+						targetsAdd(new QuaxCoordinate(x+i, y, true));
 				if (QuaxCoordinate.validOctagonCoordinates(x-i, y))
-					targets.add(new QuaxCoordinate(x-i, y, true));
+					targetsAdd(new QuaxCoordinate(x-i, y, true));
 			}
 		}
 		
@@ -384,30 +418,16 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public boolean arePointsHorizontal() {
 			return points[0].x() != points[1].x();
 		}
-		
-		public Set<QuaxCoordinate> getTargets() {
-			return this.targets;
-		}
-		
-		public IntUnaryOperator getOperation() {
-			return this.operation;
-		}
-		
-		public void setOperation(IntUnaryOperator operation) {
-			this.operation = operation;
-		}
 	}
 	
-	protected static class SprawlStrategyOperation extends AbstractStrategyOperation {
+	protected static class SprawlStrategyOperation extends GeneralAbstractStrategyOperation {
 
-		private HashSet<QuaxCoordinate> targets;
-		private IntUnaryOperator operation;
 		private int size;
 		private QuaxCoordinate center;
 		
 		public SprawlStrategyOperation(QuaxCoordinate center, int size, IntUnaryOperator operation) {
 			
-			this.targets = new HashSet<QuaxCoordinate>();
+			super();
 			this.center = center;
 			setSize(size);
 			setOperation(operation);
@@ -424,80 +444,51 @@ public abstract class BotPlayer extends QuaxPlayer {
 			this.center = center;
 			recalculateOperation();
 		}
-		
-		public void setOperation(IntUnaryOperator operation) {
-			this.operation = operation;
-		}
-		
+
 		private void recalculateOperation() {
 			int prevCount = 1;
-			targets.clear();
-			targets.add(center);
+			targetsClear();
+			targetsAdd(center);
 			for (int i = 0; i < size; i++) {
 				
-				Set<QuaxCoordinate> copy = new HashSet<QuaxCoordinate>(targets);
+				Set<QuaxCoordinate> copy = new HashSet<QuaxCoordinate>(getTargets());
 				
 				for (QuaxCoordinate c : copy) {
 					targetNeighbours(c);
 				}
 				
-				if (prevCount == targets.size()) break;
-				prevCount = targets.size();
+				if (prevCount == targetsSize()) break;
+				prevCount = targetsSize();
 			}
 		}
 		
 		private void targetNeighbours(QuaxCoordinate c) {
 			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
-				targets.add(n);
+				targetsAdd(n);
 			}
 		}
 		
-		@Override
-		public Set<QuaxCoordinate> getTargets() {
-			return this.targets;
-		}
-
-		@Override
-		public IntUnaryOperator getOperation() {
-			return this.operation;
-		}
 	}
 	
-	protected static class DotStrategyOperation extends AbstractStrategyOperation {
-		private HashSet<QuaxCoordinate> targets;
-		private IntUnaryOperator operation;
+	protected static class DotStrategyOperation extends GeneralAbstractStrategyOperation {
 		private QuaxCoordinate center;
 		
 		public DotStrategyOperation(QuaxCoordinate center, IntUnaryOperator operation) {
 			
-			this.targets = new HashSet<QuaxCoordinate>();
+			super();
 			setCenter(center);
 			setOperation(operation);
 			
 		}
 		
 		private void recalculateOperation() {
-			targets.clear();
-			targets.add(center);
-		}
-		
-		public void setOperation(IntUnaryOperator operation) {
-			this.operation = operation;
+			targetsClear();
+			targetsAdd(center);
 		}
 		
 		public void setCenter(QuaxCoordinate center) {
 			this.center = center;
 			recalculateOperation();
-		}
-		
-		@Override
-		public Set<QuaxCoordinate> getTargets() {
-			return this.targets;
-		}
-
-		@Override
-		public IntUnaryOperator getOperation() {
-			return this.operation;
 		}
 	}
 }
