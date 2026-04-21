@@ -126,16 +126,26 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
-        QuaxTile[][] n = neighbours(q);
-
-        if (n[0][0].getColour() == c && n[1][1].getColour() == c) {
-            return true;
-        }
-        if (n[1][0].getColour() == c &&  n[0][1].getColour() == c) {
-            return true;
+        if (q.isOctagonMove()) throw new IllegalArgumentException("Coordinate must be a rhombus tile.");
+        if (getTile(q).isFree()) {
+		
+			QuaxTile[][] n = neighbours(q);
+	
+	        if (n[0][0].getColour() == c && n[1][1].getColour() == c) {
+	            return true;
+	        }
+	        if (n[1][0].getColour() == c &&  n[0][1].getColour() == c) {
+	            return true;
+	        }
         }
         return false;
     }
+	
+	public boolean isValidForBoth(QuaxCoordinate c) {
+		if (c.isOctagonMove()) return getTile(c).isFree();
+		else return isValidRhombusPlacement(c, QuaxTileColour.BLACK)
+			 &&		isValidRhombusPlacement(c, QuaxTileColour.WHITE);
+	}
 
     // TODO - Too long
 	public QuaxTile[][] neighbours(QuaxCoordinate q) {
@@ -186,6 +196,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return neighbours;
 	}
 
+	public QuaxTile[][] previousMoveNeighbours() {
+		return neighbours(previousMove());
+	}
+	
 	public int getMoveNumber() {
 		return this.moveNumber;
 	}
@@ -322,6 +336,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return new QuaxBoardIterator(this);
 	}
 	
+	public Iterator<QuaxTile> rhombusIterator() {
+		return new QuaxBoardRhombusIterator(this);
+	}
+	
 	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
 		private static final int MAX_ELEMENTS = 221;
 		
@@ -342,6 +360,35 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			}
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
 				this.elements.add(source.getOctagon(10, j));
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < MAX_ELEMENTS;
+		}
+		
+		@Override
+		public QuaxTile next() {
+			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+			return elements.get(cursor++);
+		}
+	}
+	
+	public static class QuaxBoardRhombusIterator implements Iterator<QuaxTile> {
+		private static final int MAX_ELEMENTS = 100;
+		
+		private int cursor;
+		private ArrayList<QuaxTile> elements;
+		
+		public QuaxBoardRhombusIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<>(MAX_ELEMENTS);
+			
+			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
+				for (int j = 0; j < MAX_RHOMBUSES; j++) {
+					this.elements.add(source.getRhombus(i, j));
+				}
 			}
 		}
 		
