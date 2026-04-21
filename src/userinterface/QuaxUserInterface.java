@@ -41,7 +41,6 @@ public class QuaxUserInterface implements UserInterface {
 
 	private static final double FRONT_HOURGLASS_GAP = 5.7;
 	private static final double BACK_HOURGLASS_GAP = 11.4;
-	private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
 	private static final String[] STYLESHEETS = new String[] {
 		"/userinterface/stylesheets/tile-styling.css",
@@ -58,7 +57,6 @@ public class QuaxUserInterface implements UserInterface {
 	private Label winLabel;
 	private Scene scene;
 	private Button pieRuleButton;
-
 
     public QuaxUserInterface(Stage stage) {
 		this.stage = stage;
@@ -83,53 +81,71 @@ public class QuaxUserInterface implements UserInterface {
 		}
 	}
 
-	// TODO - Decompose?
-	private void initialiseWindow() {
-        VBox sideBar = initialiseButtons();
-        this.turnIndicator = new PlayerTurnIndicator();
-        
-        this.winLabel = new Label("_ wins");
-        winLabel.setVisible(false);
-        winLabel.getStyleClass().add("win-label");
-        
-        sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel);
-        sideBar.getStyleClass().add("vbox");
 
+	private void initialiseWindow() {
+		this.turnIndicator = new PlayerTurnIndicator();
+		initialiseWinLabel();
+
+		VBox sideBar = initialiseSideBar();
 		Label title = new Label("Quax (Human V Bot)");
 		title.getStyleClass().add("custom-title");
-
-        GridPane outer = new GridPane();
 		
-        outer.add(title,0,0);
-        outer.add(board.getBoard(),0,1);
-        outer.add(sideBar,1,1);
-        outer.setAlignment(Pos.CENTER);
-		
-		this.scene = new Scene(outer);
+		this.scene = new Scene(initialiseOuterGridPane(title, sideBar));
 	}
 
-	// TODO - Decompose?
-	private VBox initialiseButtons(){
-        VBox sideBar = new VBox(10);
+	private void initialiseWinLabel() {
+		this.winLabel = new Label("_ wins");
+		winLabel.setVisible(false);
+		winLabel.getStyleClass().add("win-label");
+	}
+
+	private GridPane initialiseOuterGridPane(Label title, VBox sideBar) {
+		GridPane outer = new GridPane();
+
+		outer.add(title,0,0);
+		outer.add(board.getBoard(),0,1);
+		outer.add(sideBar,1,1);
+		outer.setAlignment(Pos.CENTER);
+
+		return outer;
+	}
+
+
+	private VBox initialiseSideBar() {
+		VBox sideBar = new VBox(10);
+
+		initialiseSideBarButtons(sideBar);
+
+		sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel);
+		sideBar.getStyleClass().add("vbox");
+		return sideBar;
+	}
+
+	private void initialiseSideBarButtons(VBox sideBar){
         Button strat = new Button("Show Strategy");
         Button hideStrat = new Button("Hide Strategy");
         pieRuleButton = new Button("PieRule");
+		styleButtons(strat, hideStrat);
 
-		pieRuleButton.setOnMouseClicked(event -> {
-        	pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
-        });
-        pieRuleButton.setId("PieRule");
-        setPieRuleVisibility(false);
-        
-        strat.getStyleClass().add("button3");
-        hideStrat.getStyleClass().add("button3");
-        pieRuleButton.getStyleClass().add("button3");
-
-        sideBar.getChildren().addAll(strat,hideStrat,pieRuleButton);
-
-        return sideBar;
+		setupPieRuleButton();
+        sideBar.getChildren().addAll(strat, hideStrat, pieRuleButton);
     }
-	
+
+	private void setupPieRuleButton() {
+		pieRuleButton.setOnMouseClicked(event -> {
+			pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
+		});
+		pieRuleButton.setId("PieRule");
+		setPieRuleVisibility(false);
+	}
+
+	private void styleButtons(Button stratB, Button hideB) {
+		stratB.getStyleClass().add("button3");
+		hideB.getStyleClass().add("button3");
+		pieRuleButton.getStyleClass().add("button3");
+	}
+
+
 	@Override
 	public void showWinLabel(QuaxTileColour c){
         winLabel.setText(c + " wins");
@@ -148,6 +164,7 @@ public class QuaxUserInterface implements UserInterface {
         }
 		else {
 			QuaxCoordinate previousMove = board.previousMove();
+			// TODO - LoD violation??
         	QuaxTileColour colour = board.getTile(previousMove).getColour();
 
             this.setTile(previousMove, colour);
@@ -175,6 +192,8 @@ public class QuaxUserInterface implements UserInterface {
 
 
 	private static class UserInterfaceBoard {
+		private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
+
 		private OctagonTile[][] octagonGridCells;
 		private RhombusTile[][] rhombusGridCells;
 
@@ -236,11 +255,13 @@ public class QuaxUserInterface implements UserInterface {
 
 		private static Polygon createHourglass(){
 			double distance = (FRONT_HOURGLASS_GAP * OCTAGON_WIDTH) + ((FRONT_HOURGLASS_GAP - (MAX_OCTAGONS - MAX_RHOMBUSES)) * OCTAGON_GRID_GAP) + OCTAGON_WIDTH/4;
+
 			Polygon hourglass = new Polygon(-distance,distance,
 					distance,distance,
 					-distance,-distance,
 					distance,-distance);
 			hourglass.setFill(Color.BLACK);
+
 			return hourglass;
 		}
 
@@ -265,9 +286,9 @@ public class QuaxUserInterface implements UserInterface {
 			return gridStack;
 		}
 
+		// TODO - Decompose
 		private static GridPane createBoardCoordinates() {
 	        GridPane coordGrid = new GridPane();
-	        coordGrid.setAlignment(Pos.CENTER);
 	        setCoordinateGridRowsColumns(coordGrid);
 
 	        GridPane topCoords = new GridPane();
@@ -288,7 +309,8 @@ public class QuaxUserInterface implements UserInterface {
 	    }
 
 		private static void setCoordinateGridRowsColumns(GridPane coordinateGrid) {
-			// Create left and right coordinate columns, with the board accounting for the centre column
+			coordinateGrid.setAlignment(Pos.CENTER);
+
 			coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
 			coordinateGrid.getColumnConstraints().add(new ColumnConstraints((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
 			coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
@@ -298,7 +320,7 @@ public class QuaxUserInterface implements UserInterface {
 			coordinateGrid.getRowConstraints().add(new RowConstraints());
 		}
 
-		// TODO - Decompose?
+
 		private static void setTopBottomCoordinateGrid(GridPane top, GridPane bottom) {
 			positionColumns(top, bottom);
 
@@ -306,17 +328,8 @@ public class QuaxUserInterface implements UserInterface {
 				top.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
 				bottom.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
 
-				Label letterCoordTop = new Label(String.valueOf((char) ('A' + i)));
-				Label letterCoordBottom = new Label(String.valueOf((char) ('A' + i)));
-
-				styleColumnLabel(letterCoordTop);
-				styleColumnLabel(letterCoordBottom);
-
-				StackPane topCoordPane = new StackPane(letterCoordTop);
-				StackPane bottomCoordPane = new StackPane(letterCoordBottom);
-
-				top.add(topCoordPane, i,0);
-				bottom.add(bottomCoordPane, i,0);
+				addLetterCoordinateLabel(top, i);
+				addLetterCoordinateLabel(bottom, i);
 			}
 		}
 
@@ -330,12 +343,21 @@ public class QuaxUserInterface implements UserInterface {
 			bottom.setAlignment(Pos.CENTER);
 		}
 
-		private static void styleColumnLabel(Label letterCoordinateLabel) {
-			letterCoordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
-			letterCoordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-			letterCoordinateLabel.getStyleClass().add("coordinate-letter-style");
-			letterCoordinateLabel.setAlignment(Pos.CENTER);
+		private static void addLetterCoordinateLabel(GridPane gp, int i) {
+			Label letterCLabel = new Label(String.valueOf((char) ('A' + i)));
+			styleColumnLabel(letterCLabel);
+
+			StackPane letterCoordPane = new StackPane(letterCLabel);
+			gp.add(letterCoordPane, i,0);
 		}
+
+		private static void styleColumnLabel(Label letterLabel) {
+			letterLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+			letterLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			letterLabel.getStyleClass().add("coordinate-letter-style");
+			letterLabel.setAlignment(Pos.CENTER);
+		}
+
 
 		private static void setLeftRightCoordinateGrid(GridPane left, GridPane right) {
 			positionRows(left, right);
@@ -344,17 +366,8 @@ public class QuaxUserInterface implements UserInterface {
 				left.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
 				right.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
 
-				Label numCoordLeft = new Label(String.valueOf(11 - j));
-				Label numCoordRight = new Label(String.valueOf(11 - j));
-
-				styleRowLabel(numCoordLeft);
-				styleRowLabel(numCoordRight);
-
-				StackPane leftCoordPane = new StackPane(numCoordLeft);
-				StackPane rightCoordPane = new StackPane(numCoordRight);
-
-				left.add(leftCoordPane,0,j);
-				right.add(rightCoordPane,0,j);
+				addNumberCoordinateLabel(left, j);
+				addNumberCoordinateLabel(right, j);
 			}
 		}
 
@@ -368,80 +381,103 @@ public class QuaxUserInterface implements UserInterface {
 			right.setAlignment(Pos.CENTER);
 		}
 
-		private static void styleRowLabel(Label coordinateLabel) {
-			coordinateLabel.getStyleClass().add("coordinate-number-style");
-			coordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-			coordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		private static void addNumberCoordinateLabel(GridPane gp, int j) {
+			Label numCLabel = new Label(String.valueOf(11 - j));
+			styleRowLabel(numCLabel);
+
+			StackPane leftCoordPane = new StackPane(numCLabel);
+			gp.add(leftCoordPane,0,j);
 		}
 
-		// TODO - Decompose?
+		private static void styleRowLabel(Label numberLabel) {
+			numberLabel.getStyleClass().add("coordinate-number-style");
+			numberLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			numberLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		}
+
+
 		private GridPane createOctagonGrid() {
 			octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
 			GridPane octagonGrid = new GridPane();
-			positionTileGrid(octagonGrid);
+			positionBoardTileGrid(octagonGrid);
 
+			initialiseOctagonGridRowColumns(octagonGrid);
+			initialiseOctagonGridCells(octagonGrid);
+
+			return octagonGrid;
+		}
+
+		private void initialiseOctagonGridRowColumns(GridPane oGrid) {
 			for (int i = 0; i < MAX_OCTAGONS ; i++) {
 				ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
-				octagonGrid.getColumnConstraints().add(column);
+				oGrid.getColumnConstraints().add(column);
 
 				RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
-				octagonGrid.getRowConstraints().add(row);
+				oGrid.getRowConstraints().add(row);
 			}
-			
+		}
+
+		private void initialiseOctagonGridCells(GridPane oGrid) {
 			for (int i = 0; i < MAX_OCTAGONS ; i++) {
 				for (int j = 0; j < MAX_OCTAGONS ; j++) {
 					OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
 					newTile.setId("octagon" + i + "-" + j);
 					octagonGridCells[i][j] = newTile;
-					octagonGrid.add(newTile, i, j);
+					oGrid.add(newTile, i, j);
 				}
 			}
-
-			return octagonGrid;
 		}
 
-		private static void positionTileGrid(GridPane boardTiles) {
+
+		private static void positionBoardTileGrid(GridPane boardTiles) {
 			boardTiles.setAlignment(Pos.TOP_LEFT);
 			boardTiles.setVgap(OCTAGON_GRID_GAP);
 			boardTiles.setHgap(OCTAGON_GRID_GAP);
 			boardTiles.setPickOnBounds(false);
 		}
 
-		// TODO - Decompose?
+
 		private GridPane createRhombusGrid() {
 			rhombusGridCells = new RhombusTile[MAX_RHOMBUSES][MAX_RHOMBUSES];
 			GridPane rhombusGrid = new GridPane();
-			positionTileGrid(rhombusGrid);
-			
-			double rhombusGridGap = calculateRhombusGridGap();
-			rhombusGrid.setPadding(new Insets(rhombusGridGap, 0, 0, rhombusGridGap));	
-			
+			positionBoardTileGrid(rhombusGrid);
+
+			rhombusGrid.setPadding(new Insets(calculateRhombusGridGap(), 0, 0, calculateRhombusGridGap()));
+
+			initialiseRhombusGridRowColumns(rhombusGrid);
+			initialiseRhombusGridCells(rhombusGrid);
+
+			return rhombusGrid;
+		}
+
+		private double calculateRhombusGridGap() {
+			double rhombusSideLength = OctagonBase.calculateSideLength(OCTAGON_WIDTH);
+			double rhombusDiagonalHeight = (OCTAGON_WIDTH - rhombusSideLength) / 2;
+			return rhombusSideLength + rhombusDiagonalHeight + (OCTAGON_GRID_GAP/2);
+		}
+
+		private void initialiseRhombusGridRowColumns(GridPane rGrid) {
 			for (int i = 0; i < MAX_RHOMBUSES; i++) {
 				ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
-				rhombusGrid.getColumnConstraints().add(column);
+				rGrid.getColumnConstraints().add(column);
 
 				RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
 				row.setValignment(VPos.TOP);
-				rhombusGrid.getRowConstraints().add(row);
+				rGrid.getRowConstraints().add(row);
 			}
-			
+		}
+
+		private void initialiseRhombusGridCells(GridPane rGrid) {
 			for (int i = 0; i < MAX_RHOMBUSES; i++) {
 				for (int j = 0; j < MAX_RHOMBUSES; j++) {
 					RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
 					newTile.setId("rhombus" + i + "-" + j);
 					rhombusGridCells[i][j] = newTile;
-					rhombusGrid.add(newTile, i, j);
+					rGrid.add(newTile, i, j);
 				}
 			}
+		}
 
-			return rhombusGrid;
-		}
-		
-		private static double calculateRhombusGridGap() {
-			double rhombusSideLength = OctagonBase.calculateSideLength(OCTAGON_WIDTH);
-			double rhombusDiagonalHeight = (OCTAGON_WIDTH - rhombusSideLength) / 2;
-			return rhombusSideLength + rhombusDiagonalHeight + (OCTAGON_GRID_GAP/2);
-		}
 
 		private interface Tile extends Styleable {
 			default void setColour(QuaxTileColour colour) {
@@ -592,14 +628,10 @@ public class QuaxUserInterface implements UserInterface {
 
     	private interface TurnIndicatorShape extends Styleable {
     		default void setColour(QuaxTileColour colour) {
-    			if (colour == QuaxTileColour.NONE) {
-                    throw new IllegalArgumentException();
-                }
-    			else {
-    				this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+				assert colour != QuaxTileColour.NONE;
+				this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
 							   					   QuaxTileColour.WHITE.tilecolourStyle());
-    				this.getStyleClass().add(colour.tilecolourStyle());
-    			}
+				this.getStyleClass().add(colour.tilecolourStyle());
             }
     	}
     	
@@ -631,16 +663,8 @@ public class QuaxUserInterface implements UserInterface {
         	}
         	
         	public void setColour(QuaxTileColour colour) {
-        		switch (colour) {
-        			case BLACK :
-        				this.setText("BLACK to play");
-        				break;
-        			case WHITE :
-        				this.setText("WHITE to play");
-        				break;
-        			default :
-        				throw new IllegalArgumentException("Cannot be set to none.");
-        		}
+				assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+				this.setText(colour + " to play");
         	}
         }
     }
