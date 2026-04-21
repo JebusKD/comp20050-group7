@@ -106,7 +106,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public QuaxTile getTile(QuaxCoordinate c) {
-		if (c.isOctagonMove()) {
+		if (c.isOctagon()) {
 			return octagonGrid[c.x()][c.y()];
 		}
 		else {
@@ -132,12 +132,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		if (isStartingMove()) {
 			return false;
 		}
-		// TODO - violates LoD
-		return getTile(this.previousMove).getGroup().isWinningGroup();
+
+		// TODO - violates LoD?
+		QuaxTileGroup moveGroup = getTile(previousMove).getGroup();
+		return moveGroup.isWinningGroup();
 	}
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
-		if (!checkForWinningMove() && (q.isOctagonMove() || isValidRhombusPlacement(q, t))) {
+		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, t))) {
 			QuaxTile tile = getTile(q);
 			return tile.getColour() == QuaxTileColour.NONE;
 		}
@@ -158,7 +160,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
 		QuaxTile tile;
-		if (q.isOctagonMove()) {
+		if (q.isOctagon()) {
 			tile = octagonGrid[q.x()][q.y()];
 		}
 		else {
@@ -232,7 +234,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
 
-		if (q.isOctagonMove()) {
+		if (q.isOctagon()) {
 			neighbours = getOctagonNeighbours(q);
 		}
 		else {
