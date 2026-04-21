@@ -39,7 +39,6 @@ public class QuaxController {
 		this.executor = new JavaFXThreadedExecutor();
 		
 		QuaxEventHandler.setup(this, stage);
-		
 		if (againstBot) {
 			startGameAgainstBot();
 		}
@@ -71,7 +70,8 @@ public class QuaxController {
 	
 		curPlayer().movePrompt(board);
 	}
-	
+
+	// TODO - Update new BotPlayer()
 	public void startGameAgainstBot() {
 		QuaxPlayer human = new HumanPlayer();
 		QuaxPlayer bot = new BogoBot();
@@ -90,12 +90,8 @@ public class QuaxController {
 	
 	// for testing purposes
 	public QuaxTileColour getPlayerColour(int i){
-		if (i == 0 || i == 1) {
-			return players[i].getColour();
-		}
-		else {
-			throw new IllegalArgumentException("Only players 0 and 1 exist.");
-		}
+		assert i == 0 || i == 1;
+		return players[i].getColour();
 	}
 	
 	public int getMoveNumber() {
