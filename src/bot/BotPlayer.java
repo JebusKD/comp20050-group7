@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.function.IntUnaryOperator;
 
-import bot.BotPlayer.SimpleStrategyOperation;
-import javafx.application.Platform;
 import model.QuaxBoard;
 import player.QuaxPlayer;
 import types.*;
@@ -152,6 +150,49 @@ public abstract class BotPlayer extends QuaxPlayer {
 		result.add(new QuaxCoordinate(x1, y1, true));
 		result.add(new QuaxCoordinate(x2, y2, true));
 		return result;
+	}
+	
+	protected static int homogeneousNeighbours(QuaxBoard board, QuaxCoordinate center) {
+		 int countBlack = 0;
+		 int countWhite = 0;
+		 
+		 for (QuaxTile[] nArray : board.neighbours(center)) {
+			 for (QuaxTile n : nArray) {
+				 switch (n.getColour()) {
+				 case BLACK:
+					 countBlack++;
+					 break;
+				 case WHITE:
+					 countWhite++;
+					 break;
+				 case NONE:
+					 break;
+				 }
+			 }
+		 }
+		 
+		 return Math.max(countWhite, countBlack);
+	}
+	
+	// Adds IGNORE_VALUE to any free rhombus on the board that is useless.
+	// "Useless" if surrounded by 3 or 4 tiles of a given colour.
+	protected static void avoidUselessRhombuses(QuaxBoard board) {
+		List<QuaxCoordinate> uselessRhombuses = new LinkedList<QuaxCoordinate>();
+		
+		Iterator<QuaxTile> iterator = board.rhombusIterator();
+		
+		while (iterator.hasNext()) {
+			QuaxCoordinate coord = iterator.next().getCoordinates();
+			
+			if (homogeneousNeighbours(board, coord) >= 3) {
+				uselessRhombuses.add(coord);
+			}
+		}
+		
+		SimpleStrategyOperation.simpleExecution(
+				board,
+				uselessRhombuses,
+				(_) -> IGNORE_VALUE);
 	}
 	
 	protected static StrategyOperation centerSprawl(int size, IntUnaryOperator operation) {

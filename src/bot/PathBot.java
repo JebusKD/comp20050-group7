@@ -33,14 +33,14 @@ public class PathBot extends BotPlayer {
 	protected void computeMove() {
 
 		if (!attemptImmediateWin(getSubmissionBoard())) {
-	
-			if (getSubmissionBoard().getMoveNumber() == 0) {
+			int moveNumber = getSubmissionBoard().getMoveNumber();
+			if (moveNumber == 0) {
 				// Starting as black and need to consider starting location.
 				setAll(getSubmissionBoard(), 0);
 				// Place centrally.
 				centerSprawl(2, (prevValue) -> 1).execute(getSubmissionBoard());
 			}
-			else if (getSubmissionBoard().getMoveNumber() == 1) {
+			else if (moveNumber == 1) {
 				// Starting as white and need to consider the pie rule.
 				
 				// If opponent has placed centrally, use the pie rule.
@@ -58,8 +58,12 @@ public class PathBot extends BotPlayer {
 					centerSprawl(2, (prevValue) -> prevValue + 1)
 					.execute(getSubmissionBoard());
 				}
-			} else {
+			
+			} else if (moveNumber == 2 && getColour() == QuaxTileColour.WHITE) {
+				// We started as black, opponent used pie rule, starting location.
 				
+			}
+			else {
 				standardTurn();
 				
 			}
@@ -68,6 +72,7 @@ public class PathBot extends BotPlayer {
 	
 	private void standardTurn() {
 		setAll(getSubmissionBoard(), 0);
+		avoidUselessRhombuses(getSubmissionBoard());
 		defendRhombuses(10);
 		exploitWeakRhombuses(40);
 		avoidDefendableRhombuses(20);
@@ -131,7 +136,7 @@ public class PathBot extends BotPlayer {
 		
 		for ( QuaxBoard b : new BoardPermutations(getSubmissionBoard()) ) {
 			b.skipTurn();
-			if (weakRhombusCount( b ) < currentWeaknesses - 1) {
+			if (weakRhombusCount( b ) > currentWeaknesses + 1) {
 				reinforceTiles.add(b.previousMove());
 			}
 		}
