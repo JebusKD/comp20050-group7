@@ -29,7 +29,7 @@ public class PathBot extends BotPlayer {
 
 	@Override
 	protected void computeMove() {
-		
+	
 		if (getSubmissionBoard().getMoveNumber() == 0) {
 			// Starting as black and need to consider starting location.
 			setAll(getSubmissionBoard(), 0);
@@ -40,7 +40,9 @@ public class PathBot extends BotPlayer {
 			// Starting as white and need to consider the pie rule.
 			
 			// If opponent has placed centrally, use the pie rule.
-			if (
+			if (centerSprawl(2, null).blackContents(getSubmissionBoard()) == 1) {
+				doPieRule();
+			}
 		}
 		
 	}

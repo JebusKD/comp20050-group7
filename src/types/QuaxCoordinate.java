@@ -1,6 +1,7 @@
 package types;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class QuaxCoordinate {
 	private final int x;
@@ -69,12 +70,24 @@ public class QuaxCoordinate {
 	}
 	
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		else if (o instanceof QuaxCoordinate c)
-			return this.x == c.x &&
-				   this.y == c.y &&
-				   this.octagonMove == c.octagonMove;
-		else return false;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		QuaxCoordinate other = (QuaxCoordinate) obj;
+		return octagonMove == other.octagonMove && x == other.x && y == other.y;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(octagonMove, x, y);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new QuaxCoordinate(3, 3, true).equals(new QuaxCoordinate(3, 3, true)));
+		System.out.println(new QuaxCoordinate(3, 4, true).equals(new QuaxCoordinate(3, 3, true)));
 	}
 }

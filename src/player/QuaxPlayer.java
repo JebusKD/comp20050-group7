@@ -50,6 +50,16 @@ public abstract class QuaxPlayer {
 	
 	public abstract void movePrompt(QuaxBoard b);
 	
+	protected void submitPieRule() {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				controller.doPieRule();
+			}
+		});
+	}
+	
 	protected void submitMove(QuaxCoordinate move) {
 		Platform.runLater(new Runnable() {
 

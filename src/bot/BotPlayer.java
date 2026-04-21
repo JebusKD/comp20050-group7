@@ -24,6 +24,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	private boolean interrupt;
 	private QuaxBoard submissionBoard;
+	private boolean wantsPieRule;
 	private long startThinkingTime;
 	//private List<BotStrategyElement> strategyElements;
 
@@ -40,26 +41,32 @@ public abstract class BotPlayer extends QuaxPlayer {
 	 * one at random.
 	 */
 	private void decideMove() {
-		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
-		int maxVal = Integer.MIN_VALUE;
 		
-		for (QuaxTile tile : submissionBoard) {
-			if (tile.isFree() && submissionBoard.validMove(tile.getCoordinates())) {
-				int stratVal = tile.getStrategyValue();
-				if (stratVal > maxVal) {
-					candidateMoves.clear();
-					maxVal = stratVal;
-				}
-				if (stratVal == maxVal) {
-					candidateMoves.add(tile.getCoordinates());
+		if (wantsPieRule && submissionBoard.isPieRuleValid()) {
+			while (!isInterrupted() && thinkingDelayed());
+			submitPieRule();
+		} else {
+			ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
+			int maxVal = Integer.MIN_VALUE;
+			
+			for (QuaxTile tile : submissionBoard) {
+				if (tile.isFree() && submissionBoard.validMove(tile.getCoordinates())) {
+					int stratVal = tile.getStrategyValue();
+					if (stratVal > maxVal) {
+						candidateMoves.clear();
+						maxVal = stratVal;
+					}
+					if (stratVal == maxVal) {
+						candidateMoves.add(tile.getCoordinates());
+					}
 				}
 			}
+			
+			int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
+			
+			while (!isInterrupted() && thinkingDelayed());
+			submitMove(candidateMoves.get(index));
 		}
-		
-		int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
-		
-		while (!isInterrupted() && thinkingDelayed());
-		submitMove(candidateMoves.get(index));
 			
 	}
 	
@@ -95,6 +102,10 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 	
+	protected void doPieRule() {
+		this.wantsPieRule = true;
+	}
+	
 	public void interrupt() {
 		this.interrupt = true;
 	}
@@ -107,10 +118,6 @@ public abstract class BotPlayer extends QuaxPlayer {
 		return this.submissionBoard;
 	}
 	
-	protected void setSubmissionBoard(QuaxBoard b) {
-		this.submissionBoard = b;
-	}
-	
 	private boolean thinkingDelayed() {
 		return System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME;
 	}
@@ -119,6 +126,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	public void movePrompt(QuaxBoard b) {
 		this.startThinkingTime = System.currentTimeMillis();
 		this.interrupt = false;
+		this.wantsPieRule = false;
 		this.submissionBoard = new QuaxBoard(b);
 		this.getExecutor().execute(() -> {
 			computeMove();
@@ -143,6 +151,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		private final int freeCount;
 		
 		public TileCounts(QuaxBoard b, Set<QuaxCoordinate> targets) {
+			
 			int blackCount = 0;
 			int whiteCount = 0;
 			int freeCount = 0;
@@ -204,8 +213,16 @@ public abstract class BotPlayer extends QuaxPlayer {
 			return this.contents(b).getWhiteCount();
 		}
 		
-		public default int noneContents(QuaxBoard b) {
+		public default int occupiedContents(QuaxBoard b) {
+			return this.contents(b).getOccupiedCount();
+		}
+		
+		public default int freeContents(QuaxBoard b) {
 			return this.contents(b).getFreeCount();
+		}
+		
+		public default int totalContents() {
+			return this.contents(new QuaxBoard()).getTotalCount();
 		}
 		
 		public static Set<QuaxCoordinate> unionTargets(StrategyOperation o1, StrategyOperation o2) {
