@@ -1,6 +1,7 @@
 package player;
 
 import java.util.concurrent.Executor;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import controller.QuaxController;
 import model.QuaxBoard;
@@ -18,34 +19,24 @@ public abstract class QuaxPlayer {
 	}
 	
 	public void setController(QuaxController controller) {
+		assertNotNull(controller);
 		this.controller = controller;
 	}
 	
 	protected Executor getExecutor() {
-		if (controller == null) {
-			throw new IllegalStateException("Player not initialised to a controller.");
-		}
-		else {
-			return controller.getExecutor();
-		}
+		assertNotNull(controller);
+		return controller.getExecutor();
 	}
 	
 	public QuaxTileColour getColour() {
-		if (this.colour == null) {
-			throw new IllegalStateException("Player not initialised to a controller.");
-		}
-		else {
-			return this.colour;
-		}
+		assertNotNull(colour);
+		return colour;
 	}
 	
 	public void setColour(QuaxTileColour colour) {
-		if (colour == QuaxTileColour.NONE || colour == null) {
-            throw new IllegalArgumentException("Invalid colour assigned to player " + colour);
-        }
-		else {
-            this.colour = colour;
-        }
+		assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+		//assertNotNull(colour);
+        this.colour = colour;
 	}
 	
 	public abstract void movePrompt(QuaxBoard b);
