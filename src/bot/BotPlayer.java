@@ -17,7 +17,7 @@ import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
-	protected static final int IGNORE_VALUE = Integer.MIN_VALUE;
+	public static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	protected static final Random RNG = new Random();
 	private static final long MIN_THINKING_TIME = 1000;
 	private static final long MAX_THINKING_TIME = 9000;
@@ -114,7 +114,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 		return this.interrupt || System.currentTimeMillis() - startThinkingTime >= MAX_THINKING_TIME;
 	}
 	
-	protected QuaxBoard getSubmissionBoard() {
+	public QuaxBoard getSubmissionBoard() {
 		return this.submissionBoard;
 	}
 	

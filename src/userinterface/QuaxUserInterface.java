@@ -117,6 +117,10 @@ public class QuaxUserInterface implements UserInterface {
         Button hideStrat = new Button("Hide Strategy");
         pieRuleButton = new Button("PieRule");
 
+        strat.setOnMouseClicked(event -> {
+        	strat.fireEvent(new ButtonClickEvent(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT));
+        });
+        
         pieRuleButton.setOnMouseClicked(event -> {
         	pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
@@ -188,6 +192,40 @@ public class QuaxUserInterface implements UserInterface {
 	public void setBotReference(BotPlayer b) {
 		this.botReference = b;
 	}
+	
+	@Override
+	public void showStrategy() {
+		debugShowStrategy();
+	}
+	
+	private void debugShowStrategy() {
+		debugShowStrategyOctagonRow(0);
+		for (int i = 0; i < 10; ) {
+			debugShowStrategyRhombusRow(i);
+			debugShowStrategyOctagonRow(++i);
+		}
+		System.out.println("\n----------------------------\n");
+	}
+	
+	private void debugShowStrategyOctagonRow(int y) {
+		for (int x = 0; x < 11; x++) {
+			int value = botReference.getSubmissionBoard().getOctagon(x, y).getStrategyValue();
+			if (value == BotPlayer.IGNORE_VALUE) System.out.printf("%4c ", 'X');
+			else System.out.printf("%4d ", value);
+		}
+		System.out.println();
+	}
+	
+	private void debugShowStrategyRhombusRow(int y) {
+		System.out.print("  ");
+		for (int x = 0; x < 10; x++) {
+			int value = botReference.getSubmissionBoard().getRhombus(x, y).getStrategyValue();
+			if (value == BotPlayer.IGNORE_VALUE) System.out.printf("%4c ", 'X');
+			else System.out.printf("%4d ", value);
+		}
+		System.out.println();
+	}
+	
 
 	public Scene getScene() {
 		return this.scene;
@@ -510,6 +548,7 @@ public class QuaxUserInterface implements UserInterface {
 				return this.coordinate;
 			}
 		}
+
 	}
 
 	private abstract static class OctagonBase extends Polygon {

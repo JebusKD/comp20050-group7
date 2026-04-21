@@ -144,6 +144,10 @@ public class QuaxController {
 		ui.setPieRuleVisibility(visibility);
 	}
 	
+	public void showStrategy() {
+		ui.showStrategy();
+	}
+	
 	public static class SingleThreadExecutor implements Executor {
 		public void execute(Runnable r) {
 			r.run();

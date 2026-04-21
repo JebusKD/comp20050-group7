@@ -20,4 +20,6 @@ public interface UserInterface {
 	public void setPieRuleVisibility(boolean visibility);
 	
 	public void setBotReference(BotPlayer b);
+	
+	public void showStrategy();
 }

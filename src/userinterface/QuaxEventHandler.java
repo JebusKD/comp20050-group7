@@ -29,6 +29,12 @@ public class QuaxEventHandler {
 			}
 		});
 		
+		stage.addEventHandler(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+			@Override
+			public void handle(ButtonClickEvent event) {
+					controller.showStrategy();
+			}
+		});
 	}
 	
 }

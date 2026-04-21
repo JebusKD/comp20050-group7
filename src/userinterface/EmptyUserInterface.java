@@ -36,4 +36,8 @@ public class EmptyUserInterface implements UserInterface {
 	@Override
 	public void setBotReference(BotPlayer b) {
 	}
+	
+	@Override
+	public void showStrategy() {
+	}
 }
