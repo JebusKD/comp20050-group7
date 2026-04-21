@@ -125,6 +125,13 @@ public abstract class BotPlayer extends QuaxPlayer {
 			decideMove();
 		});
 	}
+
+	public static Vector<QuaxCoordinate> twoOctagonVectorPoints(int x1, int y1, int x2, int y2) {
+		Vector<QuaxCoordinate> result = new Vector<>(2);
+		result.add(new QuaxCoordinate(x1, y1, true));
+		result.add(new QuaxCoordinate(x2, y2, true));
+		return result;
+	}
 	
 	protected static interface StrategyOperation {
 		public Set<QuaxCoordinate> getTargets();
@@ -242,20 +249,44 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 		
 		private void recalculateOperation() {
+			targets.clear();
 			boolean flag = false;
-			int direction;
+			int direction,
+				fixed;
 			if (arePointsHorizontal()) {
 				direction = points[0].x() < points[1].x() ? 1 : -1;
-			
+				fixed = points[0].y();
 				for (int i = points[0].x(); !flag; i += direction) {
-					if (points[0].x() == points[1].x()) flag = true;
-					
-					for (int j = 1; j < width; j++) {
-						 
-					}
+					if (i == points[1].x()) flag = true;
+					buildVerticalRow(i, fixed);
 				}
 			} else {
-				
+				direction = points[0].y() < points[1].y() ? 1 : -1;
+				fixed = points[0].x();
+				for (int i = points[0].y(); !flag; i += direction) {
+					if (i == points[1].y()) flag = true;
+					buildHorizontalRow(fixed, i);
+				}
+			}
+		}
+		
+		private void buildVerticalRow(int x, int y) {
+			targets.add(new QuaxCoordinate(x, y, true));
+			for (int i = 1; i < width; i++) {
+				if (QuaxCoordinate.validOctagonCoordinates(x, y+i))
+						targets.add(new QuaxCoordinate(x, y+i, true));
+				if (QuaxCoordinate.validOctagonCoordinates(x, y-i))
+					targets.add(new QuaxCoordinate(x, y-i, true));
+			}
+		}
+		
+		private void buildHorizontalRow(int x, int y) {
+			targets.add(new QuaxCoordinate(x, y, true));
+			for (int i = 1; i < width; i++) {
+				if (QuaxCoordinate.validOctagonCoordinates(x+i, y))
+						targets.add(new QuaxCoordinate(x+i, y, true));
+				if (QuaxCoordinate.validOctagonCoordinates(x-i, y))
+					targets.add(new QuaxCoordinate(x-i, y, true));
 			}
 		}
 		

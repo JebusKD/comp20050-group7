@@ -21,9 +21,6 @@ import types.QuaxCoordinate;
  *
  */
 public class PathBot extends BotPlayer {
-
-	protected int pathLength;
-	protected ArrayList<QuaxCoordinate> desiredPath;
 	
 	public PathBot() {
 		super();
@@ -34,7 +31,12 @@ public class PathBot extends BotPlayer {
 	@Override
 	protected void computeMove() {
 		setAll(getSubmissionBoard(), 1);
-		StrategyOperation op = new SprawlStrategyOperation(new QuaxCoordinate(5, 5, true), 1, (prevValue) -> 3);
+		StrategyOperation op = new OctagonLineStrategyOperation(
+				twoOctagonVectorPoints(5, 10, 5, 0),
+				2,
+				prev -> 3
+				);
+								
 		op.execute(getSubmissionBoard());
 	}
 }

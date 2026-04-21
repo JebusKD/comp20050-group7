@@ -13,6 +13,11 @@ public class QuaxCoordinate {
 		this.x = x;
 		this.y = y;
 		this.octagonMove = octagonMove;
+		
+		if (octagonMove && !validOctagonCoordinates(x, y))
+			throw new IllegalArgumentException("QuaxCoordinate constructed with out-of-bounds points. (Octagon x: " + x + ", y: " + y + ")");
+		else if (!octagonMove && !validRhombusCoordinates(x, y))
+			throw new IllegalArgumentException("QuaxCoordinate constructed with out-of-bounds points. (Rhombus x: " + x + ", y: " + y + ")");
 	}
 	
 	public int x() {
