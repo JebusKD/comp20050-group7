@@ -27,44 +27,47 @@ public class PathBot extends BotPlayer {
 	
 	}
 
+	protected boolean opening() {
+		int moveNumber = getSubmissionBoard().getMoveNumber();
+		if (moveNumber == 0) {
+			// Starting as black and need to consider starting location.
+			setAll(getSubmissionBoard(), 0);
+			// Place centrally.
+			centerSprawl(2, (_) -> 1).execute(getSubmissionBoard());
+		}
+		else if (moveNumber == 1) {
+			// Starting as white and need to consider the pie rule.
+			
+			// If opponent has placed centrally, use the pie rule.
+			if (centerSprawl(2, null).blackContents(getSubmissionBoard()) == 1) {
+				doPieRule();
+			}
+			else {
+				setAll(getSubmissionBoard(), 1);
+				// Otherwise, place centrally but away from opponent.
+				new AuraStrategyOperation(
+						new ColourStrategyOperation(getSubmissionBoard(), QuaxTileColour.BLACK, null),
+						centerSprawl(3, null),
+						(_) -> -1)
+				.execute(getSubmissionBoard());
+				centerSprawl(2, (prevValue) -> prevValue + 1)
+				.execute(getSubmissionBoard());
+			}
+		
+		} else if (moveNumber == 2 && getColour() == QuaxTileColour.WHITE) {
+			// We started as black, opponent used pie rule, starting location.
+			
+		}
+		else return false;
+		
+		return true;
+	}
+	
 	@Override
 	protected void computeMove() {
 
-		if (!attemptImmediateWin(getSubmissionBoard())) {
-			int moveNumber = getSubmissionBoard().getMoveNumber();
-			if (moveNumber == 0) {
-				// Starting as black and need to consider starting location.
-				setAll(getSubmissionBoard(), 0);
-				// Place centrally.
-				centerSprawl(2, (_) -> 1).execute(getSubmissionBoard());
-			}
-			else if (moveNumber == 1) {
-				// Starting as white and need to consider the pie rule.
-				
-				// If opponent has placed centrally, use the pie rule.
-				if (centerSprawl(2, null).blackContents(getSubmissionBoard()) == 1) {
-					doPieRule();
-				}
-				else {
-					setAll(getSubmissionBoard(), 1);
-					// Otherwise, place centrally but away from opponent.
-					new AuraStrategyOperation(
-							new ColourStrategyOperation(getSubmissionBoard(), QuaxTileColour.BLACK, null),
-							centerSprawl(3, null),
-							(_) -> -1)
-					.execute(getSubmissionBoard());
-					centerSprawl(2, (prevValue) -> prevValue + 1)
-					.execute(getSubmissionBoard());
-				}
-			
-			} else if (moveNumber == 2 && getColour() == QuaxTileColour.WHITE) {
-				// We started as black, opponent used pie rule, starting location.
-				
-			}
-			else {
+		if (!attemptImmediateWin(getSubmissionBoard()) && !opening()) {
 				standardTurn();
-				
-			}
 		}
 	}
 	
@@ -74,6 +77,7 @@ public class PathBot extends BotPlayer {
 		defendRhombuses(10);
 		exploitWeakRhombuses(40);
 		avoidDefendableRhombuses(20);
+		avoidUnnecessaryRhombuses(2);
 		reinforceWeakRhombuses(100);
 	}
 
@@ -128,12 +132,35 @@ public class PathBot extends BotPlayer {
 				(prevValue) -> prevValue + strength);
 	}
 	
+	// "Unnecessary rhombus" is one that isn't being threatened.
+	// It'd be better to place an adjacent octagonal tile instead.
+	private void avoidUnnecessaryRhombuses(int strength) {
+		List<QuaxCoordinate> unnecessaryRhombuses = new LinkedList<QuaxCoordinate>();
+		
+		Iterator<QuaxTile> iterator = getSubmissionBoard().rhombusIterator();
+		
+		while (iterator.hasNext()) {
+			QuaxCoordinate coord = iterator.next().getCoordinates();
+			
+			if (!getSubmissionBoard().isValidForBoth(coord)) {
+				unnecessaryRhombuses.add(coord);
+			}
+		}
+		
+		SimpleStrategyOperation.simpleExecution(
+				getSubmissionBoard(),
+				unnecessaryRhombuses,
+				(prevValue) -> prevValue - strength);
+	}
+	
 	private void reinforceWeakRhombuses(int strength) {
 		List<QuaxCoordinate> reinforceTiles = new LinkedList<QuaxCoordinate>();
-		int currentWeaknesses = weakRhombusCount( getSubmissionBoard() );
 		
-		for ( QuaxBoard b : new BoardPermutations(getSubmissionBoard()) ) {
-			b.skipTurn();
+		QuaxBoard skippedBoard = new QuaxBoard(getSubmissionBoard());
+		skippedBoard.skipTurn();
+		int currentWeaknesses = weakRhombusCount( skippedBoard );
+		
+		for ( QuaxBoard b : new BoardPermutations(skippedBoard) ) {
 			if (weakRhombusCount( b ) > currentWeaknesses + 1) {
 				reinforceTiles.add(b.previousMove());
 			}
