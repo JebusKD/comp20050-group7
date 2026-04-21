@@ -201,6 +201,10 @@ public abstract class BotPlayer extends QuaxPlayer {
 		public IntUnaryOperator getOperation();
 		public void execute(QuaxBoard b);
 		
+		public default StrategyOperation auraClone(QuaxCoordinate c) {
+			throw new UnsupportedOperationException("Not supported as an aura.");
+		}
+		
 		public default TileCounts contents(QuaxBoard b) {
 			return new TileCounts(b, getTargets());
 		}
@@ -341,6 +345,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 			this(targets);
 			setOperation(operation);
 		}
+
 	}
 	
 	protected static class OctagonSquareStrategyOperation extends GeneralAbstractStrategyOperation {
@@ -353,6 +358,11 @@ public abstract class BotPlayer extends QuaxPlayer {
 			this.size = size;
 			setCenter(center);
 			setOperation(operation);
+		}
+		
+		@Override
+		public StrategyOperation auraClone(QuaxCoordinate c) {
+			return new OctagonSquareStrategyOperation(c, size, null);
 		}
 		
 		public void setCenter(QuaxCoordinate center) {
@@ -502,6 +512,11 @@ public abstract class BotPlayer extends QuaxPlayer {
 			recalculateOperation();
 		}
 		
+		@Override
+		public StrategyOperation auraClone(QuaxCoordinate c) {
+			return new SprawlStrategyOperation(c, size, null);
+		}
+		
 		public void setSize(int size) {
 			if (size < 0) throw new IllegalArgumentException("Size of operation cannot be negative.");
 			this.size = size;
@@ -549,6 +564,11 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 		}
 		
+		@Override
+		public StrategyOperation auraClone(QuaxCoordinate c) {
+			return new DotStrategyOperation(c, null);
+		}
+		
 		private void recalculateOperation() {
 			targetsClear();
 			targetsAdd(center);
@@ -560,20 +580,31 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 	
+	/*
+	 * Aura Strategy Operation takes the basis and runs the 'aura' for
+	 * every member of the basis.
+	 */
 	protected static class AuraStrategyOperation extends GeneralAbstractStrategyOperation {
 		private int sprawlSize;
 		private HashSet<QuaxCoordinate> basis;
+		private StrategyOperation aura;
 		
-		public AuraStrategyOperation(StrategyOperation basis, int sprawlSize, IntUnaryOperator operation) {
-			this(basis.getTargets(), sprawlSize, operation);
+		public AuraStrategyOperation(StrategyOperation basis, StrategyOperation aura, IntUnaryOperator operation) {
+			this(basis.getTargets(), aura, operation);
 		}
 		
-		public AuraStrategyOperation(Collection<QuaxCoordinate> basis, int sprawlSize, IntUnaryOperator operation) {
+		public AuraStrategyOperation(Collection<QuaxCoordinate> basis, StrategyOperation aura, IntUnaryOperator operation) {
 			super();
 			if ((this.sprawlSize) < 0) throw new IllegalArgumentException("Size of operation cannot be negative.");
+			if ((this.aura = aura) == null) throw new IllegalArgumentException("null aura cannot be provided.");
 			
 			setBasis(basis);
 			setOperation(operation);
+		}
+		
+		public void setAura(StrategyOperation aura) {
+			if ((this.aura = aura) == null) throw new IllegalArgumentException("null aura cannot be provided.");
+			else recalculateOperation();
 		}
 		
 		public void setBasis(StrategyOperation basis) {
@@ -591,9 +622,38 @@ public abstract class BotPlayer extends QuaxPlayer {
 			
 			Set<QuaxCoordinate> result = new HashSet<QuaxCoordinate>();
 			for (QuaxCoordinate c : basis) {
-				result = StrategyOperation.unionTargets(result, new SprawlStrategyOperation(c, this.sprawlSize, null));
+				result = StrategyOperation.unionTargets(result, aura.auraClone(c));
 			}
 			this.targetsAddAll(result);			
+		}
+	}
+	
+	/*
+	 * Selects targets from colours on the current board state.
+	 */
+	protected static class ColourStrategyOperation extends GeneralAbstractStrategyOperation {
+		private QuaxTileColour colour;
+		private QuaxBoard board;
+		
+		public ColourStrategyOperation(QuaxBoard board, QuaxTileColour colour, IntUnaryOperator operation) {
+			super();
+			this.colour = colour;
+			setBoard(board);
+			setOperation(operation);
+			
+		}
+		
+		public void setBoard(QuaxBoard board) {
+			if ((this.board = board) == null) throw new IllegalArgumentException("board cannot be null.");
+		}
+		
+		private void recalculateOperation() {
+			targetsClear();
+			for (QuaxTile t : board) {
+				if (t.getColour() == this.colour) {
+					targetsAdd(t.getCoordinates());
+				}
+			}
 		}
 	}
 }
