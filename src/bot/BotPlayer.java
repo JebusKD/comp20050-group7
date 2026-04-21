@@ -89,7 +89,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 			if (t.isFree()) {
 				QuaxBoard tempCopy = new QuaxBoard(b);
 				
-				tempCopy.makeMove(t.getCoordinates());
+				tempCopy.attemptMakeMove(t.getCoordinates());
 				
 				if (tempCopy.checkForWinningMove())
 					winners.add(t.getCoordinates());

@@ -264,6 +264,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.trackedGroups.remove(g);
 	}
 	
+	// Attempts to make a move, not causing an error if it's invalid.
+	public void attemptMakeMove(QuaxCoordinate q, QuaxTileColour c) {
+		if (validMove(q, c)) makeMove(q, c);
+	}
+	
+	public void attemptMakeMove( QuaxCoordinate c ) {
+		attemptMakeMove(c, currentPlayerColour());
+	}
+	
+	public void attemptMakeMove( QuaxTile t ) {
+		attemptMakeMove( t.getCoordinates() );
+	}
+	
 	public void makeMove(QuaxTile t) {
 		makeMove(t.getCoordinates());
 	}
