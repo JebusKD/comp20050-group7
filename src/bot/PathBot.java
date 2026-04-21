@@ -1,10 +1,8 @@
 package bot;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.IntUnaryOperator;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;
@@ -38,7 +36,7 @@ public class PathBot extends BotPlayer {
 				// Starting as black and need to consider starting location.
 				setAll(getSubmissionBoard(), 0);
 				// Place centrally.
-				centerSprawl(2, (prevValue) -> 1).execute(getSubmissionBoard());
+				centerSprawl(2, (_) -> 1).execute(getSubmissionBoard());
 			}
 			else if (moveNumber == 1) {
 				// Starting as white and need to consider the pie rule.
@@ -53,7 +51,7 @@ public class PathBot extends BotPlayer {
 					new AuraStrategyOperation(
 							new ColourStrategyOperation(getSubmissionBoard(), QuaxTileColour.BLACK, null),
 							centerSprawl(3, null),
-							(prevValue) -> -1)
+							(_) -> -1)
 					.execute(getSubmissionBoard());
 					centerSprawl(2, (prevValue) -> prevValue + 1)
 					.execute(getSubmissionBoard());
