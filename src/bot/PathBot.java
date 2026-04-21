@@ -71,6 +71,7 @@ public class PathBot extends BotPlayer {
 		defendRhombuses(10);
 		exploitWeakRhombuses(40);
 		avoidDefendableRhombuses(20);
+		reinforceWeakRhombuses(100);
 	}
 
 	private void defendRhombuses(int strength) {
@@ -121,6 +122,23 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				weakTiles,
+				(prevValue) -> prevValue + strength);
+	}
+	
+	private void reinforceWeakRhombuses(int strength) {
+		List<QuaxCoordinate> reinforceTiles = new LinkedList<QuaxCoordinate>();
+		int currentWeaknesses = weakRhombusCount( getSubmissionBoard() );
+		
+		for ( QuaxBoard b : new BoardPermutations(getSubmissionBoard()) ) {
+			b.skipTurn();
+			if (weakRhombusCount( b ) < currentWeaknesses - 1) {
+				reinforceTiles.add(b.previousMove());
+			}
+		}
+		
+		SimpleStrategyOperation.simpleExecution(
+				getSubmissionBoard(),
+				reinforceTiles,
 				(prevValue) -> prevValue + strength);
 	}
 

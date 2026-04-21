@@ -129,6 +129,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return validMove(q, currentPlayerColour());
 	}
 	
+	//  Designed for use by bots to analyze the current board state.
+	public void skipTurn() {
+		this.moveNumber++;
+	}
+	
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
         if (q.isOctagonMove()) throw new IllegalArgumentException("Coordinate must be a rhombus tile.");
         if (getTile(q).isFree()) {
