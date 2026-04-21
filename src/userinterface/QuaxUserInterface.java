@@ -222,7 +222,7 @@ public class QuaxUserInterface implements UserInterface {
 		}
 		
 		public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-			if (q.isOctagonMove()) {
+			if (q.isOctagon()) {
                 octagonGridCells[q.x()][q.y()].setColour(c);
             }
 			else {

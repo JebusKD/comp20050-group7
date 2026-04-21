@@ -23,11 +23,11 @@ public class QuaxCoordinate {
 		return this.y;
 	}
 	
-	public boolean isOctagonMove() {
+	public boolean isOctagon() {
 		return octagonMove;
 	}
 	
-	public boolean isRhombusMove() {
+	public boolean isRhombus() {
 		return !octagonMove;
 	}
 }
