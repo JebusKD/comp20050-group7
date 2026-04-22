@@ -27,6 +27,17 @@ public class QuaxUITest {
     }
 
     @Test
+    void ShowTitleExists(FxRobot robot) {
+        assertNotNull(robot.lookup("#Title").query());
+    }
+
+    @Test
+    void ShowTitleTextCorrect(FxRobot robot) {
+        Label winLabel = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax (Human V Bot)", winLabel.getText());
+    }
+
+    @Test
     void ShowStrategyButtonExists(FxRobot robot) {
         assertNotNull(robot.lookup("Show Strategy").query());
     }
@@ -87,8 +98,8 @@ public class QuaxUITest {
 
     @Test
     void RhombusObjectDisplayExists(FxRobot robot){
-        Node turnRhom = robot.lookup("#Rhombus-object").query();
-        assertTrue(turnRhom.isVisible());
+        Node turnRhombus = robot.lookup("#Rhombus-object").query();
+        assertTrue(turnRhombus.isVisible());
     }
 
     @Test
@@ -135,7 +146,7 @@ public class QuaxUITest {
 
     @Test
     void NumberCoordsExist(FxRobot robot){
-        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //theres 22 of each coordinate type, all with the same styling
+        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //there is 22 of each coordinate type, all with the same styling
     }
 
 

@@ -88,6 +88,7 @@ public class QuaxUserInterface implements UserInterface {
 
 		VBox sideBar = initialiseSideBar();
 		Label title = new Label("Quax (Human V Bot)");
+		title.setId("Title");
 		title.getStyleClass().add("custom-title");
 		
 		this.scene = new Scene(initialiseOuterGridPane(title, sideBar));
