@@ -100,6 +100,7 @@ public class QuaxUserInterface implements UserInterface {
 
         Label title = new Label("Quax (Human V Bot)");
         title.getStyleClass().add("custom-title");
+        title.setId("Title");
 
         outer.add(title,0,0);
         outer.add(board.getBoard(),0,1);

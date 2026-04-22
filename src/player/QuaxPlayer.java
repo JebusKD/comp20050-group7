@@ -67,7 +67,9 @@ public abstract class QuaxPlayer {
     	getSubmitter().execute(new Runnable() {
 			@Override
 			public void run() {
-				controller.makeMove(move);
+				if (controller.makeMove(move)) {
+					controller.redoStrategy();
+				}
 			}
 		});
 	}

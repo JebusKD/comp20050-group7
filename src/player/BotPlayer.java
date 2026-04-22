@@ -53,9 +53,11 @@ public abstract class BotPlayer extends QuaxPlayer {
         }
         if(choice == getStratGroup(4) && choice.size() == 0){
             choice = getStratGroup(3);
+         
         }
         if(choice == getStratGroup(3) && choice.size() == 0){
             choice = getStratGroup(2);
+           
         }
 
         if(stratSix != null && stratSix.size() != 0){ //if bot can win, that is highest priority
@@ -72,7 +74,11 @@ public abstract class BotPlayer extends QuaxPlayer {
         }
 
         if(candidateMoves.isEmpty()){ //just in case candiateMoves is somehow empty
-            return null;
+            for (QuaxTile t : b) {
+            	if (b.validMove(t.getCoordinates(), this.getColour())) {
+            		candidateMoves.add(t.getCoordinates());
+            	}
+            }
         }
 
 		int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
