@@ -37,6 +37,8 @@ public class QuaxController {
 
     private final Executor executor;
 
+    private boolean humanPlaysFirst;
+
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
         players = new QuaxPlayer[2];
 
@@ -48,10 +50,10 @@ public class QuaxController {
     }
 
     public QuaxController(Stage stage) {
-        this(stage, true);
+        this(stage, true,false);
     }
 
-    public QuaxController(Stage stage, boolean againstBot) {
+    public QuaxController(Stage stage, boolean againstBot,boolean humanPlaysFirst) {
         ui = new QuaxUserInterface(stage);
 
         players = new QuaxPlayer[2];
@@ -60,10 +62,13 @@ public class QuaxController {
 
         QuaxEventHandler.setup(this, stage);
 
-        //startGame(new BogoBot(), new BogoBot());
-        if (againstBot) startGameAgainstBot();
-        else startTwoPlayerGame();
-
+        if(humanPlaysFirst){
+            startGame(new HumanPlayer(),new BogoBot());
+        }else{
+            //startGame(new BogoBot(), new BogoBot());
+            if (againstBot) startGameAgainstBot();
+            else startTwoPlayerGame();
+        }
     }
 
     public void startTwoPlayerGame() {
@@ -95,11 +100,11 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BogoBot();
 
-        if (RNG.nextInt() % 2 == 0) {
-            startGame(human, bot);
-        } else {
-            startGame(bot, human);
-        }
+            if (RNG.nextInt() % 2 == 0) {
+                startGame(human, bot);
+            } else {
+                startGame(bot, human);
+            }
     }
 
     public QuaxPlayer curPlayer() {

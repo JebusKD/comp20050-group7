@@ -98,7 +98,7 @@ public class QuaxUserInterface implements UserInterface {
 
         GridPane outer = new GridPane();
 
-        Label title = new Label("Quax");
+        Label title = new Label("Quax: Human V Bot");
         title.getStyleClass().add("custom-title");
 
         outer.add(title,0,0);
@@ -119,7 +119,10 @@ public class QuaxUserInterface implements UserInterface {
             strat.fireEvent(new ButtonClickEvent(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT));
         });
 
+        strat.setId("showStrat");
+
         Button hideStrat = new Button("Hide Strategy");
+        hideStrat.setId("hideStrat");
 
         hideStrat.setOnMouseClicked(event -> {
             hideStrat.fireEvent(new ButtonClickEvent(ButtonClickEvent.HIDE_STRATEGY_CLICKED_EVENT));
@@ -143,21 +146,24 @@ public class QuaxUserInterface implements UserInterface {
     }
 
     private VBox initialiseStrategyColourCoding(){
-        Label stratTwo = new Label("Strategy Two");
+        Label stratLabel = new Label("Strategy Value - SV");
+        stratLabel.getStyleClass().add("stratLabel");
+        Label stratTwo = new Label("SV2 - Low priority surrounding tile ");
         stratTwo.getStyleClass().add("stratTwo");
-        Label stratThree = new Label("Strategy Three");
+        Label stratThree = new Label("SV3 - Block opponent ");
         stratThree.getStyleClass().add("stratThree");
-        Label stratFour = new Label("Strategy Four");
+        Label stratFour = new Label("SV4 - Progress self");
         stratFour.getStyleClass().add("stratFour");
-        Label stratFive = new Label("Strategy Five");
+        Label stratFive = new Label("SV5 - Opponent has winning move");
         stratFive.getStyleClass().add("stratFive");
-        Label stratSix = new Label("Strategy Six");
+        Label stratSix = new Label("SV6 - Winning move for self");
         stratSix.getStyleClass().add("stratSix");
 
         VBox stratColourIndicator = new VBox(10);
-        stratColourIndicator.getChildren().addAll(stratTwo,stratThree,stratFour,stratFive,stratSix);
+        stratColourIndicator.getChildren().addAll(stratLabel,stratTwo,stratThree,stratFour,stratFive,stratSix);
         stratColourIndicator.getStyleClass().add("vbox");
         stratColourIndicator.setVisible(false);
+        stratColourIndicator.setId("ColourIndicator");
         return stratColourIndicator;
     }
 

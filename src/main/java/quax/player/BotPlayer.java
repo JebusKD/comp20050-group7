@@ -83,7 +83,7 @@ public abstract class BotPlayer extends QuaxPlayer {
         SplittableRandom random = new SplittableRandom();
         int probability= random.nextInt(1,101);
         if(probability <= 3) return 1;
-        if(probability <= 25) return 2;
+        if(probability <= 15) return 2;
         if(probability <= 45) return 3;
         return 4;
     }
@@ -189,9 +189,10 @@ public abstract class BotPlayer extends QuaxPlayer {
                                     if(this.getColour() == QuaxTileColour.WHITE){
                                         neighbour.setStrategyValue(4);
                                         assignStratGroup(neighbour);
+                                    }else {
+                                        neighbour.setStrategyValue(3);
+                                        assignStratGroup(neighbour);
                                     }
-                                    neighbour.setStrategyValue(3);
-                                    assignStratGroup(neighbour);
                                 }
                             }
                         }
@@ -199,21 +200,21 @@ public abstract class BotPlayer extends QuaxPlayer {
                 }
             }
             if (t instanceof Rhombus && b.validMove(t.getCoordinates(), this.getColour())) {
-                t.setStrategyValue(3);
+                t.setStrategyValue(4);
                 assignStratGroup(t);
                 if (b.validMove(t.getCoordinates(), this.getColour().flip())){
                     t.setStrategyValue(4);
                     assignStratGroup(t);
                 }
 
-                QuaxTileColour humanCol =  this.getColour().flip();
+               QuaxTileColour humanCol =  this.getColour().flip();
                 if(b.validMove(t.getCoordinates(), humanCol)){
                     if(checkForWin(t.getCoordinates(),b,humanCol)){
                         t.setStrategyValue(5);
                         assignStratGroup(t);
                     }
                 }
-                if(checkForWin(t.getCoordinates(),b,this.getColour())){
+               if(checkForWin(t.getCoordinates(),b,this.getColour())){
                     t.setStrategyValue(6);
                     assignStratGroup(t);
                 }

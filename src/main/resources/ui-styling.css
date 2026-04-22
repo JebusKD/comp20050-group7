@@ -39,39 +39,39 @@
     -fx-alignment: center;
 }
 
-.stratindicator-base{
+.stratLabel{
     -fx-font-family : "Georgia";
-    -fx-font-size: 10px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
 .stratTwo{
     -fx-font-family : "Georgia";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill:blue ;
 }
 
 .stratThree{
     -fx-font-family : "Georgia";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill: green;
 }
 
 .stratFour{
     -fx-font-family : "Georgia";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill:red ;
 }
 
 .stratFive{
     -fx-font-family : "Georgia";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill: purple;
 }
 
 .stratSix{
     -fx-font-family : "Georgia";
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill: deeppink;
 }
 

@@ -27,7 +27,7 @@ public class QuaxUITest {
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,false);//human v human game for testing
+        controller = new QuaxController(stage,false,false);//human v human game for testing
     }
 
     @Test

@@ -30,7 +30,7 @@ public class BotUiTest {
     private QuaxController controller;
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,true);//human v bot game now
+        controller = new QuaxController(stage,true,false);//human v bot game now
     }
 
     @Test
@@ -56,5 +56,26 @@ public class BotUiTest {
         else{
             assertEquals(1,controller.getBoard().getMoveNumber()); //robot is BLACK so has moved
         }
+    }
+
+    @Test
+    void StratColourIndicatorAppearsWhenShowStratActive(FxRobot robot){
+        robot.clickOn("#showStrat");
+        assertTrue(robot.lookup("#ColourIndicator").query().isVisible());
+    }
+
+    @Test
+    void StratColourIndicatorDisappearsWhenShowStratInactive(FxRobot robot){
+        robot.clickOn("#showStrat");
+        robot.clickOn("#hideStrat");
+        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
+
+    }
+
+    @Test
+    void hideStratRemovesAllBorders(FxRobot robot){
+        robot.clickOn("#showStrat");
+        robot.clickOn("#hideStrat");
+        assertEquals(221, robot.lookup(".tileoutline-base").queryAll().size());
     }
 }
