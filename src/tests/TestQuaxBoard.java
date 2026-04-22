@@ -23,14 +23,14 @@ class TestQuaxBoard {
 	void testMakeMove1() {
 		board.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.BLACK);
 		
-		assertEquals(board.getTile(new QuaxCoordinate(4, 7, true)).getColour(), QuaxTileColour.BLACK);
+		assertEquals(board.getTile(new QuaxCoordinate(4, 7, true)).getTileColour(), QuaxTileColour.BLACK);
 	}
 	
 	@Test
 	void testMakeMove2() {
 		board.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
 		
-		assertEquals(board.getTile(new QuaxCoordinate(2, 3, true)).getColour(), QuaxTileColour.WHITE);
+		assertEquals(board.getTile(new QuaxCoordinate(2, 3, true)).getTileColour(), QuaxTileColour.WHITE);
 	}
 	
 	@Test
@@ -147,7 +147,7 @@ class TestQuaxBoard {
 		
 		board.makeMove(new QuaxCoordinate(3, 3, true), QuaxTileColour.BLACK);
 		
-		assertEquals(QuaxTileColour.BLACK, neighbours[1][0].getColour());
+		assertEquals(QuaxTileColour.BLACK, neighbours[1][0].getTileColour());
 	}
 	
 	// Checks if the colour of neighbouring tiles are correctly read.
@@ -157,7 +157,7 @@ class TestQuaxBoard {
 		
 		board.makeMove(new QuaxCoordinate(4, 5, true), QuaxTileColour.WHITE);
 		
-		assertEquals(QuaxTileColour.WHITE, neighbours[1][1].getColour());
+		assertEquals(QuaxTileColour.WHITE, neighbours[1][1].getTileColour());
 	}
 	
 	// Ensures the correct entries in neighbours are indeed null/not null

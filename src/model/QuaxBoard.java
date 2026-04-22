@@ -141,7 +141,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, t))) {
 			QuaxTile tile = getTile(q);
-			return tile.getColour() == QuaxTileColour.NONE;
+			return tile.getTileColour() == QuaxTileColour.NONE;
 		}
 
 		return false;
@@ -150,12 +150,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
         QuaxTile[][] n = getNeighbours(q);
 
-        if ((n[0][0].getColour() == c && n[1][1].getColour() == c)
-				|| n[1][0].getColour() == c &&  n[0][1].getColour() == c ) {
-            return true;
-        }
-
-        return false;
+        return (n[0][0].getTileColour() == c && n[1][1].getTileColour() == c)
+                || n[1][0].getTileColour() == c && n[0][1].getTileColour() == c;
     }
 
 	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
@@ -166,7 +162,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		else {
 			tile = rhombusGrid[q.x()][q.y()];
 		}
-		tile.setColour(c);
+		tile.setTileColour(c);
 		assignGroup(tile);
 		this.previousMove = q;
 		this.moveNumber++;
@@ -175,7 +171,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	private void assignGroup(QuaxTile newTile) {
 		QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
-		QuaxTileColour c = newTile.getColour();
+		QuaxTileColour c = newTile.getTileColour();
 		assert c != QuaxTileColour.NONE;
 
 		ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
@@ -187,7 +183,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		for (QuaxTile[] tileArray : neighbours) {
 			for (QuaxTile tile : tileArray) {
-				if (tile != null && tile.getColour().equals(c) && !(nearGroups.contains(tile.getGroup()))) {
+				if (tile != null && tile.getTileColour().equals(c) && !(nearGroups.contains(tile.getGroup()))) {
 					nearGroups.add(tile.getGroup());
 				}
 			}

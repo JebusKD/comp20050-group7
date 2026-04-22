@@ -168,7 +168,7 @@ public class QuaxUserInterface implements UserInterface {
 		else {
 			QuaxCoordinate previousMove = board.previousMove();
 			// TODO - LoD violation??
-        	QuaxTileColour colour = board.getTile(previousMove).getColour();
+        	QuaxTileColour colour = board.getTile(previousMove).getTileColour();
 
             this.setTile(previousMove, colour);
             this.turnIndicator.setColour(colour.flip());
@@ -221,7 +221,7 @@ public class QuaxUserInterface implements UserInterface {
 
 		public void setBoard(QuaxBoard board) {
 			for (QuaxTile tile : board) {
-				setTile(tile.getCoordinates(), tile.getColour());
+				setTile(tile.getCoordinates(), tile.getTileColour());
 			}
 		}
 

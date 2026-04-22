@@ -50,7 +50,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	public void setAll(QuaxBoard board, int value) {
 		for (QuaxTile tile : board) {
-			if (board.validMove(tile.getCoordinates(), this.getColour())) {
+			if (board.validMove(tile.getCoordinates(), this.getPlayerColour())) {
                 tile.setStrategyValue(value);
 			}
 			else {

@@ -41,7 +41,7 @@ public class TestBogoBot {
 		
 		int count = 0;
 		for (QuaxTile t : controller.getQuaxBoard()) {
-			if (t.getColour() == QuaxTileColour.BLACK) {
+			if (t.getTileColour() == QuaxTileColour.BLACK) {
 				count++;
 			}
 		}

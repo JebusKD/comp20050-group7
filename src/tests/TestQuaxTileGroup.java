@@ -2,10 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import types.Octagon;
@@ -82,7 +78,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g.addTile(t);
 		}
 		
@@ -95,7 +91,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g.addTile(t);
 		}
 		
@@ -108,7 +104,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 8);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g.addTile(t);
 		}
 		
@@ -121,7 +117,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 8);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g.addTile(t);
 		}
 		
@@ -173,13 +169,13 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i <= 6; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g1.addTile(t);
 		}
 		
 		for (int i = 7; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g2.addTile(t);
 		}
 		
@@ -194,13 +190,13 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i <= 7; i++) {
 			QuaxTile t = new Octagon(i, 3);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g1.addTile(t);
 		}
 		
 		for (int i = 8; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 3);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g2.addTile(t);
 		}
 		

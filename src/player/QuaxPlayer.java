@@ -9,12 +9,12 @@ import types.*;
 
 public abstract class QuaxPlayer {
 
-	private QuaxTileColour colour;
+	private QuaxTileColour playerColour;
 	private QuaxController controller;
 
 
 	public QuaxPlayer() {
-		this.colour = null;
+		this.playerColour = null;
 		this.controller = null;
 	}
 	
@@ -28,15 +28,14 @@ public abstract class QuaxPlayer {
 		return controller.getExecutor();
 	}
 	
-	public QuaxTileColour getColour() {
-		assertNotNull(colour);
-		return colour;
+	public QuaxTileColour getPlayerColour() {
+		assertNotNull(playerColour);
+		return playerColour;
 	}
 	
-	public void setColour(QuaxTileColour colour) {
+	public void setPlayerColour(QuaxTileColour colour) {
 		assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
-		//assertNotNull(colour);
-        this.colour = colour;
+        this.playerColour = colour;
 	}
 	
 	public abstract void movePrompt(QuaxBoard b);

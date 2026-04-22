@@ -33,10 +33,10 @@ class TestBoardCopying {
 	@Test
 	void testOctagonCopying3() {
 		Octagon o = new Octagon(3, 2);
-		o.setColour(QuaxTileColour.WHITE);
+		o.setTileColour(QuaxTileColour.WHITE);
 		
 		Octagon c = new Octagon(o);
-		assertEquals(QuaxTileColour.WHITE, c.getColour());
+		assertEquals(QuaxTileColour.WHITE, c.getTileColour());
 	}
 	
 	@Test
@@ -71,10 +71,10 @@ class TestBoardCopying {
 	@Test
 	void testRhombusCopying3() {
 		Rhombus o = new Rhombus(3, 2);
-		o.setColour(QuaxTileColour.WHITE);
+		o.setTileColour(QuaxTileColour.WHITE);
 		
 		Rhombus c = new Rhombus(o);
-		assertEquals(QuaxTileColour.WHITE, c.getColour());
+		assertEquals(QuaxTileColour.WHITE, c.getTileColour());
 	}
 	
 	@Test

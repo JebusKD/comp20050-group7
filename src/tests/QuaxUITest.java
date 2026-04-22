@@ -23,7 +23,7 @@ public class QuaxUITest {
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,false);//human v human game for testing
+        controller = new QuaxController(stage, false);//human v human game for testing
     }
 
     @Test
@@ -55,7 +55,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class QuaxUITest {
     void InvalidRhombusPlacement(FxRobot robot){
         QuaxBoard board = controller.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class QuaxUITest {
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK, board.getRhombus(5,5).getTileColour());
     }
 
     @Test

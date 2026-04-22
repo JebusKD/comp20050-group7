@@ -28,14 +28,14 @@ class TestPieRule {
 	void testPieRuleSuccess() {
 		controller.makeMove(new QuaxCoordinate(3, 3, true));
 		controller.doPieRule();
-		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getColour());
+		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getPlayerColour());
 		assertEquals(p1, controller.curPlayer());
 	}
 	
 	@Test
 	void testPieRuleFailure1() {
 		controller.doPieRule();
-		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getColour());
+		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getPlayerColour());
 		assertEquals(p1, controller.curPlayer());
 	}
 	
@@ -44,7 +44,7 @@ class TestPieRule {
 		controller.makeMove(new QuaxCoordinate(3, 3, true));
 		controller.makeMove(new QuaxCoordinate(3, 4, true));
 		controller.doPieRule();
-		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getColour());
+		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getPlayerColour());
 		assertEquals(p1, controller.curPlayer());
 	}
 	
@@ -54,7 +54,7 @@ class TestPieRule {
 		controller.makeMove(new QuaxCoordinate(3, 4, true));
 		controller.makeMove(new QuaxCoordinate(3, 5, true));
 		controller.doPieRule();
-		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getColour());
+		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getPlayerColour());
 		assertEquals(p2, controller.curPlayer());
 	}
 
