@@ -90,8 +90,8 @@ public class PathBot extends BotPlayer {
 		
 		recalculatePaths();
 		
-		extendOurPaths((prevValue, distance) -> prevValue + (prevValue * distance));
-		shrinkEnemyPaths((prevValue, distance) -> prevValue + (prevValue * distance));
+		extendOurPaths((prevValue, distance, curSize) -> prevValue + (prevValue * distance));
+		shrinkEnemyPaths((prevValue, distance, curSize) -> prevValue + (prevValue * distance));
 	}
 	
 	private void recalculatePaths() {
@@ -236,10 +236,22 @@ public class PathBot extends BotPlayer {
 		private void recalculateLength() {
 			QuaxCoordinate[] furthestCoordinates = new QuaxCoordinate[2];
 			Vector<Direction> travelDirections = Direction.favouredDirections(this.colour);
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i <= 1; i++) {
 				furthestCoordinates[i] = travelDirections.get(i).wallCoordinate();
 			}
+			for (QuaxCoordinate c : tangibleTiles) {
+				for (int i = 0; i <= 1; i++) {
+					if (travelDirections.get(i)
+						.compareCoordinateDistance(
+								furthestCoordinates[i],
+								c)
+						> 0) {
+						furthestCoordinates[i] = c;
+					}
+				}
+			}
 			
+			this.length = Math.abs( travelDirections.get(0).compareCoordinateDistance(furthestCoordinates[0], furthestCoordinates[0]) );
 		}
 		
 		public ArrayList<Path> tryFormGhosts(QuaxCoordinate c) {
@@ -336,10 +348,12 @@ public class PathBot extends BotPlayer {
 					return 0;
 				}
 				
+				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.x()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) - (origin.isRhombusMove() ? 1 : 0));
 				}
 				
+				@Override
 				public QuaxCoordinate wallCoordinate() {
 					return new QuaxCoordinate(5, 0, true);
 				}
@@ -365,10 +379,12 @@ public class PathBot extends BotPlayer {
 					return 2;
 				}
 				
+				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.y()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.y()) + (origin.isRhombusMove() ? 1 : 0));
 				}
 				
+				@Override
 				public QuaxCoordinate wallCoordinate() {
 					return new QuaxCoordinate(5, 10, true);
 				}
@@ -394,10 +410,12 @@ public class PathBot extends BotPlayer {
 					return 3;
 				}
 
+				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.x()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) - (origin.isRhombusMove() ? 1 : 0));
 				}
 				
+				@Override
 				public QuaxCoordinate wallCoordinate() {
 					return new QuaxCoordinate(0, 5, true);
 				}
@@ -423,10 +441,12 @@ public class PathBot extends BotPlayer {
 					return 1;
 				}
 				
+				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.x()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) + (origin.isRhombusMove() ? 1 : 0));
 				}
 				
+				@Override
 				public QuaxCoordinate wallCoordinate() {
 					return new QuaxCoordinate(10, 5, true);
 				}
