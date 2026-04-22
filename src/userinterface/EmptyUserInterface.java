@@ -32,7 +32,7 @@ public class EmptyUserInterface implements UserInterface {
 	@Override
 	public void setPieRuleVisibility(boolean visibility) {
 	}
-	
+
 	@Override
 	public void showStrategy(BotPlayer bot) {
     }

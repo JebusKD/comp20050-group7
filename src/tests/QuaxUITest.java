@@ -23,7 +23,18 @@ public class QuaxUITest {
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,false);//human v human game for testing
+        controller = new QuaxController(stage, false);//human v human game for testing
+    }
+
+    @Test
+    void ShowTitleExists(FxRobot robot) {
+        assertNotNull(robot.lookup("#Title").query());
+    }
+
+    @Test
+    void ShowTitleTextCorrect(FxRobot robot) {
+        Label titleLabel = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax (Human V Bot)", titleLabel.getText());
     }
 
     @Test
@@ -44,7 +55,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
     }
 
     @Test
@@ -56,27 +67,27 @@ public class QuaxUITest {
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getBoard().checkForWinningMove());
+        assertTrue(controller.getQuaxBoard().checkForWinningMove());
     }
 
     @Test
     void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
     void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
-        robot.clickOn("#octagon0-0");//just have white turn click somehwere else
+        robot.clickOn("#octagon0-0");//just have white turn click somewhere else
         robot.clickOn("#octagon6-6");
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK, board.getRhombus(5,5).getTileColour());
     }
 
     @Test

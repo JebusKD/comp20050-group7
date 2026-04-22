@@ -2,9 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +20,13 @@ class TestQuaxCoordinate {
 	@Test
 	void testIsOctagonMove() {
 		QuaxTile t = b.getOctagon(5, 1);
-		assertTrue(t.getCoordinates().isOctagonMove());
+		assertTrue(t.getCoordinates().isOctagon());
 	}
 	
 	@Test
-	void testIsRhombusMove() {
+	void testIsRhombus() {
 		QuaxTile t = b.getRhombus(6, 4);
-		assertTrue(t.getCoordinates().isRhombusMove());
+		assertTrue(t.getCoordinates().isRhombus());
 	}
 	
 	@Test

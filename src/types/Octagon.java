@@ -2,9 +2,11 @@ package types;
 
 public class Octagon extends QuaxTile {
 
+	// TODO - Move to parent class?
 	private final int xPosition;
 	private final int yPosition;
-	
+
+
 	public Octagon(int x, int y) {
 		super();
 		this.xPosition = x;
@@ -21,30 +23,22 @@ public class Octagon extends QuaxTile {
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPosition, yPosition, true);
 	}
-	
+
 	@Override
 	public boolean onLow() {
 		if (isFree()) {
             return false;
         }
-		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 10;
-        }
 
-		return xPosition == 0;
+		return (xPosition == 0 && isWhite()) || (yPosition == 10 && isBlack());
 	}
-	
+
 	@Override
 	public boolean onHigh() {
 		if (isFree()) {
             return false;
         }
-		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 0;
-        }
 
-        return xPosition == 10;
+		return (xPosition == 10 && isWhite()) || (yPosition == 0 && isBlack());
 	}
 }

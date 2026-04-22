@@ -2,14 +2,9 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import types.Rhombus;
-import types.Octagon;
 import types.QuaxCoordinate;
 import types.QuaxTile;
 import types.QuaxTileColour;
@@ -75,147 +70,147 @@ class TestRhombus {
 	@Test
 	void testOnLow1() {
 		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow2() {
 		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow3() {
 		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow4() {
 		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow5() {
 		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow6() {
 		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow7() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow8() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnLow9() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onLow());
 	}
 	
 	@Test
 	void testOnHigh1() {
 		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh2() {
 		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh3() {
 		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh4() {
 		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh5() {
 		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh6() {
 		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh7() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh8() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testOnHigh9() {
 		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
 	
 	@Test
 	void testIsFree1() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
 	void testIsFree2() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
 	void testIsFree3() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertTrue(t.isFree());
 	}
 	
