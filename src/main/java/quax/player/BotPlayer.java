@@ -11,6 +11,7 @@ import quax.types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
+	private static final long MIN_THINKING_TIME = 1000;
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	
 	static final Random RNG = new Random();
@@ -22,6 +23,8 @@ public abstract class BotPlayer extends QuaxPlayer {
     private QuaxTileStrategyGroup stratSix;
 
     private QuaxTileStrategyGroup[] stratGroups;
+    
+    private long startThinkingTime;
 
 	public BotPlayer() {
 		super();
@@ -249,8 +252,13 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	@Override
 	public void movePrompt(QuaxBoard b) {
+		startThinkingTime = System.currentTimeMillis();
+		
         this.getExecutor().execute(() -> {
-            submitMove(computeMove(b));
+        	QuaxCoordinate move = computeMove(b);
+        	
+        	while (System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME);
+            submitMove(move);
         });
 	}
 	
