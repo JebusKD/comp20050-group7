@@ -33,6 +33,7 @@ import types.QuaxCoordinateEvent;
 import types.QuaxTile;
 import static model.QuaxBoard.MAX_OCTAGONS;
 import static model.QuaxBoard.MAX_RHOMBUSES;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class QuaxUserInterface implements UserInterface {
 
@@ -49,19 +50,19 @@ public class QuaxUserInterface implements UserInterface {
 		"/userinterface/stylesheets/button-styling.css"
 	};
 	
-	private Stage stage;
-	
-	private UserInterfaceBoard board;
+
+	private UserInterfaceBoard quaxUIBoard;
 	private PlayerTurnIndicator turnIndicator;
-	
+
+	private Stage stage;
 	private Label winLabel;
 	private Scene scene;
 	private Button pieRuleButton;
 
     public QuaxUserInterface(Stage stage) {
+		this.quaxUIBoard = new UserInterfaceBoard();
 		this.stage = stage;
-		this.board = new UserInterfaceBoard();
-		
+
 		initialiseWindow();
 		initialiseStylesheets();
 		
@@ -77,6 +78,7 @@ public class QuaxUserInterface implements UserInterface {
 	private void initialiseStylesheets() {
 		ObservableList<String> sheets = scene.getStylesheets();
 		for (String stylesheet : STYLESHEETS) {
+			assertNotNull(getClass().getResource(stylesheet));
 			sheets.add(getClass().getResource(stylesheet).toExternalForm());
 		}
 	}
@@ -104,7 +106,7 @@ public class QuaxUserInterface implements UserInterface {
 		GridPane outer = new GridPane();
 
 		outer.add(title,0,0);
-		outer.add(board.getBoard(),0,1);
+		outer.add(quaxUIBoard.getBoard(),0,1);
 		outer.add(sideBar,1,1);
 		outer.setAlignment(Pos.CENTER);
 
@@ -176,12 +178,12 @@ public class QuaxUserInterface implements UserInterface {
 	
 	@Override
 	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-		board.setTile(q, c);
+		quaxUIBoard.setTile(q, c);
 	}
 	
 	@Override
 	public void setBoard(QuaxBoard b) {
-		board.setBoard(b);
+		quaxUIBoard.setBoard(b);
 		setPieRuleVisibility(b.isPieRuleValid());
 	}
 	
