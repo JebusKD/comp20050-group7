@@ -135,6 +135,7 @@ public class QuaxUserInterface implements UserInterface {
         });
 
         pieRuleButton.setId("PieRule");
+        setPieRuleVisibility(false);
 
         strat.getStyleClass().add("button3");
         hideStrat.getStyleClass().add("button3");
@@ -185,6 +186,12 @@ public class QuaxUserInterface implements UserInterface {
             QuaxTileColour colour = board.getTile(previousMove).getColour();
             this.setTile(previousMove, colour);
             this.turnIndicator.setColour(colour.flip());
+            
+            if (board.isPieRuleValid()) {
+            	this.setPieRuleVisibility(true);
+            } else {
+            	this.setPieRuleVisibility(false);
+            }
         }
     }
 
@@ -194,6 +201,13 @@ public class QuaxUserInterface implements UserInterface {
 
     public void setBoard(QuaxBoard b) {
         board.setBoard(b);
+        
+        if (b.isPieRuleValid()) {
+			setPieRuleVisibility(true);
+		}
+		else {
+			setPieRuleVisibility(false);
+		}
     }
 
     public Scene getScene() {
