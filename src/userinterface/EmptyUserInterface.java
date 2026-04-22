@@ -1,6 +1,7 @@
 package userinterface;
 
 import model.QuaxBoard;
+import player.BotPlayer;
 import types.QuaxCoordinate;
 import types.QuaxTileColour;
 
@@ -31,5 +32,13 @@ public class EmptyUserInterface implements UserInterface {
 	@Override
 	public void setPieRuleVisibility(boolean visibility) {
 	}
+	
+	@Override
+	public void showStrategy(BotPlayer bot) {
+    }
+
+    @Override
+    public void hideStrategy(QuaxBoard board) {
+    }
 
 }

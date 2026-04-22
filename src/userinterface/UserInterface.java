@@ -1,8 +1,8 @@
 package userinterface;
 
 import model.QuaxBoard;
-import types.QuaxCoordinate;
-import types.QuaxTileColour;
+import player.BotPlayer;
+import types.*;
 
 public interface UserInterface {
 
@@ -17,4 +17,8 @@ public interface UserInterface {
 	public void setBoard(QuaxBoard b);
 	
 	public void setPieRuleVisibility(boolean visibility);
+
+	public void showStrategy(BotPlayer bot);
+	
+	public void hideStrategy(QuaxBoard board);
 }

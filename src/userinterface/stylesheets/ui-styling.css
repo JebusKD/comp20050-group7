@@ -34,10 +34,47 @@
 
 .custom-title{
     -fx-font-family : "Georgia";
-    -fx-font-size: 35px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
+
+.stratLabel{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.stratTwo{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill:blue ;
+}
+
+.stratThree{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: green;
+}
+
+.stratFour{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill:red ;
+}
+
+.stratFive{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: purple;
+}
+
+.stratSix{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: deeppink;
+}
+
 
 .board-border{
     -fx-border-color: #000
@@ -50,19 +87,37 @@
 .coordinate-letter-style{
     -fx-font-family : Arial;
     -fx-font-weight: bolder;
-	-fx-font-size: 10px;
     -fx-text-fill: #FFFF;
 }
 
 .coordinate-number-style{
     -fx-font-family : Arial;
     -fx-font-weight: bolder;
-    -fx-font-size: 12px;
+    -fx-font-size: 15px;
     -fx-text-fill: #000;
 }
 
-.turn-indicator-shape {
-    -fx-stroke : #0F496B;
+.tileoutline-base {
     -fx-stroke-type:inside;
-    -fx-stroke-width: 3;
+    -fx-stroke-width:3;
+}
+
+.tileoutline-base.tileoutline-0 {
+    -fx-stroke:red;
+}
+
+.tileoutline-base.tileoutline-1 {
+    -fx-stroke:blue;
+}
+
+.tileoutline-base.tileoutline-2{
+    -fx-stroke:green;
+}
+
+.tileoutline-base.tileoutline-3{
+    -fx-stroke:purple;
+}
+
+.tileoutline-base.tileoutline-4{
+    -fx-stroke: hotpink;
 }

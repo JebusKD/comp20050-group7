@@ -1,7 +1,9 @@
 package player;
 
+import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.QuaxCoordinate;
+import types.QuaxTileColour;
 
 public class BogoBot extends BotPlayer {
 
@@ -10,8 +12,10 @@ public class BogoBot extends BotPlayer {
 	}
 
 	@Override
-	protected QuaxCoordinate computeMove(QuaxBoard board) {
-        setAll(board, 1);
-        return decideMove(board);
-    }
+	protected QuaxCoordinate computeMove(QuaxBoard b) {
+
+        setUpStrategy(b);
+		return decideMove(b);
+	}
+	
 }
