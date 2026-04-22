@@ -17,7 +17,7 @@ public class QuaxController {
 	private final Executor executor;
 
 	private final UserInterface userInterface;
-	private QuaxBoard board;
+	private QuaxBoard quaxBoard;
 	private final QuaxPlayer[] players;
 
 
@@ -56,7 +56,7 @@ public class QuaxController {
 	}
 	
 	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-		this.board = new QuaxBoard();
+		this.quaxBoard = new QuaxBoard();
 		this.players[0] = p1;
 		this.players[1] = p2;
 		
@@ -66,9 +66,9 @@ public class QuaxController {
 		p1.setController(this);
 		p2.setController(this);
 		
-		userInterface.setBoard(board);
+		userInterface.setBoard(quaxBoard);
 	
-		curPlayer().movePrompt(board);
+		curPlayer().movePrompt(quaxBoard);
 	}
 
 	public void startGameAgainstBot() {
@@ -94,41 +94,41 @@ public class QuaxController {
 	}
 	
 	public int getMoveNumber() {
-		return board.getMoveNumber();
+		return quaxBoard.getMoveNumber();
 	}
 	
 	public void makeMove(QuaxCoordinate coords) {
 		QuaxTileColour c = curPlayer().getColour();
-		if (board.validMove(coords, c)) {
-			board.makeMove(coords, c);
+		if (quaxBoard.validMove(coords, c)) {
+			quaxBoard.makeMove(coords, c);
 
-			userInterface.updateFromPreviousMove(board);
+			userInterface.updateFromPreviousMove(quaxBoard);
 
 			didMoveWin(c);
 		}
 	}
 
 	private void didMoveWin(QuaxTileColour c) {
-		if (board.checkForWinningMove()) {
+		if (quaxBoard.checkForWinningMove()) {
 			userInterface.showWinLabel(c);
 			userInterface.hideTurnTracker();
 		}
 		else {
-			curPlayer().movePrompt(board);
+			curPlayer().movePrompt(quaxBoard);
 		}
 	}
 
-	public QuaxBoard getBoard() {
-		return this.board;
+	public QuaxBoard getQuaxBoard() {
+		return this.quaxBoard;
 	}
 
 	public void doPieRule() {
-		if (board.attemptPieRule()) {
+		if (quaxBoard.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
 			players[1].setColour(QuaxTileColour.BLACK);
 
 			userInterface.setPieRuleVisibility(false);
-			curPlayer().movePrompt(getBoard());
+			curPlayer().movePrompt(getQuaxBoard());
 		}
 	}
 	

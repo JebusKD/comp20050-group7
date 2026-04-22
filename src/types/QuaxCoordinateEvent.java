@@ -7,23 +7,23 @@ public class QuaxCoordinateEvent extends Event {
 
 	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 
-	private QuaxCoordinate coord;
+	private QuaxCoordinate coordinate;
 
 
 	public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
 		super(t);
-		this.coord = q;
+		this.coordinate = q;
 	}
 	
 	public int x() {
-		return coord.x();
+		return coordinate.x();
 	}
 	
 	public int y() {
-		return coord.y();
+		return coordinate.y();
 	}
 
 	public QuaxCoordinate coords() {
-		return this.coord;
+		return this.coordinate;
 	}
 }
