@@ -1,8 +1,12 @@
 package bot;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Vector;
 import java.util.function.IntUnaryOperator;
 
 import model.QuaxBoard;
@@ -82,11 +86,14 @@ public class PathBot extends BotPlayer {
 		modifyUnnecesaryRhombuses((prevValue) -> prevValue - 2);
 		modifyReinforceWeakness((prevValue) -> prevValue + 100);
 		
-		paths.rebuild();
+		rebuildPaths();
 		
-		modifyForwardSnares((prevValue) -> prevValue * 5);
-		modifyForwardHops((prevValue) -> prevValue * 4);
-		modifyForwardSteps((prevValue) -> prevValue * 2);
+		extendOurPaths((prevValue, distance) -> prevValue + (prevValue * distance));
+		shrinkEnemyPaths((prevValue, distance) -> prevValue + (prevValue * distance));
+	}
+	
+	private void rebuildPaths() {
+		
 	}
 
 	private void modifyVulnerableRhombuses(IntUnaryOperator op) {
@@ -184,7 +191,118 @@ public class PathBot extends BotPlayer {
 	
 	private static class Path {
 		
+		private final QuaxTileColour colour;
+		private QuaxBoard board;
+		private final HashSet<QuaxCoordinate> tangibleTiles;
+		private final HashSet<QuaxCoordinate> ghostTiles;
 		
+		private Path(QuaxTileColour colour, QuaxBoard board) {
+			// TODO change to assert
+			if ((this.colour = colour) == QuaxTileColour.NONE) throw new IllegalArgumentException("Cannot be constructed with no colour.");
+			this.board = board;
+			this.tangibleTiles = new HashSet<QuaxCoordinate>();
+			this.ghostTiles = new HashSet<QuaxCoordinate>();
+		}
+		
+		private Path(Path original) {
+			this.colour = original.colour;
+			this.board = original.board;
+			this.tangibleTiles = new HashSet<QuaxCoordinate>(original.tangibleTiles);
+			this.ghostTiles = new HashSet<QuaxCoordinate>(original.ghostTiles);
+
+		}
+		
+		public ArrayList<Path> tryConnect(QuaxCoordinate c) {
+			ArrayList<Path> newPaths = new ArrayList<Path>(4);
+			if (ghostTiles.contains(c) || adjacent(c)) {
+				newPaths.add( copyPathAndAdd(c) );
+			} else {
+				newPaths.addAll( tryFormGhosts(c) );
+			}
+			return newPaths;
+		}
+		
+		public int getLength() {
+			
+		}
+		
+		private recalculateLength() {
+			QuaxCoordinate[] furthestCoordinates = new QuaxCoordinate[2];
+			
+		}
+		
+		public ArrayList<Path> tryFormGhosts(QuaxCoordinate c) {
+			
+		}
+		
+		public boolean adjacent(QuaxCoordinate c) {
+			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
+				if (tangibleTiles.contains(n)) return true;
+			}
+			return false;
+		}
+		
+		public HashSet<QuaxCoordinate> adjacentGhosts(QuaxCoordinate c) {
+			HashSet<QuaxCoordinate> ghosts = new HashSet<>();
+			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
+				if (ghostTiles.contains(n)) ghosts.add(n);
+			}
+			return ghosts;
+		}
+		
+		public int countTangibleTiles() {
+			return tangibleTiles.size();
+		}
+		
+		public int countGhostTiles() {
+			return ghostTiles.size();
+		}
+		
+		public int countTotalTiles() {
+			return countTangibleTiles() + countGhostTiles();
+		}
+		
+		public void addTangibleTile(QuaxCoordinate c) {
+			ghostTiles.remove(c);
+			tangibleTiles.add(c);
+		}
+		
+		public void addGhostTile(QuaxCoordinate c) {
+			if (!tangibleTiles.contains(c))
+				ghostTiles.add(c);
+		}
+		
+		public Vector<Direction> favouredDirections() {
+			return Direction.favouredDirections(colour);
+		}
+		
+		public Path copyPathAndAdd(QuaxCoordinate c) {
+			Path newPath = new Path(this);
+			newPath.addTangibleTile(c);
+			return newPath;
+		}
+		
+		public static Path newPath(QuaxBoard b, QuaxCoordinate c) {
+			Path newPath = new Path(b.getTileColour(c), b);
+			newPath.addTangibleTile(c);
+			return newPath;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Path other = (Path) obj;
+			return colour == other.colour && Objects.equals(ghostTiles, other.ghostTiles)
+					&& Objects.equals(tangibleTiles, other.tangibleTiles);
+		}
+
+
+
 		private static enum Direction {
 			UP {
 				@Override
@@ -200,6 +318,19 @@ public class PathBot extends BotPlayer {
 				@Override
 				public Direction rotateCounterClockwise() {
 					return LEFT;
+				}
+				
+				@Override
+				public int index() {
+					return 0;
+				}
+				
+				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
+					return ((2 * point.x()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) - (origin.isRhombusMove() ? 1 : 0));
+				}
+				
+				public QuaxCoordinate wallCoordinate() {
+					return new QuaxCoordinate(5, 0, true);
 				}
 			},
 			DOWN {
@@ -217,6 +348,19 @@ public class PathBot extends BotPlayer {
 				public Direction rotateCounterClockwise() {
 					return RIGHT;
 				}
+				
+				@Override
+				public int index() {
+					return 2;
+				}
+				
+				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
+					return ((2 * point.y()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.y()) + (origin.isRhombusMove() ? 1 : 0));
+				}
+				
+				public QuaxCoordinate wallCoordinate() {
+					return new QuaxCoordinate(5, 10, true);
+				}
 			},
 			LEFT {
 				@Override
@@ -232,6 +376,19 @@ public class PathBot extends BotPlayer {
 				@Override
 				public Direction rotateCounterClockwise() {
 					return DOWN;
+				}
+				
+				@Override
+				public int index() {
+					return 3;
+				}
+
+				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
+					return ((2 * point.x()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) - (origin.isRhombusMove() ? 1 : 0));
+				}
+				
+				public QuaxCoordinate wallCoordinate() {
+					return new QuaxCoordinate(0, 5, true);
 				}
 			},
 			RIGHT {
@@ -249,10 +406,43 @@ public class PathBot extends BotPlayer {
 				public Direction rotateCounterClockwise() {
 					return UP;
 				}
+				
+				@Override
+				public int index() {
+					return 1;
+				}
+				
+				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
+					return ((2 * point.x()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) + (origin.isRhombusMove() ? 1 : 0));
+				}
+				
+				public QuaxCoordinate wallCoordinate() {
+					return new QuaxCoordinate(10, 5, true);
+				}
 			};
 			public abstract Direction flip();
 			public abstract Direction rotateClockwise();
 			public abstract Direction rotateCounterClockwise();
+			public abstract int index();
+			public abstract int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point);
+			public abstract QuaxCoordinate wallCoordinate();
+			
+			public static Vector<Direction> favouredDirections(QuaxTileColour c) {
+				Vector<Direction> v = new Vector<>(2);
+				switch (c) {
+				case BLACK:
+					v.add(UP);
+					v.add(DOWN);
+					break;
+				case WHITE:
+					v.add(LEFT);
+					v.add(RIGHT);
+					break;
+				case NONE:
+					throw new IllegalArgumentException("Colour cannot be NONE.");
+				}
+				return v;
+			}
 		}
 	}
 

@@ -69,6 +69,10 @@ public class QuaxCoordinate {
 		return neighbours;
 	}
 	
+	public boolean againstWall() {
+		return isOctagonMove() && (x == 0 || y == 0 || x == 10 || y == 10);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
