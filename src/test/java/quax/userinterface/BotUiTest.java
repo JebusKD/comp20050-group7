@@ -28,7 +28,6 @@ import quax.types.QuaxTileColour;
 public class BotUiTest {
 
     private QuaxController controller;
-
     @Start
     public void start(Stage stage) throws Exception {
         controller = new QuaxController(stage,true);//human v bot game now

@@ -1,133 +1,119 @@
 package quax.controller;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import quax.model.QuaxBoard;
 import quax.player.BogoBot;
+import quax.player.BotPlayer;
 import quax.player.HumanPlayer;
 import quax.player.QuaxPlayer;
 import quax.types.QuaxCoordinate;
 import quax.types.QuaxCoordinateEvent;
 import quax.types.QuaxTileColour;
+import quax.userinterface.EmptyUserInterface;
 import quax.userinterface.QuaxUserInterface;
 import quax.types.ButtonClickEvent;
+import quax.userinterface.UserInterface;
+import java.util.concurrent.Executor;
+import quax.userinterface.QuaxEventHandler;
 
 import java.util.Random;
+import java.util.concurrent.Executor;
 
 public class QuaxController {
 
     static final Random RNG = new Random();
 
-    public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
-    public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-    public static final EventType<ButtonClickEvent> PIE_RULE_CLICKED_EVENT = new EventType<>("pieRuleClickedEvent");
-
-    private Stage stage;
-
-    private QuaxUserInterface ui;
+    private final UserInterface ui;
 
     private QuaxBoard board;
 
-    private QuaxPlayer[] players;
+    private final QuaxPlayer[] players;
 
-    public QuaxController(Stage stage) {
-        this(stage,true); //by default, bot game is always true
+    private boolean showingStrategy = false;
+
+    private final Executor executor;
+
+    public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
+        players = new QuaxPlayer[2];
+
+        this.ui = new EmptyUserInterface();
+
+        this.executor = new SingleThreadExecutor();
+
+        startGame(p1, p2);
     }
 
-    public QuaxController(Stage stage,boolean checkBotGame){
-        this.stage = stage;
+    public QuaxController(Stage stage) {
+        this(stage, true);
+    }
+
+    public QuaxController(Stage stage, boolean againstBot) {
         ui = new QuaxUserInterface(stage);
 
         players = new QuaxPlayer[2];
 
-        stage.addEventHandler(QuaxController.TILE_CLICKED_EVENT, new EventHandler<>() {
-            @Override
-            public void handle(QuaxCoordinateEvent coords) {
+        this.executor = new JavaFXThreadedExecutor();
 
-                if (curPlayer() instanceof HumanPlayer) {
-                    makeMove(coords.coords());
-                }
-            }
-        });
+        QuaxEventHandler.setup(this, stage);
 
-        stage.addEventHandler(QuaxController.MOVE_SUBMITTED_EVENT, new EventHandler<>() {
-            @Override
-            public void handle(QuaxCoordinateEvent coords) {
-                makeMove(coords.coords());
-            }
-        });
-
-        stage.addEventHandler(QuaxController.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
-            @Override
-            public void handle(ButtonClickEvent event) {
-                if (curPlayer() instanceof HumanPlayer && doPieRule()) {
-                    ui.setPieRuleVisibility(false);
-
-                    curPlayer().movePrompt(board);
-                }
-            }
-        });
-
-        if(checkBotGame){
-            startGameAgainstBot();
-        }
-        else{
-            startTwoPlayerGame();
-        }
+        //startGame(new BogoBot(), new BogoBot());
+        if (againstBot) startGameAgainstBot();
+        else startTwoPlayerGame();
 
     }
 
-    // TODO Keep for testing - Remove on final submission
     public void startTwoPlayerGame() {
 
-        QuaxPlayer p1 = new HumanPlayer("Player 1", QuaxTileColour.BLACK, stage);
-        QuaxPlayer p2 = new HumanPlayer("Player 2", QuaxTileColour.WHITE, stage);
+        QuaxPlayer p1 = new HumanPlayer();
+        QuaxPlayer p2 = new HumanPlayer();
 
         startGame(p1, p2);
     }
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
         this.board = new QuaxBoard();
-        ui.setBoard(board);
 
         players[0] = p1;
         players[1] = p2;
 
-        ui.setPieRuleVisibility(true);
+        p1.setColour(QuaxTileColour.BLACK);
+        p2.setColour(QuaxTileColour.WHITE);
+
+        p1.setController(this);
+        p2.setController(this);
+
+        ui.setBoard(board);
+
         curPlayer().movePrompt(board);
     }
 
     public void startGameAgainstBot() {
+        QuaxPlayer human = new HumanPlayer();
+        QuaxPlayer bot = new BogoBot();
 
         if (RNG.nextInt() % 2 == 0) {
-            QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.BLACK, stage);
-            QuaxPlayer bot = new BogoBot(QuaxTileColour.WHITE, stage);
-
             startGame(human, bot);
-        }
-        else {
-            QuaxPlayer human = new HumanPlayer("Player", QuaxTileColour.WHITE, stage);
-            QuaxPlayer bot = new BogoBot(QuaxTileColour.BLACK, stage);
-
+        } else {
             startGame(bot, human);
         }
     }
 
     public QuaxPlayer curPlayer() {
-        return players[board.getMoveNumber() % 2];
+        return players[getMoveNumber() % 2];
     }
 
-    //for testing purposes
-    public QuaxTileColour getPlayerColour(int i){
-        if(i == 0){
-            return players[0].getColour();
-        }
-        else if(i == 1){
-            return players[1].getColour();
-        }
-        return null;
+    // for testing purposes
+    public QuaxTileColour getPlayerColour(int i) {
+        if (i == 0 || i == 1) return players[i].getColour();
+        else throw new IllegalArgumentException("Only players 0 and 1 exist.");
+    }
+
+    public int getMoveNumber() {
+        return board.getMoveNumber();
     }
 
     public void makeMove(QuaxCoordinate coords) {
@@ -140,9 +126,9 @@ public class QuaxController {
             if (board.checkForWinningMove()) {
                 ui.showWinLabel(c);
                 ui.hideTurnTracker();
-            }
-            else {
+            } else {
                 curPlayer().movePrompt(board);
+                redoStrategy();
             }
         }
     }
@@ -155,9 +141,61 @@ public class QuaxController {
         if (board.attemptPieRule()) {
             players[0].setColour(QuaxTileColour.WHITE);
             players[1].setColour(QuaxTileColour.BLACK);
+            ui.setPieRuleVisibility(false);
+            curPlayer().movePrompt(getBoard());
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
+    public BotPlayer getBot() {
+        for (QuaxPlayer p : players) {
+            if (p instanceof BotPlayer) return (BotPlayer) p;
+        }
+        return null;
+    }
+
+    public void showStrategy() {
+        showingStrategy = true;
+        BotPlayer bot = getBot();
+        if (bot != null) {
+            bot.setUpStrategy(board);
+            ui.showStrategy(bot);
+        }
+    }
+
+    public void redoStrategy() {
+        if (showingStrategy) {
+            BotPlayer bot = getBot();
+            if (bot != null) {
+                ui.hideStrategy(board);
+                bot.setUpStrategy(board);
+                ui.showStrategy(bot);
+            }
+        }
+    }
+
+    public void hideStrategy() {
+        showingStrategy = false;
+        ui.hideStrategy(board);
+    }
+
+    public Executor getExecutor() {
+        return this.executor;
+    }
+
+    public void setPieRuleVisibility(boolean visibility) {
+        ui.setPieRuleVisibility(visibility);
+    }
+
+    public static class SingleThreadExecutor implements Executor {
+        public void execute(Runnable r) {
+            r.run();
+        }
+    }
+
+    public static class JavaFXThreadedExecutor implements Executor {
+        public void execute(Runnable r) {
+            Platform.runLater(r);
+        }
+    }
 }

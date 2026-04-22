@@ -12,18 +12,12 @@ import quax.types.QuaxTileColour;
 
 public class HumanPlayer extends QuaxPlayer {
 
-    private String name;
-
-    public HumanPlayer(String name, QuaxTileColour colour, Stage stage) {
-        super(colour, stage);
-        this.name = name;
+    public HumanPlayer() {
+        super();
     }
 
     @Override
-    public void movePrompt(QuaxBoard board) {
-        System.out.println(name + "'s move.");
-
-
+    public void movePrompt(QuaxBoard b) {
     }
 
 

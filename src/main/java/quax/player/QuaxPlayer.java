@@ -8,33 +8,52 @@ import quax.model.QuaxBoard;
 import quax.types.QuaxCoordinate;
 import quax.types.QuaxCoordinateEvent;
 import quax.types.QuaxTileColour;
+import java.util.concurrent.Executor;
 
 public abstract class QuaxPlayer {
 
     private QuaxTileColour colour;
+    private QuaxController controller;
 
-    private Stage stage;
+    public QuaxPlayer() {
+        this.colour = null;
+        this.controller = null;
+    }
 
-    public QuaxPlayer(QuaxTileColour colour, Stage stage) {
-        this.setColour(colour);
-        this.stage = stage;
+    public void setController(QuaxController controller) {
+        this.controller = controller;
+    }
+
+    protected Executor getExecutor() {
+        if (controller == null) {
+            throw new IllegalStateException("Player not initialised to a controller.");
+        }
+        else {
+            return controller.getExecutor();
+        }
     }
 
     public QuaxTileColour getColour() {
-        return this.colour;
+        if (this.colour == null) {
+            throw new IllegalStateException("Player not initialised to a controller.");
+        }
+        else {
+            return this.colour;
+        }
     }
 
     public void setColour(QuaxTileColour colour) {
-        if (colour == QuaxTileColour.NONE)
-            throw new IllegalArgumentException("Player cannot be assigned to no colour.");
-        else this.colour = colour;
+        if (colour == QuaxTileColour.NONE || colour == null) {
+            throw new IllegalArgumentException("Invalid colour assigned to player " + colour);
+        }
+        else {
+            this.colour = colour;
+        }
     }
 
     public abstract void movePrompt(QuaxBoard b);
 
     protected void submitMove(QuaxCoordinate move) {
-        QuaxCoordinateEvent submission = new QuaxCoordinateEvent(QuaxController.MOVE_SUBMITTED_EVENT, move);
-
-        Event.fireEvent(stage, submission);
+        controller.makeMove(move);
     }
 }

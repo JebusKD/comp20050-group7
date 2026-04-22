@@ -3,22 +3,30 @@ package quax.types;
 public abstract class QuaxTile {
 
     private QuaxTileColour colour;
+    private QuaxTileBorder border;
     private QuaxTileGroup group;
+    private QuaxTileStrategyGroup strategyGroup;
     private int strategyValue;
 
     public QuaxTile() {
         this.colour = QuaxTileColour.NONE;
+        this.border = QuaxTileBorder.NONE;
         this.group = null;
         this.strategyValue = 0;
     }
     public QuaxTile(QuaxTile t) {
         this.colour = t.colour;
+        this.border = t.border;
         this.strategyValue = t.strategyValue;
         this.group = null; // Groups aren't copied, add in the board after the fact.
     }
 
     public QuaxTileColour getColour() {
         return this.colour;
+    }
+
+    public QuaxTileBorder getBorder() {
+        return this.border;
     }
 
     public QuaxTileGroup getGroup() {
@@ -33,9 +41,13 @@ public abstract class QuaxTile {
         this.colour = colour;
     }
 
+    public void setBorder(QuaxTileBorder border) {this.border = border;}
+
     public void setGroup(QuaxTileGroup group) {
         this.group = group;
     }
+
+    public void setStrategyGroup(QuaxTileStrategyGroup strategyGroup) {this.strategyGroup = strategyGroup;}
 
     public boolean isFree() {
         return this.colour == QuaxTileColour.NONE;

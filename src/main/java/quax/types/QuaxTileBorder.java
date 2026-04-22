@@ -21,6 +21,11 @@ public enum QuaxTileBorder {
             return "tileoutline-3";
         }
     },
+    PINK{
+        public String tileborderStyle() {
+            return "tileoutline-4";
+        }
+    },
     BLUE{
         public String tileborderStyle() {
             return "tileoutline-1";

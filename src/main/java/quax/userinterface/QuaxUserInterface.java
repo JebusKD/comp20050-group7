@@ -26,19 +26,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import quax.model.QuaxBoard;
-import quax.types.QuaxTileColour;
-import quax.types.QuaxTileGroup;
-import quax.types.QuaxCoordinate;
-import quax.types.QuaxCoordinateEvent;
-import quax.types.QuaxTile;
+import quax.player.BotPlayer;
+import quax.types.*;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.css.Styleable;
-import quax.types.ButtonClickEvent;
+
 import static quax.model.QuaxBoard.MAX_OCTAGONS;
 import static quax.model.QuaxBoard.MAX_RHOMBUSES;
 
-public class QuaxUserInterface {
+public class QuaxUserInterface implements UserInterface {
 
     private static final double OCTAGON_WIDTH = 40;
     private static final double OCTAGON_GRID_GAP = 1;
@@ -54,6 +51,7 @@ public class QuaxUserInterface {
 
     private UserInterfaceBoard board;
     private PlayerTurnIndicator turnIndicator;
+    private VBox stratColourIndicator;
 
     private Label winLabel;
 
@@ -93,7 +91,9 @@ public class QuaxUserInterface {
         winLabel.setVisible(false);
         winLabel.getStyleClass().add("win-label");
 
-        sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel);
+        this.stratColourIndicator = initialiseStrategyColourCoding();
+
+        sideBar.getChildren().addAll(this.turnIndicator.getTurnTracker(), this.winLabel,this.stratColourIndicator);
         sideBar.getStyleClass().add("vbox");
 
         GridPane outer = new GridPane();
@@ -114,11 +114,21 @@ public class QuaxUserInterface {
         VBox sideBar = new VBox(10);
 
         Button strat = new Button("Show Strategy");
+
+        strat.setOnMouseClicked(event -> {
+            strat.fireEvent(new ButtonClickEvent(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT));
+        });
+
         Button hideStrat = new Button("Hide Strategy");
+
+        hideStrat.setOnMouseClicked(event -> {
+            hideStrat.fireEvent(new ButtonClickEvent(ButtonClickEvent.HIDE_STRATEGY_CLICKED_EVENT));
+        });
+
         pieRuleButton = new Button("PieRule");
 
         pieRuleButton.setOnMouseClicked(event -> {
-            pieRuleButton.fireEvent(new ButtonClickEvent(QuaxController.PIE_RULE_CLICKED_EVENT));
+            pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
 
         pieRuleButton.setId("PieRule");
@@ -130,6 +140,25 @@ public class QuaxUserInterface {
         sideBar.getChildren().addAll(strat,hideStrat,pieRuleButton);
 
         return sideBar;
+    }
+
+    private VBox initialiseStrategyColourCoding(){
+        Label stratTwo = new Label("Strategy Two");
+        stratTwo.getStyleClass().add("stratTwo");
+        Label stratThree = new Label("Strategy Three");
+        stratThree.getStyleClass().add("stratThree");
+        Label stratFour = new Label("Strategy Four");
+        stratFour.getStyleClass().add("stratFour");
+        Label stratFive = new Label("Strategy Five");
+        stratFive.getStyleClass().add("stratFive");
+        Label stratSix = new Label("Strategy Six");
+        stratSix.getStyleClass().add("stratSix");
+
+        VBox stratColourIndicator = new VBox(10);
+        stratColourIndicator.getChildren().addAll(stratTwo,stratThree,stratFour,stratFive,stratSix);
+        stratColourIndicator.getStyleClass().add("vbox");
+        stratColourIndicator.setVisible(false);
+        return stratColourIndicator;
     }
 
     public void showWinLabel(QuaxTileColour c){
@@ -170,6 +199,35 @@ public class QuaxUserInterface {
         pieRuleButton.setVisible(value);
     }
 
+    public void showStrategy(BotPlayer bot){
+        for (QuaxTile t : bot.getStratGroup(1)) {
+            board.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
+        }
+        for (QuaxTile t : bot.getStratGroup(2)) {
+            board.setTileBorder(t.getCoordinates(), QuaxTileBorder.BLUE);
+        }
+        for(QuaxTile t : bot.getStratGroup(3)){
+            board.setTileBorder(t.getCoordinates(),QuaxTileBorder.GREEN);
+        }
+        for(QuaxTile t: bot.getStratGroup(4)){
+            board.setTileBorder(t.getCoordinates(),QuaxTileBorder.RED);
+        }
+        for(QuaxTile t : bot.getStratGroup(5)){
+            board.setTileBorder(t.getCoordinates(),QuaxTileBorder.PURPLE);
+        }
+        for(QuaxTile t: bot.getStratGroup(6)){
+            board.setTileBorder(t.getCoordinates(),QuaxTileBorder.PINK);
+        }
+        this.stratColourIndicator.setVisible(true);
+    }
+
+    public void hideStrategy(QuaxBoard board){
+        for(QuaxTile t : board){
+            this.board.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
+        }
+        this.stratColourIndicator.setVisible(false);
+    }
+
     private static class UserInterfaceBoard {
         private OctagonTile[][] octagonGridCells;
         private RhombusTile[][] rhombusGridCells;
@@ -203,6 +261,14 @@ public class QuaxUserInterface {
             }
             else {
                 rhombusGridCells[q.x()][q.y()].setColour(c);
+            }
+        }
+
+        public void setTileBorder(QuaxCoordinate q, QuaxTileBorder b) {
+            if (q.isOctagonMove()) {
+                octagonGridCells[q.x()][q.y()].setBorder(b);
+            } else {
+                rhombusGridCells[q.x()][q.y()].setBorder(b);
             }
         }
 
@@ -359,6 +425,19 @@ public class QuaxUserInterface {
             return gridStack;
         }
 
+        private StackPane createShowStratGrid(){
+            StackPane gridStack = new StackPane(
+                    createOctagonGrid(),
+                    createRhombusGrid()
+            );
+            gridStack.setMaxHeight(Region.USE_PREF_SIZE);
+            gridStack.setMaxWidth(Region.USE_PREF_SIZE);
+            gridStack.setVisible(false);
+            gridStack.setMouseTransparent(true);
+
+            return gridStack;
+        }
+
         private GridPane createOctagonGrid() {
             octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
             GridPane octagonGrid = new GridPane();
@@ -435,6 +514,11 @@ public class QuaxUserInterface {
                         QuaxTileColour.NONE.tilecolourStyle());
                 this.getStyleClass().add(colour.tilecolourStyle());
             }
+            default void setBorder(QuaxTileBorder border) {
+                this.getStyleClass().removeAll("tileoutline-0", "tileoutline-1","tileoutline-2","tileoutline-3","tileoutline-4");
+                this.getStyleClass().add("tileoutline-base");
+                this.getStyleClass().add(border.tileborderStyle());
+            }
 
             QuaxCoordinate getCoordinate();
         }
@@ -448,12 +532,13 @@ public class QuaxUserInterface {
                 this.getStyleClass().add("tile");
                 this.getStyleClass().add("tiletype-octagon");
                 this.setColour(QuaxTileColour.NONE);
+                this.setBorder(QuaxTileBorder.NONE);
                 this.coordinate = coordinate;
 
                 this.setOnMouseClicked(new EventHandler<>() {
                     @Override
                     public void handle(MouseEvent arg0) {
-                        fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+                        fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
                     }
                 });
             }
@@ -472,12 +557,13 @@ public class QuaxUserInterface {
                 this.getStyleClass().add("tile");
                 this.getStyleClass().add("tiletype-rhombus");
                 this.setColour(QuaxTileColour.NONE);
+                this.setBorder(QuaxTileBorder.NONE);
                 this.coordinate = coordinate;
 
                 this.setOnMouseClicked(new EventHandler<>() {
                     @Override
                     public void handle(MouseEvent arg0) {
-                        fireEvent(new QuaxCoordinateEvent(QuaxController.TILE_CLICKED_EVENT, getCoordinate()));
+                        fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
                     }
                 });
             }

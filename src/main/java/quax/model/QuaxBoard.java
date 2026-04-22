@@ -2,12 +2,7 @@ package quax.model;
 
 import java.util.*;
 
-import quax.types.Octagon;
-import quax.types.QuaxCoordinate;
-import quax.types.QuaxTile;
-import quax.types.QuaxTileColour;
-import quax.types.QuaxTileGroup;
-import quax.types.Rhombus;
+import quax.types.*;
 
 public class QuaxBoard implements Iterable<QuaxTile> {
 
@@ -23,6 +18,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
     private boolean pieRuleDone;
 
     private LinkedList<QuaxTileGroup> trackedGroups;
+
 
     public QuaxBoard() {
         this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
