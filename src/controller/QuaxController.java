@@ -47,29 +47,12 @@ public class QuaxController {
 		}
 	}
 
-
     // TODO - Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		QuaxPlayer p1 = new HumanPlayer();
 		QuaxPlayer p2 = new HumanPlayer();
 		
 		startGame(p1, p2);
-	}
-	
-	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-		this.quaxBoard = new QuaxBoard();
-		this.quaxPlayers[0] = p1;
-		this.quaxPlayers[1] = p2;
-		
-		p1.setColour(QuaxTileColour.BLACK);
-		p2.setColour(QuaxTileColour.WHITE);
-		
-		p1.setController(this);
-		p2.setController(this);
-		
-		userInterface.setBoard(quaxBoard);
-	
-		curPlayer().movePrompt(quaxBoard);
 	}
 
 	public void startGameAgainstBot() {
@@ -82,6 +65,22 @@ public class QuaxController {
 		else {
 			startGame(bot, human);
 		}
+	}
+
+	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
+		this.quaxBoard = new QuaxBoard();
+		this.quaxPlayers[0] = p1;
+		this.quaxPlayers[1] = p2;
+
+		p1.setPlayerColour(QuaxTileColour.BLACK);
+		p2.setPlayerColour(QuaxTileColour.WHITE);
+
+		p1.setController(this);
+		p2.setController(this);
+
+		userInterface.setBoard(quaxBoard);
+
+		curPlayer().movePrompt(quaxBoard);
 	}
 
 
@@ -104,12 +103,12 @@ public class QuaxController {
 	// for testing purposes
 	public QuaxTileColour getPlayerColour(int p_ind){
 		assert p_ind == 0 || p_ind == 1;
-		return quaxPlayers[p_ind].getColour();
+		return quaxPlayers[p_ind].getPlayerColour();
 	}
 
 
 	public void makeMove(QuaxCoordinate coords) {
-		QuaxTileColour c = curPlayer().getColour();
+		QuaxTileColour c = curPlayer().getPlayerColour();
 		if (quaxBoard.validMove(coords, c)) {
 			quaxBoard.makeMove(coords, c);
 
@@ -131,8 +130,8 @@ public class QuaxController {
 
 	public void doPieRule() {
 		if (quaxBoard.attemptPieRule()) {
-			quaxPlayers[0].setColour(QuaxTileColour.WHITE);
-			quaxPlayers[1].setColour(QuaxTileColour.BLACK);
+			quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
+			quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
 
 			userInterface.setPieRuleVisibility(false);
 			curPlayer().movePrompt(getQuaxBoard());
