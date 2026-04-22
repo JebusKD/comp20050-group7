@@ -27,6 +27,17 @@ public class QuaxUITest {
     }
 
     @Test
+    void ShowTitleExists(FxRobot robot) {
+        assertNotNull(robot.lookup("#Title").query());
+    }
+
+    @Test
+    void ShowTitleTextCorrect(FxRobot robot) {
+        Label titleLabel = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax (Human V Bot)", titleLabel.getText());
+    }
+
+    @Test
     void ShowStrategyButtonExists(FxRobot robot) {
         assertNotNull(robot.lookup("Show Strategy").query());
     }
