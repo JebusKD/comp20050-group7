@@ -168,5 +168,28 @@ public class QuaxUITest {
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
         assertEquals("WHITE wins",winLabel.getText());
     }
+    
+    @Test
+    void WinLabelIsDisplayed(FxRobot robot){
+        QuaxBoard board = controller.getBoard();
+
+        for(int i = 0; i < 10;i++){
+            robot.clickOn("#octagon5-" + i);
+            robot.clickOn("#octagon1-" + i);
+        }
+
+        robot.clickOn("#octagon5-10");
+        Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
+        assertEquals("BLACK wins",winLabel.getText());
+    }
+
+    @Test
+    void ShowTitleExists(FxRobot robot){assertNotNull(robot.lookup("#Title").query());}
+
+    @Test
+    void  ShowTitleTextCorrect(FxRobot robot){
+        Label title = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax (Human V Bot)",title.getText());
+    }
 
 }
