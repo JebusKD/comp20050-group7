@@ -27,9 +27,11 @@ import types.QuaxTileColour;
  *
  */
 public class PathBot extends BotPlayer {
+	private ArrayList<Path> paths;
+	
 	public PathBot() {
 		super();
-	
+		paths = new ArrayList<Path>();
 	}
 
 	protected boolean opening() {
@@ -86,16 +88,21 @@ public class PathBot extends BotPlayer {
 		modifyUnnecesaryRhombuses((prevValue) -> prevValue - 2);
 		modifyReinforceWeakness((prevValue) -> prevValue + 100);
 		
-		rebuildPaths();
+		recalculatePaths();
 		
 		extendOurPaths((prevValue, distance) -> prevValue + (prevValue * distance));
 		shrinkEnemyPaths((prevValue, distance) -> prevValue + (prevValue * distance));
 	}
 	
-	private void rebuildPaths() {
-		
+	private void recalculatePaths() {
+		this.paths.clear();
+		this.paths.addAll(calculatePaths(getSubmissionBoard()));
 	}
 
+	private static ArrayList<Path> calculatePaths(QuaxBoard b) {
+		return null;
+	}
+	
 	private void modifyVulnerableRhombuses(IntUnaryOperator op) {
 		List<QuaxCoordinate> endangeredRhombuses = new LinkedList<QuaxCoordinate>();
 		
@@ -226,8 +233,12 @@ public class PathBot extends BotPlayer {
 			
 		}
 		
-		private recalculateLength() {
+		private void recalculateLength() {
 			QuaxCoordinate[] furthestCoordinates = new QuaxCoordinate[2];
+			Vector<Direction> travelDirections = Direction.favouredDirections(this.colour);
+			for (int i = 0; i < 2; i++) {
+				furthestCoordinates[i] = travelDirections.get(i).wallCoordinate();
+			}
 			
 		}
 		
