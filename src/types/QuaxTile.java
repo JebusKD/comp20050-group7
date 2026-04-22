@@ -1,5 +1,6 @@
 package types;
 
+import bot.BotPlayer;
 import bot.QuaxTileStrategyGroup;
 
 public abstract class QuaxTile {
@@ -36,6 +37,10 @@ public abstract class QuaxTile {
 	
 	public void setStrategyGroup(QuaxTileStrategyGroup strategyGroup) {
 		this.strategyGroup = strategyGroup;
+	}
+	
+	public boolean ignored() {
+		return this.strategyValue == BotPlayer.IGNORE_VALUE;
 	}
 	
 	public void setColour(QuaxTileColour colour) {

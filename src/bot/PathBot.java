@@ -75,11 +75,36 @@ public class PathBot extends BotPlayer {
 
 		if (!attemptImmediateWin(getSubmissionBoard()) && !opening()) {
 				standardTurn();
-				subclassAfterTurnHook();
+				QuaxBoard subclassBoard = new QuaxBoard(getSubmissionBoard());
+				setAll(subclassBoard, 1);
+				subclassAfterTurnHook(subclassBoard);
+				combineStrategyCells(subclassBoard);
 		}
 	}
 	
-	protected void subclassAfterTurnHook() {
+	private void combineStrategyCells(QuaxBoard b) {
+		Iterator<QuaxCoordinate> coords = QuaxCoordinate.boardCoordinateIterator();
+			
+		while (coords.hasNext()) {
+			QuaxCoordinate c = coords.next();
+			// TODO Bad code
+			QuaxTile ours = getSubmissionBoard().getTile(c),
+					 theirs = b.getTile(c);
+			
+			if (!ours.ignored()) {
+				if (theirs.ignored()) {
+					ours.setStrategyValue(IGNORE_VALUE);
+				} else {
+					ours.setStrategyValue(
+							ours.getStrategyValue() +
+							theirs.getStrategyValue()
+							);
+				}
+			}
+		}
+	}
+	
+	protected void subclassAfterTurnHook(QuaxBoard b) {
 	}
 	
 	private void standardTurn() {

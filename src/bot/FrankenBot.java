@@ -14,8 +14,8 @@ public class FrankenBot extends PathBot {
 	}
 	
 	@Override
-	protected void subclassAfterTurnHook() {
-		betterBogoFallback(getSubmissionBoard());
+	protected void subclassAfterTurnHook(QuaxBoard b) {
+		betterBogoFallback(b);
 	}
 	
 	public void removeFromAllGroups(QuaxTile newTile) {
@@ -37,7 +37,7 @@ public class FrankenBot extends PathBot {
     }
 	
 	public void assignStratGroup(QuaxTile newTile) {
-		stratGroups[newTile.getStrategyValue() + 1].addTile(newTile);
+		stratGroups[newTile.getStrategyValue() - 1].addTile(newTile);
     }
 	
 	public void betterBogoFallback(QuaxBoard b) {

@@ -1,7 +1,11 @@
 package types;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+
+import model.QuaxBoard;
 
 public class QuaxCoordinate {
 	private final int x;
@@ -93,5 +97,44 @@ public class QuaxCoordinate {
 	public static void main(String[] args) {
 		System.out.println(new QuaxCoordinate(3, 3, true).equals(new QuaxCoordinate(3, 3, true)));
 		System.out.println(new QuaxCoordinate(3, 4, true).equals(new QuaxCoordinate(3, 3, true)));
+	}
+	
+	public static Iterator<QuaxCoordinate> boardCoordinateIterator() {
+		return new QuaxCoordinateBoardIterator();
+	}
+	// TODO Repeated code, fix
+	private static class QuaxCoordinateBoardIterator implements Iterator<QuaxCoordinate> {
+		private static final int MAX_ELEMENTS = 221;
+		
+		private int cursor;
+		private ArrayList<QuaxCoordinate> elements;
+		
+		public QuaxCoordinateBoardIterator() {
+			this.cursor = 0;
+			this.elements = new ArrayList<>(MAX_ELEMENTS);
+			
+			for (int i = 0; i < 10 ; i++) {
+				for (int j = 0; j < 11; j++) {
+					this.elements.add(new QuaxCoordinate(i, j, true));
+				}
+				for (int j = 0; j < 10; j++) {
+					this.elements.add(new QuaxCoordinate(i, j, false));
+				}
+			}
+			for (int j = 0; j < 11; j++) {
+				this.elements.add(new QuaxCoordinate(10, j, true));
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < MAX_ELEMENTS;
+		}
+		
+		@Override
+		public QuaxCoordinate next() {
+			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+			return elements.get(cursor++);
+		}
 	}
 }
