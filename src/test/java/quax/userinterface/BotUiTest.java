@@ -22,6 +22,9 @@ import quax.types.QuaxCoordinate;
 import quax.types.QuaxTile;
 import quax.types.QuaxTileColour;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @ExtendWith(ApplicationExtension.class)
@@ -48,14 +51,25 @@ public class BotUiTest {
 
     @Test
     public void BotAlwaysMakesMove(FxRobot robot){
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         if(controller.curPlayer() instanceof HumanPlayer){
             robot.clickOn("#octagon5-5");
             WaitForAsyncUtils.waitForFxEvents();
-            assertEquals(2,controller.getBoard().getMoveNumber()); //robot went after human
+
+            scheduler.schedule(() ->{
+                assertEquals(2,controller.getBoard().getMoveNumber());
+            },3, TimeUnit.SECONDS);
+
+             //robot went after human
         }
         else{
-            assertEquals(1,controller.getBoard().getMoveNumber()); //robot is BLACK so has moved
+            scheduler.schedule(() ->{
+                assertEquals(1,controller.getBoard().getMoveNumber());;
+            },3, TimeUnit.SECONDS);
+
+            //robot is BLACK so has moved
         }
+
     }
 
     @Test

@@ -163,4 +163,13 @@ public class QuaxUITest {
         assertEquals("BLACK wins",winLabel.getText());
     }
 
+    @Test
+    void ShowTitleExists(FxRobot robot){assertNotNull(robot.lookup("#Title").query());}
+
+    @Test
+    void  ShowTitleTextCorrect(FxRobot robot){
+        Label title = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax: Human V Bot",title.getText());
+    }
+
 }

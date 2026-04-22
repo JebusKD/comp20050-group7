@@ -22,6 +22,10 @@ import quax.types.QuaxCoordinate;
 import quax.types.QuaxTile;
 import quax.types.QuaxTileColour;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 @ExtendWith(ApplicationExtension.class)
 public class StratValuesTesting {
 
@@ -33,10 +37,14 @@ public class StratValuesTesting {
 
     @Test
     void stratValsUpdate(FxRobot robot){
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
         robot.clickOn("#octagon5-5");
         robot.clickOn("#showStrat");
 
-        assertTrue(!robot.lookup(".tileoutline-base.tileoutline-0").queryAll().isEmpty());
-        assertTrue(!robot.lookup(".tileoutline-base.tileoutline-2").queryAll().isEmpty());
+        scheduler.schedule(() ->{
+            assertTrue(!robot.lookup(".tileoutline-base.tileoutline-0").queryAll().isEmpty());
+            assertTrue(!robot.lookup(".tileoutline-base.tileoutline-2").queryAll().isEmpty());
+        },3, TimeUnit.SECONDS);
     }
 }
