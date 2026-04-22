@@ -27,6 +27,7 @@ public class QuaxController {
     private boolean showingStrategy = false;
 
     private final Executor executor;
+    private final Executor submitter;
 
     private boolean humanPlaysFirst;
 
@@ -36,7 +37,10 @@ public class QuaxController {
         this.ui = new EmptyUserInterface();
 
         this.executor = new SingleThreadExecutor();
+        this.submitter = new SingleThreadExecutor();
 
+        BotPlayer.enableHaste();
+        
         startGame(p1, p2);
     }
 
@@ -50,6 +54,7 @@ public class QuaxController {
         players = new QuaxPlayer[2];
 
         this.executor = new JavaFXThreadedExecutor();
+        this.submitter = new JavaFXPlatformRunner();
 
         QuaxEventHandler.setup(this, stage);
 
@@ -179,7 +184,11 @@ public class QuaxController {
     public Executor getExecutor() {
         return this.executor;
     }
-
+    
+    public Executor getSubmitter() {
+    	return this.submitter;
+    }
+    
     public void setPieRuleVisibility(boolean visibility) {
         ui.setPieRuleVisibility(visibility);
     }
@@ -194,5 +203,11 @@ public class QuaxController {
     	public void execute(Runnable r) {
 			new Thread(r).start();
 		}
+    }
+    
+    public static class JavaFXPlatformRunner implements Executor {
+    	public void execute(Runnable r) {
+    		Platform.runLater(r);
+    	}
     }
 }

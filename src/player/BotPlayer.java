@@ -11,6 +11,8 @@ import types.*;
 
 public abstract class BotPlayer extends QuaxPlayer {
 	
+	private static boolean botHaste = false;
+	
 	private static final long MIN_THINKING_TIME = 1000;
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	
@@ -248,8 +250,10 @@ public abstract class BotPlayer extends QuaxPlayer {
         return copyBoard.checkForWinningMove();
     }
 
-
-	
+    public static void enableHaste() {
+    	botHaste = true;
+    }
+    
 	@Override
 	public void movePrompt(QuaxBoard b) {
 		startThinkingTime = System.currentTimeMillis();
@@ -257,7 +261,7 @@ public abstract class BotPlayer extends QuaxPlayer {
         this.getExecutor().execute(() -> {
         	QuaxCoordinate move = computeMove(b);
         	
-        	while (System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME);
+        	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME);
             submitMove(move);
         });
 	}

@@ -31,6 +31,15 @@ public abstract class QuaxPlayer {
             return controller.getExecutor();
         }
     }
+    
+    protected Executor getSubmitter() {
+        if (controller == null) {
+            throw new IllegalStateException("Player not initialised to a controller.");
+        }
+        else {
+            return controller.getSubmitter();
+        }
+    }
 
     public QuaxTileColour getColour() {
         if (this.colour == null) {
@@ -53,8 +62,9 @@ public abstract class QuaxPlayer {
     public abstract void movePrompt(QuaxBoard b);
 
     protected void submitMove(QuaxCoordinate move) {
-		Platform.runLater(new Runnable() {
-
+		
+    	
+    	getSubmitter().execute(new Runnable() {
 			@Override
 			public void run() {
 				controller.makeMove(move);
