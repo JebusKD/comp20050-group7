@@ -54,14 +54,14 @@ public class QuaxUserInterface implements UserInterface {
 	private UserInterfaceBoard quaxUIBoard;
 	private PlayerTurnIndicator turnIndicator;
 
-	private Stage stage;
+	private Stage quaxUIStage;
 	private Label winLabel;
 	private Scene scene;
 	private Button pieRuleButton;
 
     public QuaxUserInterface(Stage stage) {
 		this.quaxUIBoard = new UserInterfaceBoard();
-		this.stage = stage;
+		this.quaxUIStage = stage;
 
 		initialiseWindow();
 		initialiseStylesheets();
@@ -70,9 +70,9 @@ public class QuaxUserInterface implements UserInterface {
 	}
 	
 	private void setupStage() {
-		stage.setScene(scene);
-		stage.setMaximized(true);
-		stage.show();
+		quaxUIStage.setScene(scene);
+		quaxUIStage.setMaximized(true);
+		quaxUIStage.show();
 	}
 	
 	private void initialiseStylesheets() {
@@ -106,7 +106,7 @@ public class QuaxUserInterface implements UserInterface {
 		GridPane outer = new GridPane();
 
 		outer.add(title,0,0);
-		outer.add(quaxUIBoard.getBoard(),0,1);
+		outer.add(quaxUIBoard.getStackUIBoard(),0,1);
 		outer.add(sideBar,1,1);
 		outer.setAlignment(Pos.CENTER);
 
@@ -183,7 +183,7 @@ public class QuaxUserInterface implements UserInterface {
 	
 	@Override
 	public void setBoard(QuaxBoard b) {
-		quaxUIBoard.setBoard(b);
+		quaxUIBoard.setStackUIBoard(b);
 		setPieRuleVisibility(b.isPieRuleValid());
 	}
 	
@@ -201,11 +201,11 @@ public class QuaxUserInterface implements UserInterface {
 		private OctagonTile[][] octagonGridCells;
 		private RhombusTile[][] rhombusGridCells;
 
-		private StackPane board;
+		private StackPane stackUIBoard;
 
 
 		public UserInterfaceBoard() {
-			this.board = new StackPane(
+			this.stackUIBoard = new StackPane(
 					createGradientBackground(),
 					createBehindHourglass(),
 					createHourglass(),
@@ -215,12 +215,12 @@ public class QuaxUserInterface implements UserInterface {
 			);
 		}
 
-		public StackPane getBoard() {
-			return this.board;
+		public StackPane getStackUIBoard() {
+			return this.stackUIBoard;
 		}
 
-		public void setBoard(QuaxBoard board) {
-			for (QuaxTile tile : board) {
+		public void setStackUIBoard(QuaxBoard stackUIBoard) {
+			for (QuaxTile tile : stackUIBoard) {
 				setTile(tile.getCoordinates(), tile.getTileColour());
 			}
 		}
@@ -290,7 +290,7 @@ public class QuaxUserInterface implements UserInterface {
 			return gridStack;
 		}
 
-		// TODO - Decompose
+
 		private static GridPane createBoardCoordinates() {
 			GridPane coordGrid = new GridPane();
 			setCoordinateGridRowsColumns(coordGrid);
@@ -491,55 +491,56 @@ public class QuaxUserInterface implements UserInterface {
 				this.getStyleClass().add(colour.tilecolourStyle());
 			}
 
-			QuaxCoordinate getCoordinate();
+			QuaxCoordinate getRhombusGridCoordinate();
 		}
 
 		private static class OctagonTile extends OctagonBase implements Tile {
 
-			private QuaxCoordinate coordinate;
+			private QuaxCoordinate octagonGridCoordinate;
 
 			public OctagonTile(QuaxCoordinate coordinate) {
 				super();
 				this.getStyleClass().add("tile");
 				this.getStyleClass().add("tiletype-octagon");
 				this.setColour(QuaxTileColour.NONE);
-				this.coordinate = coordinate;
+				this.octagonGridCoordinate = coordinate;
 
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
-						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
+						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getRhombusGridCoordinate()));
 					}
 				});
 			}
 
 			@Override
-			public QuaxCoordinate getCoordinate() {
-				return this.coordinate;
+			public QuaxCoordinate getRhombusGridCoordinate() {
+				return this.octagonGridCoordinate;
 			}
 		}
 
 		private static class RhombusTile extends RhombusBase implements Tile {
-			private QuaxCoordinate coordinate;
+
+			private QuaxCoordinate rhombusGridCoordinate;
 
 			public RhombusTile(QuaxCoordinate coordinate) {
 				super();
 				this.getStyleClass().add("tile");
 				this.getStyleClass().add("tiletype-rhombus");
 				this.setColour(QuaxTileColour.NONE);
-				this.coordinate = coordinate;
+				this.rhombusGridCoordinate = coordinate;
 
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
-						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
+						fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getRhombusGridCoordinate()));
 					}
 				});
 			}
 
 			@Override
-			public QuaxCoordinate getCoordinate() {
-				return this.coordinate;
+			public QuaxCoordinate getRhombusGridCoordinate() {
+				return this.rhombusGridCoordinate;
 			}
 		}
 	}
