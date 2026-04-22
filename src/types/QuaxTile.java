@@ -43,6 +43,10 @@ public abstract class QuaxTile {
 		return this.colour == QuaxTileColour.NONE;
 	}
 	
+	public boolean isOccupied() {
+		return !isFree();
+	}
+	
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
 	}
