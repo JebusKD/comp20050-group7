@@ -3,6 +3,7 @@ package bot;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.IntUnaryOperator;
 
 import model.QuaxBoard;
 import types.QuaxCoordinate;
@@ -72,16 +73,23 @@ public class PathBot extends BotPlayer {
 	}
 	
 	private void standardTurn() {
-		setAll(getSubmissionBoard(), 0);
+		setAll(getSubmissionBoard(), 5);
 		avoidUselessRhombuses(getSubmissionBoard());
-		defendRhombuses(10);
-		exploitWeakRhombuses(40);
-		avoidDefendableRhombuses(20);
-		avoidUnnecessaryRhombuses(2);
-		reinforceWeakRhombuses(100);
+		
+		modifyVulnerableRhombuses((prevValue) -> prevValue + 10);
+		modifyWeakRhombuses((prevValue) -> prevValue + 40);
+		modifyDefendableRhombuses((prevValue) -> prevValue - 20);
+		modifyUnnecesaryRhombuses((prevValue) -> prevValue - 2);
+		modifyReinforceWeakness((prevValue) -> prevValue + 100);
+		
+		paths.rebuild();
+		
+		modifyForwardSnares((prevValue) -> prevValue * 5);
+		modifyForwardHops((prevValue) -> prevValue * 4);
+		modifyForwardSteps((prevValue) -> prevValue * 2);
 	}
 
-	private void defendRhombuses(int strength) {
+	private void modifyVulnerableRhombuses(IntUnaryOperator op) {
 		List<QuaxCoordinate> endangeredRhombuses = new LinkedList<QuaxCoordinate>();
 		
 		Iterator<QuaxTile> iterator = getSubmissionBoard().rhombusIterator();
@@ -97,10 +105,10 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				endangeredRhombuses,
-				(prevValue) -> prevValue + strength);
+				op);
 	}
 	
-	private void avoidDefendableRhombuses(int strength) {
+	private void modifyDefendableRhombuses(IntUnaryOperator op) {
 		List<QuaxCoordinate> strongTiles = new LinkedList<QuaxCoordinate>();
 		int currentWeaknesses = weakRhombusCount( getSubmissionBoard() );
 		
@@ -113,10 +121,10 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				strongTiles,
-				(prevValue) -> prevValue - strength);
+				op);
 	}
 	
-	private void exploitWeakRhombuses(int strength) {
+	private void modifyWeakRhombuses(IntUnaryOperator op) {
 		List<QuaxCoordinate> weakTiles = new LinkedList<QuaxCoordinate>();
 		int currentWeaknesses = weakRhombusCount( getSubmissionBoard() );
 		
@@ -129,12 +137,12 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				weakTiles,
-				(prevValue) -> prevValue + strength);
+				op);
 	}
 	
 	// "Unnecessary rhombus" is one that isn't being threatened.
 	// It'd be better to place an adjacent octagonal tile instead.
-	private void avoidUnnecessaryRhombuses(int strength) {
+	private void modifyUnnecesaryRhombuses(IntUnaryOperator op) {
 		List<QuaxCoordinate> unnecessaryRhombuses = new LinkedList<QuaxCoordinate>();
 		
 		Iterator<QuaxTile> iterator = getSubmissionBoard().rhombusIterator();
@@ -150,10 +158,12 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				unnecessaryRhombuses,
-				(prevValue) -> prevValue - strength);
+				op);
 	}
 	
-	private void reinforceWeakRhombuses(int strength) {
+	// Assuming we skip our turn, could our opponent make a move that
+	// creates 2+ weaknesses? If so, try prevent that.
+	private void modifyReinforceWeakness(IntUnaryOperator op) {
 		List<QuaxCoordinate> reinforceTiles = new LinkedList<QuaxCoordinate>();
 		
 		QuaxBoard skippedBoard = new QuaxBoard(getSubmissionBoard());
@@ -169,7 +179,81 @@ public class PathBot extends BotPlayer {
 		SimpleStrategyOperation.simpleExecution(
 				getSubmissionBoard(),
 				reinforceTiles,
-				(prevValue) -> prevValue + strength);
+				op);
+	}
+	
+	private static class Path {
+		
+		
+		private static enum Direction {
+			UP {
+				@Override
+				public Direction flip() {
+					return DOWN;
+				}
+				
+				@Override
+				public Direction rotateClockwise() {
+					return RIGHT;
+				}
+				
+				@Override
+				public Direction rotateCounterClockwise() {
+					return LEFT;
+				}
+			},
+			DOWN {
+				@Override
+				public Direction flip() {
+					return UP;
+				}
+				
+				@Override
+				public Direction rotateClockwise() {
+					return LEFT;
+				}
+				
+				@Override
+				public Direction rotateCounterClockwise() {
+					return RIGHT;
+				}
+			},
+			LEFT {
+				@Override
+				public Direction flip() {
+					return RIGHT;
+				}
+				
+				@Override
+				public Direction rotateClockwise() {
+					return UP;
+				}
+				
+				@Override
+				public Direction rotateCounterClockwise() {
+					return DOWN;
+				}
+			},
+			RIGHT {
+				@Override
+				public Direction flip() {
+					return LEFT;
+				}
+				
+				@Override
+				public Direction rotateClockwise() {
+					return DOWN;
+				}
+				
+				@Override
+				public Direction rotateCounterClockwise() {
+					return UP;
+				}
+			};
+			public abstract Direction flip();
+			public abstract Direction rotateClockwise();
+			public abstract Direction rotateCounterClockwise();
+		}
 	}
 
 }
