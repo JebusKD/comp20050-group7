@@ -18,11 +18,11 @@ public class QuaxController {
 
 	private final UserInterface userInterface;
 	private QuaxBoard quaxBoard;
-	private final QuaxPlayer[] players;
+	private final QuaxPlayer[] quaxPlayers;
 
 
 	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-		this.players = new QuaxPlayer[2];
+		this.quaxPlayers = new QuaxPlayer[2];
 		this.userInterface = new EmptyUserInterface();
 		this.executor = new SingleThreadExecutor();
 		
@@ -34,7 +34,7 @@ public class QuaxController {
 	}
 	
 	public QuaxController(Stage stage, boolean againstBot) {
-		this.players = new QuaxPlayer[2];
+		this.quaxPlayers = new QuaxPlayer[2];
 		this.userInterface = new QuaxUserInterface(stage);
 		this.executor = new JavaFXThreadedExecutor();
 		
@@ -58,8 +58,8 @@ public class QuaxController {
 	
 	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
 		this.quaxBoard = new QuaxBoard();
-		this.players[0] = p1;
-		this.players[1] = p2;
+		this.quaxPlayers[0] = p1;
+		this.quaxPlayers[1] = p2;
 		
 		p1.setColour(QuaxTileColour.BLACK);
 		p2.setColour(QuaxTileColour.WHITE);
@@ -98,13 +98,13 @@ public class QuaxController {
 	}
 
 	public QuaxPlayer curPlayer() {
-		return players[getMoveNumber() % 2];
+		return quaxPlayers[getMoveNumber() % 2];
 	}
 	
 	// for testing purposes
 	public QuaxTileColour getPlayerColour(int p_ind){
 		assert p_ind == 0 || p_ind == 1;
-		return players[p_ind].getColour();
+		return quaxPlayers[p_ind].getColour();
 	}
 
 
@@ -131,8 +131,8 @@ public class QuaxController {
 
 	public void doPieRule() {
 		if (quaxBoard.attemptPieRule()) {
-			players[0].setColour(QuaxTileColour.WHITE);
-			players[1].setColour(QuaxTileColour.BLACK);
+			quaxPlayers[0].setColour(QuaxTileColour.WHITE);
+			quaxPlayers[1].setColour(QuaxTileColour.BLACK);
 
 			userInterface.setPieRuleVisibility(false);
 			curPlayer().movePrompt(getQuaxBoard());
