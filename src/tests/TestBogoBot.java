@@ -40,7 +40,7 @@ public class TestBogoBot {
 		QuaxController controller = new QuaxController(bot, human);
 		
 		int count = 0;
-		for (QuaxTile t : controller.getBoard()) {
+		for (QuaxTile t : controller.getQuaxBoard()) {
 			if (t.getColour() == QuaxTileColour.BLACK) {
 				count++;
 			}
@@ -73,7 +73,7 @@ public class TestBogoBot {
 		QuaxController controller = new QuaxController(b1, b2);
 		
 		// Check to see did the bots complete the game
-		assertTrue(controller.getBoard().checkForWinningMove());
+		assertTrue(controller.getQuaxBoard().checkForWinningMove());
 	}
 	
 }

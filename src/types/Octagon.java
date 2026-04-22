@@ -2,6 +2,7 @@ package types;
 
 public class Octagon extends QuaxTile {
 
+	// TODO - Move to parent class?
 	private final int xPosition;
 	private final int yPosition;
 

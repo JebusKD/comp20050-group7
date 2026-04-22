@@ -44,7 +44,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getColour());
     }
 
     @Test
@@ -56,19 +56,19 @@ public class QuaxUITest {
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getBoard().checkForWinningMove());
+        assertTrue(controller.getQuaxBoard().checkForWinningMove());
     }
 
     @Test
     void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
         assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
     }
 
     @Test
     void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
         robot.clickOn("#octagon0-0");//just have white turn click somewhere else
