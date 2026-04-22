@@ -199,8 +199,8 @@ public class QuaxController {
     }
 
     public static class JavaFXThreadedExecutor implements Executor {
-        public void execute(Runnable r) {
-            Platform.runLater(r);
-        }
+    	public void execute(Runnable r) {
+			new Thread(r).start();
+		}
     }
 }

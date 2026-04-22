@@ -1,6 +1,7 @@
 package quax.player;
 
 import quax.controller.QuaxController;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -54,6 +55,12 @@ public abstract class QuaxPlayer {
     public abstract void movePrompt(QuaxBoard b);
 
     protected void submitMove(QuaxCoordinate move) {
-        controller.makeMove(move);
-    }
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				controller.makeMove(move);
+			}
+		});
+	}
 }
