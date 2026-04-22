@@ -91,6 +91,7 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BogoBot();
 
+        
             if (RNG.nextInt() % 2 == 0) {
                 startGame(human, bot);
             } else {
