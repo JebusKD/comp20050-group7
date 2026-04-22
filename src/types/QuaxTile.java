@@ -9,8 +9,8 @@ public abstract class QuaxTile {
 
 	public QuaxTile() {
 		this.colour = QuaxTileColour.NONE;
-		this.strategyValue = 0;
 		this.group = null;
+		this.strategyValue = 0;
 	}
 
 	public QuaxTile(QuaxTile t) {
@@ -55,7 +55,6 @@ public abstract class QuaxTile {
 		return getColour() == QuaxTileColour.WHITE;
 	}
 
-	// TODO - Rename methods?
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
 }

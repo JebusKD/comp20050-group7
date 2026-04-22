@@ -191,6 +191,7 @@ public class QuaxUserInterface implements UserInterface {
 	}
 
 
+	// TODO - Class to large
 	private static class UserInterfaceBoard {
 		private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
@@ -202,32 +203,32 @@ public class QuaxUserInterface implements UserInterface {
 
 		public UserInterfaceBoard() {
 			this.board = new StackPane(
-				createGradientBackground(),
-				createBehindHourglass(),
-				createHourglass(),
-				createGridBackground(),
-				createBoardCoordinates(),
-				createGrid()
+					createGradientBackground(),
+					createBehindHourglass(),
+					createHourglass(),
+					createGridBackground(),
+					createBoardCoordinates(),
+					createGrid()
 			);
 		}
-		
+
 		public StackPane getBoard() {
 			return this.board;
 		}
-		
+
 		public void setBoard(QuaxBoard board) {
 			for (QuaxTile tile : board) {
 				setTile(tile.getCoordinates(), tile.getColour());
 			}
 		}
-		
+
 		public void setTile(QuaxCoordinate q, QuaxTileColour c) {
 			if (q.isOctagon()) {
-                octagonGridCells[q.x()][q.y()].setColour(c);
-            }
+				octagonGridCells[q.x()][q.y()].setColour(c);
+			}
 			else {
-                rhombusGridCells[q.x()][q.y()].setColour(c);
-            }
+				rhombusGridCells[q.x()][q.y()].setColour(c);
+			}
 		}
 
 
@@ -266,13 +267,13 @@ public class QuaxUserInterface implements UserInterface {
 		}
 
 		private static Rectangle createGridBackground(){
-	        double size = ((MAX_OCTAGONS - 1)*OCTAGON_WIDTH) + OctagonBase.calculateSideLength(OCTAGON_WIDTH) + (MAX_RHOMBUSES * OCTAGON_GRID_GAP);
-	        
-	        Rectangle background = new Rectangle(size, size);
-	        background.setFill(Color.OLDLACE);
-	        
-	        return background;
-	    }
+			double size = ((MAX_OCTAGONS - 1)*OCTAGON_WIDTH) + OctagonBase.calculateSideLength(OCTAGON_WIDTH) + (MAX_RHOMBUSES * OCTAGON_GRID_GAP);
+
+			Rectangle background = new Rectangle(size, size);
+			background.setFill(Color.OLDLACE);
+
+			return background;
+		}
 
 		private StackPane createGrid() {
 			StackPane gridStack = new StackPane(
@@ -288,25 +289,25 @@ public class QuaxUserInterface implements UserInterface {
 
 		// TODO - Decompose
 		private static GridPane createBoardCoordinates() {
-	        GridPane coordGrid = new GridPane();
-	        setCoordinateGridRowsColumns(coordGrid);
+			GridPane coordGrid = new GridPane();
+			setCoordinateGridRowsColumns(coordGrid);
 
-	        GridPane topCoords = new GridPane();
-	        GridPane bottomCoords = new GridPane();
+			GridPane topCoords = new GridPane();
+			GridPane bottomCoords = new GridPane();
 			setTopBottomCoordinateGrid(topCoords, bottomCoords);
-	        
-	        coordGrid.add(topCoords, 1, 0);
-	        coordGrid.add(bottomCoords, 1, 2);
 
-	        GridPane leftCoords = new GridPane();
-	        GridPane rightCoords = new GridPane();
+			coordGrid.add(topCoords, 1, 0);
+			coordGrid.add(bottomCoords, 1, 2);
+
+			GridPane leftCoords = new GridPane();
+			GridPane rightCoords = new GridPane();
 			setLeftRightCoordinateGrid(leftCoords, rightCoords);
-	        
-	        coordGrid.add(leftCoords, 0, 1);
-	        coordGrid.add(rightCoords, 2, 1);
-	        
-	        return coordGrid;
-	    }
+
+			coordGrid.add(leftCoords, 0, 1);
+			coordGrid.add(rightCoords, 2, 1);
+
+			return coordGrid;
+		}
 
 		private static void setCoordinateGridRowsColumns(GridPane coordinateGrid) {
 			coordinateGrid.setAlignment(Pos.CENTER);
@@ -482,14 +483,14 @@ public class QuaxUserInterface implements UserInterface {
 		private interface Tile extends Styleable {
 			default void setColour(QuaxTileColour colour) {
 				this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
-											   QuaxTileColour.WHITE.tilecolourStyle(),
-											   QuaxTileColour.NONE.tilecolourStyle());
+						QuaxTileColour.WHITE.tilecolourStyle(),
+						QuaxTileColour.NONE.tilecolourStyle());
 				this.getStyleClass().add(colour.tilecolourStyle());
-	        }
+			}
 
-            QuaxCoordinate getCoordinate();
+			QuaxCoordinate getCoordinate();
 		}
-		
+
 		private static class OctagonTile extends OctagonBase implements Tile {
 
 			private QuaxCoordinate coordinate;
@@ -500,7 +501,7 @@ public class QuaxUserInterface implements UserInterface {
 				this.getStyleClass().add("tiletype-octagon");
 				this.setColour(QuaxTileColour.NONE);
 				this.coordinate = coordinate;
-				
+
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
@@ -508,13 +509,13 @@ public class QuaxUserInterface implements UserInterface {
 					}
 				});
 			}
-			
+
 			@Override
 			public QuaxCoordinate getCoordinate() {
 				return this.coordinate;
 			}
 		}
-		
+
 		private static class RhombusTile extends RhombusBase implements Tile {
 			private QuaxCoordinate coordinate;
 
@@ -524,7 +525,7 @@ public class QuaxUserInterface implements UserInterface {
 				this.getStyleClass().add("tiletype-rhombus");
 				this.setColour(QuaxTileColour.NONE);
 				this.coordinate = coordinate;
-				
+
 				this.setOnMouseClicked(new EventHandler<>() {
 					@Override
 					public void handle(MouseEvent arg0) {
@@ -532,7 +533,7 @@ public class QuaxUserInterface implements UserInterface {
 					}
 				});
 			}
-			
+
 			@Override
 			public QuaxCoordinate getCoordinate() {
 				return this.coordinate;
