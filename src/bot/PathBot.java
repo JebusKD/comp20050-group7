@@ -10,6 +10,7 @@ import java.util.Vector;
 import java.util.function.IntUnaryOperator;
 
 import model.QuaxBoard;
+import types.Octagon;
 import types.QuaxCoordinate;
 import types.QuaxTile;
 import types.QuaxTileColour;
@@ -27,6 +28,7 @@ import types.QuaxTileColour;
  *
  */
 public class PathBot extends BotPlayer {
+	
 	public PathBot() {
 		super();
 	
@@ -73,7 +75,11 @@ public class PathBot extends BotPlayer {
 
 		if (!attemptImmediateWin(getSubmissionBoard()) && !opening()) {
 				standardTurn();
+				subclassAfterTurnHook();
 		}
+	}
+	
+	protected void subclassAfterTurnHook() {
 	}
 	
 	private void standardTurn() {
@@ -86,10 +92,10 @@ public class PathBot extends BotPlayer {
 		modifyUnnecesaryRhombuses((prevValue) -> prevValue - 2);
 		modifyReinforceWeakness((prevValue) -> prevValue + 100);
 		
-		rebuildPaths();
+		//rebuildPaths();
 		
-		extendOurPaths((prevValue, distance) -> prevValue + (prevValue * distance));
-		shrinkEnemyPaths((prevValue, distance) -> prevValue + (prevValue * distance));
+		//extendOurPaths((prevValue, distance) -> prevValue + (prevValue * distance));
+		//shrinkEnemyPaths((prevValue, distance) -> prevValue + (prevValue * distance));
 	}
 	
 	private void rebuildPaths() {

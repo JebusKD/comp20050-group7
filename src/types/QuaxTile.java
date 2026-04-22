@@ -1,10 +1,13 @@
 package types;
 
+import bot.QuaxTileStrategyGroup;
+
 public abstract class QuaxTile {
 
 	private QuaxTileColour colour;
 	private QuaxTileGroup group;
 	private int strategyValue;
+	private QuaxTileStrategyGroup strategyGroup;
 	
 	public QuaxTile() {
 		this.colour = QuaxTileColour.NONE;
@@ -29,6 +32,10 @@ public abstract class QuaxTile {
 	
 	public int getStrategyValue() {
 		return this.strategyValue;
+	}
+	
+	public void setStrategyGroup(QuaxTileStrategyGroup strategyGroup) {
+		this.strategyGroup = strategyGroup;
 	}
 	
 	public void setColour(QuaxTileColour colour) {
