@@ -32,7 +32,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 
 	private static ArrayList<QuaxCoordinate> getMaxStrategyValue(QuaxBoard board) {
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
-		int maxVal = board.getOctagon(0, 0).getStrategyValue();
+		int maxVal = board.getTile(new QuaxCoordinate(0, 0, true)).getStrategyValue();
 
 		for (QuaxTile tile : board) {
 			int stratVal = tile.getStrategyValue();

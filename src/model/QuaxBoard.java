@@ -52,13 +52,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private void initialiseGrids(QuaxBoard b) {
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				octagonGrid[i][j] = new Octagon(b.octagonGrid[i][j]);
+				octagonGrid[i][j] = new Octagon(b.getOctagon(i, j));
 			}
 		}
 
 		for (int i = 0; i < MAX_RHOMBUSES; i++) {
 			for (int j = 0; j < MAX_RHOMBUSES; j++) {
-				rhombusGrid[i][j] = new Rhombus(b.rhombusGrid[i][j]);
+				rhombusGrid[i][j] = new Rhombus(b.getRhombus(i, j));
 			}
 		}
 	}
@@ -321,7 +321,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
-		private static final int MAX_ELEMENTS = 221;
+		private static final int MAX_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
 		
 		private int cursor;
 		private ArrayList<QuaxTile> elements;

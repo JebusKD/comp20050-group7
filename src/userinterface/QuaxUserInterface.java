@@ -191,7 +191,7 @@ public class QuaxUserInterface implements UserInterface {
 	}
 
 
-	// TODO - Class to large
+	// TODO - Class too large
 	private static class UserInterfaceBoard {
 		private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 

@@ -47,6 +47,7 @@ public class QuaxController {
 		}
 	}
 
+
     // TODO - Keep for testing - Remove on final submission
 	public void startTwoPlayerGame() {
 		QuaxPlayer p1 = new HumanPlayer();
@@ -82,21 +83,31 @@ public class QuaxController {
 			startGame(bot, human);
 		}
 	}
-	
+
+
+	public Executor getExecutor() {
+		return this.executor;
+	}
+
+	public int getMoveNumber() {
+		return quaxBoard.getMoveNumber();
+	}
+
+	public QuaxBoard getQuaxBoard() {
+		return this.quaxBoard;
+	}
+
 	public QuaxPlayer curPlayer() {
 		return players[getMoveNumber() % 2];
 	}
 	
 	// for testing purposes
-	public QuaxTileColour getPlayerColour(int i){
-		assert i == 0 || i == 1;
-		return players[i].getColour();
+	public QuaxTileColour getPlayerColour(int p_ind){
+		assert p_ind == 0 || p_ind == 1;
+		return players[p_ind].getColour();
 	}
-	
-	public int getMoveNumber() {
-		return quaxBoard.getMoveNumber();
-	}
-	
+
+
 	public void makeMove(QuaxCoordinate coords) {
 		QuaxTileColour c = curPlayer().getColour();
 		if (quaxBoard.validMove(coords, c)) {
@@ -118,10 +129,6 @@ public class QuaxController {
 		}
 	}
 
-	public QuaxBoard getQuaxBoard() {
-		return this.quaxBoard;
-	}
-
 	public void doPieRule() {
 		if (quaxBoard.attemptPieRule()) {
 			players[0].setColour(QuaxTileColour.WHITE);
@@ -131,10 +138,7 @@ public class QuaxController {
 			curPlayer().movePrompt(getQuaxBoard());
 		}
 	}
-	
-	public Executor getExecutor() {
-		return this.executor;
-	}
+
 
 	public static class SingleThreadExecutor implements Executor {
 		public void execute(Runnable r) {
