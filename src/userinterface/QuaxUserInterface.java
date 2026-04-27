@@ -189,14 +189,14 @@ public class QuaxUserInterface implements UserInterface {
     public void updateFromPreviousMove(QuaxBoard board) {
         QuaxCoordinate previousMove = board.previousMove();
         if (previousMove == null) {
-            this.turnIndicator.setColour(QuaxTileColour.BLACK);
+            this.turnIndicator.setIndicatorColour(QuaxTileColour.BLACK);
         }
 
         else {
             // TODO - LoD violation
             QuaxTileColour colour = board.getTile(previousMove).getTileColour();
             this.setTile(previousMove, colour);
-            this.turnIndicator.setColour(colour.flip());
+            this.turnIndicator.setIndicatorColour(colour.flip());
 
             setPieRuleVisibility(board.isPieRuleValid());
         }
@@ -218,22 +218,22 @@ public class QuaxUserInterface implements UserInterface {
 
     // TODO - just fix
     public void showStrategy(BotPlayer bot) {
-        for (QuaxTile t : bot.getStratGroup(1)) {
+        for (QuaxTile t : bot.getStrategyValueGroup(1)) {
             quaxUIBoard.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
         }
-        for (QuaxTile t : bot.getStratGroup(2)) {
+        for (QuaxTile t : bot.getStrategyValueGroup(2)) {
             quaxUIBoard.setTileBorder(t.getCoordinates(), QuaxTileBorder.BLUE);
         }
-        for(QuaxTile t : bot.getStratGroup(3)){
+        for(QuaxTile t : bot.getStrategyValueGroup(3)){
             quaxUIBoard.setTileBorder(t.getCoordinates(),QuaxTileBorder.GREEN);
         }
-        for(QuaxTile t: bot.getStratGroup(4)){
+        for(QuaxTile t: bot.getStrategyValueGroup(4)){
             quaxUIBoard.setTileBorder(t.getCoordinates(),QuaxTileBorder.RED);
         }
-        for(QuaxTile t : bot.getStratGroup(5)){
+        for(QuaxTile t : bot.getStrategyValueGroup(5)){
             quaxUIBoard.setTileBorder(t.getCoordinates(),QuaxTileBorder.PURPLE);
         }
-        for(QuaxTile t: bot.getStratGroup(6)){
+        for(QuaxTile t: bot.getStrategyValueGroup(6)){
             quaxUIBoard.setTileBorder(t.getCoordinates(),QuaxTileBorder.PINK);
         }
         this.strategyColourIndicator.setVisible(true);
@@ -355,7 +355,7 @@ public class QuaxUserInterface implements UserInterface {
             return gridStack;
         }
 
-
+        // TODO - No output arguments allowed
         private static GridPane createBoardCoordinates() {
             GridPane coordGrid = new GridPane();
             setCoordinateGridRowsColumns(coordGrid);
@@ -678,7 +678,7 @@ public class QuaxUserInterface implements UserInterface {
         }
     }
 
-    // TODO - Definitely too complicated for a nested class
+    // TODO - Definitely too complicated for a nested class, move to another
     private static class PlayerTurnIndicator {
 
         private static final double HBOX_SPACING = 5;
@@ -691,17 +691,17 @@ public class QuaxUserInterface implements UserInterface {
 
         public PlayerTurnIndicator() {
             this.turnTracker = createTurnTracker();
-            this.setColour(QuaxTileColour.BLACK);
+            this.setIndicatorColour(QuaxTileColour.BLACK);
         }
 
         public HBox getTurnTracker() {
             return this.turnTracker;
         }
 
-        public void setColour(QuaxTileColour colour) {
-            this.octagonIndicator.setColour(colour);
-            this.rhombusIndicator.setColour(colour);
-            this.turnText.setColour(colour);
+        public void setIndicatorColour(QuaxTileColour colour) {
+            this.octagonIndicator.setTurnTileColour(colour);
+            this.rhombusIndicator.setTurnTileColour(colour);
+            this.turnText.setTurnColour(colour);
         }
 
         private HBox createTurnTracker() {
@@ -719,15 +719,11 @@ public class QuaxUserInterface implements UserInterface {
         }
 
         private interface TurnIndicatorShape extends Styleable {
-            default void setColour(QuaxTileColour colour) {
-                if (colour == QuaxTileColour.NONE) {
-                    throw new IllegalArgumentException();
-                }
-                else {
-                    this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+            default void setTurnTileColour(QuaxTileColour colour) {
+                assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+                this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
                             QuaxTileColour.WHITE.tilecolourStyle());
-                    this.getStyleClass().add(colour.tilecolourStyle());
-                }
+                this.getStyleClass().add(colour.tilecolourStyle());
             }
         }
 
@@ -740,7 +736,7 @@ public class QuaxUserInterface implements UserInterface {
                 super(width);
                 this.setId("Octagon-object"); // TODO Change this ID - also needs to be done in UI test
                 this.getStyleClass().add("turn-indicator-shape");
-                this.setColour(QuaxTileColour.BLACK);
+                this.setTurnTileColour(QuaxTileColour.BLACK);
             }
         }
 
@@ -752,6 +748,7 @@ public class QuaxUserInterface implements UserInterface {
             }
         }
 
+
         private static class TurnText extends Label {
             public TurnText() {
                 super();
@@ -759,7 +756,10 @@ public class QuaxUserInterface implements UserInterface {
                 this.setId("Turn-text");
             }
 
-            public void setColour(QuaxTileColour colour) {
+            public void setTurnColour(QuaxTileColour colour) {
+                assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+                this.setText(colour + " to play");
+                /*
                 switch (colour) {
                     case BLACK :
                         this.setText("BLACK to play");
@@ -770,6 +770,7 @@ public class QuaxUserInterface implements UserInterface {
                     default :
                         throw new IllegalArgumentException("Cannot be set to none.");
                 }
+                */
             }
         }
     }
