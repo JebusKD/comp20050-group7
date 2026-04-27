@@ -23,7 +23,7 @@ public class QuaxEventHandler {
             }
         });
 
-        stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+        stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(ButtonClickEvent event) {
                 if (controller.curPlayer() instanceof HumanPlayer) {
@@ -32,14 +32,14 @@ public class QuaxEventHandler {
             }
         });
 
-        stage.addEventHandler(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+        stage.addEventHandler(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(ButtonClickEvent event) {
                 controller.showStrategy();
             }
         });
 
-        stage.addEventHandler(ButtonClickEvent.HIDE_STRATEGY_CLICKED_EVENT, new EventHandler<ButtonClickEvent>() {
+        stage.addEventHandler(ButtonClickEvent.HIDE_STRATEGY_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(ButtonClickEvent event) {
                 controller.hideStrategy();
