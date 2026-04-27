@@ -1,20 +1,23 @@
 package userinterface;
 
-import controller.QuaxController;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+
+import controller.QuaxController;
 import player.HumanPlayer;
 import types.*;
 
-public class QuaxEventHandler {
-    public static void setup(QuaxController controller, Stage stage) {
 
+public class QuaxEventHandler {
+
+    // TODO - Can we split this?
+    public static void setup(QuaxController controller, Stage stage) {
         stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(QuaxCoordinateEvent coords) {
 
                 if (controller.curPlayer() instanceof HumanPlayer) {
-                    controller.makeMove(coords.coords());
+                    controller.makeMove(coords.coordinate());
                     controller.redoStrategy();
                 }
             }

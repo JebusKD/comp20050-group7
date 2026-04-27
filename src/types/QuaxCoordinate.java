@@ -1,5 +1,6 @@
 package types;
 
+
 public class QuaxCoordinate {
 
 	private final int x;

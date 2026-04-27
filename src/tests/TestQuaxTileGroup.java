@@ -17,7 +17,7 @@ class TestQuaxTileGroup {
 		QuaxTileGroup g = new QuaxTileGroup();
 		QuaxTile t = new Octagon(3, 6);
 		g.addTile(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
@@ -25,21 +25,21 @@ class TestQuaxTileGroup {
 		QuaxTileGroup g = new QuaxTileGroup();
 		QuaxTile t = new Rhombus(2, 0);
 		g.addTile(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
 	void testIsTileMember3() {
 		QuaxTile t = new Octagon(3, 6);
 		QuaxTileGroup g = new QuaxTileGroup(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
 	void testIsTileMember4() {
 		QuaxTile t = new Rhombus(2, 0);
 		QuaxTileGroup g = new QuaxTileGroup(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test

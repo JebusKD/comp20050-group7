@@ -1,30 +1,21 @@
 package tests;
 
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
-import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.base.WindowMatchers.isShowing;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import  org.testfx.api.FxAssert;
-import model.QuaxBoard;
 import player.BotPlayer;
-import player.HumanPlayer;
-import types.QuaxCoordinate;
-import types.QuaxTile;
 import types.QuaxTileColour;
 
 
@@ -47,11 +38,11 @@ public class BotUiTest {
     	scheduler.schedule(() ->{
             
     		assertFalse(controller.curPlayer() instanceof BotPlayer);
-        	if (controller.curPlayer().getColour() == QuaxTileColour.BLACK) { // Human goes first
-        		assertEquals(0,controller.getBoard().getMoveNumber()); //robot has not moved
+        	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
+        		assertEquals(0,controller.getQuaxBoard().getMoveNumber()); //robot has not moved
         	}
         	else { // Otherwise, bot moves first and makes exactly one move.
-        		assertEquals(1,controller.getBoard().getMoveNumber());
+        		assertEquals(1,controller.getQuaxBoard().getMoveNumber());
         	}
         },3, TimeUnit.SECONDS);
     	
@@ -65,19 +56,19 @@ public class BotUiTest {
     public void BotAlwaysMakesMove(FxRobot robot){
     	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     	WaitForAsyncUtils.waitForFxEvents();
-    	if (controller.curPlayer().getColour() == QuaxTileColour.BLACK) { // Human goes first
+    	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
     		robot.clickOn("#octagon5-5");
     		WaitForAsyncUtils.waitForFxEvents();
     		
     		scheduler.schedule(() ->{
-                assertEquals(2,controller.getBoard().getMoveNumber());
+                assertEquals(2,controller.getQuaxBoard().getMoveNumber());
             },3, TimeUnit.SECONDS);
 
              //robot went after human
     	}
 		else{
 			scheduler.schedule(() ->{
-                assertEquals(1,controller.getBoard().getMoveNumber());;
+                assertEquals(1,controller.getQuaxBoard().getMoveNumber());;
             },3, TimeUnit.SECONDS);
 
             //robot is BLACK so has moved

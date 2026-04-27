@@ -44,7 +44,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
     }
 
     @Test
@@ -56,27 +56,27 @@ public class QuaxUITest {
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getBoard().checkForWinningMove());
+        assertTrue(controller.getQuaxBoard().checkForWinningMove());
     }
 
     @Test
     void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
     void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
-        robot.clickOn("#octagon0-0");//just have white turn click somehwere else
+        robot.clickOn("#octagon0-0");//just have white turn click somewhere else
         robot.clickOn("#octagon6-6");
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
@@ -87,8 +87,8 @@ public class QuaxUITest {
 
     @Test
     void RhombusObjectDisplayExists(FxRobot robot){
-        Node turnRhom = robot.lookup("#Rhombus-object").query();
-        assertTrue(turnRhom.isVisible());
+        Node turnRhombus = robot.lookup("#Rhombus-object").query();
+        assertTrue(turnRhombus.isVisible());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class QuaxUITest {
 
     @Test
     void NumberCoordsExist(FxRobot robot){
-        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //theres 22 of each coordinate type, all with the same styling
+        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //there is 22 of each coordinate type, all with the same styling
     }
 
 
@@ -171,7 +171,7 @@ public class QuaxUITest {
     
     @Test
     void WinLabelIsDisplayed(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         for(int i = 0; i < 10;i++){
             robot.clickOn("#octagon5-" + i);

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import types.*;
 
+
 public class QuaxBoard implements Iterable<QuaxTile> {
 
     public static final int MAX_OCTAGONS = 11;
@@ -14,12 +15,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	private Octagon[][] octagonGrid;
 	private Rhombus[][] rhombusGrid;
-	
+	private LinkedList<QuaxTileGroup> trackedGroups;
 	private QuaxCoordinate previousMove;
+
 	private int moveNumber;
 	private boolean pieRuleDone;
-	
-	private LinkedList<QuaxTileGroup> trackedGroups;
 
 
 	public QuaxBoard() {
@@ -27,10 +27,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
-		
+
+		this.previousMove = null;
 		this.moveNumber = 0;
 		this.pieRuleDone = false;
-		this.previousMove = null;
 
 		initialiseGrids();
 	}
@@ -38,13 +38,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private void initialiseGrids() {
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				octagonGrid[i][j] = new Octagon(i, j);
+				this.octagonGrid[i][j] = new Octagon(i, j);
 			}
 		}
 
 		for (int i = 0; i < MAX_RHOMBUSES; i++) {
 			for (int j = 0; j < MAX_RHOMBUSES; j++) {
-				rhombusGrid[i][j] = new Rhombus(i, j);
+				this.rhombusGrid[i][j] = new Rhombus(i, j);
 			}
 		}
 	}
@@ -52,13 +52,13 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private void initialiseGrids(QuaxBoard b) {
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				octagonGrid[i][j] = new Octagon(b.getOctagon(i, j));
+				this.octagonGrid[i][j] = new Octagon(b.getOctagon(i, j));
 			}
 		}
 
 		for (int i = 0; i < MAX_RHOMBUSES; i++) {
 			for (int j = 0; j < MAX_RHOMBUSES; j++) {
-				rhombusGrid[i][j] = new Rhombus(b.getRhombus(i, j));
+				this.rhombusGrid[i][j] = new Rhombus(b.getRhombus(i, j));
 			}
 		}
 	}
@@ -69,10 +69,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
-		
+
+		this.previousMove = b.previousMove;
 		this.moveNumber = b.moveNumber;
 		this.pieRuleDone = b.pieRuleDone;
-		this.previousMove = b.previousMove;
 
 		initialiseGrids(b);
 		initialiseGroups(b);
@@ -82,6 +82,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		for (QuaxTileGroup g : b.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
 			this.trackGroup(newGroup);
+
 			for (QuaxTile t : g) {
 				newGroup.addTile(getTile(t.getCoordinates()));
 			}
@@ -134,7 +135,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 		// TODO - violates LoD?
-		QuaxTileGroup moveGroup = getTile(previousMove).getGroup();
+		QuaxTileGroup moveGroup = getTile(previousMove).getTileGroup();
 		return moveGroup.isWinningGroup();
 	}
 
@@ -157,10 +158,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
 		QuaxTile tile;
 		if (q.isOctagon()) {
-			tile = octagonGrid[q.x()][q.y()];
+			tile = this.octagonGrid[q.x()][q.y()];
 		}
 		else {
-			tile = rhombusGrid[q.x()][q.y()];
+			tile = this.rhombusGrid[q.x()][q.y()];
 		}
 		tile.setTileColour(c);
 		assignGroup(tile);
@@ -169,6 +170,20 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+	public boolean attemptPieRule() {
+		if (isPieRuleValid()) {
+			this.pieRuleDone = true;
+			this.moveNumber++;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isPieRuleValid() {
+		return this.moveNumber == 1 && !this.pieRuleDone;
+	}
+
+	// TODO - Move to new class?
 	private void assignGroup(QuaxTile newTile) {
 		QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
 		QuaxTileColour c = newTile.getTileColour();
@@ -183,8 +198,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		for (QuaxTile[] tileArray : neighbours) {
 			for (QuaxTile tile : tileArray) {
-				if (tile != null && tile.getTileColour().equals(c) && !(nearGroups.contains(tile.getGroup()))) {
-					nearGroups.add(tile.getGroup());
+				if (tile != null && tile.getTileColour().equals(c) && !(nearGroups.contains(tile.getTileGroup()))) {
+					nearGroups.add(tile.getTileGroup());
 				}
 			}
 		}
@@ -226,7 +241,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-
+	// TODO - Move to new class?
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
 
@@ -298,19 +313,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-
-	public boolean attemptPieRule() {
-		if (isPieRuleValid()) {
-			pieRuleDone = true;
-			moveNumber++;
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean isPieRuleValid() {
-		return moveNumber == 1 && !pieRuleDone;
-	}
 
 	public Iterator<QuaxTile> iterator() {
 		return new QuaxBoardIterator(this);

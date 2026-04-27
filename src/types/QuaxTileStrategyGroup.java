@@ -3,33 +3,38 @@ package types;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
-    private LinkedList<QuaxTile> members;
 
-    public QuaxTileStrategyGroup(){
-        this.members = new LinkedList<QuaxTile>();
+    private LinkedList<QuaxTile> strategyMembers;
+
+
+    public QuaxTileStrategyGroup() {
+        this.strategyMembers = new LinkedList<>();
     }
-
-    public void addTile(QuaxTile tile) {
-        tile.setStrategyGroup(this);
-        members.addFirst(tile);
-    }
-
-    public void removeTile(QuaxTile tile) {
-        members.remove(tile);
-    }
-
-    public int size(){
-        return members.size();
-    }
-
+    // TODO - Remove unused constructor
     public QuaxTileStrategyGroup(QuaxTile initialMember) {
         this();
         this.addTile(initialMember);
     }
 
 
+    public void addTile(QuaxTile tile) {
+        tile.setTileStrategyGroup(this);
+        strategyMembers.addFirst(tile);
+    }
+
+    public void removeTile(QuaxTile tile) {
+        strategyMembers.remove(tile);
+    }
+
+    // TODO - rename
+    public int size(){
+        return strategyMembers.size();
+    }
+
+
     public Iterator<QuaxTile> iterator() {
-        return members.iterator();
+        return strategyMembers.iterator();
     }
 }

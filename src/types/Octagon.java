@@ -1,5 +1,6 @@
 package types;
 
+
 public class Octagon extends QuaxTile {
 
 	// TODO - Move to parent class?
@@ -18,7 +19,8 @@ public class Octagon extends QuaxTile {
 		this.xPosition = o.xPosition;
 		this.yPosition = o.yPosition;
 	}
-	
+
+
 	@Override
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPosition, yPosition, true);

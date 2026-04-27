@@ -47,7 +47,7 @@ class TestBoardCopying {
 		b.makeMove(new QuaxCoordinate(5, 4, true), QuaxTileColour.BLACK);
 		
 		Octagon c = new Octagon(b.getOctagon(5, 4));
-		assertNull(c.getGroup());
+		assertNull(c.getTileGroup());
 	}
 	
 	@Test
@@ -89,7 +89,7 @@ class TestBoardCopying {
 		b.makeMove(new QuaxCoordinate(5, 4, false), QuaxTileColour.BLACK);
 		
 		Rhombus c = new Rhombus(b.getRhombus(5, 4));
-		assertNull(c.getGroup());
+		assertNull(c.getTileGroup());
 	}
 
 }

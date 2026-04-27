@@ -1,5 +1,7 @@
 package types;
 
+
+// TODO - Do we need overrides here?
 public enum QuaxTileColour {
 	NONE {
 		@Override
@@ -12,6 +14,7 @@ public enum QuaxTileColour {
 			return "tilecolour-none";
 		}
 	},
+
 	BLACK {
 		@Override
 		public QuaxTileColour flip() {
@@ -23,6 +26,7 @@ public enum QuaxTileColour {
 			return "tilecolour-black";
 		}
 	},
+
 	WHITE {
 		@Override
 		public QuaxTileColour flip() {
@@ -34,6 +38,7 @@ public enum QuaxTileColour {
 			return "tilecolour-white";
 		}
 	};
+
 	public abstract QuaxTileColour flip();
 	public abstract String tilecolourStyle();
 }

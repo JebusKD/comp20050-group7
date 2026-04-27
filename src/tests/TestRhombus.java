@@ -223,7 +223,7 @@ class TestRhombus {
 	@Test
 	void testUnassignedGroup() {
 		QuaxTile t = new Rhombus(5, 5);
-		assertNull(t.getGroup());
+		assertNull(t.getTileGroup());
 	}
 	
 	@Test
