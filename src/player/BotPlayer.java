@@ -55,11 +55,13 @@ public abstract class BotPlayer extends QuaxPlayer {
             choice = getStrategyValueGroup(1);
         }
 
+        /*
         while (choice.size() == 0) {
             val--;
-            getStrategyValueGroup(val);
+            choice = getStrategyValueGroup(val);
         }
-        /*
+         */
+
         if (choice == getStrategyValueGroup(4) && choice.size() == 0) {
             choice = getStrategyValueGroup(3);
 
@@ -67,7 +69,6 @@ public abstract class BotPlayer extends QuaxPlayer {
         if (choice == getStrategyValueGroup(3) && choice.size() == 0) {
             choice = getStrategyValueGroup(2);
         }
-        */
 
         if (stratSix != null && stratSix.size() != 0) { //if bot can win, that is highest priority
             choice = getStrategyValueGroup(6);
