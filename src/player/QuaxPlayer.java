@@ -1,74 +1,57 @@
 package player;
 
+import java.util.concurrent.Executor;
+
 import controller.QuaxController;
-import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.*;
-import java.util.concurrent.Executor;
+
 
 public abstract class QuaxPlayer {
 
-    private QuaxTileColour colour;
-    private QuaxController controller;
+    private QuaxTileColour playerColour;
+    private QuaxController playerController;
+
 
     public QuaxPlayer() {
-        this.colour = null;
-        this.controller = null;
+        this.playerColour = null;
+        this.playerController = null;
     }
 
-    public void setController(QuaxController controller) {
-        this.controller = controller;
+
+    public void setPlayerController(QuaxController playerController) {
+        this.playerController = playerController;
     }
 
     protected Executor getExecutor() {
-        if (controller == null) {
-            throw new IllegalStateException("Player not initialised to a controller.");
-        }
-        else {
-            return controller.getExecutor();
-        }
+        assert playerController != null;
+        return playerController.getExecutor();
     }
     
     protected Executor getSubmitter() {
-        if (controller == null) {
-            throw new IllegalStateException("Player not initialised to a controller.");
-        }
-        else {
-            return controller.getSubmitter();
-        }
+        assert playerController != null;
+        return playerController.getSubmitter();
     }
 
-    public QuaxTileColour getColour() {
-        if (this.colour == null) {
-            throw new IllegalStateException("Player not initialised to a controller.");
-        }
-        else {
-            return this.colour;
-        }
+    public QuaxTileColour getPlayerColour() {
+        assert this.playerColour == QuaxTileColour.BLACK || this.playerColour == QuaxTileColour.WHITE;
+        return this.playerColour;
     }
 
-    public void setColour(QuaxTileColour colour) {
-        if (colour == QuaxTileColour.NONE || colour == null) {
-            throw new IllegalArgumentException("Invalid colour assigned to player " + colour);
-        }
-        else {
-            this.colour = colour;
-        }
+    public void setPlayerColour(QuaxTileColour colour) {
+        assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+        this.playerColour = colour;
     }
+
 
     public abstract void movePrompt(QuaxBoard b);
 
     protected void submitMove(QuaxCoordinate move) {
-		
-    	
     	getSubmitter().execute(new Runnable() {
 			@Override
 			public void run() {
-				if (controller.makeMove(move)) {
-					controller.redoStrategy();
+				if (playerController.makeMove(move)) {
+					playerController.redoStrategy();
 				}
 			}
 		});
