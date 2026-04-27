@@ -156,20 +156,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
                 || n[1][0].getTileColour() == c && n[0][1].getTileColour() == c;
     }
 
-	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
-		QuaxTile tile;
-		if (q.isOctagon()) {
-			tile = this.octagonGrid[q.x()][q.y()];
-		}
-		else {
-			tile = this.rhombusGrid[q.x()][q.y()];
-		}
-		tile.setTileColour(c);
-		assignGroup(tile);
-		this.previousMove = q;
-		this.moveNumber++;
-	}
-
 
 	public boolean attemptPieRule() {
 		if (isPieRuleValid()) {
@@ -184,133 +170,176 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return this.moveNumber == 1 && !this.pieRuleDone;
 	}
 
-	// TODO - Move to new class?
-	private void assignGroup(QuaxTile newTile) {
-		QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
-		QuaxTileColour c = newTile.getTileColour();
-		assert c != QuaxTileColour.NONE;
 
-		ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
-		expandGroup(newTile, nearGroups);
+	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
+		QuaxTile tile;
+		GroupManager moveManager = new GroupManager();
+
+		if (q.isOctagon()) {
+			tile = this.octagonGrid[q.x()][q.y()];
+		}
+		else {
+			tile = this.rhombusGrid[q.x()][q.y()];
+		}
+
+		tile.setTileColour(c);
+		moveManager.assignGroup(tile);
+		this.previousMove = q;
+		this.moveNumber++;
 	}
 
-	private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
-		ArrayList<QuaxTileGroup> nearGroups = new ArrayList<>(ADJACENT_TILES);
+	private class GroupManager {
 
-		for (QuaxTile[] tileArray : neighbours) {
-			for (QuaxTile tile : tileArray) {
-				if (tile != null && tile.getTileColour().equals(c) && !(nearGroups.contains(tile.getTileGroup()))) {
-					nearGroups.add(tile.getTileGroup());
+		private void assignGroup(QuaxTile newTile) {
+			QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
+			QuaxTileColour c = newTile.getTileColour();
+			assert c != QuaxTileColour.NONE;
+
+			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
+			expandGroup(newTile, nearGroups);
+		}
+
+		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
+			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(ADJACENT_TILES);
+
+			for (QuaxTile[] tileArray : neighbours) {
+				for (QuaxTile tile : tileArray) {
+					if (tile != null && tile.getTileColour().equals(c)
+										&& !(nearbyGroups.contains(tile.getTileGroup()))) {
+						nearbyGroups.add(tile.getTileGroup());
+					}
+				}
+			}
+
+			return nearbyGroups;
+		}
+
+
+		private void expandGroup(QuaxTile tile, ArrayList<QuaxTileGroup> adjacentGroups) {
+			if (adjacentGroups.isEmpty()) {
+				trackGroup(new QuaxTileGroup(tile));
+			}
+			else {
+				QuaxTileGroup largestGroup = getBiggestGroup(adjacentGroups);
+				largestGroup.addTile(tile);
+				mergeNearbyGroups(largestGroup, adjacentGroups);
+			}
+		}
+
+		private QuaxTileGroup getBiggestGroup(ArrayList<QuaxTileGroup> adjGroups) {
+			int maxSize = -1;
+			QuaxTileGroup biggestGroup = null;
+
+			for (QuaxTileGroup g : adjGroups) {
+				if (g.size() > maxSize) {
+					biggestGroup = g;
+					maxSize = g.size();
+				}
+			}
+
+			return biggestGroup;
+		}
+
+		private void mergeNearbyGroups(QuaxTileGroup largest, ArrayList<QuaxTileGroup> adjacentGroups) {
+			for (QuaxTileGroup g : adjacentGroups) {
+				if (g != largest) {
+					largest.merge(g);
+					untrackGroup(g);
 				}
 			}
 		}
-
-		return nearGroups;
 	}
 
-	private void expandGroup(QuaxTile tile, ArrayList<QuaxTileGroup> adjacentGroups) {
-		if (adjacentGroups.isEmpty()) {
-			trackGroup(new QuaxTileGroup(tile));
-		}
-		else {
-			QuaxTileGroup largestGroup = getBiggestGroup(adjacentGroups);
-			largestGroup.addTile(tile);
-			mergeNearbyGroups(largestGroup, adjacentGroups);
-		}
-	}
 
-	private QuaxTileGroup getBiggestGroup(ArrayList<QuaxTileGroup> adjGroups) {
-		int maxSize = -1;
-		QuaxTileGroup biggestGroup = null;
-
-		for (QuaxTileGroup g : adjGroups) {
-			if (g.size() > maxSize) {
-				biggestGroup = g;
-				maxSize = g.size();
-			}
-		}
-
-		return biggestGroup;
-	}
-
-	private void mergeNearbyGroups(QuaxTileGroup largest, ArrayList<QuaxTileGroup> adjacentGroups) {
-		for (QuaxTileGroup g : adjacentGroups) {
-			if (g != largest) {
-				largest.merge(g);
-				untrackGroup(g);
-			}
-		}
-	}
-
-	// TODO - Move to new class?
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
+		NeighbourFinder nf = new NeighbourFinder();
 
 		if (q.isOctagon()) {
-			neighbours = getOctagonNeighbours(q);
+			neighbours = nf.getOctagonNeighbours(q);
 		}
 		else {
-			neighbours = getRhombusNeighbours(q);
+			neighbours = nf.getRhombusNeighbours(q);
 		}
 
 		return neighbours;
 	}
 
-	private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
-		Octagon[][] adjTiles = new Octagon[2][2];
-		adjTiles[0][0] = octagonGrid[qc.x()][qc.y()];
-		adjTiles[0][1] = octagonGrid[qc.x()][qc.y() + 1];
-		adjTiles[1][0] = octagonGrid[qc.x() + 1][qc.y()];
-		adjTiles[1][1] = octagonGrid[qc.x() + 1][qc.y() + 1];
-		return adjTiles;
-	}
+	private class NeighbourFinder {
 
-	private QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc) {
-		QuaxTile[][] adjTiles = new QuaxTile[3][3];
+		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
+			Octagon[][] neighbours = new Octagon[2][2];
 
-		getLeftNeighbours(qc, adjTiles);
-		getRightNeighbours(qc, adjTiles);
-		getVerticalNeighbours(qc, adjTiles);
+			neighbours[0][0] = getOctagon(qc.x(), qc.y());
+			neighbours[0][1] = getOctagon(qc.x(), qc.y() + 1);
+			neighbours[1][0] = getOctagon(qc.x() + 1, qc.y());
+			neighbours[1][1] = getOctagon(qc.x() + 1, qc.y() + 1);
 
-		return adjTiles;
-	}
+			return neighbours;
+		}
 
-	private void getLeftNeighbours(QuaxCoordinate coordinate, QuaxTile[][] adjTiles) {
-		int minusX = coordinate.x() - 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
 
-		if (minusX >= 0) {
+		private QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc) {
+			QuaxTile[][] neighbours = new QuaxTile[3][3];
+
+			neighbours[0] = getLeftNeighbours(qc);
+			neighbours[1] = getVerticalNeighbours(qc);
+			neighbours[2] = getRightNeighbours(qc);
+
+			return neighbours;
+		}
+
+		private QuaxTile[] getLeftNeighbours(QuaxCoordinate coordinate) {
+			int minusX = coordinate.x() - 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
+			QuaxTile[] adjTiles = new QuaxTile[3];
+
+			if (minusX >= 0) {
+				if (minusY >= 0) {
+					adjTiles[0] = getRhombus(minusX, minusY);
+				}
+
+				adjTiles[1] = getOctagon(minusX, coordinate.y());
+
+				if (plusY <= MAX_RHOMBUSES) {
+					adjTiles[2] = getRhombus(minusX, coordinate.y());
+				}
+			}
+
+			return adjTiles;
+		}
+
+		private QuaxTile[] getRightNeighbours(QuaxCoordinate coordinate) {
+			int plusX = coordinate.x() + 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
+			QuaxTile[] adjTiles = new QuaxTile[3];
+
+			if (plusX <= MAX_RHOMBUSES) {
+				if (minusY >= 0) {
+					adjTiles[0] = rhombusGrid[coordinate.x()][minusY];
+				}
+
+				adjTiles[1] = octagonGrid[plusX][coordinate.y()];
+
+				if (plusY <= MAX_RHOMBUSES) {
+					adjTiles[2] = rhombusGrid[coordinate.x()][coordinate.y()];
+				}
+			}
+
+			return adjTiles;
+		}
+
+		private QuaxTile[] getVerticalNeighbours(QuaxCoordinate coordinate) {
+			int minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
+			QuaxTile[] adjTiles = new QuaxTile[3];
+
 			if (minusY >= 0) {
-				adjTiles[0][0] = rhombusGrid[minusX][minusY];
+				adjTiles[0] = octagonGrid[coordinate.x()][minusY];
 			}
-			adjTiles[0][1] = octagonGrid[minusX][coordinate.y()];
+
 			if (plusY <= MAX_RHOMBUSES) {
-				adjTiles[0][2] = rhombusGrid[minusX][coordinate.y()];
+				adjTiles[2] = octagonGrid[coordinate.x()][plusY];
 			}
-		}
-	}
 
-	private void getRightNeighbours(QuaxCoordinate coordinate, QuaxTile[][] adjTiles) {
-		int plusX = coordinate.x() + 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
-
-		if (plusX <= MAX_RHOMBUSES) {
-			if (minusY >= 0) {
-				adjTiles[2][0] = rhombusGrid[coordinate.x()][minusY];
-			}
-			adjTiles[2][1] = octagonGrid[plusX][coordinate.y()];
-			if (plusY <= MAX_RHOMBUSES) {
-				adjTiles[2][2] = rhombusGrid[coordinate.x()][coordinate.y()];
-			}
-		}
-	}
-
-	private void getVerticalNeighbours(QuaxCoordinate coordinate, QuaxTile[][] adjTiles) {
-		int minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
-		if (minusY >= 0) {
-			adjTiles[1][0] = octagonGrid[coordinate.x()][minusY];
-		}
-
-		if (plusY <= MAX_RHOMBUSES) {
-			adjTiles[1][2] = octagonGrid[coordinate.x()][plusY];
+			return adjTiles;
 		}
 	}
 
