@@ -23,18 +23,7 @@ public class QuaxUITest {
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage, false);//human v human game for testing
-    }
-
-    @Test
-    void ShowTitleExists(FxRobot robot) {
-        assertNotNull(robot.lookup("#Title").query());
-    }
-
-    @Test
-    void ShowTitleTextCorrect(FxRobot robot) {
-        Label titleLabel = robot.lookup("#Title").queryAs(Label.class);
-        assertEquals("Quax (Human V Bot)", titleLabel.getText());
+        controller = new QuaxController(stage,false, false);//human v human game for testing
     }
 
     @Test
@@ -55,7 +44,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
     }
 
     @Test
@@ -67,27 +56,27 @@ public class QuaxUITest {
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getQuaxBoard().checkForWinningMove());
+        assertTrue(controller.getBoard().checkForWinningMove());
     }
 
     @Test
     void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getQuaxBoard();
+        QuaxBoard board = controller.getBoard();
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
     }
 
     @Test
     void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getQuaxBoard();
+        QuaxBoard board = controller.getBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
-        robot.clickOn("#octagon0-0");//just have white turn click somewhere else
+        robot.clickOn("#octagon0-0");//just have white turn click somehwere else
         robot.clickOn("#octagon6-6");
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK, board.getRhombus(5,5).getTileColour());
+        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
     }
 
     @Test
@@ -178,6 +167,29 @@ public class QuaxUITest {
         robot.clickOn("#octagon10-3");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
         assertEquals("WHITE wins",winLabel.getText());
+    }
+    
+    @Test
+    void WinLabelIsDisplayed(FxRobot robot){
+        QuaxBoard board = controller.getBoard();
+
+        for(int i = 0; i < 10;i++){
+            robot.clickOn("#octagon5-" + i);
+            robot.clickOn("#octagon1-" + i);
+        }
+
+        robot.clickOn("#octagon5-10");
+        Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
+        assertEquals("BLACK wins",winLabel.getText());
+    }
+
+    @Test
+    void ShowTitleExists(FxRobot robot){assertNotNull(robot.lookup("#Title").query());}
+
+    @Test
+    void  ShowTitleTextCorrect(FxRobot robot){
+        Label title = robot.lookup("#Title").queryAs(Label.class);
+        assertEquals("Quax (Human V Bot)",title.getText());
     }
 
 }

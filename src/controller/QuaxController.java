@@ -27,6 +27,7 @@ public class QuaxController {
     private boolean showingStrategy = false;
 
     private final Executor executor;
+    private final Executor submitter;
 
     private boolean humanPlaysFirst;
 
@@ -36,7 +37,10 @@ public class QuaxController {
         this.ui = new EmptyUserInterface();
 
         this.executor = new SingleThreadExecutor();
+        this.submitter = new SingleThreadExecutor();
 
+        BotPlayer.enableHaste();
+        
         startGame(p1, p2);
     }
 
@@ -50,6 +54,7 @@ public class QuaxController {
         players = new QuaxPlayer[2];
 
         this.executor = new JavaFXThreadedExecutor();
+        this.submitter = new JavaFXPlatformRunner();
 
         QuaxEventHandler.setup(this, stage);
 
@@ -91,6 +96,7 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BogoBot();
 
+        
             if (RNG.nextInt() % 2 == 0) {
                 startGame(human, bot);
             } else {
@@ -112,7 +118,7 @@ public class QuaxController {
         return board.getMoveNumber();
     }
 
-    public void makeMove(QuaxCoordinate coords) {
+    public boolean makeMove(QuaxCoordinate coords) {
         QuaxTileColour c = curPlayer().getColour();
         if (board.validMove(coords, c)) {
             board.makeMove(coords, c);
@@ -124,9 +130,11 @@ public class QuaxController {
                 ui.hideTurnTracker();
             } else {
                 curPlayer().movePrompt(board);
-                redoStrategy();
+               
             }
+            return true;
         }
+        else return false;
     }
 
     public QuaxBoard getBoard() {
@@ -178,7 +186,11 @@ public class QuaxController {
     public Executor getExecutor() {
         return this.executor;
     }
-
+    
+    public Executor getSubmitter() {
+    	return this.submitter;
+    }
+    
     public void setPieRuleVisibility(boolean visibility) {
         ui.setPieRuleVisibility(visibility);
     }
@@ -193,5 +205,11 @@ public class QuaxController {
     	public void execute(Runnable r) {
 			new Thread(r).start();
 		}
+    }
+    
+    public static class JavaFXPlatformRunner implements Executor {
+    	public void execute(Runnable r) {
+    		Platform.runLater(r);
+    	}
     }
 }

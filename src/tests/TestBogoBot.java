@@ -76,4 +76,6 @@ public class TestBogoBot {
 		assertTrue(controller.getQuaxBoard().checkForWinningMove());
 	}
 	
+	
+	
 }
