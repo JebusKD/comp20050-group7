@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.SplittableRandom;
 
-import javafx.application.Platform;
-import javafx.stage.Stage;
 import model.QuaxBoard;
 import types.*;
 
@@ -75,7 +73,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 
         if(candidateMoves.isEmpty()){ //just in case candiateMoves is somehow empty
             for (QuaxTile t : b) {
-            	if (b.validMove(t.getCoordinates(), this.getColour())) {
+            	if (b.validMove(t.getCoordinates(), this.getPlayerColour())) {
             		candidateMoves.add(t.getCoordinates());
             	}
             }
@@ -154,7 +152,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	public void setAll(QuaxBoard b, int val) {
 		for (QuaxTile t : b) {
-			if (b.validMove(t.getCoordinates(), this.getColour())) {
+			if (b.validMove(t.getCoordinates(), this.getPlayerColour())) {
 				t.setStrategyValue(val);
 			}
 			else {
@@ -169,7 +167,7 @@ public abstract class BotPlayer extends QuaxPlayer {
 
         for (QuaxTile t : b) {
             t.setStrategyValue(IGNORE_VALUE);
-            if (!b.validMove(t.getCoordinates(), this.getColour())) {
+            if (!b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 continue;
             }
             t.setStrategyValue(1);
@@ -177,17 +175,17 @@ public abstract class BotPlayer extends QuaxPlayer {
         }
 
         for (QuaxTile t : b) {
-            if (t instanceof Octagon && !b.validMove(t.getCoordinates(), this.getColour())) {
-                QuaxTile[][] neighbours = b.neighbours(t.getCoordinates());
+            if (t instanceof Octagon && !b.validMove(t.getCoordinates(), this.getPlayerColour())) {
+                QuaxTile[][] neighbours = b.getNeighbours(t.getCoordinates());
                 for (QuaxTile[] row : neighbours) {
                     for (QuaxTile neighbour : row) {
                         if (neighbour instanceof Octagon
-                                && b.validMove(neighbour.getCoordinates(), this.getColour())) {
+                                && b.validMove(neighbour.getCoordinates(), this.getPlayerColour())) {
                             neighbour.setStrategyValue(2);
                             assignStratGroup(neighbour);
-                            if (t.getColour() == QuaxTileColour.BLACK) {
+                            if (t.getTileColour() == QuaxTileColour.BLACK) {
                                 if (neighbour == neighbours[1][0] || neighbour == neighbours[1][2]) {
-                                    if(this.getColour() == QuaxTileColour.BLACK){
+                                    if(this.getPlayerColour() == QuaxTileColour.BLACK){
                                         neighbour.setStrategyValue(4);
                                         assignStratGroup(neighbour);
                                     }else{
@@ -195,9 +193,9 @@ public abstract class BotPlayer extends QuaxPlayer {
                                         assignStratGroup(neighbour);
                                     }
                                 }
-                            } else if (t.getColour() == QuaxTileColour.WHITE) {
+                            } else if (t.getTileColour() == QuaxTileColour.WHITE) {
                                 if (neighbour == neighbours[0][1] || neighbour == neighbours[2][1]) {
-                                    if(this.getColour() == QuaxTileColour.WHITE){
+                                    if(this.getPlayerColour() == QuaxTileColour.WHITE){
                                         neighbour.setStrategyValue(4);
                                         assignStratGroup(neighbour);
                                     }else {
@@ -210,22 +208,22 @@ public abstract class BotPlayer extends QuaxPlayer {
                     }
                 }
             }
-            if (t instanceof Rhombus && b.validMove(t.getCoordinates(), this.getColour())) {
+            if (t instanceof Rhombus && b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 t.setStrategyValue(4);
                 assignStratGroup(t);
-                if (b.validMove(t.getCoordinates(), this.getColour().flip())){
+                if (b.validMove(t.getCoordinates(), this.getPlayerColour().flip())){
                     t.setStrategyValue(4);
                     assignStratGroup(t);
                 }
 
-               QuaxTileColour humanCol =  this.getColour().flip();
+               QuaxTileColour humanCol =  this.getPlayerColour().flip();
                 if(b.validMove(t.getCoordinates(), humanCol)){
                     if(checkForWin(t.getCoordinates(),b,humanCol)){
                         t.setStrategyValue(5);
                         assignStratGroup(t);
                     }
                 }
-               if(checkForWin(t.getCoordinates(),b,this.getColour())){
+               if(checkForWin(t.getCoordinates(),b,this.getPlayerColour())){
                     t.setStrategyValue(6);
                     assignStratGroup(t);
                 }
@@ -233,14 +231,14 @@ public abstract class BotPlayer extends QuaxPlayer {
             }
         }
         for(QuaxTile t: b){
-            if(b.validMove(t.getCoordinates(), this.getColour())){
-                    QuaxTileColour humanCol =  this.getColour().flip();
+            if(b.validMove(t.getCoordinates(), this.getPlayerColour())){
+                    QuaxTileColour humanCol =  this.getPlayerColour().flip();
                     if(checkForWin(t.getCoordinates(),b,humanCol)){
                         t.setStrategyValue(5);
                         assignStratGroup(t);
                     }
 
-                if(checkForWin(t.getCoordinates(),b,this.getColour())){
+                if(checkForWin(t.getCoordinates(),b,this.getPlayerColour())){
                     t.setStrategyValue(6); // bot winning takes priority
                     assignStratGroup(t);
                 }
