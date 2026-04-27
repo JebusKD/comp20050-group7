@@ -17,7 +17,7 @@ public class QuaxEventHandler {
             public void handle(QuaxCoordinateEvent coords) {
 
                 if (controller.curPlayer() instanceof HumanPlayer) {
-                    controller.makeMove(coords.coordinate());
+                    controller.tryMove(coords.coordinate());
                     controller.redoStrategy();
                 }
             }

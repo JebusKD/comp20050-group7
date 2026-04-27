@@ -140,8 +140,9 @@ public class QuaxController {
         }
     }
 
-    public boolean makeMove(QuaxCoordinate coords) {
+    public boolean tryMove(QuaxCoordinate coords) {
         QuaxTileColour c = curPlayer().getPlayerColour();
+
         if (quaxBoard.validMove(coords, c)) {
             quaxBoard.makeMove(coords, c);
 
@@ -150,13 +151,16 @@ public class QuaxController {
             if (quaxBoard.checkForWinningMove()) {
                 quaxUserInterface.showWinLabel(c);
                 quaxUserInterface.hideTurnTracker();
-            } else {
-                curPlayer().movePrompt(quaxBoard);
-
             }
+
+            else {
+                curPlayer().movePrompt(quaxBoard);
+            }
+
             return true;
         }
-        else return false;
+
+        return false;
     }
 
 
