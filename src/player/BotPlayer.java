@@ -83,7 +83,7 @@ public abstract class BotPlayer extends QuaxPlayer {
             candidateMoves.add(t.getCoordinates());
         }
 
-        if (candidateMoves.isEmpty()) { // just in case candidate Moves is somehow empty
+        if (candidateMoves.isEmpty()) { // just in case candidateMoves is somehow empty
             for (QuaxTile t : b) {
             	if (b.validMove(t.getCoordinates(), this.getPlayerColour())) {
             		candidateMoves.add(t.getCoordinates());
@@ -95,42 +95,6 @@ public abstract class BotPlayer extends QuaxPlayer {
 		return candidateMoves.get(index);
 	}
 
-
-    private QuaxTileStrategyGroup selectStrategyGroup(QuaxBoard b) {
-
-        if (stratSix != null && stratSix.size() != 0) { //if bot can win, that is highest priority
-            return stratSix;
-        }
-
-        else if (stratFive != null && stratFive.size() != 0) { //else block the opponents win
-            return stratFive;
-        }
-
-        if (b.getMoveNumber() == 0) { // if there's no moves, all strat vals are 1, so choose from this group
-            return stratOne;
-        }
-
-        int val = chooseStrategyValue();
-        QuaxTileStrategyGroup choice = getStrategyValueGroup(val);
-
-        while (choice.size() == 0) {
-            val--;
-            choice = getStrategyValueGroup(val);
-        }
-        /*
-        if (choice == getStratGroup(4) && choice.size() == 0) {
-            choice = getStratGroup(3);
-
-        }
-        if(choice == getStratGroup(3) && choice.size() == 0){
-            choice = getStratGroup(2);
-        }
-        */
-
-        return choice;
-    }
-
-
     /*
       5% chance of strat val 1
       20% chance of strat val 2
@@ -139,7 +103,7 @@ public abstract class BotPlayer extends QuaxPlayer {
      */
     public int chooseStrategyValue() {
         SplittableRandom random = new SplittableRandom();
-        int probability= random.nextInt(1,101);
+        int probability= random.nextInt(1, 101);
 
         if (probability <= 3) {
             return 1;
@@ -175,10 +139,9 @@ public abstract class BotPlayer extends QuaxPlayer {
 
 
     public void assignStratGroup(QuaxTile newTile) {
-        types.QuaxTileStrategyGroup newStrategyGroup = getStrategyValueGroup(newTile.getStrategyValue());
+        QuaxTileStrategyGroup tileGroup = getStrategyValueGroup(newTile.getStrategyValue());
         removeTileFromAllStrategyGroups(newTile);
-        newStrategyGroup.addTile(newTile);
-
+        tileGroup.addTile(newTile);
         /*
         if (newTile.getStrategyValue() == 1) {
             this.stratOne.addTile(newTile);
@@ -283,7 +246,7 @@ public abstract class BotPlayer extends QuaxPlayer {
                 }
             }
 
-            // TODO - Rhombus fix
+            // TODO - Fix rhombus
             if (t instanceof Rhombus && b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 t.setStrategyValue(4);
                 assignStratGroup(t);
