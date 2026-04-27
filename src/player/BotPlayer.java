@@ -238,14 +238,13 @@ public abstract class BotPlayer extends QuaxPlayer {
 		}
 	}
 
-    // TODO - please help
-    // how the bot decides strategy vals for the tiles
+    // how the bot decides strat vals for the tiles
     public void setUpStrategy(QuaxBoard b) {
         clearStrategyGroups();
         initialiseStrategyGroups(b);
 
         for (QuaxTile t : b) {
-            // TODO - Octagon fix
+            // TODO - Fix octagons
             if (t instanceof Octagon && !b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 QuaxTile[][] neighbours = b.getNeighbours(t.getCoordinates());
                 for (QuaxTile[] row : neighbours) {
@@ -256,20 +255,24 @@ public abstract class BotPlayer extends QuaxPlayer {
                             assignStratGroup(neighbour);
                             if (t.getTileColour() == QuaxTileColour.BLACK) {
                                 if (neighbour == neighbours[1][0] || neighbour == neighbours[1][2]) {
-                                    if(this.getPlayerColour() == QuaxTileColour.BLACK){
+                                    if (this.getPlayerColour() == QuaxTileColour.BLACK) {
                                         neighbour.setStrategyValue(4);
                                         assignStratGroup(neighbour);
-                                    }else{
+                                    }
+                                    else{
                                         neighbour.setStrategyValue(3);
                                         assignStratGroup(neighbour);
                                     }
                                 }
-                            } else if (t.getTileColour() == QuaxTileColour.WHITE) {
+                            }
+
+                            else if (t.getTileColour() == QuaxTileColour.WHITE) {
                                 if (neighbour == neighbours[0][1] || neighbour == neighbours[2][1]) {
-                                    if(this.getPlayerColour() == QuaxTileColour.WHITE){
+                                    if (this.getPlayerColour() == QuaxTileColour.WHITE) {
                                         neighbour.setStrategyValue(4);
                                         assignStratGroup(neighbour);
-                                    }else {
+                                    }
+                                    else {
                                         neighbour.setStrategyValue(3);
                                         assignStratGroup(neighbour);
                                     }
@@ -284,23 +287,23 @@ public abstract class BotPlayer extends QuaxPlayer {
             if (t instanceof Rhombus && b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 t.setStrategyValue(4);
                 assignStratGroup(t);
-                if (b.validMove(t.getCoordinates(), this.getPlayerColour().flip())){
+                if (b.validMove(t.getCoordinates(), this.getPlayerColour().flip())) {
                     t.setStrategyValue(4);
                     assignStratGroup(t);
                 }
 
-               QuaxTileColour humanCol =  this.getPlayerColour().flip();
-                if(b.validMove(t.getCoordinates(), humanCol)){
-                    if(checkForWin(t.getCoordinates(),b,humanCol)){
+                QuaxTileColour humanColour =  this.getPlayerColour().flip();
+                if (b.validMove(t.getCoordinates(), humanColour)) {
+                    if (checkForWin(t.getCoordinates(),b,humanColour)) {
                         t.setStrategyValue(5);
                         assignStratGroup(t);
                     }
                 }
-               if(checkForWin(t.getCoordinates(),b,this.getPlayerColour())){
+
+                if (checkForWin(t.getCoordinates(),b,this.getPlayerColour())) {
                     t.setStrategyValue(6);
                     assignStratGroup(t);
                 }
-
             }
         }
 
