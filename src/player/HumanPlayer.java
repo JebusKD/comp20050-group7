@@ -2,6 +2,7 @@ package player;
 
 import model.QuaxBoard;
 
+
 public class HumanPlayer extends QuaxPlayer {
 
 	public HumanPlayer() {
