@@ -141,31 +141,6 @@ public abstract class BotPlayer extends QuaxPlayer {
         QuaxTileStrategyGroup tileGroup = getStrategyValueGroup(newTile.getStrategyValue());
         removeTileFromAllStrategyGroups(newTile);
         tileGroup.addTile(newTile);
-        /*
-        if (newTile.getStrategyValue() == 1) {
-            this.stratOne.addTile(newTile);
-        }
-        else if (newTile.getStrategyValue() == 2) {
-            removeFromAllGroups(newTile);
-            this.stratTwo.addTile(newTile);
-        }
-        else if (newTile.getStrategyValue() == 3) {
-            removeFromAllGroups(newTile);
-            this.stratThree.addTile(newTile);
-        }
-        else if (newTile.getStrategyValue() == 4) {
-            removeFromAllGroups(newTile);
-            this.stratFour.addTile(newTile);
-        }
-        else if(newTile.getStrategyValue() == 5){
-            removeFromAllGroups(newTile);
-            this.stratFive.addTile(newTile);
-        }
-        else if (newTile.getStrategyValue() == 6) {
-            removeFromAllGroups(newTile);
-            this.stratSix.addTile(newTile);
-        }
-        */
     }
 
 

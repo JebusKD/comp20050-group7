@@ -2,7 +2,6 @@ package controller;
 
 import java.util.concurrent.Executor;
 import java.util.Random;
-
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -37,6 +36,7 @@ public class QuaxController {
         startGame(p1, p2);
     }
 
+    // Testing constructor
     public QuaxController(Stage stage) {
         this(stage, true, false);
     }
@@ -54,6 +54,7 @@ public class QuaxController {
             startGame(new HumanPlayer(),new BogoBot());
         }
         else {
+            // TODO - Remove on final submission
             //startGame(new BogoBot(), new BogoBot());
             if (againstBot) {
                 startGameAgainstBot();

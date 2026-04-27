@@ -36,9 +36,11 @@ public abstract class QuaxTile {
 	public int getStrategyValue() {
 		return this.strategyValue;
 	}
+	// TODO - Add getStrategyGroup?
 
-	public void setTileColour(QuaxTileColour tileColour) {
-		this.tileColour = tileColour;
+	// TODO - Add assertions?
+	public void setTileColour(QuaxTileColour colour) {
+		this.tileColour = colour;
 	}
 
 	public void setTileGroup(QuaxTileGroup tileGroup) {

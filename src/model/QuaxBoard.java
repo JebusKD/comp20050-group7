@@ -35,6 +35,22 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		initialiseGrids();
 	}
 
+	// Copy constructor
+	public QuaxBoard(QuaxBoard b) {
+		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
+		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
+		
+		this.trackedGroups = new LinkedList<>();
+
+		this.previousMove = b.previousMove;
+		this.moveNumber = b.moveNumber;
+		this.pieRuleDone = b.pieRuleDone;
+
+		initialiseGrids(b);
+		initialiseGroups(b);
+	}
+
+
 	private void initialiseGrids() {
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
 			for (int j = 0; j < MAX_OCTAGONS; j++) {
@@ -61,21 +77,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				this.rhombusGrid[i][j] = new Rhombus(b.getRhombus(i, j));
 			}
 		}
-	}
-
-	// Copy constructor
-	public QuaxBoard(QuaxBoard b) {
-		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
-		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
-		
-		this.trackedGroups = new LinkedList<>();
-
-		this.previousMove = b.previousMove;
-		this.moveNumber = b.moveNumber;
-		this.pieRuleDone = b.pieRuleDone;
-
-		initialiseGrids(b);
-		initialiseGroups(b);
 	}
 
 	private void initialiseGroups(QuaxBoard b) {

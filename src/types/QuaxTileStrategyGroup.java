@@ -12,6 +12,7 @@ public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
     public QuaxTileStrategyGroup() {
         this.strategyMembers = new LinkedList<>();
     }
+
     // TODO - Remove unused constructor
     public QuaxTileStrategyGroup(QuaxTile initialMember) {
         this();
@@ -28,8 +29,8 @@ public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
         strategyMembers.remove(tile);
     }
 
-    // TODO - rename
-    public int size(){
+
+    public int size() {
         return strategyMembers.size();
     }
 
