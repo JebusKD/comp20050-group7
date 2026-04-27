@@ -7,6 +7,7 @@ import java.util.SplittableRandom;
 import model.QuaxBoard;
 import types.*;
 
+
 // TODO - Remove abstract
 public abstract class BotPlayer extends QuaxPlayer {
 	// TODO - rename variable

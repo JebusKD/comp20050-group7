@@ -3,6 +3,7 @@ package player;
 import model.QuaxBoard;
 import types.*;
 
+
 public class BogoBot extends BotPlayer {
 
 	public BogoBot() {
