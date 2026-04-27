@@ -15,7 +15,6 @@ public abstract class BotPlayer extends QuaxPlayer {
 	
 	private static final long MIN_THINKING_TIME = 1000;
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
-	
 	static final Random RNG = new Random();
 
     private QuaxTileStrategyGroup stratOne;
@@ -204,7 +203,15 @@ public abstract class BotPlayer extends QuaxPlayer {
     // how the bot decides strat vals for the tiles
     public void setUpStrategy(QuaxBoard b) {
         clearStrategyGroups();
-        initialiseStrategyGroups(b);
+
+        for (QuaxTile t : b) {
+            t.setStrategyValue(IGNORE_VALUE);
+            if (!b.validMove(t.getCoordinates(), this.getPlayerColour())) {
+                continue;
+            }
+            t.setStrategyValue(1);
+            assignStratGroup(t);
+        }
 
         for (QuaxTile t : b) {
             // TODO - Fix octagons
