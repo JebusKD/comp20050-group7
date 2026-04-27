@@ -1,43 +1,36 @@
 package controller;
 
+import java.util.concurrent.Executor;
+import java.util.Random;
+
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.stage.Stage;
+
 import model.QuaxBoard;
 import player.*;
 import types.*;
-import java.util.concurrent.Executor;
 import userinterface.*;
 
-import java.util.Random;
-import java.util.concurrent.Executor;
 
 public class QuaxController {
 
     static final Random RNG = new Random();
-
-    private final UserInterface ui;
-
-    private QuaxBoard board;
-
-    private final QuaxPlayer[] players;
-
-    private boolean showingStrategy = false;
-
     private final Executor executor;
     private final Executor submitter;
 
-    private boolean humanPlaysFirst;
+    private final UserInterface quaxUserInterface;
+    private QuaxBoard quaxBoard;
+    private final QuaxPlayer[] quaxPlayers;
+
+    private boolean showingStrategy = false;
+
 
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-        players = new QuaxPlayer[2];
-
-        this.ui = new EmptyUserInterface();
-
         this.executor = new SingleThreadExecutor();
         this.submitter = new SingleThreadExecutor();
+
+        this.quaxPlayers = new QuaxPlayer[2];
+        this.quaxUserInterface = new TestingEmptyInterface();
 
         BotPlayer.enableHaste();
         
@@ -45,30 +38,35 @@ public class QuaxController {
     }
 
     public QuaxController(Stage stage) {
-        this(stage, true,false);
+        this(stage, true, false);
     }
 
     public QuaxController(Stage stage, boolean againstBot,boolean humanPlaysFirst) {
-        ui = new QuaxUserInterface(stage);
-
-        players = new QuaxPlayer[2];
-
         this.executor = new JavaFXThreadedExecutor();
         this.submitter = new JavaFXPlatformRunner();
 
+        this.quaxUserInterface = new QuaxUserInterface(stage);
+        this.quaxPlayers = new QuaxPlayer[2];
+
         QuaxEventHandler.setup(this, stage);
 
-        if(humanPlaysFirst){
+        if (humanPlaysFirst) {
             startGame(new HumanPlayer(),new BogoBot());
-        }else{
+        }
+        else {
             //startGame(new BogoBot(), new BogoBot());
-            if (againstBot) startGameAgainstBot();
-            else startTwoPlayerGame();
+            if (againstBot) {
+                startGameAgainstBot();
+            }
+            else {
+                startTwoPlayerGame();
+            }
         }
     }
 
-    public void startTwoPlayerGame() {
 
+    // TODO - Remove on final submission
+    public void startTwoPlayerGame() {
         QuaxPlayer p1 = new HumanPlayer();
         QuaxPlayer p2 = new HumanPlayer();
 
@@ -76,83 +74,94 @@ public class QuaxController {
     }
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-        this.board = new QuaxBoard();
+        this.quaxBoard = new QuaxBoard();
 
-        players[0] = p1;
-        players[1] = p2;
+        this.quaxPlayers[0] = p1;
+        this.quaxPlayers[1] = p2;
 
-        p1.setColour(QuaxTileColour.BLACK);
-        p2.setColour(QuaxTileColour.WHITE);
+        p1.setPlayerColour(QuaxTileColour.BLACK);
+        p2.setPlayerColour(QuaxTileColour.WHITE);
 
-        p1.setController(this);
-        p2.setController(this);
+        p1.setPlayerController(this);
+        p2.setPlayerController(this);
 
-        ui.setBoard(board);
+        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
 
-        curPlayer().movePrompt(board);
+        curPlayer().movePrompt(quaxBoard);
     }
 
     public void startGameAgainstBot() {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BogoBot();
-
         
-            if (RNG.nextInt() % 2 == 0) {
-                startGame(human, bot);
-            } else {
-                startGame(bot, human);
-            }
+        if (RNG.nextInt() % 2 == 0) {
+            startGame(human, bot);
+        }
+        else {
+            startGame(bot, human);
+        }
     }
 
+
     public QuaxPlayer curPlayer() {
-        return players[getMoveNumber() % 2];
+        return quaxPlayers[getMoveNumber() % 2];
     }
 
     // for testing purposes
     public QuaxTileColour getPlayerColour(int i) {
-        if (i == 0 || i == 1) return players[i].getColour();
-        else throw new IllegalArgumentException("Only players 0 and 1 exist.");
+        assert i == 0 || i == 1;
+        return quaxPlayers[i].getPlayerColour();
     }
 
     public int getMoveNumber() {
-        return board.getMoveNumber();
+        return quaxBoard.getMoveNumber();
+    }
+
+    public QuaxBoard getQuaxBoard() {
+        return this.quaxBoard;
+    }
+
+    public Executor getExecutor() {
+        return this.executor;
+    }
+
+    public Executor getSubmitter() {
+        return this.submitter;
+    }
+
+
+    public void doPieRule() {
+        if (quaxBoard.attemptPieRule()) {
+            quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
+            quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
+            quaxUserInterface.setPieRuleVisibility(false);
+            curPlayer().movePrompt(getQuaxBoard());
+        }
     }
 
     public boolean makeMove(QuaxCoordinate coords) {
-        QuaxTileColour c = curPlayer().getColour();
-        if (board.validMove(coords, c)) {
-            board.makeMove(coords, c);
+        QuaxTileColour c = curPlayer().getPlayerColour();
+        if (quaxBoard.validMove(coords, c)) {
+            quaxBoard.makeMove(coords, c);
 
-            ui.updateFromPreviousMove(board);
+            quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
-            if (board.checkForWinningMove()) {
-                ui.showWinLabel(c);
-                ui.hideTurnTracker();
+            if (quaxBoard.checkForWinningMove()) {
+                quaxUserInterface.showWinLabel(c);
+                quaxUserInterface.hideTurnTracker();
             } else {
-                curPlayer().movePrompt(board);
-               
+                curPlayer().movePrompt(quaxBoard);
+
             }
             return true;
         }
         else return false;
     }
 
-    public QuaxBoard getBoard() {
-        return this.board;
-    }
 
-    public boolean doPieRule() {
-        if (board.attemptPieRule()) {
-            players[0].setColour(QuaxTileColour.WHITE);
-            players[1].setColour(QuaxTileColour.BLACK);
-            ui.setPieRuleVisibility(false);
-            curPlayer().movePrompt(getBoard());
-            return true;
-        } else return false;
-    }
-
+    // TODO - Bot cleanup
     public BotPlayer getBot() {
-        for (QuaxPlayer p : players) {
+        for (QuaxPlayer p : quaxPlayers) {
             if (p instanceof BotPlayer) return (BotPlayer) p;
         }
         return null;
@@ -162,8 +171,8 @@ public class QuaxController {
         showingStrategy = true;
         BotPlayer bot = getBot();
         if (bot != null) {
-            bot.setUpStrategy(board);
-            ui.showStrategy(bot);
+            bot.setUpStrategy(quaxBoard);
+            quaxUserInterface.showStrategy(bot);
         }
     }
 
@@ -171,29 +180,18 @@ public class QuaxController {
         if (showingStrategy) {
             BotPlayer bot = getBot();
             if (bot != null) {
-                ui.hideStrategy(board);
-                bot.setUpStrategy(board);
-                ui.showStrategy(bot);
+                quaxUserInterface.hideStrategy(quaxBoard);
+                bot.setUpStrategy(quaxBoard);
+                quaxUserInterface.showStrategy(bot);
             }
         }
     }
 
     public void hideStrategy() {
         showingStrategy = false;
-        ui.hideStrategy(board);
+        quaxUserInterface.hideStrategy(quaxBoard);
     }
 
-    public Executor getExecutor() {
-        return this.executor;
-    }
-    
-    public Executor getSubmitter() {
-    	return this.submitter;
-    }
-    
-    public void setPieRuleVisibility(boolean visibility) {
-        ui.setPieRuleVisibility(visibility);
-    }
 
     public static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {

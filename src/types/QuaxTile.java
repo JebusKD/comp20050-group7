@@ -1,22 +1,27 @@
 package types;
 
+
 public abstract class QuaxTile {
 
 	private QuaxTileColour tileColour;
-	private QuaxTileGroup group;
+	private QuaxTileGroup tileGroup;
+	private QuaxTileStrategyGroup tileStrategyGroup;
+
 	private int strategyValue;
 
 
 	public QuaxTile() {
 		this.tileColour = QuaxTileColour.NONE;
-		this.group = null;
+		this.tileGroup = null;
+		this.tileStrategyGroup = null;
 		this.strategyValue = 0;
 	}
 
 	public QuaxTile(QuaxTile t) {
 		this.tileColour = t.tileColour;
+		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
+		//this.tileStrategyGroup = t.tileStrategyGroup;
 		this.strategyValue = t.strategyValue;
-		this.group = null; // Don't copy tile group, added in the board after object is constructed
 	}
 
 
@@ -24,8 +29,8 @@ public abstract class QuaxTile {
 		return this.tileColour;
 	}
 
-	public QuaxTileGroup getGroup() {
-		return this.group;
+	public QuaxTileGroup getTileGroup() {
+		return this.tileGroup;
 	}
 
 	public int getStrategyValue() {
@@ -36,12 +41,16 @@ public abstract class QuaxTile {
 		this.tileColour = tileColour;
 	}
 
-	public void setGroup(QuaxTileGroup group) {
-		this.group = group;
+	public void setTileGroup(QuaxTileGroup tileGroup) {
+		this.tileGroup = tileGroup;
 	}
 
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
+	}
+
+	public void setTileStrategyGroup(QuaxTileStrategyGroup stratGroup) {
+		this.tileStrategyGroup = stratGroup;
 	}
 
 
@@ -59,64 +68,4 @@ public abstract class QuaxTile {
 
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
-}
-    private QuaxTileColour colour;
-    private QuaxTileBorder border;
-    private QuaxTileGroup group;
-    private QuaxTileStrategyGroup strategyGroup;
-    private int strategyValue;
-
-    public QuaxTile() {
-        this.colour = QuaxTileColour.NONE;
-        this.border = QuaxTileBorder.NONE;
-        this.group = null;
-        this.strategyValue = 0;
-    }
-    public QuaxTile(QuaxTile t) {
-        this.colour = t.colour;
-        this.border = t.border;
-        this.strategyValue = t.strategyValue;
-        this.group = null; // Groups aren't copied, add in the board after the fact.
-    }
-
-    public QuaxTileColour getColour() {
-        return this.colour;
-    }
-
-    public QuaxTileBorder getBorder() {
-        return this.border;
-    }
-
-    public QuaxTileGroup getGroup() {
-        return this.group;
-    }
-
-    public int getStrategyValue() {
-        return this.strategyValue;
-    }
-
-    public void setColour(QuaxTileColour colour) {
-        this.colour = colour;
-    }
-
-    public void setBorder(QuaxTileBorder border) {this.border = border;}
-
-    public void setGroup(QuaxTileGroup group) {
-        this.group = group;
-    }
-
-    public void setStrategyGroup(QuaxTileStrategyGroup strategyGroup) {this.strategyGroup = strategyGroup;}
-
-    public boolean isFree() {
-        return this.colour == QuaxTileColour.NONE;
-    }
-
-    public void setStrategyValue(int value) {
-        this.strategyValue = value;
-    }
-
-    public abstract QuaxCoordinate getCoordinates();
-    public abstract boolean onLow();
-    public abstract boolean onHigh();
-
 }
