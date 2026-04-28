@@ -12,7 +12,8 @@ import types.*;
 public abstract class BotPlayer extends QuaxPlayer {
 	// TODO - rename variable
 	private static boolean botHaste = false;
-	
+
+    public static final int MAX_STRATEGIES = 6;
 	private static final long MIN_THINKING_TIME = 1000;
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
