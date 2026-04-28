@@ -24,7 +24,7 @@ public abstract class BotPlayer extends QuaxPlayer {
     private QuaxTileStrategyGroup stratFive;
     private QuaxTileStrategyGroup stratSix;
 
-    private QuaxTileStrategyGroup[] stratGroups;
+    private QuaxTileStrategyGroup[] strategyGroups;
     
     private long startThinkingTime;
 
@@ -42,7 +42,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 
 	protected abstract QuaxCoordinate computeMove(QuaxBoard b);
 	
-	/* Given a QuaxBoard b containing strategy values, chooses the move with
+	/*
+	    Given a QuaxBoard b containing strategy values, chooses the move with
 	 	the highest strategy value and returns it. If there is a tie, chooses
 	 	one move at random of the highest strategy values.
 	 */
@@ -63,8 +64,8 @@ public abstract class BotPlayer extends QuaxPlayer {
 
         if (choice == getStrategyValueGroup(4) && choice.size() == 0) {
             choice = getStrategyValueGroup(3);
-
         }
+
         if (choice == getStrategyValueGroup(3) && choice.size() == 0) {
             choice = getStrategyValueGroup(2);
         }
@@ -72,9 +73,11 @@ public abstract class BotPlayer extends QuaxPlayer {
         if (stratSix != null && stratSix.size() != 0) { //if bot can win, that is highest priority
             choice = getStrategyValueGroup(6);
         }
+
         else if (stratFive != null && stratFive.size() != 0) { //else block the opponents win
             choice = getStrategyValueGroup(5);
         }
+
 
 		ArrayList<QuaxCoordinate> candidateMoves = new ArrayList<>();
 
