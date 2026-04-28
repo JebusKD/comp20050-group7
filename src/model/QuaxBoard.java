@@ -7,11 +7,14 @@ import java.util.LinkedList;
 import types.*;
 
 
+/* Handle board state
+ *
+ */
 public class QuaxBoard implements Iterable<QuaxTile> {
 
     public static final int MAX_OCTAGONS = 11;
     public static final int MAX_RHOMBUSES = 10;
-	private static final int ADJACENT_TILES = 4;
+	private static final int MAX_ADJACENT_TILE_GROUPS = 4;
 
 	private Octagon[][] octagonGrid;
 	private Rhombus[][] rhombusGrid;
@@ -22,6 +25,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private boolean pieRuleDone;
 
 
+	/* Construct initial board
+	 *
+	 */
 	public QuaxBoard() {
 		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
 		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
@@ -82,7 +88,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private void initialiseGroups(QuaxBoard b) {
 		for (QuaxTileGroup g : b.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
-			this.trackGroup(newGroup);
+			GroupManager gm = new GroupManager();
+			gm.trackGroup(newGroup);
 
 			for (QuaxTile t : g) {
 				newGroup.addTile(getTile(t.getCoordinates()));
@@ -90,15 +97,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-	private void trackGroup(QuaxTileGroup g) {
-		this.trackedGroups.addFirst(g);
-	}
 
-	private void untrackGroup(QuaxTileGroup g) {
-		this.trackedGroups.remove(g);
-	}
-
-
+	/* Useful getters
+	 *
+	 */
 	public Octagon getOctagon(int x, int y) {
 		return octagonGrid[x][y];
 	}
@@ -120,6 +122,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return this.moveNumber;
 	}
 
+	public LinkedList<QuaxTileGroup> getTrackedGroups() {
+		return trackedGroups;
+	}
+
 	public QuaxCoordinate previousMove() {
 		return previousMove;
 	}
@@ -129,6 +135,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+	/* Move validation checks
+	 *
+	 */
 	public boolean checkForWinningMove() {
 		// Cannot win on first move
 		if (isStartingMove()) {
@@ -188,7 +197,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.moveNumber++;
 	}
 
+	/*
+	 * Manage adding a tile to a group
+	 */
 	private class GroupManager {
+
+		private void trackGroup(QuaxTileGroup g) {
+			trackedGroups.addFirst(g);
+		}
+
+		private void untrackGroup(QuaxTileGroup g) {
+			trackedGroups.remove(g);
+		}
+
 
 		private void assignGroup(QuaxTile newTile) {
 			QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
@@ -200,7 +221,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
-			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(ADJACENT_TILES);
+			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(MAX_ADJACENT_TILE_GROUPS);
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
@@ -251,6 +272,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
 		NeighbourFinder nf = new NeighbourFinder();
@@ -265,6 +287,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return neighbours;
 	}
 
+	/*
+	 * Handle searching for neighbours
+	 */
 	private class NeighbourFinder {
 
 		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
@@ -344,6 +369,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+	/*
+	 * Create an Iterable for all tiles in the board
+	 */
 	public Iterator<QuaxTile> iterator() {
 		return new QuaxBoardIterator(this);
 	}

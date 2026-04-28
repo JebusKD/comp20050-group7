@@ -1,6 +1,9 @@
 package types;
 
 
+/*
+ * Represent the Rhombus tiles on the board
+ */
 public class Rhombus extends QuaxTile {
 
 	// TODO - Move to parent class?

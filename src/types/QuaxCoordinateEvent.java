@@ -6,7 +6,6 @@ import javafx.event.EventType;
 
 public class QuaxCoordinateEvent extends Event {
     public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-    public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
 
     private QuaxCoordinate coordinate;
 
@@ -15,6 +14,7 @@ public class QuaxCoordinateEvent extends Event {
         super(t);
         this.coordinate = q;
     }
+
 
     // TODO - rename methods?
     public int x() {

@@ -11,11 +11,14 @@ import types.*;
 import userinterface.*;
 
 
+/* Handle technical aspects of the game
+ *
+ */
 public class QuaxController {
 
     static final Random RNG = new Random();
-    private final Executor executor;
-    private final Executor submitter;
+    private final Executor quaxExecutor;
+    private final Executor quaxMoveSubmitter;
 
     private final UserInterface quaxUserInterface;
     private QuaxBoard quaxBoard;
@@ -24,9 +27,12 @@ public class QuaxController {
     private boolean showingStrategy = false;
 
 
+    /*
+     *
+     */
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-        this.executor = new SingleThreadExecutor();
-        this.submitter = new SingleThreadExecutor();
+        this.quaxExecutor = new SingleThreadExecutor();
+        this.quaxMoveSubmitter = new SingleThreadExecutor();
 
         this.quaxPlayers = new QuaxPlayer[2];
         this.quaxUserInterface = new TestingEmptyInterface();
@@ -41,9 +47,9 @@ public class QuaxController {
         this(stage, true, false);
     }
 
-    public QuaxController(Stage stage, boolean againstBot,boolean humanPlaysFirst) {
-        this.executor = new JavaFXThreadedExecutor();
-        this.submitter = new JavaFXPlatformRunner();
+    public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
+        this.quaxExecutor = new JavaFXThreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformRunner();
 
         this.quaxUserInterface = new QuaxUserInterface(stage);
         this.quaxPlayers = new QuaxPlayer[2];
@@ -104,6 +110,9 @@ public class QuaxController {
     }
 
 
+    /*
+     *
+     */
     public QuaxPlayer curPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
@@ -122,12 +131,12 @@ public class QuaxController {
         return this.quaxBoard;
     }
 
-    public Executor getExecutor() {
-        return this.executor;
+    public Executor getQuaxExecutor() {
+        return this.quaxExecutor;
     }
 
-    public Executor getSubmitter() {
-        return this.submitter;
+    public Executor getQuaxMoveSubmitter() {
+        return this.quaxMoveSubmitter;
     }
 
 
@@ -164,7 +173,10 @@ public class QuaxController {
     }
 
 
-    // TODO - Bot cleanup
+    /*  Handle bot strategy
+     *  Retrieve bot, handle showing/hiding strategy
+     */
+    // TODO - Bot Cleanup
     public BotPlayer getBot() {
         for (QuaxPlayer p : quaxPlayers) {
             if (p instanceof BotPlayer) return (BotPlayer) p;
@@ -198,6 +210,9 @@ public class QuaxController {
     }
 
 
+    /* // TODO - Explain these
+     *
+     */
     public static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {
             r.run();

@@ -1,6 +1,9 @@
 package types;
 
 
+/*
+ * Represent the Octagon tiles on the board
+ */
 public class Octagon extends QuaxTile {
 
 	// TODO - Move to parent class?

@@ -25,12 +25,12 @@ public abstract class QuaxPlayer {
 
     protected Executor getExecutor() {
         assert playerController != null;
-        return playerController.getExecutor();
+        return playerController.getQuaxExecutor();
     }
     
     protected Executor getSubmitter() {
         assert playerController != null;
-        return playerController.getSubmitter();
+        return playerController.getQuaxMoveSubmitter();
     }
 
     public QuaxTileColour getPlayerColour() {
