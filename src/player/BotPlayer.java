@@ -117,7 +117,7 @@ public abstract class BotPlayer extends QuaxPlayer {
     }
 
     public QuaxTileStrategyGroup getStrategyValueGroup(int i) {
-        assert i < 7 && i > 0;
+        assert (i < 7 && i > 0);
         switch (i) {
             case 1:
                 return this.stratOne;
@@ -132,15 +132,15 @@ public abstract class BotPlayer extends QuaxPlayer {
             case 6:
                 return this.stratSix;
             default:
-                return null;
+                return null; //TODO - Don't return null
         }
     }
 
 
     public void assignStratGroup(QuaxTile newTile) {
-        QuaxTileStrategyGroup tileGroup = getStrategyValueGroup(newTile.getStrategyValue());
+        QuaxTileStrategyGroup tileSGroup = getStrategyValueGroup(newTile.getStrategyValue());
         removeTileFromAllStrategyGroups(newTile);
-        tileGroup.addTile(newTile);
+        tileSGroup.addTile(newTile);
     }
 
 
@@ -163,19 +163,8 @@ public abstract class BotPlayer extends QuaxPlayer {
     }
 
 
-    // TODO - Remove unused method
-	public void setAll(QuaxBoard b, int val) {
-		for (QuaxTile t : b) {
-			if (b.validMove(t.getCoordinates(), this.getPlayerColour())) {
-				t.setStrategyValue(val);
-			}
-			else {
-				t.setStrategyValue(IGNORE_VALUE);
-			}
-		}
-	}
-
     // how the bot decides strat vals for the tiles
+    // TODO - please help
     public void setUpStrategy(QuaxBoard b) {
         clearStrategyGroups();
 
