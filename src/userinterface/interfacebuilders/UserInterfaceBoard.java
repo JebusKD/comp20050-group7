@@ -144,21 +144,6 @@ public class UserInterfaceBoard {
     }
 
 
-    // TODO - What's this for?
-    private StackPane createShowStrategyGrid() {
-        StackPane gridStack = new StackPane(
-                createOctagonGrid(),
-                createRhombusGrid()
-        );
-        gridStack.setMaxHeight(Region.USE_PREF_SIZE);
-        gridStack.setMaxWidth(Region.USE_PREF_SIZE);
-        gridStack.setVisible(false);
-        gridStack.setMouseTransparent(true);
-
-        return gridStack;
-    }
-
-
     private GridPane createOctagonGrid() {
         octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
         GridPane octagonGrid = new GridPane();
