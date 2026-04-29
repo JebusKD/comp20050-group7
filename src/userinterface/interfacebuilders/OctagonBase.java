@@ -4,7 +4,7 @@ import javafx.scene.shape.Polygon;
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
-public abstract class OctagonBase extends Polygon {
+abstract class OctagonBase extends Polygon {
 
     private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
     public static final double SIDELENGTH = calculateSideLength(OCTAGON_WIDTH);

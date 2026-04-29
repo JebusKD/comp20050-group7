@@ -4,7 +4,7 @@ import javafx.scene.shape.Polygon;
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
-public abstract class RhombusBase extends Polygon {
+abstract class RhombusBase extends Polygon {
 
     public RhombusBase() {
         this((OCTAGON_WIDTH - OctagonBase.SIDELENGTH) / 2);
