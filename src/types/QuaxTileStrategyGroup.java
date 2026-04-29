@@ -13,12 +13,6 @@ public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
         this.strategyMembers = new LinkedList<>();
     }
 
-    // TODO - Remove unused constructor
-    public QuaxTileStrategyGroup(QuaxTile initialMember) {
-        this();
-        this.addTile(initialMember);
-    }
-
 
     public void addTile(QuaxTile tile) {
         tile.setTileStrategyGroup(this);
