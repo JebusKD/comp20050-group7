@@ -144,7 +144,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
         if (q.isOctagonMove()) throw new IllegalArgumentException("Coordinate must be a rhombus tile.");
-        if (getTile(q).isFree()) {
+        if (isFree(q)) {
 		
 			QuaxTile[][] n = neighbours(q);
 	
@@ -159,9 +159,17 @@ public class QuaxBoard implements Iterable<QuaxTile> {
     }
 	
 	public boolean isValidForBoth(QuaxCoordinate c) {
-		if (c.isOctagonMove()) return getTile(c).isFree();
+		if (c.isOctagonMove()) return isFree(c);
 		else return isValidRhombusPlacement(c, QuaxTileColour.BLACK)
 			 &&		isValidRhombusPlacement(c, QuaxTileColour.WHITE);
+	}
+	
+	public boolean isFree(QuaxCoordinate c) {
+		return getTile(c).isFree();
+	}
+	
+	public boolean isOccupied(QuaxCoordinate c) {
+		return !isFree(c);
 	}
 
     // TODO - Too long

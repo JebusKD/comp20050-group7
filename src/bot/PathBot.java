@@ -99,23 +99,7 @@ public class PathBot extends BotPlayer {
 	
 	private void recalculatePaths() {
 		this.paths.clear();
-		this.paths.addAll(calculatePaths(new QuaxBoard(getSubmissionBoard())));
-	}
-
-	private static Collection<Path> calculatePaths(QuaxBoard b) {
-		HashSet<Path> paths = new HashSet<Path>();
-		
-		for (QuaxTile t : b) {
-			if (t.isOccupied()) {
-				Path newPath = Path.newPath(b, t);
-				while (newPath.couldConnect()) {
-					newPath.findConnection();
-				}
-				paths.add(newPath);
-			}
-		}
-		
-		return paths;
+		this.paths.addAll(Path.calculatePaths(new QuaxBoard(getSubmissionBoard())));
 	}
 	
 	private void extendOurPaths(IntTernaryOperator op) {
@@ -132,7 +116,7 @@ public class PathBot extends BotPlayer {
 					
 					int score = p.getStrategyValueOfMove(getSubmissionBoard(), c, op);
 					if ((extendingMoves.containsKey(c) && score > extendingMoves.get(c))
-							|| !extendingMoves.containsKey(c)) {
+							|| (!extendingMoves.containsKey(c) && score != IGNORE_VALUE)) {
 						
 							extendingMoves.put(c, score);
 					}
@@ -301,6 +285,22 @@ public class PathBot extends BotPlayer {
 			}
 		}
 		
+		private static Collection<Path> calculatePaths(QuaxBoard b) {
+			HashSet<Path> paths = new HashSet<Path>();
+			
+			for (QuaxTile t : b) {
+				if (t.isOccupied()) {
+					Path newPath = Path.newPath(b, t);
+					while (newPath.couldConnect()) {
+						newPath.findConnection();
+					}
+					paths.add(newPath);
+				}
+			}
+			
+			return paths;
+		}
+		
 		private void absorbPath(Path p) {
 			for (QuaxCoordinate c : p.tangibleTiles) {
 				this.addTangibleTile(c);
@@ -313,7 +313,7 @@ public class PathBot extends BotPlayer {
 		
 		private Path tryConnect(QuaxCoordinate c) {
 			Path path;
-			if (ghostTiles.contains(c) || isAdjacent(c) || canConnectWithGhost(c)) {
+			if (isGhost(c) || isAdjacent(c) || canConnectWithGhost(c)) {
 				path = copyPathAndAddTangible(c);
 			} else {
 				path = tryFormGhost(c);
@@ -349,35 +349,70 @@ public class PathBot extends BotPlayer {
 			
 			if (!board.validMove(c)) return false;
 			
-			QuaxBoard copy = new QuaxBoard(board);
-			copy.makeMove(c);
+			QuaxBoard copyBoard = new QuaxBoard(board);
+			copyBoard.makeMove(c);
 			
-			Collection<Path> newPaths = calculatePaths(copy);
-			for (Path p : newPaths) {
-				if (p.contains(this) && p.isTangible(c)) {
-					return true;
-				}
-			}
-			return false;
+			Path copyPath = new Path(this);
+			
+			copyPath.addTangibleTile(c);
+			copyPath.recalculateGhosts();
+			return copyPath.isDisjoint();
 		}
 		
 		public Path tryFormGhost(QuaxCoordinate c) {
 			
-			if (isAdjacent(c) || isGhostRhombus(c, board)) {
+			if (isAdjacent(c) || isGhostRhombus(c, board) || isHop(c, board)) {
+				System.out.println("Ghost added.");
 				return copyPathAndAddGhost(c);
 			}
 			
 			return null;
 		}
 		
-		public boolean isGhostRhombus(QuaxCoordinate c, QuaxBoard b) {
+		public static boolean isGhostRhombus(QuaxCoordinate c, QuaxBoard b) {
 			return c.isRhombusMove() && b.isValidForBoth(c);
+		}
+		
+		public boolean isHop(QuaxCoordinate c, QuaxBoard b) {
+			if (c.isRhombusMove() || b.isOccupied(c)) return false;
+			
+			return isStraightHop(c, b);// || isDiagonalHop(c, b);
+		}
+		
+		private boolean isStraightHop(QuaxCoordinate c, QuaxBoard b) {
+			QuaxTile[][] neighbours = b.neighbours(c);
+			for (int i = 0; i < 2; i++) {
+				if (isTileMyColourOrNull(neighbours[i][1-i])
+						&& isTileMyColourOrNull(neighbours[2-i][1+i])) {
+					int leftCount = 0,
+						rightCount = 0;
+					for (int j = 0; j < 3; j++) {
+						if (isTileOtherColour(neighbours[j*(1-i)][(j*i)]))
+								leftCount++;
+						if (isTileOtherColour(neighbours[j*(1-i)+(2*i)][(j*i)+(2*i)]))
+								rightCount++;
+					}
+					return leftCount == 0 || rightCount == 0;
+				}
+			}
+			return false;
+		}
+		
+		public HashSet<QuaxCoordinate> unoccupiedNeighbours(QuaxCoordinate c) {
+			HashSet<QuaxCoordinate> neighbours = new HashSet<QuaxCoordinate>();
+			
+			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
+				if (board.isFree(c)) {
+					neighbours.add(c);
+				}
+			}
+			return neighbours;
 		}
 		
 		public void recalculateGhosts() {
 			this.ghostTiles.clear();
 			for (QuaxCoordinate c : tangibleTiles) {
-				for (QuaxCoordinate n : adjacentGhosts(c)) {
+				for (QuaxCoordinate n : unoccupiedNeighbours(c)) {
 					Path newPath = tryFormGhost(n);
 					if (newPath != null) {
 						absorbPath(newPath);
@@ -393,12 +428,19 @@ public class PathBot extends BotPlayer {
 			return false;
 		}
 		
-		public HashSet<QuaxCoordinate> adjacentGhosts(QuaxCoordinate c) {
-			HashSet<QuaxCoordinate> ghosts = new HashSet<>();
-			for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
-				if (ghostTiles.contains(n)) ghosts.add(n);
+		public boolean isDisjoint() {
+			boolean isConnected;
+			for (QuaxCoordinate c : tangibleTiles) {
+				isConnected = false;
+				for (QuaxCoordinate n : c.getNeighbouringCoordinates()) {
+					if (isIn(n)) {
+						isConnected = true;
+						break; // TODO not sure if this is allowed by his clean principles.
+					}
+				}
+				if (!isConnected) return false;
 			}
-			return ghosts;
+			return true;
 		}
 		
 		public int countTangibleTiles() {
@@ -423,8 +465,17 @@ public class PathBot extends BotPlayer {
 			return this.colour;
 		}
 		
+		public boolean isTileMyColourOrNull(QuaxTile t) {
+			return t == null || isTileMyColour(t);
+		}
+		
 		public boolean isTileMyColour(QuaxTile t) {
 			return this.colour == t.getColour();
+		}
+		
+		public boolean isTileOtherColour(QuaxTile t) {
+			if (t == null) return false;
+			else return this.colour.flip() == t.getColour();
 		}
 		
 		public boolean isTangible(QuaxCoordinate c) {
@@ -439,12 +490,20 @@ public class PathBot extends BotPlayer {
 			return !isTangible(c);
 		}
 		
+		public boolean isGhost(QuaxCoordinate c) {
+			return ghostTiles.contains(c);
+		}
+		
 		public boolean notGhost(QuaxCoordinate c) {
-			return !ghostTiles.contains(c);
+			return !isGhost(c);
+		}
+		
+		public boolean isIn(QuaxCoordinate c) {
+			return isTangible(c) || isGhost(c);
 		}
 		
 		public boolean notIn(QuaxCoordinate c) {
-			return notTangible(c) && notGhost(c);
+			return !isIn(c);
 		}
 		
 		public void addGhostTile(QuaxCoordinate c) {
@@ -533,12 +592,7 @@ public class PathBot extends BotPlayer {
 				public Direction rotateCounterClockwise() {
 					return LEFT;
 				}
-				
-				@Override
-				public int index() {
-					return 0;
-				}
-				
+
 				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.y()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.y()) - (origin.isRhombusMove() ? 1 : 0));
@@ -566,11 +620,6 @@ public class PathBot extends BotPlayer {
 				}
 				
 				@Override
-				public int index() {
-					return 2;
-				}
-				
-				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.y()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.y()) + (origin.isRhombusMove() ? 1 : 0));
 				}
@@ -594,11 +643,6 @@ public class PathBot extends BotPlayer {
 				@Override
 				public Direction rotateCounterClockwise() {
 					return DOWN;
-				}
-				
-				@Override
-				public int index() {
-					return 3;
 				}
 
 				@Override
@@ -628,11 +672,6 @@ public class PathBot extends BotPlayer {
 				}
 				
 				@Override
-				public int index() {
-					return 1;
-				}
-				
-				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
 					return ((2 * point.x()) + (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) + (origin.isRhombusMove() ? 1 : 0));
 				}
@@ -647,7 +686,6 @@ public class PathBot extends BotPlayer {
 			public abstract Direction flip();
 			public abstract Direction rotateClockwise();
 			public abstract Direction rotateCounterClockwise();
-			public abstract int index();
 			public abstract int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point);
 			public abstract QuaxCoordinate wallCoordinate();
 			
@@ -676,12 +714,5 @@ public class PathBot extends BotPlayer {
 				return v;
 			}
 		}
-		
-		public static void main(String[] args) {
-			QuaxCoordinate c1 = new QuaxCoordinate(10, 3, true);
-			QuaxCoordinate c2 = new QuaxCoordinate(1, 5, true);
-			System.out.println( Direction.LEFT.compareCoordinateDistance(c1, Direction.LEFT.wallCoordinate()) );
-		}
 	}
-
 }
