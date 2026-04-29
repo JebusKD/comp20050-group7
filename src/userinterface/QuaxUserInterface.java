@@ -1,9 +1,9 @@
 package userinterface;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import model.QuaxBoard;

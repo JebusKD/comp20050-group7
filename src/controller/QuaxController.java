@@ -11,9 +11,7 @@ import types.*;
 import userinterface.*;
 
 
-/* Handle technical aspects of the game
- *
- */
+/** Handle all technical aspects of the game */
 public class QuaxController {
 
     static final Random RNG = new Random();
@@ -27,9 +25,6 @@ public class QuaxController {
     private boolean showingStrategy = false;
 
 
-    /*
-     *
-     */
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
@@ -110,9 +105,7 @@ public class QuaxController {
     }
 
 
-    /*
-     *
-     */
+
     public QuaxPlayer curPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
@@ -173,10 +166,10 @@ public class QuaxController {
     }
 
 
-    /*  Handle bot strategy
-     *  Retrieve bot, handle showing/hiding strategy
+    /**  Methods for handling the strategic bot
+     *  Retrieve bot, manage showing/hiding strategy
      */
-    // TODO - Bot Cleanup
+    // TODO - Bot Cleanup - assertion breaks tests, but too many null checks
     public BotPlayer getBot() {
         for (QuaxPlayer p : quaxPlayers) {
             if (p instanceof BotPlayer) return (BotPlayer) p;

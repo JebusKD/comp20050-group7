@@ -1,8 +1,6 @@
 package player;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.SplittableRandom;
+import java.util.*;
 
 import model.QuaxBoard;
 import types.*;
@@ -293,7 +291,9 @@ public abstract class BotPlayer extends QuaxPlayer {
         this.getExecutor().execute(() -> {
         	QuaxCoordinate move = computeMove(b);
         	
-        	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME);
+        	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME) {
+                ;
+            }
             submitMove(move);
         });
 	}

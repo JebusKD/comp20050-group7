@@ -3,9 +3,7 @@ package controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-/* Launch Game
- *
- */
+/** Launch the game of Quax */
 public class Main extends Application {
 
 	@Override

@@ -1,15 +1,11 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 import types.*;
 
 
-/* Handle board state
- *
- */
+/** Manage the game board state during the game */
 public class QuaxBoard implements Iterable<QuaxTile> {
 
     public static final int MAX_OCTAGONS = 11;
@@ -25,9 +21,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private boolean pieRuleDone;
 
 
-	/* Construct initial board
-	 *
-	 */
 	public QuaxBoard() {
 		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
 		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
@@ -98,9 +91,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/* Useful getters
-	 *
-	 */
 	public Octagon getOctagon(int x, int y) {
 		return octagonGrid[x][y];
 	}
@@ -135,9 +125,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/* Move validation checks
-	 *
-	 */
+	/** Move validation checks */
 	public boolean checkForWinningMove() {
 		// Cannot win on first move
 		if (isStartingMove()) {
@@ -197,9 +185,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.moveNumber++;
 	}
 
-	/*
-	 * Manage adding a tile to a group
-	 */
+	/** Manage adding a tile to a group */
 	private class GroupManager {
 
 		private void trackGroup(QuaxTileGroup g) {
@@ -287,9 +273,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return neighbours;
 	}
 
-	/*
-	 * Handle searching for neighbours
-	 */
+	/** Handle searching for neighbours */
 	private class NeighbourFinder {
 
 		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
@@ -369,9 +353,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/*
-	 * Create an Iterable for all tiles in the board
-	 */
+	/** Create an Iterable for all tiles in the board */
 	public Iterator<QuaxTile> iterator() {
 		return new QuaxBoardIterator(this);
 	}

@@ -1,11 +1,9 @@
 package userinterface.interfacebuilders;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
-import types.ButtonClickEvent;
-import types.QuaxTileColour;
+import types.*;
 
 
 public class WindowManager {
