@@ -113,11 +113,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return this.moveNumber;
 	}
 
-	// TODO - Remove unused method
-	public LinkedList<QuaxTileGroup> getTrackedGroups() {
-		return trackedGroups;
-	}
-
 	public QuaxCoordinate previousMove() {
 		return previousMove;
 	}
@@ -148,7 +143,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return false;
 	}
 
-	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
+	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
         QuaxTile[][] n = getNeighbours(q);
 
         return (n[0][0].isSameColour(c) && n[1][1].isSameColour(c))
@@ -363,7 +358,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return new QuaxBoardIterator(this);
 	}
 	
-	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
+	private static class QuaxBoardIterator implements Iterator<QuaxTile> {
 		private static final int MAX_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
 		
 		private int cursor;
