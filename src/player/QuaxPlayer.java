@@ -19,8 +19,9 @@ public abstract class QuaxPlayer {
     }
 
 
-    public void setPlayerController(QuaxController playerController) {
-        this.playerController = playerController;
+    public void setPlayerController(QuaxController controller) {
+        assert controller != null;
+        this.playerController = controller;
     }
 
     protected Executor getExecutor() {
