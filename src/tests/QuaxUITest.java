@@ -50,7 +50,7 @@ public class QuaxUITest {
     @Test
     void WinningMove(FxRobot robot){
 
-        for(int i = 0; i < 10;i++){
+        for(int i = 0 ; i < 10 ; i++){
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
         }
@@ -70,8 +70,8 @@ public class QuaxUITest {
     void validRhombusPlacement(FxRobot robot){
         QuaxBoard board = controller.getQuaxBoard();
 
-        robot.clickOn("#octagon5-5");//Black goes first
-        robot.clickOn("#octagon0-0");//just have white turn click somewhere else
+        robot.clickOn("#octagon5-5"); //Black goes first
+        robot.clickOn("#octagon0-0"); //just have white turn click somewhere else
         robot.clickOn("#octagon6-6");
         robot.clickOn("#octagon0-1");
 

@@ -1,14 +1,12 @@
 package userinterface.interfacebuilders;
 
-import javafx.geometry.Insets;
+import javafx.geometry.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-import static model.QuaxBoard.MAX_OCTAGONS;
-import static model.QuaxBoard.MAX_RHOMBUSES;
-import static userinterface.QuaxUserInterface.OCTAGON_GRID_GAP;
-import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
+import static model.QuaxBoard.*;
+import static userinterface.QuaxUserInterface.*;
 
 
 public class CoordinateBuilder {

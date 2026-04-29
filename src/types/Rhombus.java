@@ -29,7 +29,7 @@ public class Rhombus extends QuaxTile {
 		return new QuaxCoordinate(xPosition, yPosition, false);
 	}
 
-	// TODO - Move to Octagon class only?
+
 	@Override
 	public boolean onLow() {
 		return false;

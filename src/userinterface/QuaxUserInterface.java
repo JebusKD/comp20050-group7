@@ -92,7 +92,6 @@ public class QuaxUserInterface implements UserInterface {
         quaxUIWindow.showWinLabel(c);
     }
 
-    // TODO - LoD violation?
     public void hideTurnTracker() {
         turnIndicator.hideTurnTrackerBox();
     }

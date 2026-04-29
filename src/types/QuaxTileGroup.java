@@ -24,7 +24,6 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 
-	// TODO - rename?
 	public int size() {
 		return groupMembers.size();
 	}

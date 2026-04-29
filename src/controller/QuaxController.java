@@ -173,7 +173,7 @@ public class QuaxController {
     /**  Methods for handling the strategic bot
      *  Retrieve bot, manage showing/hiding strategy
      */
-    // TODO - Bot Cleanup - assertion breaks tests, but too many null checks --> DON'T RETURN NULL
+    // TODO - Bot Cleanup - assertions break tests, but too many null checks --> DON'T RETURN NULL
     public BotPlayer getBot() {
         for (QuaxPlayer p : quaxPlayers) {
             if (p instanceof BotPlayer) return (BotPlayer) p;

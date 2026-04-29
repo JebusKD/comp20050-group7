@@ -136,7 +136,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, t))) {
-			// TODO - violates LoD?
 			return getTile(q).isFree();
 		}
 
