@@ -61,10 +61,10 @@ public abstract class QuaxTile {
 	public boolean isFree() {
 		return getTileColour() == QuaxTileColour.NONE;
 	}
-	protected boolean isBlack() {
+	public boolean isBlack() {
 		return getTileColour() == QuaxTileColour.BLACK;
 	}
-	protected boolean isWhite() {
+	public boolean isWhite() {
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
 	public boolean isSameColour(QuaxTileColour c) {
