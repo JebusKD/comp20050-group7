@@ -94,8 +94,16 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		else return rhombusGrid[c.x()][c.y()];
 	}
 	
+	public int getCoordinateStrategyValue(QuaxCoordinate c) {
+		return getTile(c).getStrategyValue();
+	}
+	
 	public QuaxTileColour getTileColour(QuaxCoordinate c) {
 		return getTile(c).getColour();
+	}
+	
+	public void setCoordinateStrategyValue(QuaxCoordinate coordinate, int strategyValue) {
+		getTile(coordinate).setStrategyValue(strategyValue);
 	}
 	
 	public boolean validMove(QuaxTile t) {
@@ -368,14 +376,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
-		private static final int MAX_ELEMENTS = 221;
+		private static final int NUM_ELEMENTS = 221;
 		
 		private int cursor;
 		private ArrayList<QuaxTile> elements;
 		
 		public QuaxBoardIterator(QuaxBoard source) {
 			this.cursor = 0;
-			this.elements = new ArrayList<>(MAX_ELEMENTS);
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
 			
 			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
 				for (int j = 0; j < MAX_OCTAGONS; j++) {
@@ -392,7 +400,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		
 		@Override
 		public boolean hasNext() {
-			return cursor < MAX_ELEMENTS;
+			return cursor < NUM_ELEMENTS;
 		}
 		
 		@Override
@@ -403,14 +411,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public static class QuaxBoardRhombusIterator implements Iterator<QuaxTile> {
-		private static final int MAX_ELEMENTS = 100;
+		private static final int NUM_ELEMENTS = 100;
 		
 		private int cursor;
 		private ArrayList<QuaxTile> elements;
 		
 		public QuaxBoardRhombusIterator(QuaxBoard source) {
 			this.cursor = 0;
-			this.elements = new ArrayList<>(MAX_ELEMENTS);
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
 			
 			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
 				for (int j = 0; j < MAX_RHOMBUSES; j++) {
@@ -421,11 +429,38 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		
 		@Override
 		public boolean hasNext() {
-			return cursor < MAX_ELEMENTS;
+			return cursor < NUM_ELEMENTS;
 		}
 		
 		@Override
 		public QuaxTile next() {
+			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
+			return elements.get(cursor++);
+		}
+	}
+	
+	public static class QuaxBoardValidCoordinateIterator implements Iterator<QuaxCoordinate> {
+		private int cursor;
+		private ArrayList<QuaxCoordinate> elements;
+		
+		public QuaxBoardValidCoordinateIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<>();
+			
+			for (QuaxTile t : source) {
+				if (source.validMove(t)) {
+					elements.add(t.getCoordinates());
+				}
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < elements.size();
+		}
+		
+		@Override
+		public QuaxCoordinate next() {
 			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
 			return elements.get(cursor++);
 		}

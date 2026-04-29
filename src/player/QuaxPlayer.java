@@ -48,7 +48,7 @@ public abstract class QuaxPlayer {
         }
 	}
 	
-	public QuaxTileColour opponentColour() {
+	public QuaxTileColour getOpponentColour() {
 		return getColour().flip();
 	}
 	
