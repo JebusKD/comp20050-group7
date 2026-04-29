@@ -76,6 +76,7 @@ public class PathBot extends BotPlayer {
 
 		if (!attemptImmediateWin(getSubmissionBoard()) && !opening()) {
 				standardTurn();
+				System.out.println(paths);
 		}
 	}
 	
@@ -112,9 +113,12 @@ public class PathBot extends BotPlayer {
 				paths.add(newPath);
 			}
 		}
+		
+		return paths;
 	}
 	
 	private void extendOurPaths(IntTernaryOperator op) {
+		
 		op.applyAsInt(3, 2, 1);
 	}
 	
@@ -237,6 +241,7 @@ public class PathBot extends BotPlayer {
 			this.tangibleTiles = new HashSet<QuaxCoordinate>();
 			this.ghostTiles = new HashSet<QuaxCoordinate>();
 			this.couldConnect = true;
+			this.length = 0;
 		}
 		
 		private Path(Path original) {
@@ -257,32 +262,33 @@ public class PathBot extends BotPlayer {
 			
 			for (QuaxTile t : board) {
 				if (notTangible(t) && isMyColour(t)) {
-					ArrayList<Path> connectionResults = tryConnect(t.getCoordinates());
-					if (connectionResults.size() > 0) {
-						absorbConnection(connectionResults.get(0));
+					Path connectionResult = tryConnect(t.getCoordinates());
+					if (connectionResult != null) {
+						absorbPath(connectionResult);
 						couldConnect = true;
 					}
 				}
 			}
 		}
 		
-		private void absorbConnection(Path p) {
+		private void absorbPath(Path p) {
 			for (QuaxCoordinate c : p.tangibleTiles) {
 				this.addTangibleTile(c);
 			}
 			for (QuaxCoordinate c : p.ghostTiles) {
 				this.addGhostTile(c);
 			}
+			this.recalculateLength();;
 		}
 		
-		private HashSet<Path> tryConnect(QuaxCoordinate c) {
-			HashSet<Path> newPaths = new HashSet<Path>();
+		private Path tryConnect(QuaxCoordinate c) {
+			Path path;
 			if (ghostTiles.contains(c) || isAdjacent(c)) {
-				newPaths.add( copyPathAndAdd(c) );
+				path = copyPathAndAddTangible(c);
 			} else {
-				newPaths.addAll( tryFormGhosts(c) );
+				path = tryFormGhost(c);
 			}
-			return newPaths;
+			return path;
 		}
 		
 		public int getLength() {
@@ -297,20 +303,26 @@ public class PathBot extends BotPlayer {
 			for (QuaxCoordinate c : tangibleTiles) {
 				for (int i = 0; i <= 1; i++) {
 					if (favouredDirections().get(i)
-						.compareCoordinateDistance(
+						.compareDistanceFromWall(
 								furthestCoordinates[i],
-								c)
-						> 0) {
+								c
+								) < 0) {
 						furthestCoordinates[i] = c;
 					}
 				}
 			}
 			
-			this.length = Math.abs( favouredDirections().get(0).compareCoordinateDistance(furthestCoordinates[0], furthestCoordinates[0]) );
+			this.length = Math.abs( favouredDirections().get(0).compareCoordinateDistance(furthestCoordinates[0], furthestCoordinates[1]) );
 		}
 		
-		public ArrayList<Path> tryFormGhosts(QuaxCoordinate c) {
+		public Path tryFormGhost(QuaxCoordinate c) {
 			
+			if (isAdjacent(c)) {
+				// TODO temporary
+				return copyPathAndAddGhost(c);
+			}
+			
+			return null;
 		}
 		
 		public boolean isAdjacent(QuaxCoordinate c) {
@@ -369,9 +381,15 @@ public class PathBot extends BotPlayer {
 			return Direction.favouredDirections(colour);
 		}
 		
-		public Path copyPathAndAdd(QuaxCoordinate c) {
+		public Path copyPathAndAddTangible(QuaxCoordinate c) {
 			Path newPath = new Path(this);
 			newPath.addTangibleTile(c);
+			return newPath;
+		}
+		
+		public Path copyPathAndAddGhost(QuaxCoordinate c) {
+			Path newPath = new Path(this);
+			newPath.addGhostTile(c);
 			return newPath;
 		}
 		
@@ -403,7 +421,10 @@ public class PathBot extends BotPlayer {
 					&& Objects.equals(tangibleTiles, other.tangibleTiles);
 		}
 
-
+		@Override
+		public String toString() {
+			return "Path|Colour:"+this.colour+"|Members:"+countTotalTiles()+"|Length:"+this.length;
+		}
 
 		private static enum Direction {
 			UP {
@@ -429,7 +450,7 @@ public class PathBot extends BotPlayer {
 				
 				@Override
 				public int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point) {
-					return ((2 * point.x()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.x()) - (origin.isRhombusMove() ? 1 : 0));
+					return ((2 * point.y()) - (point.isRhombusMove() ? 1 : 0)) - ((2 * origin.y()) - (origin.isRhombusMove() ? 1 : 0));
 				}
 				
 				@Override
@@ -529,6 +550,8 @@ public class PathBot extends BotPlayer {
 				public QuaxCoordinate wallCoordinate() {
 					return new QuaxCoordinate(10, 5, true);
 				}
+				
+				
 			};
 			public abstract Direction flip();
 			public abstract Direction rotateClockwise();
@@ -536,6 +559,14 @@ public class PathBot extends BotPlayer {
 			public abstract int index();
 			public abstract int compareCoordinateDistance(QuaxCoordinate origin, QuaxCoordinate point);
 			public abstract QuaxCoordinate wallCoordinate();
+			
+			public int distanceFromWall(QuaxCoordinate origin) {
+				return Math.abs(compareCoordinateDistance(origin, wallCoordinate()));
+			}
+			
+			public int compareDistanceFromWall(QuaxCoordinate c1, QuaxCoordinate c2) {
+				return distanceFromWall(c1) - distanceFromWall(c2);
+			}
 			
 			public static Vector<Direction> favouredDirections(QuaxTileColour c) {
 				Vector<Direction> v = new Vector<>(2);
@@ -553,6 +584,12 @@ public class PathBot extends BotPlayer {
 				}
 				return v;
 			}
+		}
+		
+		public static void main(String[] args) {
+			QuaxCoordinate c1 = new QuaxCoordinate(10, 3, true);
+			QuaxCoordinate c2 = new QuaxCoordinate(1, 5, true);
+			System.out.println( Direction.LEFT.compareCoordinateDistance(c1, Direction.LEFT.wallCoordinate()) );
 		}
 	}
 
