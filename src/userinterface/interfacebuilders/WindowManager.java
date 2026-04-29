@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import types.*;
 
 
+// TODO - Rename? QuaxWindowController/QuaxWindowManager?
 public class WindowManager {
 
     private Button showStrategyButton;
@@ -14,6 +15,7 @@ public class WindowManager {
 
     private Label boardWinLabel;
     private VBox strategyColourIndicator;
+
 
     public Label getWinLabel() {
         return boardWinLabel;
