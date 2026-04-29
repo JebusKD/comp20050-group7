@@ -36,4 +36,20 @@ public enum QuaxTileColour {
 	};
 	public abstract QuaxTileColour flip();
 	public abstract String tilecolourStyle();
+	
+	public boolean matchesOrIsNull(QuaxTileColour other) {
+		return other == null || other == this;
+	}
+	
+	public boolean matchesOrIsNull(QuaxTile other) {
+		return other == null || matchesOrIsNull(other.getColour());
+	}
+	
+	public boolean matchesFlipped(QuaxTileColour other) {
+		return other != null && other == this.flip();
+	}
+	
+	public boolean matchesFlipped(QuaxTile other) {
+		return other != null && matchesFlipped(other.getColour());
+	}
 }
