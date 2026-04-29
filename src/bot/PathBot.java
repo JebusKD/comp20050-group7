@@ -38,7 +38,7 @@ public class PathBot extends BotPlayer {
 
 	protected boolean opening() {
 		int moveNumber = getSubmissionBoard().getMoveNumber();
-		if (moveNumber == 0) {
+		/*if (moveNumber == 0) {
 			// Starting as black and need to consider starting location.
 			setAll(getSubmissionBoard(), 0);
 			// Place centrally.
@@ -68,6 +68,17 @@ public class PathBot extends BotPlayer {
 			
 		}
 		else return false;
+		*/
+		
+		if (moveNumber <= 1) {
+			getSubmissionBoard().setCoordinateStrategyValue(new QuaxCoordinate(3, 4, true), 100);
+		}
+		if (moveNumber <= 3) {
+			getSubmissionBoard().setCoordinateStrategyValue(new QuaxCoordinate(1, 4, true), 100);
+		}
+		else {
+			return false;
+		}
 		
 		return true;
 	}
@@ -352,6 +363,9 @@ public class PathBot extends BotPlayer {
 		
 		private Path tryConnect(QuaxCoordinate c, QuaxBoard b) {
 			Path path = null;
+			
+			QuaxBoard copyBoard = new QuaxBoard(b);
+	
 			if (isGhost(c) || isAdjacent(c) || canConnectWithGhost(c, b)) {
 				path = copyPathAndAddTangible(c);
 			} /*else {  //TODO uncomment
@@ -397,12 +411,12 @@ public class PathBot extends BotPlayer {
 			copyPath.addTangibleTile(c);
 			copyPath.recalculateGhosts();
 			
-			return copyPath.isDisjoint();
+			return !copyPath.isDisjoint();
 		}
 		
 		public Path tryFormGhost(QuaxCoordinate c, QuaxBoard b) {
 			
-			if (isAdjacent(c) || isGhostRhombus(c, board) || isHop(c, board)) {
+			if (/*isAdjacent(c) || */isGhostRhombus(c, board) || isHop(c, board)) {
 				System.out.println("Ghost added.");
 				return copyPathAndAddGhost(c);
 			}
@@ -487,9 +501,9 @@ public class PathBot extends BotPlayer {
 						break; // TODO not sure if this is allowed by his clean principles.
 					}
 				}
-				if (!isConnected) return false;
+				if (!isConnected) return true;
 			}
-			return true;
+			return false;
 		}
 		
 		public int countTangibleTiles() {
@@ -767,7 +781,7 @@ public class PathBot extends BotPlayer {
 			}
 		}
 	}
-	
+	/*
 	public static void main(String[] args) {
 		QuaxBoard b = new QuaxBoard();
 		
@@ -778,6 +792,6 @@ public class PathBot extends BotPlayer {
 		
 		System.out.println("black: " + Path.isStraightHop(new QuaxCoordinate(2,1,true), b, QuaxTileColour.BLACK));
 		System.out.println("white: " + Path.isStraightHop(new QuaxCoordinate(8,7,true), b, QuaxTileColour.WHITE));
-	}
+	}*/
 	
 }

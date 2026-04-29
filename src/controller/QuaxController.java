@@ -78,8 +78,8 @@ public class QuaxController {
 	}
 	
 	public void startGameAgainstBot() {
-		//HumanPlayer human = new HumanPlayer();
-		BotPlayer human = new PathBot();
+		HumanPlayer human = new HumanPlayer();
+		//BotPlayer human = new PathBot();
 		BotPlayer bot = new PathBot();
 		
 		if (RNG.nextInt() % 2 == 0) {
