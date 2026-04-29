@@ -218,6 +218,63 @@ class TestOctagon {
 		QuaxTile t = new Octagon(5, 5);
 		assertTrue(t.isFree());
 	}
+
+	@Test
+	void testIsBlack1() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertTrue(t.isBlack());
+	}
+
+	@Test
+	void testIsBlack2() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testIsBlack3() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isBlack());
+	}
+
+
+	@Test
+	void testIsBlack4() {
+		QuaxTile t = new Octagon(5, 5);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testIsWhite1() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertFalse(t.isWhite());
+	}
+
+	@Test
+	void testIsWhite2() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertTrue(t.isWhite());
+	}
+
+	@Test
+	void testIsWhite3() {
+		QuaxTile t = new Octagon(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isWhite());
+	}
+
+
+	@Test
+	void testIsWhite4() {
+		QuaxTile t = new Octagon(5, 5);
+		assertFalse(t.isWhite());
+	}
+
 	
 	@Test
 	void testUnassignedGroup() {
