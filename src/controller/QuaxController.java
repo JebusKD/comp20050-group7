@@ -56,7 +56,6 @@ public class QuaxController {
         }
         else {
             // TODO - Remove on final submission
-            //startGame(new BogoBot(), new BogoBot());
             if (againstBot) {
                 startGameAgainstBot();
             }
@@ -68,7 +67,7 @@ public class QuaxController {
 
 
     // TODO - Remove on final submission
-    public void startTwoPlayerGame() {
+    private void startTwoPlayerGame() {
         QuaxPlayer p1 = new HumanPlayer();
         QuaxPlayer p2 = new HumanPlayer();
 
@@ -92,9 +91,9 @@ public class QuaxController {
         curPlayer().movePrompt(quaxBoard);
     }
 
-    public void startGameAgainstBot() {
+    private void startGameAgainstBot() {
         QuaxPlayer human = new HumanPlayer();
-        QuaxPlayer bot = new BogoBot();
+        QuaxPlayer bot = new BotPlayer();
         
         if (RNG.nextInt() % 2 == 0) {
             startGame(human, bot);
@@ -111,10 +110,17 @@ public class QuaxController {
     }
 
     // for testing purposes
-    public QuaxTileColour getPlayerColour(int i) {
-        assert i == 0 || i == 1;
-        return quaxPlayers[i].getPlayerColour();
+    public QuaxTileColour getFirstPlayerColour() {
+        assert quaxPlayers[0] != null;
+        return quaxPlayers[0].getPlayerColour();
     }
+
+    // for testing purposes
+    public QuaxTileColour getSecondPlayerColour() {
+        assert quaxPlayers[1] != null;
+        return quaxPlayers[1].getPlayerColour();
+    }
+
 
     public int getMoveNumber() {
         return quaxBoard.getMoveNumber();

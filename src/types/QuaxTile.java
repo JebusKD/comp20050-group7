@@ -20,7 +20,7 @@ public abstract class QuaxTile {
 	public QuaxTile(QuaxTile t) {
 		this.tileColour = t.tileColour;
 		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
-		//this.tileStrategyGroup = t.tileStrategyGroup; //TODO - Initialise StratGroup too
+		//TODO - Initialise StratGroup too
 		this.strategyValue = t.strategyValue;
 	}
 

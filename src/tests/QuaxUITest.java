@@ -127,9 +127,9 @@ public class QuaxUITest {
         robot.clickOn("#PieRule"); //player two clicks PieRule
 
         //player one should now be the colour player two started out as
-        assertEquals(QuaxTileColour.WHITE,controller.getPlayerColour(0));
+        assertEquals(QuaxTileColour.WHITE,controller.getFirstPlayerColour());
         //player two should now be the colour player one started out as
-        assertEquals(QuaxTileColour.BLACK,controller.getPlayerColour(1));
+        assertEquals(QuaxTileColour.BLACK,controller.getSecondPlayerColour());
 
     }
 
