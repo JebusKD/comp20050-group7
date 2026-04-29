@@ -10,7 +10,7 @@ public class BogoBot extends BotPlayer {
 		super();
 	}
 
-	@Override
+	//@Override
 	protected QuaxCoordinate computeMove(QuaxBoard b) {
 
         setUpStrategy(b);
