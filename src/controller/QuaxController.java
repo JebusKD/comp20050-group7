@@ -43,8 +43,8 @@ public class QuaxController {
     }
 
     public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
-        this.quaxExecutor = new JavaFXThreadedExecutor();
-        this.quaxMoveSubmitter = new JavaFXPlatformRunner();
+        this.quaxExecutor = new MultithreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
 
         this.quaxUserInterface = new QuaxUserInterface(stage);
         this.quaxPlayers = new QuaxPlayer[2];
@@ -201,8 +201,19 @@ public class QuaxController {
     }
 
 
-    /* // TODO - Explain these
-     *
+    /*
+     * These three executor classes allow us to choose how
+     * players (particularly bots) interact with the threads
+     * in the JVM. Without these, there will be situations
+     * where test cases finish before bots can make their
+     * moves and JavaFX will freeze or crash.
+     */
+    /*
+     * The SingleThreadedExecutor will run on the main thread,
+     * blocking JavaFX and any other operations until the
+     * execution is done.
+     * 
+     * This is used in integration tests not involving the UI.
      */
     public static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {
@@ -210,13 +221,27 @@ public class QuaxController {
         }
     }
 
-    public static class JavaFXThreadedExecutor implements Executor {
+    /*
+     * The MultithreadedExecutor will run on a separate thread
+     * than the JavaFX Application, which means the window won't
+     * freeze while a long operation is happening.
+     * 
+     * This is used for bots to compute their moves.
+     */
+    public static class MultithreadedExecutor implements Executor {
     	public void execute(Runnable r) {
 			new Thread(r).start();
 		}
     }
     
-    public static class JavaFXPlatformRunner implements Executor {
+    /*
+     * The JavaFXPlatformExecutor allows us to rejoin operations
+     * made off the main JavaFX application thread by queuing them
+     * for when JavaFX is idle.
+     * 
+     * This is used for bots to submit computed moves.
+     */
+    public static class JavaFXPlatformExecutor implements Executor {
     	public void execute(Runnable r) {
     		Platform.runLater(r);
     	}
