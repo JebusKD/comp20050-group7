@@ -10,8 +10,8 @@ import types.*;
 
 public class QuaxEventHandler {
 
-    // TODO - Can we split this?
     public static void setup(QuaxController controller, Stage stage) {
+
         stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(QuaxCoordinateEvent coords) {

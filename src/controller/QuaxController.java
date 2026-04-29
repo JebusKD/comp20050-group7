@@ -52,7 +52,7 @@ public class QuaxController {
         QuaxEventHandler.setup(this, stage);
 
         if (humanPlaysFirst) {
-            startGame(new HumanPlayer(),new BogoBot());
+            startGame(new HumanPlayer(), new BogoBot()); // TODO - Remember to change if adjusting BogoBot
         }
         else {
             // TODO - Remove on final submission
@@ -147,14 +147,12 @@ public class QuaxController {
 
         if (quaxBoard.validMove(coords, c)) {
             quaxBoard.makeMove(coords, c);
-
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
             if (quaxBoard.checkForWinningMove()) {
                 quaxUserInterface.showWinLabel(c);
                 quaxUserInterface.hideTurnTracker();
             }
-
             else {
                 curPlayer().movePrompt(quaxBoard);
             }
@@ -169,7 +167,7 @@ public class QuaxController {
     /**  Methods for handling the strategic bot
      *  Retrieve bot, manage showing/hiding strategy
      */
-    // TODO - Bot Cleanup - assertion breaks tests, but too many null checks
+    // TODO - Bot Cleanup - assertion breaks tests, but too many null checks --> DON'T RETURN NULL
     public BotPlayer getBot() {
         for (QuaxPlayer p : quaxPlayers) {
             if (p instanceof BotPlayer) return (BotPlayer) p;

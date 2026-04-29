@@ -50,6 +50,9 @@ public class PlayerTurnIndicator {
         return this.turnTrackerBox;
     }
 
+    public void hideTurnTrackerBox() {
+        turnTrackerBox.setVisible(false);
+    }
 
     private interface TurnIndicatorShape extends Styleable {
         default void setTurnTileColour(QuaxTileColour colour) {

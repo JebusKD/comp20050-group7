@@ -78,6 +78,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
+	// TODO - Move to GM?
 	private void initialiseGroups(QuaxBoard b) {
 		for (QuaxTileGroup g : b.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
@@ -112,6 +113,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return this.moveNumber;
 	}
 
+	// TODO - Remove unused method
 	public LinkedList<QuaxTileGroup> getTrackedGroups() {
 		return trackedGroups;
 	}
@@ -132,15 +134,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return false;
 		}
 
-		// TODO - violates LoD?
+		// TODO - violates LoD
 		QuaxTileGroup moveGroup = getTile(previousMove).getTileGroup();
 		return moveGroup.isWinningGroup();
 	}
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, t))) {
-			QuaxTile tile = getTile(q);
-			return tile.getTileColour() == QuaxTileColour.NONE;
+			// TODO - violates LoD?
+			return getTile(q).isFree();
 		}
 
 		return false;
@@ -149,8 +151,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
         QuaxTile[][] n = getNeighbours(q);
 
-        return (n[0][0].getTileColour() == c && n[1][1].getTileColour() == c)
-                || n[1][0].getTileColour() == c && n[0][1].getTileColour() == c;
+        return (n[0][0].isSameColour(c) && n[1][1].isSameColour(c))
+                || (n[1][0].isSameColour(c) && n[0][1].isSameColour(c)); // TODO - Repetition?
     }
 
 
@@ -203,7 +205,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			assert c != QuaxTileColour.NONE;
 
 			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
-			expandGroup(newTile, nearGroups);
+			expandGroup(newTile, nearGroups); // TODO - figure out output arguments
 		}
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
@@ -211,14 +213,17 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (tile != null && tile.getTileColour().equals(c)
-										&& !(nearbyGroups.contains(tile.getTileGroup()))) {
+					if (isOwnedTile(tile, c) && !(nearbyGroups.contains(tile.getTileGroup()))) { // TODO - Maybe clean up
 						nearbyGroups.add(tile.getTileGroup());
 					}
 				}
 			}
 
 			return nearbyGroups;
+		}
+
+		private boolean isOwnedTile(QuaxTile t, QuaxTileColour c) {
+			return (t != null && t.isSameColour(c));
 		}
 
 

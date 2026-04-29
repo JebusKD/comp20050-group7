@@ -94,7 +94,7 @@ public class QuaxUserInterface implements UserInterface {
 
     // TODO - LoD violation?
     public void hideTurnTracker() {
-        turnIndicator.getTurnTrackerBox().setVisible(false);
+        turnIndicator.hideTurnTrackerBox();
     }
 
 
@@ -136,8 +136,10 @@ public class QuaxUserInterface implements UserInterface {
                 QuaxTileBorder.PURPLE, QuaxTileBorder.PINK
         };
 
-        for (int i = 1 ; i < MAX_STRATEGIES ; i++) {
-            for (QuaxTile t : bot.getStrategyValueGroup(i)) {
+        QuaxTileStrategyGroup[] allStrategyGroups = bot.getStrategyGroups();
+
+        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
+            for (QuaxTile t : allStrategyGroups[i]) {
                 quaxUIBoard.setTileBorder(t.getCoordinates(), colours[i - 1]);
             }
         }
