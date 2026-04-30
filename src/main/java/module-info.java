@@ -8,6 +8,7 @@ module com.example.gameofquax {
     opens com.example.gameofquax to javafx.fxml;
     exports com.example.gameofquax;
     exports quax.controller;
+    exports quax.player;
     exports quax.userinterface;
     exports quax.types;
 }

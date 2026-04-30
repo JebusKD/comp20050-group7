@@ -40,10 +40,10 @@ public class BotUiTest {
     public void BotMovesIfFirst_AND_DoesNotMoveIfSecond(FxRobot robot)  {
         //if bot goes first, then its move number should be one upon opening the stage (cos it started the game)
         if(controller.curPlayer() instanceof BotPlayer){
-            assertEquals(1,controller.getBoard().getMoveNumber());
+            assertEquals(1,controller.getQuaxBoard().getMoveNumber());
         }
         else{
-            assertEquals(0,controller.getBoard().getMoveNumber());
+            assertEquals(0,controller.getQuaxBoard().getMoveNumber());
         }
     }
 
@@ -57,14 +57,14 @@ public class BotUiTest {
             WaitForAsyncUtils.waitForFxEvents();
 
             scheduler.schedule(() ->{
-                assertEquals(2,controller.getBoard().getMoveNumber());
+                assertEquals(2,controller.getQuaxBoard().getMoveNumber());
             },3, TimeUnit.SECONDS);
 
              //robot went after human
         }
         else{
             scheduler.schedule(() ->{
-                assertEquals(1,controller.getBoard().getMoveNumber());;
+                assertEquals(1,controller.getQuaxBoard().getMoveNumber());;
             },3, TimeUnit.SECONDS);
 
             //robot is BLACK so has moved

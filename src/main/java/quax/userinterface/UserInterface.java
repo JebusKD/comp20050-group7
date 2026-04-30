@@ -2,23 +2,29 @@ package quax.userinterface;
 
 import quax.model.QuaxBoard;
 import quax.player.BotPlayer;
-import quax.types.QuaxCoordinate;
-import quax.types.QuaxTileColour;
+import quax.types.*;
+
 
 public interface UserInterface {
-    public void showWinLabel(QuaxTileColour c);
 
-    public void hideTurnTracker();
+    void showWinLabel(QuaxTileColour c);
 
-    public void updateFromPreviousMove(QuaxBoard board);
+    void hideTurnTracker();
 
-    public void setTile(QuaxCoordinate q, QuaxTileColour c);
 
-    public void setBoard(QuaxBoard b);
+    void updateFromPreviousMove(QuaxBoard board);
 
-    public void setPieRuleVisibility(boolean visibility);
+    void setTile(QuaxCoordinate q, QuaxTileColour c);
 
-    public void showStrategy(BotPlayer bot);
+    void setQuaxUIBoard(QuaxBoard b);
 
-    public void hideStrategy(QuaxBoard board);
+    void setPieRuleVisibility(boolean visibility);
+
+    void showStrategy();
+
+    void hideStrategy(QuaxBoard board);
+
+    void setLinkedBot(BotPlayer bot);
+
+    void setBotChosenMove(QuaxCoordinate c);
 }

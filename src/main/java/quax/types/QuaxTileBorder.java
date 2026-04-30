@@ -1,36 +1,42 @@
 package quax.types;
 
 public enum QuaxTileBorder {
-    NONE{
-        public String tileborderStyle() {
+    NONE {
+        public String tileBorderStyle() {
             return "tileoutline-base";
         }
     },
-    RED{
-        public String tileborderStyle() {
+
+    RED {
+        public String tileBorderStyle() {
             return "tileoutline-0";
         }
     },
-    GREEN{
-        public String tileborderStyle() {
+
+    BLUE {
+        public String tileBorderStyle() {
+            return "tileoutline-1";
+        }
+    },
+
+    GREEN {
+        public String tileBorderStyle() {
             return "tileoutline-2";
         }
     },
-    PURPLE{
-        public String tileborderStyle() {
+
+    PURPLE {
+        public String tileBorderStyle() {
             return "tileoutline-3";
         }
     },
-    PINK{
-        public String tileborderStyle() {
+
+    PINK {
+        public String tileBorderStyle() {
             return "tileoutline-4";
         }
-    },
-    BLUE{
-        public String tileborderStyle() {
-            return "tileoutline-1";
-        }
     };
-    public abstract String tileborderStyle();
+
+    public abstract String tileBorderStyle();
 }
 

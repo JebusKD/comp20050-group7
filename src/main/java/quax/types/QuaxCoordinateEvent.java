@@ -5,34 +5,34 @@ import javafx.event.EventType;
 
 public class QuaxCoordinateEvent extends Event {
     public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-    public static final EventType<QuaxCoordinateEvent> MOVE_SUBMITTED_EVENT = new EventType<>("quaxMoveSubmittedEvent");
-    private static final long serialVersionUID = 1L;
 
-    private QuaxCoordinate coord;
+    private QuaxCoordinate coordinate;
 
 
     public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
         super(t);
-        this.coord = q;
+        this.coordinate = q;
     }
 
+
+    // TODO - rename methods?
     public int x() {
-        return coord.x();
+        return coordinate.x();
     }
 
     public int y() {
-        return coord.y();
+        return coordinate.y();
     }
 
     public boolean octagon() {
-        return coord.isOctagonMove();
+        return coordinate.isOctagon();
     }
 
     public boolean rhombus() {
-        return coord.isRhombusMove();
+        return coordinate.isRhombus();
     }
 
-    public QuaxCoordinate coords() {
-        return this.coord;
+    public QuaxCoordinate coordinate() {
+        return this.coordinate;
     }
 }

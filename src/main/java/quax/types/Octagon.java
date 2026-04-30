@@ -1,41 +1,48 @@
 package quax.types;
 
+/*
+ * Represent the Octagon tiles on the board
+ */
 public class Octagon extends QuaxTile {
 
-    private final int xPos;
-    private final int yPos;
+    // TODO - Move to parent class?
+    private final int xPosition;
+    private final int yPosition;
+
 
     public Octagon(int x, int y) {
-        this.xPos = x;
-        this.yPos = y;
+        super();
+        this.xPosition = x;
+        this.yPosition = y;
     }
 
     public Octagon(Octagon o) {
         super(o);
-        this.xPos = o.xPos;
-        this.yPos = o.yPos;
+        this.xPosition = o.xPosition;
+        this.yPosition = o.yPosition;
     }
 
+
+    @Override
     public QuaxCoordinate getCoordinates() {
-        return new QuaxCoordinate(xPos, yPos, true);
+        return new QuaxCoordinate(xPosition, yPosition, true);
     }
 
     @Override
     public boolean onLow() {
-        if (isFree()) return false;
+        if (isFree()) {
+            return false;
+        }
 
-        if (getColour() == QuaxTileColour.BLACK)
-            return yPos == 10;
-        else return xPos == 10;
+        return (xPosition == 0 && isWhite()) || (yPosition == 10 && isBlack());
     }
 
     @Override
     public boolean onHigh() {
-        if (isFree()) return false;
+        if (isFree()) {
+            return false;
+        }
 
-        if (getColour() == QuaxTileColour.BLACK)
-            return yPos == 0;
-        else return xPos == 0;
+        return (xPosition == 10 && isWhite()) || (yPosition == 0 && isBlack());
     }
-
 }

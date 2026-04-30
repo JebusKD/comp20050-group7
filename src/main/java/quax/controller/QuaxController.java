@@ -1,78 +1,75 @@
 package quax.controller;
 
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.stage.Stage;
 import quax.model.QuaxBoard;
-import quax.player.BogoBot;
 import quax.player.BotPlayer;
 import quax.player.HumanPlayer;
 import quax.player.QuaxPlayer;
 import quax.types.QuaxCoordinate;
-import quax.types.QuaxCoordinateEvent;
 import quax.types.QuaxTileColour;
-import quax.userinterface.EmptyUserInterface;
 import quax.userinterface.QuaxUserInterface;
-import quax.types.ButtonClickEvent;
 import quax.userinterface.UserInterface;
 import java.util.concurrent.Executor;
 import quax.userinterface.QuaxEventHandler;
 
 import java.util.Random;
-import java.util.concurrent.Executor;
+import quax.userinterface.*;
 
+/** Handle all technical aspects of the game */
 public class QuaxController {
 
-    static final Random RNG = new Random();
+    public static final Random RNG = new Random();
+    private final Executor quaxExecutor;
+    private final Executor quaxMoveSubmitter;
 
-    private final UserInterface ui;
-
-    private QuaxBoard board;
-
-    private final QuaxPlayer[] players;
-
-    private boolean showingStrategy = false;
-
-    private final Executor executor;
-
-    private boolean humanPlaysFirst;
+    private final UserInterface quaxUserInterface;
+    private QuaxBoard quaxBoard;
+    private final QuaxPlayer[] quaxPlayers;
 
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-        players = new QuaxPlayer[2];
+        this.quaxExecutor = new SingleThreadExecutor();
+        this.quaxMoveSubmitter = new SingleThreadExecutor();
 
-        this.ui = new EmptyUserInterface();
+        this.quaxPlayers = new QuaxPlayer[2];
+        this.quaxUserInterface = new TestingEmptyInterface();
 
-        this.executor = new SingleThreadExecutor();
+        BotPlayer.enableHaste();
 
         startGame(p1, p2);
     }
 
+    // Testing constructor
     public QuaxController(Stage stage) {
-        this(stage, true,false);
+        this(stage, true, false);
     }
 
-    public QuaxController(Stage stage, boolean againstBot,boolean humanPlaysFirst) {
-        ui = new QuaxUserInterface(stage);
+    public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
+        this.quaxExecutor = new MultithreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
 
-        players = new QuaxPlayer[2];
-
-        this.executor = new JavaFXThreadedExecutor();
+        this.quaxUserInterface = new QuaxUserInterface(stage);
+        this.quaxPlayers = new QuaxPlayer[2];
 
         QuaxEventHandler.setup(this, stage);
 
-        if(humanPlaysFirst){
-            startGame(new HumanPlayer(),new BogoBot());
-        }else{
-            //startGame(new BogoBot(), new BogoBot());
-            if (againstBot) startGameAgainstBot();
-            else startTwoPlayerGame();
+        if (humanPlaysFirst) {
+            startGame(new HumanPlayer(), new BotPlayer());
+        }
+        else {
+            // TODO - Remove on final submission
+            if (againstBot) {
+                startGameAgainstBot();
+            }
+            else {
+                startTwoPlayerGame();
+            }
         }
     }
 
-    public void startTwoPlayerGame() {
 
+    // TODO - Remove on final submission
+    private void startTwoPlayerGame() {
         QuaxPlayer p1 = new HumanPlayer();
         QuaxPlayer p2 = new HumanPlayer();
 
@@ -80,129 +77,160 @@ public class QuaxController {
     }
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-        this.board = new QuaxBoard();
+        this.quaxBoard = new QuaxBoard();
 
-        players[0] = p1;
-        players[1] = p2;
+        this.quaxPlayers[0] = p1;
+        this.quaxPlayers[1] = p2;
 
-        p1.setColour(QuaxTileColour.BLACK);
-        p2.setColour(QuaxTileColour.WHITE);
+        p1.setPlayerColour(QuaxTileColour.BLACK);
+        p2.setPlayerColour(QuaxTileColour.WHITE);
 
-        p1.setController(this);
-        p2.setController(this);
+        p1.setPlayerController(this);
+        p2.setPlayerController(this);
 
-        ui.setBoard(board);
+        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
 
-        curPlayer().movePrompt(board);
+        curPlayer().movePrompt(quaxBoard);
     }
 
-    public void startGameAgainstBot() {
+    private void startGameAgainstBot() {
         QuaxPlayer human = new HumanPlayer();
-        QuaxPlayer bot = new BogoBot();
+        QuaxPlayer bot = new BotPlayer();
 
-            if (RNG.nextInt() % 2 == 0) {
-                startGame(human, bot);
-            } else {
-                startGame(bot, human);
-            }
+        if (RNG.nextInt() % 2 == 0) {
+            startGame(human, bot);
+        }
+        else {
+            startGame(bot, human);
+        }
     }
+
 
     public QuaxPlayer curPlayer() {
-        return players[getMoveNumber() % 2];
+        return quaxPlayers[getMoveNumber() % 2];
     }
 
     // for testing purposes
-    public QuaxTileColour getPlayerColour(int i) {
-        if (i == 0 || i == 1) return players[i].getColour();
-        else throw new IllegalArgumentException("Only players 0 and 1 exist.");
+    public QuaxTileColour getFirstPlayerColour() {
+        assert quaxPlayers[0] != null;
+        return quaxPlayers[0].getPlayerColour();
     }
+
+    // for testing purposes
+    public QuaxTileColour getSecondPlayerColour() {
+        assert quaxPlayers[1] != null;
+        return quaxPlayers[1].getPlayerColour();
+    }
+
 
     public int getMoveNumber() {
-        return board.getMoveNumber();
+        return quaxBoard.getMoveNumber();
     }
 
-    public boolean makeMove(QuaxCoordinate coords) {
-        QuaxTileColour c = curPlayer().getColour();
-        if (board.validMove(coords, c)) {
-            board.makeMove(coords, c);
+    public QuaxBoard getQuaxBoard() {
+        return this.quaxBoard;
+    }
 
-            ui.updateFromPreviousMove(board);
+    public Executor getQuaxExecutor() {
+        return this.quaxExecutor;
+    }
 
-            if (board.checkForWinningMove()) {
-                ui.showWinLabel(c);
-                ui.hideTurnTracker();
-            } else {
-                curPlayer().movePrompt(board);
-              //  redoStrategy();
+    public Executor getQuaxMoveSubmitter() {
+        return this.quaxMoveSubmitter;
+    }
+
+
+    public void doPieRule() {
+        if (quaxBoard.attemptPieRule()) {
+            quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
+            quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
+
+            quaxUserInterface.setPieRuleVisibility(false);
+            curPlayer().movePrompt(getQuaxBoard());
+        }
+    }
+
+    public void tryMove(QuaxCoordinate coords) {
+        QuaxPlayer moveSubmitter = curPlayer();
+        QuaxTileColour c = moveSubmitter.getPlayerColour();
+
+        if (quaxBoard.validMove(coords, c)) {
+            quaxBoard.makeMove(coords, c);
+
+            if (moveSubmitter instanceof BotPlayer bot) {
+                quaxUserInterface.setBotChosenMove(coords);
+                quaxUserInterface.setLinkedBot(bot);
+
             }
-            return true;
+
+            quaxUserInterface.updateFromPreviousMove(quaxBoard);
+
+            if (quaxBoard.checkForWinningMove()) {
+                quaxUserInterface.showWinLabel(c);
+                quaxUserInterface.hideTurnTracker();
+            }
+            else {
+                curPlayer().movePrompt(quaxBoard);
+            }
         }
-        return false;
     }
 
-    public QuaxBoard getBoard() {
-        return this.board;
-    }
 
-    public boolean doPieRule() {
-        if (board.attemptPieRule()) {
-            players[0].setColour(QuaxTileColour.WHITE);
-            players[1].setColour(QuaxTileColour.BLACK);
-            ui.setPieRuleVisibility(false);
-            curPlayer().movePrompt(getBoard());
-            return true;
-        } else return false;
-    }
-
-    public BotPlayer getBot() {
-        for (QuaxPlayer p : players) {
-            if (p instanceof BotPlayer) return (BotPlayer) p;
-        }
-        return null;
-    }
-
+    /**  Methods for handling the strategic bot
+     *  Retrieve bot, manage showing/hiding strategy
+     */
     public void showStrategy() {
-        showingStrategy = true;
-        BotPlayer bot = getBot();
-        if (bot != null) {
-            bot.setUpStrategy(board);
-            ui.showStrategy(bot);
-        }
-    }
-
-    public void redoStrategy() {
-        if (showingStrategy) {
-            BotPlayer bot = getBot();
-            if (bot != null) {
-                ui.hideStrategy(board);
-                bot.setUpStrategy(board);
-                ui.showStrategy(bot);
-            }
-        }
+        quaxUserInterface.showStrategy();
     }
 
     public void hideStrategy() {
-        showingStrategy = false;
-        ui.hideStrategy(board);
+        quaxUserInterface.hideStrategy(quaxBoard);
     }
 
-    public Executor getExecutor() {
-        return this.executor;
-    }
 
-    public void setPieRuleVisibility(boolean visibility) {
-        ui.setPieRuleVisibility(visibility);
-    }
-
+    /*
+     * These three executor classes allow us to choose how
+     * players (particularly bots) interact with the threads
+     * in the JVM. Without these, there will be situations
+     * where test cases finish before bots can make their
+     * moves and JavaFX will freeze or crash.
+     */
+    /*
+     * The SingleThreadedExecutor will run on the main thread,
+     * blocking JavaFX and any other operations until the
+     * execution is done.
+     *
+     * This is used in integration tests not involving the UI.
+     */
     public static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {
             r.run();
         }
     }
 
-    public static class JavaFXThreadedExecutor implements Executor {
-    	public void execute(Runnable r) {
-			new Thread(r).start();
-		}
+    /*
+     * The MultithreadedExecutor will run on a separate thread
+     * than the JavaFX Application, which means the window won't
+     * freeze while a long operation is happening.
+     *
+     * This is used for bots to compute their moves.
+     */
+    public static class MultithreadedExecutor implements Executor {
+        public void execute(Runnable r) {
+            new Thread(r).start();
+        }
+    }
+
+    /*
+     * The JavaFXPlatformExecutor allows us to rejoin operations
+     * made off the main JavaFX application thread by queuing them
+     * for when JavaFX is idle.
+     *
+     * This is used for bots to submit computed moves.
+     */
+    public static class JavaFXPlatformExecutor implements Executor {
+        public void execute(Runnable r) {
+            Platform.runLater(r);
+        }
     }
 }

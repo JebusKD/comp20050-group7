@@ -9,6 +9,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
 import quax.controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -48,7 +49,7 @@ public class QuaxUITest {
     @Test
     void OctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getBoard().getOctagon(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
     }
 
     @Test
@@ -60,20 +61,20 @@ public class QuaxUITest {
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getBoard().checkForWinningMove());
+        assertTrue(controller.getQuaxBoard().checkForWinningMove());
     }
 
     @Test
     void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
     }
 
     //this is passing when it shouldn't
     @Test
     void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         robot.clickOn("#octagon5-5");//Black goes first
         robot.clickOn("#octagon0-0");//just have white turn click somehwere else
@@ -81,7 +82,7 @@ public class QuaxUITest {
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getColour());
+        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
@@ -121,8 +122,7 @@ public class QuaxUITest {
     void PieRuleButtonLocked(FxRobot robot){
         robot.clickOn("#octagon5-5");
         robot.clickOn("#octagon0-0");
-        robot.clickOn("#PieRule");
-        assertTrue(robot.lookup("#PieRule").query().isVisible());//Pie rule should not be activated
+        assertFalse(robot.lookup("#PieRule").query().isVisible());//Pie rule should not be activated
 
     }
 
@@ -132,9 +132,9 @@ public class QuaxUITest {
         robot.clickOn("#PieRule"); //player two clicks PieRule
 
         //player one should now be the colour player two started out as
-        assertEquals(QuaxTileColour.WHITE,controller.getPlayerColour(0));
+        assertEquals(QuaxTileColour.WHITE,controller.getFirstPlayerColour());
         //player two should now be the colour player one started out as
-        assertEquals(QuaxTileColour.BLACK,controller.getPlayerColour(1));
+        assertEquals(QuaxTileColour.BLACK,controller.getSecondPlayerColour());
 
     }
 
@@ -151,7 +151,7 @@ public class QuaxUITest {
 
     @Test
     void WinLabelIsDisplayed(FxRobot robot){
-        QuaxBoard board = controller.getBoard();
+        QuaxBoard board = controller.getQuaxBoard();
 
         for(int i = 0; i < 10;i++){
             robot.clickOn("#octagon5-" + i);
@@ -169,7 +169,7 @@ public class QuaxUITest {
     @Test
     void  ShowTitleTextCorrect(FxRobot robot){
         Label title = robot.lookup("#Title").queryAs(Label.class);
-        assertEquals("Quax: Human V Bot",title.getText());
+        assertEquals("Quax (Human V Bot)",title.getText());
     }
 
 }
