@@ -116,7 +116,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return previousMove;
 	}
 
-	public boolean isStartingMove() {
+	private boolean isStartingMove() {
 		return previousMove == null;
 	}
 
@@ -294,7 +294,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
 			neighbours[0] = getLeftNeighbours(qc);
-			neighbours[1] = getVerticalNeighbours(qc);
+			neighbours[1] = getVerticalNeighbours(qc); // TODO - do something with n[1][1] (own tile)
 			neighbours[2] = getRightNeighbours(qc);
 
 			return neighbours;

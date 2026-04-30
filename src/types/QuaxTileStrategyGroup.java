@@ -1,7 +1,6 @@
 package types;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 
 public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {

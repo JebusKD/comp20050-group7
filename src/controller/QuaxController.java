@@ -104,7 +104,6 @@ public class QuaxController {
     }
 
 
-
     public QuaxPlayer curPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
@@ -143,6 +142,7 @@ public class QuaxController {
         if (quaxBoard.attemptPieRule()) {
             quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
             quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
+
             quaxUserInterface.setPieRuleVisibility(false);
             curPlayer().movePrompt(getQuaxBoard());
         }

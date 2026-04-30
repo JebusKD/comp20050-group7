@@ -29,10 +29,11 @@ public abstract class QuaxPlayer {
         return playerController.getQuaxExecutor();
     }
     
-    protected Executor getSubmitter() {
+    private Executor getSubmitter() {
         assert playerController != null;
         return playerController.getQuaxMoveSubmitter();
     }
+
 
     public QuaxTileColour getPlayerColour() {
         assert this.playerColour == QuaxTileColour.BLACK || this.playerColour == QuaxTileColour.WHITE;

@@ -41,6 +41,7 @@ public class QuaxUserInterface implements UserInterface {
     private BotPlayer linkedBot;
     private boolean showingStrategy;
 
+
     public QuaxUserInterface(Stage stage) {
         this.quaxUIStage = stage;
         this.quaxUIBoard = new UserInterfaceBoard();
@@ -96,9 +97,11 @@ public class QuaxUserInterface implements UserInterface {
         return outer;
     }
 
+
     public void setLinkedBot(BotPlayer bot) {
     	this.linkedBot = bot;
     }
+
 
     public void showWinLabel(QuaxTileColour c) {
         quaxUIWindow.showWinLabel(c);
