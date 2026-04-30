@@ -2,6 +2,7 @@ package player;
 
 import java.util.*;
 
+import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import types.*;
 
@@ -11,9 +12,6 @@ public class BotPlayer extends QuaxPlayer {
 
     public static final int MAX_STRATEGIES = 6;
 	private static final long MIN_THINKING_TIME = 1000;
-	// TODO IGNORE_VALUE may be redundant.
-	static final int IGNORE_VALUE = Integer.MIN_VALUE;
-	static final Random RNG = new Random(); // TODO - find all randoms
 
     private QuaxTileStrategyGroup[] strategyGroups;
     

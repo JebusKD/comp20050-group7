@@ -14,7 +14,7 @@ import userinterface.*;
 /** Handle all technical aspects of the game */
 public class QuaxController {
 
-    static final Random RNG = new Random();
+    public static final Random RNG = new Random();
     private final Executor quaxExecutor;
     private final Executor quaxMoveSubmitter;
 
