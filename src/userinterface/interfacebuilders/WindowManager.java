@@ -3,7 +3,10 @@ package userinterface.interfacebuilders;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+import static player.BotPlayer.MAX_STRATEGIES;
 import types.*;
+
+import java.util.ArrayList;
 
 
 public class WindowManager {
@@ -80,30 +83,45 @@ public class WindowManager {
     }
 
     public void initialiseStrategyColourCoding() {
-        Label stratLabel = new Label("Strategy Value - SV");
-        stratLabel.getStyleClass().add("stratLabel");
-
-        Label stratTwo = new Label("SV2 - Low priority surrounding tile ");
-        stratTwo.getStyleClass().add("stratTwo");
-
-        Label stratThree = new Label("SV3 - Block opponent ");
-        stratThree.getStyleClass().add("stratThree");
-
-        Label stratFour = new Label("SV4 - Progress self");
-        stratFour.getStyleClass().add("stratFour");
-
-        Label stratFive = new Label("SV5 - Opponent has winning move");
-        stratFive.getStyleClass().add("stratFive");
-
-        Label stratSix = new Label("SV6 - Winning move for self");
-        stratSix.getStyleClass().add("stratSix");
+        ArrayList<Label> stratLabels = initialiseStrategyLabels();
 
         strategyColourIndicator = new VBox(10);
-        strategyColourIndicator.getChildren().addAll(stratLabel, stratTwo, stratThree, stratFour, stratFive, stratSix);
+        strategyColourIndicator.getChildren().addAll(stratLabels);
         strategyColourIndicator.getStyleClass().add("vbox");
         strategyColourIndicator.setVisible(false);
         strategyColourIndicator.setId("ColourIndicator");
     }
+
+    private ArrayList<Label> initialiseStrategyLabels() {
+        ArrayList<Label> labels = new ArrayList<>(MAX_STRATEGIES);
+
+        Label stratLabel = new Label("Strategy Value - SV");
+        stratLabel.getStyleClass().add("stratLabel");
+        labels.add(stratLabel);
+
+        Label stratTwo = new Label("SV2 - Low priority surrounding tile ");
+        stratTwo.getStyleClass().add("stratTwo");
+        labels.add(stratTwo);
+
+        Label stratThree = new Label("SV3 - Block opponent ");
+        stratThree.getStyleClass().add("stratThree");
+        labels.add(stratThree);
+
+        Label stratFour = new Label("SV4 - Progress self");
+        stratFour.getStyleClass().add("stratFour");
+        labels.add(stratFour);
+
+        Label stratFive = new Label("SV5 - Opponent has winning move");
+        stratFive.getStyleClass().add("stratFive");
+        labels.add(stratFive);
+
+        Label stratSix = new Label("SV6 - Winning move for self");
+        stratSix.getStyleClass().add("stratSix");
+        labels.add(stratSix);
+
+        return labels;
+    }
+
 
     public Label createTitle() {
         Label title = new Label("Quax (Human V Bot)");
