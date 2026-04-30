@@ -121,11 +121,12 @@ public class BotPlayer extends QuaxPlayer {
 
 
     private void assignTileToStrategyGroup(QuaxTile newTile) {
-        QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(newTile.getStrategyValue());
-
         removeTileFromAllStrategyGroups(newTile);
-
-        tileSGroup.addTile(newTile);
+        int strategyValue = newTile.getStrategyValue();
+        if (strategyValue > 0 && strategyValue <= MAX_STRATEGIES) {
+	        QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(strategyValue);
+	        tileSGroup.addTile(newTile);
+        }
     }
 
     private void removeTileFromAllStrategyGroups(QuaxTile targetTile) {
