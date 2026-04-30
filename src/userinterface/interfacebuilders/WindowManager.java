@@ -41,7 +41,7 @@ public class WindowManager {
     private void initialiseShowStrategyButton() {
         showStrategyButton = new Button("Show Strategy");
 
-        showStrategyButton.setOnMouseClicked(event -> {
+        showStrategyButton.setOnMouseClicked((_) -> {
             showStrategyButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.SHOW_STRATEGY_CLICKED_EVENT));
         });
 
@@ -52,7 +52,7 @@ public class WindowManager {
     private void initialiseHideStrategyButton() {
         hideStrategyButton = new Button("Hide Strategy");
 
-        hideStrategyButton.setOnMouseClicked(event -> {
+        hideStrategyButton.setOnMouseClicked((_) -> {
             hideStrategyButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.HIDE_STRATEGY_CLICKED_EVENT));
         });
 
@@ -63,7 +63,7 @@ public class WindowManager {
     private void initialisePieRuleButton() {
         pieRuleButton = new Button("PieRule");
 
-        pieRuleButton.setOnMouseClicked(event -> {
+        pieRuleButton.setOnMouseClicked((_) -> {
             pieRuleButton.fireEvent(new ButtonClickEvent(ButtonClickEvent.PIE_RULE_CLICKED_EVENT));
         });
 
