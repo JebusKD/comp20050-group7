@@ -119,13 +119,14 @@ public class BotPlayer extends QuaxPlayer {
 
     // how the bot decides strategy vals for the tiles
     public void setUpStrategy(QuaxBoard b) {
+        StrategyBuilder sb = new StrategyBuilder();
         clearAllStrategyGroups();
-        initialiseAllStrategyGroups(b);
+        sb.initialiseAllStrategyGroups(b);
 
         for (QuaxTile t : b) {
             if (!b.validMove(t.getCoordinates(), this.getPlayerColour())) {
                 if (t instanceof Octagon) {
-                    setOctagonStrategyValues(t, b);
+                    sb.setOctagonStrategyValues(t, b);
                 }
             }
 
@@ -139,91 +140,95 @@ public class BotPlayer extends QuaxPlayer {
         }
     }
 
-    private void initialiseAllStrategyGroups(QuaxBoard b) {
-        for (QuaxTile t : b) {
-            t.setStrategyValue(IGNORE_VALUE);
-            if (!b.validMove(t.getCoordinates(), this.getPlayerColour())) {
-                continue;
-            }
-            t.setStrategyValue(1);
-            assignTileToStrategyGroup(t);
-        }
-    }
+    private class StrategyBuilder {
+        private void initialiseAllStrategyGroups(QuaxBoard b) {
 
-    private void setOctagonStrategyValues(QuaxTile t, QuaxBoard b) {
-        QuaxTile[][] neighbours = b.getNeighbours(t.getCoordinates());
-
-        for (QuaxTile[] row : neighbours) {
-            for (QuaxTile neighbour : row) {
-                if (neighbour == null) {
+            for (QuaxTile t : b) {
+                t.setStrategyValue(IGNORE_VALUE);
+                if (!b.validMove(t.getCoordinates(), getPlayerColour())) {
                     continue;
                 }
-
-                if (b.validMove(neighbour.getCoordinates(), this.getPlayerColour())) {
-                    neighbour.setStrategyValue(2);
-                    assignTileToStrategyGroup(neighbour);
-
-                    setProgressStrategy(t, neighbour, neighbours);
-                }
-            }
-        }
-    }
-
-    private void setProgressStrategy(QuaxTile t, QuaxTile n, QuaxTile[][] neighbours) {
-        if (t.getTileColour() == QuaxTileColour.BLACK) {
-            if (n == neighbours[1][0] || n == neighbours[1][2]) {
-                if (this.getPlayerColour() == QuaxTileColour.BLACK) {
-                    n.setStrategyValue(4);
-                    assignTileToStrategyGroup(n);
-                }
-                else {
-                    n.setStrategyValue(3);
-                    assignTileToStrategyGroup(n);
-                }
+                t.setStrategyValue(1);
+                assignTileToStrategyGroup(t);
             }
         }
 
-        else if (t.getTileColour() == QuaxTileColour.WHITE) {
-            if (n == neighbours[0][1] || n == neighbours[2][1]) {
-                if (this.getPlayerColour() == QuaxTileColour.WHITE) {
-                    n.setStrategyValue(4);
-                    assignTileToStrategyGroup(n);
-                }
-                else {
-                    n.setStrategyValue(3);
-                    assignTileToStrategyGroup(n);
+        private void setOctagonStrategyValues(QuaxTile t, QuaxBoard b) {
+            QuaxTile[][] neighbours = b.getNeighbours(t.getCoordinates());
+
+            for (QuaxTile[] row : neighbours) {
+                for (QuaxTile neighbour : row) {
+                    if (neighbour == null) {
+                        continue;
+                    }
+
+                    if (b.validMove(neighbour.getCoordinates(), getPlayerColour())) {
+                        neighbour.setStrategyValue(2);
+                        assignTileToStrategyGroup(neighbour);
+
+                        setProgressStrategy(t, neighbour, neighbours);
+                    }
                 }
             }
         }
-    }
 
+        private void setProgressStrategy(QuaxTile t, QuaxTile n, QuaxTile[][] neighbours) {
+            if (t.getTileColour() == QuaxTileColour.BLACK) {
+                if (n == neighbours[1][0] || n == neighbours[1][2]) {
+                    if (getPlayerColour() == QuaxTileColour.BLACK) {
+                        n.setStrategyValue(4);
+                        assignTileToStrategyGroup(n);
+                    }
+                    else {
+                        n.setStrategyValue(3);
+                        assignTileToStrategyGroup(n);
+                    }
+                }
+            }
 
-    private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
-        t.setStrategyValue(4);
-        assignTileToStrategyGroup(t);
-        if (b.validMove(t.getCoordinates(), this.getPlayerColour().flip())) {
-            t.setStrategyValue(5);
-            assignTileToStrategyGroup(t);
+            else if (t.getTileColour() == QuaxTileColour.WHITE) {
+                if (n == neighbours[0][1] || n == neighbours[2][1]) {
+                    if (getPlayerColour() == QuaxTileColour.WHITE) {
+                        n.setStrategyValue(4);
+                        assignTileToStrategyGroup(n);
+                    }
+                    else {
+                        n.setStrategyValue(3);
+                        assignTileToStrategyGroup(n);
+                    }
+                }
+            }
         }
-    }
 
-    private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
-        if (checkForWin(t.getCoordinates(), b,this.getPlayerColour().flip())) {
-            t.setStrategyValue(5); // Block opponent
+
+        private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
+            t.setStrategyValue(4);
             assignTileToStrategyGroup(t);
+            if (b.validMove(t.getCoordinates(), getPlayerColour().flip())) {
+                t.setStrategyValue(5);
+                assignTileToStrategyGroup(t);
+            }
         }
 
-        if (checkForWin(t.getCoordinates(), b, this.getPlayerColour())) {
-            t.setStrategyValue(6); // bot winning takes priority
-            assignTileToStrategyGroup(t);
+
+        private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
+            if (checkForWin(t.getCoordinates(), b, getPlayerColour().flip())) {
+                t.setStrategyValue(5); // Block opponent
+                assignTileToStrategyGroup(t);
+            }
+
+            if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
+                t.setStrategyValue(6); // bot winning takes priority
+                assignTileToStrategyGroup(t);
+            }
         }
-    }
 
 
-    private boolean checkForWin(QuaxCoordinate coord, QuaxBoard b, QuaxTileColour colour) {
-        QuaxBoard copyBoard = new QuaxBoard(b);
-        copyBoard.makeMove(coord, colour);
-        return copyBoard.checkForWinningMove();
+        private boolean checkForWin(QuaxCoordinate coord, QuaxBoard b, QuaxTileColour colour) {
+            QuaxBoard copyBoard = new QuaxBoard(b);
+            copyBoard.makeMove(coord, colour);
+            return copyBoard.checkForWinningMove();
+        }
     }
 
     public static void enableHaste() {
