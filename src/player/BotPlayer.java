@@ -148,12 +148,9 @@ public class BotPlayer extends QuaxPlayer {
         private void initialiseAllStrategyGroups(QuaxBoard b) {
             for (QuaxTile t : b) {
                 t.setStrategyValue(0);
-                if (!isValidMove(t, b)) {
-                    // TODO - Move setOctagonStrategyValues() here?
-                    continue;
+                if (isValidMove(t, b)) {
+                    assignStrategyValue(t, 1);
                 }
-                t.setStrategyValue(1);
-                assignTileToStrategyGroup(t);
             }
         }
 
@@ -190,13 +187,10 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
-                    // TODO - reduce null checks as much as possible & try to have no continues
-                    if (neighbour == null) {
-                        continue;
-                    }
-
-                    if (isValidMove(neighbour, b)) {
-                        neighbour.setStrategyValue(2);
+                    if (neighbour != null && isValidMove(neighbour, b)) {
+                        if (neighbour.getStrategyValue() <= 2) {
+                            neighbour.setStrategyValue(2);
+                        }
                         assignTileToStrategyGroup(neighbour);
 
                         setProgressStrategy(t, neighbour, neighbours);
