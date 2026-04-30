@@ -274,6 +274,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		return neighbours;
 	}
+	
+	public QuaxTile[][] getNeighbours(QuaxTile t) {
+		return getNeighbours(t.getCoordinates());
+	}
 
 	/** Handle searching for neighbours */
 	private class NeighbourFinder {

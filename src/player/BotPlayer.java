@@ -233,15 +233,37 @@ public class BotPlayer extends QuaxPlayer {
 
 
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
-            assignStrategyValue(t, 4);
-
-            if (b.validMove(t.getCoordinates(), getPlayerColour().flip())){
-                assignStrategyValue(t, 5);
-            }
-
-            if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
-                assignStrategyValue(t, 6);
-            }
+        	if (isUselessRhombus(t, b)) {
+        		assignStrategyValue(t, 0);
+        	} else {
+        	
+	            assignStrategyValue(t, 4);
+	
+	            if (b.validMove(t.getCoordinates(), getPlayerColour().flip())){
+	                assignStrategyValue(t, 5);
+	            }
+	
+	            if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
+	                assignStrategyValue(t, 6);
+	            }
+	            
+        	}
+        }
+        
+        /* "Useless Rhombus" is defined as having at most 1
+         * nearby enemy tile.
+         */
+        private boolean isUselessRhombus(QuaxTile t, QuaxBoard b) {
+        	assert t instanceof Rhombus;
+        	int countOpponentTiles = 0;
+        	for (QuaxTile[] row : b.getNeighbours(t)) {
+        		for (QuaxTile n : row) {
+        			if (n.getTileColour() == getPlayerColour().flip()) {
+        				countOpponentTiles++;
+        			}
+        		}
+        	}
+        	return countOpponentTiles <= 1;
         }
 
         private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
