@@ -185,7 +185,6 @@ public class QuaxController {
         showingStrategy = true;
         BotPlayer bot = getBot();
         if (bot != null) {
-            bot.setUpStrategy(quaxBoard);
             quaxUserInterface.showStrategy(bot);
         }
     }
@@ -195,7 +194,6 @@ public class QuaxController {
             BotPlayer bot = getBot();
             if (bot != null) {
                 quaxUserInterface.hideStrategy(quaxBoard);
-                bot.setUpStrategy(quaxBoard);
                 quaxUserInterface.showStrategy(bot);
             }
         }
