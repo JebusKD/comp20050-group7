@@ -5,17 +5,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import controller.QuaxController;
-import player.BogoBot;
+import player.BotPlayer;
 import player.HumanPlayer;
 import types.QuaxTile;
 import types.QuaxTileColour;
 
-public class TestBogoBot {
+public class TestBot {
 	
 	@Test
-	void testBogoBot1() {
+	void testBot1() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(human, bot);
 		
@@ -23,9 +23,9 @@ public class TestBogoBot {
 	}
 	
 	@Test
-	void testBogoBot2() {
+	void testBot2() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -33,9 +33,9 @@ public class TestBogoBot {
 	}
 	
 	@Test
-	void testBogoBot3() {
+	void testBot3() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -49,33 +49,30 @@ public class TestBogoBot {
 	}
 	
 	@Test
-	void testBogoBotPieRule() {
+	void testBotPieRule() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 
 		controller.doPieRule();
 		
-		// After the human uses the Pie rule, Bogo bot should immediately make another move.
+		// After the human uses the Pie rule, Bot should immediately make another move.
 		assertEquals(3, controller.getMoveNumber());
 	}
 
 	@Test
-	void testBogoBotVersusBogoBot() {
-		BogoBot b1 = new BogoBot();
-		BogoBot b2 = new BogoBot();
+	void testBotVersusBot() {
+		BotPlayer b1 = new BotPlayer();
+		BotPlayer b2 = new BotPlayer();
 		
 		/* Creating a QuaxController automatically starts the game - and
-		 * in our instance we have two Bogo Bots who will keep making
-		 * random moves until the game is over.
+		 * in our instance we have two Bots who will keep making
+		 * moves until the game is over.
 		 */
 		QuaxController controller = new QuaxController(b1, b2);
 		
 		// Check to see did the bots complete the game
 		assertTrue(controller.getQuaxBoard().checkForWinningMove());
 	}
-	
-	
-	
 }

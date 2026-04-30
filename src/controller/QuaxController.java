@@ -52,7 +52,7 @@ public class QuaxController {
         QuaxEventHandler.setup(this, stage);
 
         if (humanPlaysFirst) {
-            startGame(new HumanPlayer(), new BogoBot()); // TODO - Remember to change if adjusting BogoBot
+            startGame(new HumanPlayer(), new BotPlayer());
         }
         else {
             // TODO - Remove on final submission

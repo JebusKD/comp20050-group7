@@ -9,7 +9,7 @@ import org.junit.platform.suite.api.Suite;
 	TestBoardCopying.class,
 	TestRhombusPlacement.class,
 	TestQuaxBoardIteration.class,
-	TestBogoBot.class
+	TestBot.class
 })
 @DisplayName("Sprint 2 Unit Tests")
 class Sprint2TestSuite {
