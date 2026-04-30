@@ -96,7 +96,7 @@ public class BotPlayer extends QuaxPlayer {
 
     public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
         assert (i <= MAX_STRATEGIES && i > 0);
-        return strategyGroups[i-1];
+        return strategyGroups[i - 1];
     }
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(QuaxBoard b, QuaxTileStrategyGroup tsg) {
@@ -200,12 +200,12 @@ public class BotPlayer extends QuaxPlayer {
             if (t.isBlack()) {
                 progressVertically(n, neighbours);
             }
-
             else {
                 progressHorizontally(n, neighbours);
             }
         }
 
+        // TODO - Clean these
         private void progressVertically(QuaxTile n, QuaxTile[][] neighbours) {
             if (n == neighbours[1][0] || n == neighbours[1][2]) {
                 if (getPlayerColour() == QuaxTileColour.BLACK) {
