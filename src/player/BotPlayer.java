@@ -110,7 +110,7 @@ public class BotPlayer extends QuaxPlayer {
 
         if (moves.isEmpty()) { // just in case candidateMoves is somehow empty
             for (QuaxTile t : b) {
-                if (isValidMove(t, b)) {
+                if (isValidMove(t, b, t.getTileColour())) {
                     moves.add(t.getCoordinates());
                 }
             }
@@ -148,7 +148,7 @@ public class BotPlayer extends QuaxPlayer {
         private void initialiseAllStrategyGroups(QuaxBoard b) {
             for (QuaxTile t : b) {
                 t.setStrategyValue(0);
-                if (isValidMove(t, b)) {
+                if (isValidMove(t, b, getPlayerColour())) {
                     assignStrategyValue(t, 1);
                 }
             }
@@ -161,7 +161,7 @@ public class BotPlayer extends QuaxPlayer {
             for (QuaxTile t : b) {
                 // If the tile being checked is not valid, i.e. already owned,
                 //      set the strategy value of the tiles around it
-                if (!isValidMove(t, b)) {
+                if (!isValidMove(t, b, getPlayerColour())) {
                     if (t instanceof Octagon) {
                         setOctagonStrategyValues(t, b);
                     }
@@ -187,7 +187,7 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
-                    if (neighbour != null && isValidMove(neighbour, b)) {
+                    if (neighbour != null && isValidMove(neighbour, b, getPlayerColour())) {
                         if (neighbour.getStrategyValue() <= 2) {
                             neighbour.setStrategyValue(2);
                         }
@@ -272,8 +272,8 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
-    private boolean isValidMove(QuaxTile t, QuaxBoard b) {
-        return b.validMove(t.getCoordinates(), t.getTileColour());
+    private boolean isValidMove(QuaxTile t, QuaxBoard b, QuaxTileColour c) {
+        return b.validMove(t.getCoordinates(), c);
     }
 
     public static void enableHaste() {
