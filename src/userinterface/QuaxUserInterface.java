@@ -121,7 +121,7 @@ public class QuaxUserInterface implements UserInterface {
         }
 
         else {
-            // TODO - LoD violation
+            // TODO - LoD violation?
             QuaxTileColour colour = board.getTile(previousMove).getTileColour();
             this.setTile(previousMove, colour);
             this.turnIndicator.setIndicatorColour(colour.flip());
