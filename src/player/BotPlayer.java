@@ -11,15 +11,9 @@ public class BotPlayer extends QuaxPlayer {
 
     public static final int MAX_STRATEGIES = 6;
 	private static final long MIN_THINKING_TIME = 1000;
+	// TODO IGNORE_VALUE may be redundant.
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
 	static final Random RNG = new Random();
-
-    private QuaxTileStrategyGroup stratOne;
-    private QuaxTileStrategyGroup stratTwo;
-    private QuaxTileStrategyGroup stratThree;
-    private QuaxTileStrategyGroup stratFour;
-    private QuaxTileStrategyGroup stratFive;
-    private QuaxTileStrategyGroup stratSix;
 
     private QuaxTileStrategyGroup[] strategyGroups;
     
@@ -28,37 +22,18 @@ public class BotPlayer extends QuaxPlayer {
 
 	public BotPlayer() {
 		super();
+		strategyGroups = new QuaxTileStrategyGroup[MAX_STRATEGIES];
         clearAllStrategyGroups();
 	}
 
     private void clearAllStrategyGroups() {
-        this.stratOne = new QuaxTileStrategyGroup();
-        this.stratTwo = new QuaxTileStrategyGroup();
-        this.stratThree = new QuaxTileStrategyGroup();
-        this.stratFour = new QuaxTileStrategyGroup();
-        this.stratFive = new QuaxTileStrategyGroup();
-        this.stratSix = new QuaxTileStrategyGroup();
+        for (int i = 0; i < MAX_STRATEGIES; i++) {
+        	strategyGroups[i] = new QuaxTileStrategyGroup();
+        }
     }
-
-
-    public QuaxTileStrategyGroup[] getStrategyGroups() {
-        strategyGroups = new QuaxTileStrategyGroup[7];
-        addStrategyGroupsToArray();
-        return strategyGroups;
-    }
-
-    private void addStrategyGroupsToArray() {
-        strategyGroups[0] = new QuaxTileStrategyGroup();
-        strategyGroups[1] = stratOne;
-        strategyGroups[2] = stratTwo;
-        strategyGroups[3] = stratThree;
-        strategyGroups[4] = stratFour;
-        strategyGroups[5] = stratFive;
-        strategyGroups[6] = stratSix;
-    }
-
 
     /*
+     * TODO Outdated comment?
       Given a QuaxBoard b containing strategy values, chooses the move with
       the highest strategy value and returns it. If there is a tie, chooses
       one move at random of the highest strategy values.
@@ -79,24 +54,9 @@ public class BotPlayer extends QuaxPlayer {
         return candidateMoves.get(index);
 	}
 
-    private QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
-        assert (i < 7 && i > 0);
-        switch (i) {
-            case 1:
-                return this.stratOne;
-            case 2:
-                return this.stratTwo;
-            case 3:
-                return this.stratThree;
-            case 4:
-                return this.stratFour;
-            case 5:
-                return this.stratFive;
-            case 6:
-                return this.stratSix;
-            default:
-                return new QuaxTileStrategyGroup();
-        }
+    public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
+        assert (i <= MAX_STRATEGIES && i > 0);
+        return strategyGroups[i-1];
     }
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(QuaxBoard b, QuaxTileStrategyGroup tsg) {
@@ -124,13 +84,10 @@ public class BotPlayer extends QuaxPlayer {
         tileSGroup.addTile(newTile);
     }
 
-    private void removeTileFromAllStrategyGroups(QuaxTile newTile) {
-        this.stratOne.removeTile(newTile);
-        this.stratTwo.removeTile(newTile);
-        this.stratThree.removeTile(newTile);
-        this.stratFour.removeTile(newTile);
-        this.stratFive.removeTile(newTile);
-        this.stratSix.removeTile(newTile);
+    private void removeTileFromAllStrategyGroups(QuaxTile targetTile) {
+        for (QuaxTileStrategyGroup g : strategyGroups) {
+        	g.removeTile(targetTile);
+        }
     }
 
 
