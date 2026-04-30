@@ -357,6 +357,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return new QuaxBoardIterator(this);
 	}
 	
+	public static Iterator<QuaxCoordinate> coordinateIterator() {
+		return new QuaxBoardCoordinateIterator();
+	}
+	
 	private static class QuaxBoardIterator implements Iterator<QuaxTile> {
 		private static final int MAX_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
 		
@@ -389,6 +393,29 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		public QuaxTile next() {
 			assert hasNext();
 			return elements.get(cursor++);
+		}
+		
+		private QuaxCoordinate nextCoordinate() {
+			assert hasNext();
+			return next().getCoordinates();
+		}
+	}
+	
+	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
+		private QuaxBoardIterator boardIterator;
+		
+		public QuaxBoardCoordinateIterator() {
+			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return boardIterator.hasNext();
+		}
+		
+		@Override
+		public QuaxCoordinate next() {
+			return boardIterator.nextCoordinate();
 		}
 	}
 }

@@ -22,9 +22,6 @@ public class QuaxController {
     private QuaxBoard quaxBoard;
     private final QuaxPlayer[] quaxPlayers;
 
-    private boolean showingStrategy = false;
-
-
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
@@ -149,10 +146,14 @@ public class QuaxController {
     }
 
     public boolean tryMove(QuaxCoordinate coords) {
-        QuaxTileColour c = curPlayer().getPlayerColour();
+    	QuaxPlayer moveSubmitter = curPlayer();
+        QuaxTileColour c = moveSubmitter.getPlayerColour();
 
         if (quaxBoard.validMove(coords, c)) {
             quaxBoard.makeMove(coords, c);
+            if (moveSubmitter instanceof BotPlayer bot) {
+            	quaxUserInterface.setLinkedBot(bot);
+            }
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
             if (quaxBoard.checkForWinningMove()) {
@@ -182,27 +183,10 @@ public class QuaxController {
     }
 
     public void showStrategy() {
-        showingStrategy = true;
-        BotPlayer bot = getBot();
-        if (bot != null) {
-            bot.setUpStrategy(quaxBoard);
-            quaxUserInterface.showStrategy(bot);
-        }
-    }
-
-    public void redoStrategy() {
-        if (showingStrategy) {
-            BotPlayer bot = getBot();
-            if (bot != null) {
-                quaxUserInterface.hideStrategy(quaxBoard);
-                bot.setUpStrategy(quaxBoard);
-                quaxUserInterface.showStrategy(bot);
-            }
-        }
+        quaxUserInterface.showStrategy();   
     }
 
     public void hideStrategy() {
-        showingStrategy = false;
         quaxUserInterface.hideStrategy(quaxBoard);
     }
 

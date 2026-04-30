@@ -20,8 +20,9 @@ public interface UserInterface {
 	
 	void setPieRuleVisibility(boolean visibility);
 
-
-	void showStrategy(BotPlayer bot);
+	void showStrategy();
 
 	void hideStrategy(QuaxBoard board);
+	
+	void setLinkedBot(BotPlayer bot);
 }

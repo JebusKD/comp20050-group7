@@ -17,6 +17,12 @@ public class QuaxUserInterface implements UserInterface {
 
     public static final double OCTAGON_WIDTH = 40;
     public static final double OCTAGON_GRID_GAP = 1;
+    
+    private static final QuaxTileBorder[] STRATEGY_GROUP_BORDERS = new QuaxTileBorder[] {
+            QuaxTileBorder.NONE, QuaxTileBorder.BLUE,
+            QuaxTileBorder.GREEN, QuaxTileBorder.RED,
+            QuaxTileBorder.PURPLE, QuaxTileBorder.PINK
+    };
 
     private static final String[] STYLESHEETS = new String[] {
             "/userinterface/stylesheets/tile-styling.css",
@@ -32,6 +38,7 @@ public class QuaxUserInterface implements UserInterface {
     private PlayerTurnIndicator turnIndicator;
     private WindowManager quaxUIWindow;
 
+    private BotPlayer linkedBot;
 
     public QuaxUserInterface(Stage stage) {
         this.quaxUIStage = stage;
@@ -87,6 +94,9 @@ public class QuaxUserInterface implements UserInterface {
         return outer;
     }
 
+    public void setLinkedBot(BotPlayer bot) {
+    	this.linkedBot = bot;
+    }
 
     public void showWinLabel(QuaxTileColour c) {
         quaxUIWindow.showWinLabel(c);
@@ -99,6 +109,7 @@ public class QuaxUserInterface implements UserInterface {
 
     public void updateFromPreviousMove(QuaxBoard board) {
         QuaxCoordinate previousMove = board.previousMove();
+        updateStrategy();
         if (previousMove == null) {
             this.turnIndicator.setIndicatorColour(QuaxTileColour.BLACK);
         }
@@ -128,20 +139,21 @@ public class QuaxUserInterface implements UserInterface {
     }
 
 
-    public void showStrategy(BotPlayer bot) {
-        QuaxTileBorder[] colours = new QuaxTileBorder[] {
-                QuaxTileBorder.NONE, QuaxTileBorder.BLUE,
-                QuaxTileBorder.GREEN, QuaxTileBorder.RED,
-                QuaxTileBorder.PURPLE, QuaxTileBorder.PINK
-        };
-
-        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
-            for (QuaxTile t : bot.getStrategyGroupWithValue(i)) {
-                quaxUIBoard.setTileBorder(t.getCoordinates(), colours[i - 1]);
-            }
-        }
-
+    public void showStrategy() {
+        updateStrategy();
         quaxUIWindow.setStrategyVisibility(true);
+    }
+    
+    private void updateStrategy() {
+    	if (linkedBot != null) {
+    		quaxUIBoard.clearTileBorders();
+	
+	        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
+	            for (QuaxTile t : linkedBot.getStrategyGroupWithValue(i)) {
+	                quaxUIBoard.setTileBorder(t.getCoordinates(), STRATEGY_GROUP_BORDERS[i - 1]);
+	            }
+	        }
+    	}
     }
 
     public void hideStrategy(QuaxBoard board) {

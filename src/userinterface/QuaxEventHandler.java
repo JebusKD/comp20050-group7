@@ -18,7 +18,6 @@ public class QuaxEventHandler {
 
                 if (controller.curPlayer() instanceof HumanPlayer) {
                     controller.tryMove(coords.coordinate());
-                    controller.redoStrategy();
                 }
             }
         });

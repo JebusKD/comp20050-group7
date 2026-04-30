@@ -17,7 +17,6 @@ public class TestingEmptyInterface implements UserInterface {
 	public void hideTurnTracker() {
 	}
 
-
 	@Override
 	public void updateFromPreviousMove(QuaxBoard board) {
 	}
@@ -34,12 +33,15 @@ public class TestingEmptyInterface implements UserInterface {
 	public void setPieRuleVisibility(boolean visibility) {
 	}
 
-
 	@Override
-	public void showStrategy(BotPlayer bot) {
+	public void showStrategy() {
     }
 
     @Override
     public void hideStrategy(QuaxBoard board) {
+    }
+    
+    @Override
+    public void setLinkedBot(BotPlayer bot) {
     }
 }

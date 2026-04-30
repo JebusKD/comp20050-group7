@@ -51,9 +51,7 @@ public abstract class QuaxPlayer {
     	getSubmitter().execute(new Runnable() {
 			@Override
 			public void run() {
-				if (playerController.tryMove(move)) {
-					playerController.redoStrategy();
-				}
+				playerController.tryMove(move);
 			}
 		});
 	}
