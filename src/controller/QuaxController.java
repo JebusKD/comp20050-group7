@@ -148,7 +148,7 @@ public class QuaxController {
         }
     }
 
-    public boolean tryMove(QuaxCoordinate coords) {
+    public void tryMove(QuaxCoordinate coords) {
     	QuaxPlayer moveSubmitter = curPlayer();
         QuaxTileColour c = moveSubmitter.getPlayerColour();
 
@@ -168,11 +168,7 @@ public class QuaxController {
             else {
                 curPlayer().movePrompt(quaxBoard);
             }
-
-            return true;
         }
-
-        return false;
     }
 
 
