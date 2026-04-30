@@ -5,7 +5,6 @@ public abstract class QuaxTile {
 
 	private QuaxTileColour tileColour;
 	private QuaxTileGroup tileGroup;
-	private QuaxTileStrategyGroup tileStrategyGroup; //TODO - Remove?
 
 	private int strategyValue;
 
@@ -15,7 +14,6 @@ public abstract class QuaxTile {
 	public QuaxTile(int x, int y) {
 		this.tileColour = QuaxTileColour.NONE;
 		this.tileGroup = null;
-		this.tileStrategyGroup = null;
 		this.strategyValue = 0;
 		this.xPosition = x;
 		this.yPosition = y;
@@ -24,7 +22,7 @@ public abstract class QuaxTile {
 	public QuaxTile(QuaxTile t) {
 		this.tileColour = t.tileColour;
 		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
-		//TODO - Initialise StratGroup too
+
 		this.strategyValue = t.strategyValue;
 		this.xPosition = t.xPosition;
 		this.yPosition = t.yPosition;
@@ -42,7 +40,6 @@ public abstract class QuaxTile {
 	public int getStrategyValue() {
 		return this.strategyValue;
 	}
-	// TODO - Add getStrategyGroup?
 
 
 	public void setTileColour(QuaxTileColour colour) {
@@ -56,10 +53,6 @@ public abstract class QuaxTile {
 
 	public void setStrategyValue(int value) {
 		this.strategyValue = value;
-	}
-
-	public void setTileStrategyGroup(QuaxTileStrategyGroup stratGroup) {
-		this.tileStrategyGroup = stratGroup;
 	}
 
 
