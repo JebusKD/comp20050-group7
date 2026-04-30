@@ -68,7 +68,7 @@ public abstract class QuaxTile {
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
 	public boolean isSameColour(QuaxTileColour c) {
-		return getTileColour() == c;
+		return getTileColour() == c && c != QuaxTileColour.NONE;
 	};
 
 	public abstract boolean onLow();
