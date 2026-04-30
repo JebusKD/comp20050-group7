@@ -121,7 +121,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/** Move validation checks */
+	/* Move validation checks */
 	public boolean checkForWinningMove() {
 		// Cannot win on first move
 		if (isStartingMove()) {
