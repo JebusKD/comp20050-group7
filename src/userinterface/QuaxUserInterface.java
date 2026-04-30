@@ -135,8 +135,6 @@ public class QuaxUserInterface implements UserInterface {
                 QuaxTileBorder.PURPLE, QuaxTileBorder.PINK
         };
 
-        //QuaxTileStrategyGroup[] allStrategyGroups = bot.getStrategyGroups();
-
         for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
             for (QuaxTile t : bot.getStrategyGroupWithValue(i)) {
                 quaxUIBoard.setTileBorder(t.getCoordinates(), colours[i - 1]);
