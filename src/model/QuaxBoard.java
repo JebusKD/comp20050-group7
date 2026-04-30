@@ -12,9 +12,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
     public static final int MAX_RHOMBUSES = 10;
 	private static final int MAX_ADJACENT_TILE_GROUPS = 4;
 
-	private Octagon[][] octagonGrid;
-	private Rhombus[][] rhombusGrid;
-	private LinkedList<QuaxTileGroup> trackedGroups;
+	private final Octagon[][] octagonGrid;
+	private final Rhombus[][] rhombusGrid;
+	private final LinkedList<QuaxTileGroup> trackedGroups;
 	private QuaxCoordinate previousMove;
 
 	private int moveNumber;
@@ -48,7 +48,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		initialiseGrids(b);
 		initialiseGroups(b);
 	}
-
 
 	private void initialiseGrids() {
 		for (int i = 0; i < MAX_OCTAGONS; i++) {
@@ -179,6 +178,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				&& isValidRhombusPlacement(c, QuaxTileColour.WHITE);
 	}
 
+
 	public boolean attemptPieRule() {
 		if (isPieRuleValid()) {
 			this.pieRuleDone = true;
@@ -221,8 +221,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public void skipTurn() {
 		this.moveNumber++;
 	}
-	
-	/** Manage adding a tile to a group */
+
+
+	/*
+	 * Manage adding a tile to a group
+	 */
 	private class GroupManager {
 
 		private void trackGroup(QuaxTileGroup g) {
@@ -321,7 +324,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return getNeighbours(t.getCoordinates());
 	}
 
-	/** Handle searching for neighbours */
+	/*
+	 * Handle searching for neighbours
+	 */
 	private class NeighbourFinder {
 
 		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
@@ -401,29 +406,21 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/** Create an Iterable for all tiles in the board */
+	/* Create an Iterable for all tiles in the board */
 	public Iterator<QuaxTile> iterator() {
 		return new QuaxBoardIterator(this);
 	}
-	
-	public static Iterator<QuaxCoordinate> coordinateIterator() {
-		return new QuaxBoardCoordinateIterator();
-	}
-	
-	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
-		return new QuaxBoardRhombusCoordinateIterator();
-	}
-	
+
 	private static class QuaxBoardIterator implements Iterator<QuaxTile> {
 		private static final int NUM_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
-		
+
 		private int cursor;
 		private final ArrayList<QuaxTile> elements;
-		
+
 		public QuaxBoardIterator(QuaxBoard source) {
 			this.cursor = 0;
 			this.elements = new ArrayList<>(NUM_ELEMENTS);
-			
+
 			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
 				for (int j = 0; j < MAX_OCTAGONS; j++) {
 					this.elements.add(source.getOctagon(i, j));
@@ -436,42 +433,33 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				this.elements.add(source.getOctagon(MAX_OCTAGONS - 1, j));
 			}
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 			return cursor < NUM_ELEMENTS;
 		}
-		
+
 		@Override
 		public QuaxTile next() {
 			assert hasNext();
 			return elements.get(cursor++);
 		}
-		
+
 		private QuaxCoordinate nextCoordinate() {
 			assert hasNext();
 			return next().getCoordinates();
 		}
 	}
-	
-	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
-		private final QuaxBoardIterator boardIterator;
-		
-		public QuaxBoardCoordinateIterator() {
-			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return boardIterator.hasNext();
-		}
-		
-		@Override
-		public QuaxCoordinate next() {
-			return boardIterator.nextCoordinate();
-		}
+
+
+	public static Iterator<QuaxCoordinate> coordinateIterator() {
+		return new QuaxBoardCoordinateIterator();
 	}
 	
+	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
+		return new QuaxBoardRhombusCoordinateIterator();
+	}
+
 	private static class QuaxBoardRhombusIterator implements Iterator<QuaxTile> {
 		private static final int NUM_ELEMENTS = MAX_RHOMBUSES * MAX_RHOMBUSES;
 		
@@ -528,7 +516,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		private int cursor;
 		
 		private QuaxBoardPermutationIterator(QuaxBoard b) {
-			this.elements = new ArrayList<QuaxBoard>();
+			this.elements = new ArrayList<>();
 			this.cursor = 0;
 			populatePermutations(b);
 		}

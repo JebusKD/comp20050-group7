@@ -20,6 +20,7 @@ public interface UserInterface {
 	
 	void setPieRuleVisibility(boolean visibility);
 
+
 	void showStrategy();
 
 	void hideStrategy(QuaxBoard board);

@@ -9,6 +9,7 @@ import static userinterface.QuaxUserInterface.*;
 
 
 class CoordinateBuilder {
+
     private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
     private final GridPane coordinateGrid;

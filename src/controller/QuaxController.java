@@ -11,16 +11,18 @@ import types.*;
 import userinterface.*;
 
 
-/** Handle all technical aspects of the game */
+/*
+ * Handle all technical aspects of the game
+ */
 public class QuaxController {
 
     public static final Random RNG = new Random();
     private final Executor quaxExecutor;
     private final Executor quaxMoveSubmitter;
 
-    private UserInterface quaxUserInterface;
+    private final UserInterface quaxUserInterface;
     private QuaxBoard quaxBoard;
-    private QuaxPlayer[] quaxPlayers;
+    private final QuaxPlayer[] quaxPlayers;
 
 
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
@@ -30,12 +32,12 @@ public class QuaxController {
         this.quaxPlayers = new QuaxPlayer[2];
         this.quaxUserInterface = new TestingEmptyInterface();
 
-        //BotPlayer.enableHaste();
+        //BotPlayer.enableHaste(); TODO - Uncomment on submission
         
         startGame(p1, p2);
     }
 
-    // Testing constructor
+    // Testing constructors
     public QuaxController(Stage stage) {
         this(stage, true, false);
     }
@@ -86,7 +88,14 @@ public class QuaxController {
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxBoard = new QuaxBoard();
+        setQuaxPlayers(p1, p2);
 
+        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
+
+        curPlayer().movePrompt(quaxBoard);
+    }
+
+    private void setQuaxPlayers(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxPlayers[0] = p1;
         this.quaxPlayers[1] = p2;
 
@@ -95,29 +104,12 @@ public class QuaxController {
 
         quaxPlayers[0].setPlayerController(this);
         quaxPlayers[1].setPlayerController(this);
-
-        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
-
-        curPlayer().movePrompt(quaxBoard);
     }
 
 
     public QuaxPlayer curPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
-
-    // for testing purposes
-    public QuaxTileColour getFirstPlayerColour() {
-        assert quaxPlayers[0] != null;
-        return quaxPlayers[0].getPlayerColour();
-    }
-
-    // for testing purposes
-    public QuaxTileColour getSecondPlayerColour() {
-        assert quaxPlayers[1] != null;
-        return quaxPlayers[1].getPlayerColour();
-    }
-
 
     public int getMoveNumber() {
         return quaxBoard.getMoveNumber();
@@ -134,6 +126,19 @@ public class QuaxController {
     public Executor getQuaxMoveSubmitter() {
         return this.quaxMoveSubmitter;
     }
+
+    // for testing purposes
+    public QuaxTileColour getFirstPlayerColour() {
+        assert quaxPlayers[0] != null;
+        return quaxPlayers[0].getPlayerColour();
+    }
+
+    // for testing purposes
+    public QuaxTileColour getSecondPlayerColour() {
+        assert quaxPlayers[1] != null;
+        return quaxPlayers[1].getPlayerColour();
+    }
+
 
 
     public void doPieRule() {

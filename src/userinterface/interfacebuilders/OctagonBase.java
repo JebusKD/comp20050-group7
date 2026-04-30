@@ -6,8 +6,8 @@ import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 abstract class OctagonBase extends Polygon {
 
-    private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
     public static final double SIDELENGTH = calculateSideLength(OCTAGON_WIDTH);
+    private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
 
 
     public OctagonBase() {

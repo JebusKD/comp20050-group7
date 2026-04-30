@@ -11,6 +11,7 @@ public abstract class QuaxTile {
 	protected final int xPosition;
 	protected final int yPosition;
 
+
 	public QuaxTile(int x, int y) {
 		this.tileColour = QuaxTileColour.NONE;
 		this.tileGroup = null;
@@ -58,6 +59,9 @@ public abstract class QuaxTile {
 
 	public abstract QuaxCoordinate getCoordinates();
 
+	/*
+	 * Shorthand boolean checks for brevity
+	 */
 	public boolean isFree() {
 		return getTileColour() == QuaxTileColour.NONE;
 	}
@@ -71,6 +75,12 @@ public abstract class QuaxTile {
 		return getTileColour() == c && c != QuaxTileColour.NONE;
 	}
 
+	/*
+	 * Check if the tile is on
+	 * 	 the bottom or left (if BLACK or WHITE)
+	 *  and
+	 *   the top or the right (if BLACK or WHITE)
+	 */
 	public abstract boolean onLow();
 	public abstract boolean onHigh();
 }

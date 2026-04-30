@@ -2,7 +2,7 @@ package types;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import model.QuaxBoard;
+
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 

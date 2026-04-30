@@ -39,8 +39,8 @@ public class QuaxUserInterface implements UserInterface {
     private WindowManager quaxUIWindow;
 
     private BotPlayer linkedBot;
-    private boolean showingStrategy;
     private QuaxCoordinate chosenMove;
+    private boolean showingStrategy;
 
 
     public QuaxUserInterface(Stage stage) {
@@ -84,10 +84,10 @@ public class QuaxUserInterface implements UserInterface {
         sideBar.getStyleClass().add("vbox");
 
 
-        this.interfaceScene = new Scene(setOuterGrid(sideBar));
+        this.interfaceScene = new Scene(initialiseOuterGrid(sideBar));
     }
 
-    private GridPane setOuterGrid(VBox extrasBar) {
+    private GridPane initialiseOuterGrid(VBox extrasBar) {
         GridPane outer = new GridPane();
 
         outer.add(quaxUIWindow.createTitle(),0,0);
@@ -96,11 +96,6 @@ public class QuaxUserInterface implements UserInterface {
 
         outer.setAlignment(Pos.CENTER);
         return outer;
-    }
-
-
-    public void setLinkedBot(BotPlayer bot) {
-    	this.linkedBot = bot;
     }
 
 
@@ -121,8 +116,7 @@ public class QuaxUserInterface implements UserInterface {
         }
 
         else {
-            // TODO - LoD violation?
-            QuaxTileColour colour = board.getTile(previousMove).getTileColour();
+            QuaxTileColour colour = board.getTileColour(previousMove);
             this.setTile(previousMove, colour);
             this.turnIndicator.setIndicatorColour(colour.flip());
 
@@ -162,11 +156,6 @@ public class QuaxUserInterface implements UserInterface {
 	        }
     	}
     }
-    
-    @Override
-    public void setBotChosenMove(QuaxCoordinate c) {
-    	this.chosenMove = c;
-    }
 
     @Override
     public void hideStrategy(QuaxBoard board) {
@@ -177,5 +166,15 @@ public class QuaxUserInterface implements UserInterface {
         }
 
         quaxUIWindow.setStrategyVisibility(false);
+    }
+
+    @Override
+    public void setLinkedBot(BotPlayer bot) {
+        this.linkedBot = bot;
+    }
+
+    @Override
+    public void setBotChosenMove(QuaxCoordinate c) {
+        this.chosenMove = c;
     }
 }

@@ -49,60 +49,6 @@ public class UserInterfaceBoard {
     }
 
 
-    public StackPane getStackUIBoard() {
-        return this.stackUIBoard;
-    }
-
-    public void setStackUIBoard(QuaxBoard stackUIBoard) {
-        for (QuaxTile tile : stackUIBoard) {
-            setTile(tile.getCoordinates(), tile.getTileColour());
-        }
-    }
-    
-    private Tile getTileFromCoordinate(QuaxCoordinate q) {
-    	Tile tile;
-    	if (q.isOctagon()) {
-            tile = this.octagonGridCells[q.x()][q.y()];
-        }
-        else {
-            tile = this.rhombusGridCells[q.x()][q.y()];
-        }
-    	return tile;
-    }
-
-    public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-        getTileFromCoordinate(q).setColour(c);
-    }
-
-    public void setTileBorder(QuaxCoordinate q, QuaxTileBorder b) {
-    	getTileFromCoordinate(q).setBorder(b);
-    }
-    
-   public void setBotChosenCell(QuaxCoordinate q) {
-	   clearBotChosenMove();
-	   getTileFromCoordinate(q).setPreviousMove();
-    }
-   
-   	private void clearBotChosenCell(QuaxCoordinate q) {
-   		getTileFromCoordinate(q).clearPreviousMove();
-   	}
-
-    public void clearTileBorders() {
-    	Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
-    	
-    	while (iterator.hasNext()) {
-    		setTileBorder(iterator.next(), QuaxTileBorder.NONE);
-    	}
-    }
-    
-    public void clearBotChosenMove() {
-    	Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
-    	
-    	while (iterator.hasNext()) {
-    		clearBotChosenCell(iterator.next());
-    	}
-    }
-
     private Rectangle createGradientBackground() {
         double size = OCTAGON_WIDTH * (MAX_OCTAGONS + 1)
                         + (MAX_RHOMBUSES * OCTAGON_GRID_GAP);
@@ -156,9 +102,10 @@ public class UserInterfaceBoard {
     }
 
     private StackPane createGrid() {
+        GridBuilder gb = new GridBuilder();
         StackPane gridStack = new StackPane(
-                createOctagonGrid(),
-                createRhombusGrid()
+                gb.createOctagonGrid(),
+                gb.createRhombusGrid()
         );
 
         gridStack.setMaxHeight(Region.USE_PREF_SIZE);
@@ -172,85 +119,145 @@ public class UserInterfaceBoard {
         return coordBuild.getCoordinateGrid();
     }
 
+    private class GridBuilder {
+        private GridPane createOctagonGrid() {
+            octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
+            GridPane octagonGrid = new GridPane();
+            positionBoardTileGrid(octagonGrid);
 
-    private GridPane createOctagonGrid() {
-        octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
-        GridPane octagonGrid = new GridPane();
-        positionBoardTileGrid(octagonGrid);
+            initialiseOctagonGridRowColumns(octagonGrid);
+            initialiseOctagonGridCells(octagonGrid);
 
-        initialiseOctagonGridRowColumns(octagonGrid);
-        initialiseOctagonGridCells(octagonGrid);
-
-        return octagonGrid;
-    }
-
-    private void initialiseOctagonGridRowColumns(GridPane oGrid) {
-        for (int i = 0; i < MAX_OCTAGONS ; i++) {
-            ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
-            oGrid.getColumnConstraints().add(column);
-
-            RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
-            oGrid.getRowConstraints().add(row);
+            return octagonGrid;
         }
-    }
 
-    private void initialiseOctagonGridCells(GridPane oGrid) {
-        for (int i = 0; i < MAX_OCTAGONS ; i++) {
-            for (int j = 0; j < MAX_OCTAGONS ; j++) {
-                OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
-                newTile.setId("octagon" + i + "-" + j);
-                octagonGridCells[i][j] = newTile;
-                oGrid.add(newTile, i, j);
+        private void initialiseOctagonGridRowColumns(GridPane oGrid) {
+            for (int i = 0; i < MAX_OCTAGONS ; i++) {
+                ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+                oGrid.getColumnConstraints().add(column);
+
+                RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+                oGrid.getRowConstraints().add(row);
+            }
+        }
+
+        private void initialiseOctagonGridCells(GridPane oGrid) {
+            for (int i = 0; i < MAX_OCTAGONS ; i++) {
+                for (int j = 0; j < MAX_OCTAGONS ; j++) {
+                    OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
+                    newTile.setId("octagon" + i + "-" + j);
+                    octagonGridCells[i][j] = newTile;
+                    oGrid.add(newTile, i, j);
+                }
+            }
+        }
+
+
+        private static void positionBoardTileGrid(GridPane boardTiles) {
+            boardTiles.setAlignment(Pos.TOP_LEFT);
+            boardTiles.setVgap(OCTAGON_GRID_GAP);
+            boardTiles.setHgap(OCTAGON_GRID_GAP);
+            boardTiles.setPickOnBounds(false);
+        }
+
+        private GridPane createRhombusGrid() {
+            rhombusGridCells = new RhombusTile[MAX_RHOMBUSES][MAX_RHOMBUSES];
+            GridPane rhombusGrid = new GridPane();
+            positionBoardTileGrid(rhombusGrid);
+
+            rhombusGrid.setPadding(new Insets(calculateRhombusGridGap(), 0, 0, calculateRhombusGridGap()));
+
+            initialiseRhombusGridRowColumns(rhombusGrid);
+            initialiseRhombusGridCells(rhombusGrid);
+
+            return rhombusGrid;
+        }
+
+        private double calculateRhombusGridGap() {
+            double rhombusSideLength = OctagonBase.calculateSideLength(OCTAGON_WIDTH);
+            double rhombusDiagonalHeight = (OCTAGON_WIDTH - rhombusSideLength) / 2;
+            return rhombusSideLength + rhombusDiagonalHeight + (OCTAGON_GRID_GAP/2);
+        }
+
+        private void initialiseRhombusGridRowColumns(GridPane rGrid) {
+            for (int i = 0; i < MAX_RHOMBUSES; i++) {
+                ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
+                rGrid.getColumnConstraints().add(column);
+
+                RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
+                row.setValignment(VPos.TOP);
+                rGrid.getRowConstraints().add(row);
+            }
+        }
+
+        private void initialiseRhombusGridCells(GridPane rGrid) {
+            for (int i = 0; i < MAX_RHOMBUSES; i++) {
+                for (int j = 0; j < MAX_RHOMBUSES; j++) {
+                    RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
+                    newTile.setId("rhombus" + i + "-" + j);
+                    rhombusGridCells[i][j] = newTile;
+                    rGrid.add(newTile, i, j);
+                }
             }
         }
     }
 
 
-    private static void positionBoardTileGrid(GridPane boardTiles) {
-        boardTiles.setAlignment(Pos.TOP_LEFT);
-        boardTiles.setVgap(OCTAGON_GRID_GAP);
-        boardTiles.setHgap(OCTAGON_GRID_GAP);
-        boardTiles.setPickOnBounds(false);
+    public StackPane getStackUIBoard() {
+        return this.stackUIBoard;
     }
 
-    private GridPane createRhombusGrid() {
-        rhombusGridCells = new RhombusTile[MAX_RHOMBUSES][MAX_RHOMBUSES];
-        GridPane rhombusGrid = new GridPane();
-        positionBoardTileGrid(rhombusGrid);
-
-        rhombusGrid.setPadding(new Insets(calculateRhombusGridGap(), 0, 0, calculateRhombusGridGap()));
-
-        initialiseRhombusGridRowColumns(rhombusGrid);
-        initialiseRhombusGridCells(rhombusGrid);
-
-        return rhombusGrid;
-    }
-
-    private double calculateRhombusGridGap() {
-        double rhombusSideLength = OctagonBase.calculateSideLength(OCTAGON_WIDTH);
-        double rhombusDiagonalHeight = (OCTAGON_WIDTH - rhombusSideLength) / 2;
-        return rhombusSideLength + rhombusDiagonalHeight + (OCTAGON_GRID_GAP/2);
-    }
-
-    private void initialiseRhombusGridRowColumns(GridPane rGrid) {
-        for (int i = 0; i < MAX_RHOMBUSES; i++) {
-            ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
-            rGrid.getColumnConstraints().add(column);
-
-            RowConstraints row = new RowConstraints(OCTAGON_WIDTH);
-            row.setValignment(VPos.TOP);
-            rGrid.getRowConstraints().add(row);
+    public void setStackUIBoard(QuaxBoard stackUIBoard) {
+        for (QuaxTile tile : stackUIBoard) {
+            setTile(tile.getCoordinates(), tile.getTileColour());
         }
     }
 
-    private void initialiseRhombusGridCells(GridPane rGrid) {
-        for (int i = 0; i < MAX_RHOMBUSES; i++) {
-            for (int j = 0; j < MAX_RHOMBUSES; j++) {
-                RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
-                newTile.setId("rhombus" + i + "-" + j);
-                rhombusGridCells[i][j] = newTile;
-                rGrid.add(newTile, i, j);
-            }
+
+
+    public void setTile(QuaxCoordinate q, QuaxTileColour c) {
+        getTileFromCoordinate(q).setColour(c);
+    }
+
+    public void setTileBorder(QuaxCoordinate q, QuaxTileBorder b) {
+        getTileFromCoordinate(q).setBorder(b);
+    }
+
+    private Tile getTileFromCoordinate(QuaxCoordinate q) {
+        Tile tile;
+        if (q.isOctagon()) {
+            tile = this.octagonGridCells[q.x()][q.y()];
+        }
+        else {
+            tile = this.rhombusGridCells[q.x()][q.y()];
+        }
+        return tile;
+    }
+
+
+    public void setBotChosenCell(QuaxCoordinate q) {
+        clearBotChosenMove();
+        getTileFromCoordinate(q).setPreviousMove();
+    }
+
+    private void clearBotChosenCell(QuaxCoordinate q) {
+        getTileFromCoordinate(q).clearPreviousMove();
+    }
+
+
+    public void clearTileBorders() {
+        Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
+
+        while (iterator.hasNext()) {
+            setTileBorder(iterator.next(), QuaxTileBorder.NONE);
+        }
+    }
+
+    public void clearBotChosenMove() {
+        Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
+
+        while (iterator.hasNext()) {
+            clearBotChosenCell(iterator.next());
         }
     }
 

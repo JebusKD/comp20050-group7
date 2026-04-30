@@ -6,7 +6,6 @@ package types;
  */
 public class Octagon extends QuaxTile {
 
-
 	public Octagon(int x, int y) {
 		super(x, y);
 	}

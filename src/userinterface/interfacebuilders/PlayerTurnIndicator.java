@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import types.QuaxTileColour;
-
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
@@ -29,6 +28,7 @@ public class PlayerTurnIndicator {
     private HBox createTurnTracker() {
         HBox box = new HBox(HBOX_SPACING);
         createComponents();
+
         box.getStyleClass().add("hbox-custom");
         box.getChildren().addAll(this.turnText, this.octagonIndicator, this.rhombusIndicator);
         return box;
@@ -39,6 +39,7 @@ public class PlayerTurnIndicator {
         this.rhombusIndicator = new RhombusTurnIndicator();
         this.turnText = new TurnText();
     }
+
 
     public void setIndicatorColour(QuaxTileColour colour) {
         this.octagonIndicator.setTurnTileColour(colour);
@@ -53,6 +54,7 @@ public class PlayerTurnIndicator {
     public void hideTurnTrackerBox() {
         turnTrackerBox.setVisible(false);
     }
+
 
     private interface TurnIndicatorShape extends Styleable {
         default void setTurnTileColour(QuaxTileColour colour) {

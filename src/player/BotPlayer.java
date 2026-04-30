@@ -8,13 +8,13 @@ import types.*;
 
 
 public class BotPlayer extends QuaxPlayer {
-	private static boolean botHaste = false;
 
     public static final int MAX_STRATEGIES = 6;
     // TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
+    private static boolean botHaste = false;
 
-    private QuaxTileStrategyGroup[] strategyGroups;
+    private final QuaxTileStrategyGroup[] strategyGroups;
 
 
 	public BotPlayer() {
@@ -106,14 +106,6 @@ public class BotPlayer extends QuaxPlayer {
             moves.add(t.getCoordinates());
         }
 
-        if (moves.isEmpty()) { // just in case candidateMoves is somehow empty
-            for (QuaxTile t : b) {
-                if (isValidStrategicMove(t, b, t.getTileColour())) {
-                    moves.add(t.getCoordinates());
-                }
-            }
-        }
-
         return moves;
     }
 
@@ -191,7 +183,9 @@ public class BotPlayer extends QuaxPlayer {
                         }
                         assignTileToStrategyGroup(neighbour);
 
-                        setProgressStrategy(t, neighbour, neighbours);
+                        if (neighbour.getStrategyValue() <= 4) {
+                            setProgressStrategy(t, neighbour, neighbours);
+                        }
                     }
                 }
             }
@@ -294,9 +288,11 @@ public class BotPlayer extends QuaxPlayer {
         	for (QuaxTile t : b) {
         		if (isUselessRhombus(t, b)) {
         			assignStrategyValue(t, 0);
-        		} else if (exploitsVulnerableRhombuses(t, b)) {
+        		}
+                else if (exploitsVulnerableRhombuses(t, b)) {
         			upgradeStrategy(t, 1, 5);
-        		} else if (defendsVulnerableRhombuses(t, b)) {
+        		}
+                else if (defendsVulnerableRhombuses(t, b)) {
         			upgradeStrategy(t, 2, 5);
         		}
         	}
@@ -340,7 +336,8 @@ public class BotPlayer extends QuaxPlayer {
         	copy.skipTurn();
         	return exploitsVulnerableRhombuses(t, copy);
         }
-        
+
+
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
             assignTileToStrategyGroup(t);
