@@ -15,24 +15,6 @@ public class QuaxCoordinateEvent extends Event {
         this.coordinate = q;
     }
 
-
-    // TODO - rename methods?
-    public int x() {
-        return coordinate.x();
-    }
-
-    public int y() {
-        return coordinate.y();
-    }
-
-    public boolean octagon() {
-        return coordinate.isOctagon();
-    }
-
-    public boolean rhombus() {
-        return coordinate.isRhombus();
-    }
-
     public QuaxCoordinate coordinate() {
         return this.coordinate;
     }

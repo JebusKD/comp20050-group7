@@ -44,8 +44,9 @@ public abstract class QuaxTile {
 	}
 	// TODO - Add getStrategyGroup?
 
-	// TODO - Add assertions?
+
 	public void setTileColour(QuaxTileColour colour) {
+		assert colour != null;
 		this.tileColour = colour;
 	}
 

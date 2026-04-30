@@ -18,9 +18,9 @@ public class QuaxController {
     private final Executor quaxExecutor;
     private final Executor quaxMoveSubmitter;
 
-    private final UserInterface quaxUserInterface;
+    private UserInterface quaxUserInterface;
     private QuaxBoard quaxBoard;
-    private final QuaxPlayer[] quaxPlayers;
+    private QuaxPlayer[] quaxPlayers;
 
 
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {

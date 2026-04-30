@@ -128,10 +128,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return false;
 		}
 
-		// TODO - violates LoD
-		QuaxTileGroup moveGroup = getTile(previousMove).getTileGroup();
-		return moveGroup.isWinningGroup();
+		// TODO - violates LoD?
+		return previousGroup().isWinningGroup();
 	}
+
+	private QuaxTileGroup previousGroup() {
+		return getTile(previousMove).getTileGroup();
+	}
+
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour colour) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, colour))) {
