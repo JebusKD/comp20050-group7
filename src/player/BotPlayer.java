@@ -41,29 +41,12 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
-    public QuaxTileStrategyGroup[] getStrategyGroups() {
-        strategyGroups = new QuaxTileStrategyGroup[7];
-        addStrategyGroupsToArray();
-        return strategyGroups;
-    }
-
-    private void addStrategyGroupsToArray() {
-        strategyGroups[0] = new QuaxTileStrategyGroup();
-        strategyGroups[1] = stratOne;
-        strategyGroups[2] = stratTwo;
-        strategyGroups[3] = stratThree;
-        strategyGroups[4] = stratFour;
-        strategyGroups[5] = stratFive;
-        strategyGroups[6] = stratSix;
-    }
-
-
     /*
       Given a QuaxBoard b containing strategy values, chooses the move with
       the highest strategy value and returns it. If there is a tie, chooses
       one move at random of the highest strategy values.
      */
-	public QuaxCoordinate decideMove(QuaxBoard b) {
+	private QuaxCoordinate decideMove(QuaxBoard b) {
         int randStrategyValue = 6;
         QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
 
@@ -79,7 +62,7 @@ public class BotPlayer extends QuaxPlayer {
         return candidateMoves.get(index);
 	}
 
-    private QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
+    public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
         assert (i < 7 && i > 0);
         switch (i) {
             case 1:
@@ -135,7 +118,6 @@ public class BotPlayer extends QuaxPlayer {
 
 
     // how the bot decides strategy vals for the tiles
-    // TODO - please help
     public void setUpStrategy(QuaxBoard b) {
         clearAllStrategyGroups();
         initialiseAllStrategyGroups(b);
@@ -149,10 +131,10 @@ public class BotPlayer extends QuaxPlayer {
 
             else {
                 if (t instanceof Rhombus) {
-                    setRhombusStrategyValue(t, b);
+                    sb.setRhombusStrategyValue(t, b);
                 }
 
-                setHighPriorityStrategyGroups(t, b);
+                sb.setHighPriorityStrategyGroups(t, b);
             }
         }
     }
