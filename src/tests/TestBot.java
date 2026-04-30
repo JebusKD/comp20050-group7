@@ -75,4 +75,5 @@ public class TestBot {
 		// Check to see did the bots complete the game
 		assertTrue(controller.getQuaxBoard().checkForWinningMove());
 	}
+
 }
