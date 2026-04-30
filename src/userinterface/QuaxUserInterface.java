@@ -39,10 +39,12 @@ public class QuaxUserInterface implements UserInterface {
     private WindowManager quaxUIWindow;
 
     private BotPlayer linkedBot;
+    private boolean showingStrategy;
 
     public QuaxUserInterface(Stage stage) {
         this.quaxUIStage = stage;
         this.quaxUIBoard = new UserInterfaceBoard();
+        this.showingStrategy = false;
 
         initialiseWindow();
         initialiseStylesheets();
@@ -140,12 +142,13 @@ public class QuaxUserInterface implements UserInterface {
 
 
     public void showStrategy() {
+    	showingStrategy = true;
         updateStrategy();
         quaxUIWindow.setStrategyVisibility(true);
     }
     
     private void updateStrategy() {
-    	if (linkedBot != null) {
+    	if (linkedBot != null && showingStrategy) {
     		quaxUIBoard.clearTileBorders();
 	
 	        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
@@ -157,6 +160,7 @@ public class QuaxUserInterface implements UserInterface {
     }
 
     public void hideStrategy(QuaxBoard board) {
+    	showingStrategy = false;
         for (QuaxTile t : board) {
             this.quaxUIBoard.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
         }
