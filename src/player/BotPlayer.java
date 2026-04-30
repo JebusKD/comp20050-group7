@@ -126,6 +126,7 @@ public class BotPlayer extends QuaxPlayer {
         sb.initialiseAllStrategyGroups(b);
 
         for (QuaxTile t : b) {
+        	// TODO What?
             if (!isValidMove(t, b)) {
                 if (t instanceof Octagon) {
                     sb.setOctagonStrategyValues(t, b);
