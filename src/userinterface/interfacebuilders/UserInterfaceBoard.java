@@ -28,6 +28,8 @@ public class UserInterfaceBoard {
 
     private static final double FRONT_HOURGLASS_GAP = 5.7;
     private static final double BACK_HOURGLASS_GAP = 11.4;
+    
+    private static final String PREVIOUS_MOVE_ID = "tilecolour-green";
 
     private OctagonTile[][] octagonGridCells;
     private RhombusTile[][] rhombusGridCells;
@@ -236,17 +238,25 @@ public class UserInterfaceBoard {
 
 
     private interface Tile extends Styleable {
-        default void setColour(QuaxTileColour colour) {
-            this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+    	default void removeTileColour() {
+    		this.getStyleClass().removeAll(
+    				QuaxTileColour.BLACK.tilecolourStyle(),
                     QuaxTileColour.WHITE.tilecolourStyle(),
                     QuaxTileColour.NONE.tilecolourStyle());
+    	}
+    	
+        default void setColour(QuaxTileColour colour) {
+        	this.removeTileColour();
             this.getStyleClass().add(colour.tilecolourStyle());
         }
+        
         default void setBorder(QuaxTileBorder border) {
             this.getStyleClass().removeAll("tileoutline-0", "tileoutline-1","tileoutline-2","tileoutline-3","tileoutline-4");
             this.getStyleClass().add("tileoutline-base");
             this.getStyleClass().add(border.tileBorderStyle());
         }
+        
+        void setPreviousMove();
 
         QuaxCoordinate getCoordinate();
     }
@@ -269,6 +279,11 @@ public class UserInterfaceBoard {
                     fireEvent(new QuaxCoordinateEvent(QuaxCoordinateEvent.TILE_CLICKED_EVENT, getCoordinate()));
                 }
             });
+        }
+        
+        @Override
+        public void setPreviousMove() {
+        	this.setId(PREVIOUS_MOVE_ID);
         }
 
         @Override
@@ -296,6 +311,11 @@ public class UserInterfaceBoard {
             });
         }
 
+        @Override
+        public void setPreviousMove() {
+        	this.setId(PREVIOUS_MOVE_ID);
+        }
+        
         @Override
         public QuaxCoordinate getCoordinate() {
             return this.rhombusGridCoordinate;
