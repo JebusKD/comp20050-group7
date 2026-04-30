@@ -163,7 +163,7 @@ public class BotPlayer extends QuaxPlayer {
                 //      set values depending on the board status
                 else {
                     if (t instanceof Rhombus) {
-                        setRhombusStrategyValue(t, b);
+                        assignStrategyValue(t, 4);
                     }
 
                     setHighPriorityStrategyGroups(t, b);
