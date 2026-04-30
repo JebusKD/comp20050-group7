@@ -5,7 +5,7 @@ public abstract class QuaxTile {
 
 	private QuaxTileColour tileColour;
 	private QuaxTileGroup tileGroup;
-	private QuaxTileStrategyGroup tileStrategyGroup;
+	private QuaxTileStrategyGroup tileStrategyGroup; //TODO - Remove?
 
 	private int strategyValue;
 
@@ -68,8 +68,8 @@ public abstract class QuaxTile {
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
 	public boolean isSameColour(QuaxTileColour c) {
-		return getTileColour() == c;
-	};
+		return getTileColour() == c && c != QuaxTileColour.NONE;
+	}
 
 	public abstract boolean onLow();
 	public abstract boolean onHigh();

@@ -9,7 +9,7 @@ import static model.QuaxBoard.*;
 import static userinterface.QuaxUserInterface.*;
 
 
-public class CoordinateBuilder {
+class CoordinateBuilder {
     private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
     private GridPane coordinateGrid;

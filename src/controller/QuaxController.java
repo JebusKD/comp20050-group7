@@ -101,7 +101,6 @@ public class QuaxController {
     }
 
 
-
     public QuaxPlayer curPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
@@ -140,22 +139,25 @@ public class QuaxController {
         if (quaxBoard.attemptPieRule()) {
             quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
             quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
+
             quaxUserInterface.setPieRuleVisibility(false);
             curPlayer().movePrompt(getQuaxBoard());
         }
     }
 
-    public boolean tryMove(QuaxCoordinate coords) {
+    public void tryMove(QuaxCoordinate coords) {
     	QuaxPlayer moveSubmitter = curPlayer();
         QuaxTileColour c = moveSubmitter.getPlayerColour();
 
-        if (quaxBoard.validMove(coords, c)) {
+        if (quaxBoard.validMove(coords)) {
             quaxBoard.makeMove(coords, c);
+
             if (moveSubmitter instanceof BotPlayer bot) {
             	quaxUserInterface.setBotChosenMove(coords);
             	quaxUserInterface.setLinkedBot(bot);
             	
             }
+
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
             if (quaxBoard.checkForWinningMove()) {
@@ -165,27 +167,15 @@ public class QuaxController {
             else {
                 curPlayer().movePrompt(quaxBoard);
             }
-
-            return true;
         }
-
-        return false;
     }
 
 
     /**  Methods for handling the strategic bot
      *  Retrieve bot, manage showing/hiding strategy
      */
-    // TODO - Bot Cleanup - assertions break tests, but too many null checks --> DON'T RETURN NULL
-    public BotPlayer getBot() {
-        for (QuaxPlayer p : quaxPlayers) {
-            if (p instanceof BotPlayer) return (BotPlayer) p;
-        }
-        return null;
-    }
-
     public void showStrategy() {
-        quaxUserInterface.showStrategy();   
+        quaxUserInterface.showStrategy();
     }
 
     public void hideStrategy() {
