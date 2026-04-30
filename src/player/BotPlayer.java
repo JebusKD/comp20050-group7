@@ -291,7 +291,11 @@ public class BotPlayer extends QuaxPlayer {
         }
         
         private void postStrategy(QuaxBoard b) {
-        	
+        	for (QuaxTile t : b) {
+        		if (isUselessRhombus(t, b)) {
+        			assignStrategyValue(t, 0);
+        		}
+        	}
         }
         
         private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
