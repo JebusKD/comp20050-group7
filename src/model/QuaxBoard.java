@@ -78,7 +78,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-	// TODO - Move to GM?
 	private void initialiseGroups(QuaxBoard b) {
 		for (QuaxTileGroup g : b.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
@@ -134,19 +133,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return moveGroup.isWinningGroup();
 	}
 
-	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
-		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, t))) {
+	public boolean validMove(QuaxCoordinate q) {
+		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q))) {
 			return getTile(q).isFree();
 		}
 
 		return false;
 	}
 
-	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c) {
+	private boolean isValidRhombusPlacement(QuaxCoordinate q) {
         QuaxTile[][] n = getNeighbours(q);
 
-        return (n[0][0].isSameColour(c) && n[1][1].isSameColour(c))
-                || (n[1][0].isSameColour(c) && n[0][1].isSameColour(c)); // TODO - Repetition?
+        return n[0][0].isSameColour(n[1][1].getTileColour())
+				|| n[1][0].isSameColour(n[0][1].getTileColour());
     }
 
 
@@ -207,7 +206,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (isOwnedTile(tile, c) && !(nearbyGroups.contains(tile.getTileGroup()))) { // TODO - Maybe clean up
+					if (isOwnedTile(tile, c) &&	tileNotMemberOfGroup(nearbyGroups, tile)) {
 						nearbyGroups.add(tile.getTileGroup());
 					}
 				}
@@ -218,6 +217,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		private boolean isOwnedTile(QuaxTile t, QuaxTileColour c) {
 			return (t != null && t.isSameColour(c));
+		}
+
+		private boolean tileNotMemberOfGroup(ArrayList<QuaxTileGroup> groups, QuaxTile t) {
+			return !(groups.contains(t.getTileGroup()));
 		}
 
 

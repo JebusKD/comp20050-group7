@@ -151,7 +151,7 @@ public class QuaxController {
     public boolean tryMove(QuaxCoordinate coords) {
         QuaxTileColour c = curPlayer().getPlayerColour();
 
-        if (quaxBoard.validMove(coords, c)) {
+        if (quaxBoard.validMove(coords)) {
             quaxBoard.makeMove(coords, c);
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
