@@ -98,7 +98,7 @@ public class QuaxUserInterface implements UserInterface {
 
         GridPane outer = new GridPane();
 
-        Label title = new Label("Quax: Human V Bot");
+        Label title = new Label("Quax (Human V Bot)");
         title.setId("Title");
         title.getStyleClass().add("custom-title");
 

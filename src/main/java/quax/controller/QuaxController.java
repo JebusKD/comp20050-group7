@@ -121,7 +121,7 @@ public class QuaxController {
         return board.getMoveNumber();
     }
 
-    public void makeMove(QuaxCoordinate coords) {
+    public boolean makeMove(QuaxCoordinate coords) {
         QuaxTileColour c = curPlayer().getColour();
         if (board.validMove(coords, c)) {
             board.makeMove(coords, c);
@@ -133,9 +133,11 @@ public class QuaxController {
                 ui.hideTurnTracker();
             } else {
                 curPlayer().movePrompt(board);
-                redoStrategy();
+              //  redoStrategy();
             }
+            return true;
         }
+        return false;
     }
 
     public QuaxBoard getBoard() {

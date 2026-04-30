@@ -85,9 +85,9 @@ public abstract class BotPlayer extends QuaxPlayer {
     public int chooseStrategyValue(){
         SplittableRandom random = new SplittableRandom();
         int probability= random.nextInt(1,101);
-        if(probability <= 3) return 1;
-        if(probability <= 15) return 2;
-        if(probability <= 45) return 3;
+        if(probability <= 80) return 1;
+       //if(probability <= 15) return 2;
+        //if(probability <= 40) return 3;
         return 4;
     }
     public void assignStratGroup(QuaxTile newTile) {
