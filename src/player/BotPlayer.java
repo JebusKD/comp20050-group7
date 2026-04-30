@@ -34,9 +34,9 @@ public class BotPlayer extends QuaxPlayer {
 
 
     /*
-     * TODO Outdated comment?
-      Given a QuaxBoard b containing strategy values, chooses the move with
-      the highest strategy value and returns it. If there is a tie, chooses
+     * TODO Outdated comment? - Fixed (ish)
+      Given a QuaxBoard b containing strategy values, chooses a move with
+      a random strategy value and returns it. If there is a tie, chooses
       one move at random of the highest strategy values.
      */
 	private QuaxCoordinate decideMove(QuaxBoard b) {
@@ -49,7 +49,6 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
     private QuaxTileStrategyGroup selectStrategyGroup(int move) {
-
         if (move == 0) {
             return getStrategyGroupWithValue(1);
         }
@@ -63,7 +62,7 @@ public class BotPlayer extends QuaxPlayer {
         }
 
         int randStrategyValue = chooseStrategyValue();
-        QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);;
+        QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.size() == 0) {
             randStrategyValue--;
@@ -125,7 +124,9 @@ public class BotPlayer extends QuaxPlayer {
 
     private void assignTileToStrategyGroup(QuaxTile newTile) {
         QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(newTile.getStrategyValue());
+
         removeTileFromAllStrategyGroups(newTile);
+
         tileSGroup.addTile(newTile);
     }
 
@@ -245,7 +246,7 @@ public class BotPlayer extends QuaxPlayer {
                 assignTileToStrategyGroup(t);
             }
 
-            // If the bot can win, set
+            // If the bot can win, set tile priority to max
             if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
                 t.setStrategyValue(6); // bot winning takes priority
                 assignTileToStrategyGroup(t);
@@ -253,9 +254,16 @@ public class BotPlayer extends QuaxPlayer {
         }
 
 
+        private void assignStrategyValue(QuaxTile t, int value) {
+            t.setStrategyValue(value);
+            assignTileToStrategyGroup(t);
+        }
+
         private boolean checkForWin(QuaxCoordinate coord, QuaxBoard b, QuaxTileColour colour) {
             QuaxBoard copyBoard = new QuaxBoard(b);
+
             copyBoard.makeMove(coord, colour);
+
             return copyBoard.checkForWinningMove();
         }
     }
