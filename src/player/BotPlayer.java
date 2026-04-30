@@ -10,6 +10,8 @@ public class BotPlayer extends QuaxPlayer {
 	private static boolean botHaste = false;
 
     public static final int MAX_STRATEGIES = 6;
+    // TODO for final submission MIN_THINKING_TIME will
+    // need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
 	// TODO IGNORE_VALUE may be redundant.
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
