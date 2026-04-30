@@ -6,21 +6,13 @@ package types;
  */
 public class Octagon extends QuaxTile {
 
-	// TODO - Move to parent class?
-	private final int xPosition;
-	private final int yPosition;
-
 
 	public Octagon(int x, int y) {
-		super();
-		this.xPosition = x;
-		this.yPosition = y;
+		super(x, y);
 	}
 	
 	public Octagon(Octagon o) {
 		super(o);
-		this.xPosition = o.xPosition;
-		this.yPosition = o.yPosition;
 	}
 
 

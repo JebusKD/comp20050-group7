@@ -29,7 +29,7 @@ public class QuaxController {
         this.quaxPlayers = new QuaxPlayer[2];
         this.quaxUserInterface = new TestingEmptyInterface();
 
-        BotPlayer.enableHaste();
+        //BotPlayer.enableHaste();
         
         startGame(p1, p2);
     }

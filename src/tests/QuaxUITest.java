@@ -76,7 +76,7 @@ public class QuaxUITest {
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
-        assertEquals(QuaxTileColour.BLACK,board.getRhombus(5,5).getTileColour());
+        assertEquals(QuaxTileColour.BLACK, board.getRhombus(5,5).getTileColour());
     }
 
     @Test

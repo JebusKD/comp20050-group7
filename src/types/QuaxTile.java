@@ -9,12 +9,16 @@ public abstract class QuaxTile {
 
 	private int strategyValue;
 
+	protected final int xPosition;
+	protected final int yPosition;
 
-	public QuaxTile() {
+	public QuaxTile(int x, int y) {
 		this.tileColour = QuaxTileColour.NONE;
 		this.tileGroup = null;
 		this.tileStrategyGroup = null;
 		this.strategyValue = 0;
+		this.xPosition = x;
+		this.yPosition = y;
 	}
 
 	public QuaxTile(QuaxTile t) {
@@ -22,6 +26,8 @@ public abstract class QuaxTile {
 		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
 		//TODO - Initialise StratGroup too
 		this.strategyValue = t.strategyValue;
+		this.xPosition = t.xPosition;
+		this.yPosition = t.yPosition;
 	}
 
 
