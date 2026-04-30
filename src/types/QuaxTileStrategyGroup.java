@@ -14,7 +14,6 @@ public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
 
 
     public void addTile(QuaxTile tile) {
-        tile.setTileStrategyGroup(this);
         strategyMembers.addFirst(tile);
     }
 

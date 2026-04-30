@@ -125,16 +125,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/** Move validation checks */
+	/* Move validation checks */
 	public boolean checkForWinningMove() {
 		// Cannot win on first move
 		if (isStartingMove()) {
 			return false;
 		}
 
-		// TODO - violates LoD
-		QuaxTileGroup moveGroup = getTile(previousMove).getTileGroup();
-		return moveGroup.isWinningGroup();
+		// TODO - violates LoD?
+		return previousGroup().isWinningGroup();
 	}
 	
 	public QuaxTileColour currentColourTurn() {
@@ -146,6 +145,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 		return result;
 	}
+
+	private QuaxTileGroup previousGroup() {
+		return getTile(previousMove).getTileGroup();
+	}
+
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour colour) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, colour))) {
@@ -224,7 +228,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			assert c != QuaxTileColour.NONE;
 
 			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
-			expandGroup(newTile, nearGroups); // TODO - figure out output arguments
+			expandGroup(newTile, nearGroups);
 		}
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
@@ -324,7 +328,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
 			neighbours[0] = getLeftNeighbours(qc);
-			neighbours[1] = getVerticalNeighbours(qc); // TODO - do something with n[1][1] (own tile)
+			neighbours[1] = getVerticalNeighbours(qc);
 			neighbours[2] = getRightNeighbours(qc);
 
 			return neighbours;

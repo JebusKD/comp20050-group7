@@ -2,12 +2,11 @@ package types;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
+import model.QuaxBoard;
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	private LinkedList<QuaxTile> groupMembers;
-	// TODO - Split booleans?
 	private boolean onColumnA_Row1;
 	private boolean onColumnK_Row11;
 
@@ -54,6 +53,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 			t.setTileGroup(this);
 		}
 	}
+
 
 
 	public Iterator<QuaxTile> iterator() {

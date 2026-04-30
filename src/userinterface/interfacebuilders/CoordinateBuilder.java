@@ -1,7 +1,6 @@
 package userinterface.interfacebuilders;
 
 import javafx.geometry.*;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
@@ -12,7 +11,7 @@ import static userinterface.QuaxUserInterface.*;
 class CoordinateBuilder {
     private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
-    private GridPane coordinateGrid;
+    private final GridPane coordinateGrid;
 
 
     public CoordinateBuilder() {

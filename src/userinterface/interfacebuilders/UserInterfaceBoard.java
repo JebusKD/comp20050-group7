@@ -34,7 +34,7 @@ public class UserInterfaceBoard {
     private OctagonTile[][] octagonGridCells;
     private RhombusTile[][] rhombusGridCells;
 
-    private StackPane stackUIBoard;
+    private final StackPane stackUIBoard;
 
 
     public UserInterfaceBoard() {
