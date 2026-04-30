@@ -21,7 +21,7 @@ public class TestRhombusPlacement {
 	// Tests that a rhombic tile cant be placed away from other tiles.
 	@Test
 	void testRhombusPlacement1() {
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Tests that a rhombic tile cannot be placed adjacent to exactly one tile of a colour.
@@ -29,7 +29,7 @@ public class TestRhombusPlacement {
 	void testRhombusPlacement2() {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.BLACK);
 		
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Tests an instance where a downwards diagonal exists.
@@ -38,7 +38,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.BLACK);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Tests an instance where the diagonal is going upwards.
@@ -47,7 +47,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.BLACK);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Ensures rhombic tiles can be placed in an instance where both players can place a rhombus.
@@ -58,7 +58,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.WHITE);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Ensures rhombic tiles don't depend on the other player's tiles to be placed.
@@ -67,13 +67,13 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.WHITE);
 		
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.BLACK));
 	}
 	
 	// Tests that a rhombic tile cant be placed away from other tiles.
 	@Test
 	void testRhombusPlacement7() {
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 	
 	// Tests that a rhombic tile cannot be placed adjacent to exactly one tile of a colour.
@@ -81,7 +81,7 @@ public class TestRhombusPlacement {
 	void testRhombusPlacement8() {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.WHITE);
 		
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 	
 	// Tests an instance where a downwards diagonal exists.
@@ -90,7 +90,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.WHITE);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 	
 	// Tests an instance where the diagonal is going upwards.
@@ -99,7 +99,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.WHITE);
 		b.makeMove(new QuaxCoordinate(4, 7, true), QuaxTileColour.WHITE);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 	
 	// Ensures rhombic tiles can be placed in an instance where both players can place a rhombus.
@@ -110,7 +110,7 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(5, 7, true), QuaxTileColour.BLACK);
 		
-		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertTrue(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 	
 	// Ensures rhombic tiles don't depend on the other player's tiles to be placed.
@@ -119,6 +119,6 @@ public class TestRhombusPlacement {
 		b.makeMove(new QuaxCoordinate(4, 6, true), QuaxTileColour.BLACK);
 		b.makeMove(new QuaxCoordinate(5, 6, true), QuaxTileColour.BLACK);
 		
-		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false)));
+		assertFalse(b.validMove(new QuaxCoordinate(4, 6, false), QuaxTileColour.WHITE));
 	}
 }

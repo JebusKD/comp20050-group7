@@ -262,7 +262,7 @@ public class BotPlayer extends QuaxPlayer {
 
 
     private boolean isValidMove(QuaxTile t, QuaxBoard b) {
-        return b.validMove(t.getCoordinates());
+        return b.validMove(t.getCoordinates(), t.getTileColour());
     }
 
     public static void enableHaste() {

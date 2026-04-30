@@ -149,7 +149,7 @@ public class QuaxController {
     	QuaxPlayer moveSubmitter = curPlayer();
         QuaxTileColour c = moveSubmitter.getPlayerColour();
 
-        if (quaxBoard.validMove(coords)) {
+        if (quaxBoard.validMove(coords, c)) {
             quaxBoard.makeMove(coords, c);
 
             if (moveSubmitter instanceof BotPlayer bot) {

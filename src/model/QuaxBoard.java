@@ -133,19 +133,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return moveGroup.isWinningGroup();
 	}
 
-	public boolean validMove(QuaxCoordinate q) {
-		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q))) {
+	public boolean validMove(QuaxCoordinate q, QuaxTileColour colour) {
+		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, colour))) {
 			return getTile(q).isFree();
 		}
 
 		return false;
 	}
 
-	private boolean isValidRhombusPlacement(QuaxCoordinate q) {
+	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour colour) {
         QuaxTile[][] n = getNeighbours(q);
 
-        return n[0][0].isSameColour(n[1][1].getTileColour())
-				|| n[1][0].isSameColour(n[0][1].getTileColour());
+        return (n[0][0].isSameColour(colour) && n[1][1].isSameColour(colour))
+				|| (n[1][0].isSameColour(colour) && n[0][1].isSameColour(colour));
     }
 
 

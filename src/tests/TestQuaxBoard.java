@@ -37,14 +37,14 @@ class TestQuaxBoard {
 	void testOccupiedTile1() {
 		board.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile2() {
 		board.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE));
 	}
 	
 	@Test
@@ -53,21 +53,21 @@ class TestQuaxBoard {
 		board.makeMove(new QuaxCoordinate(3, 4, true), QuaxTileColour.WHITE);
 		board.makeMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, false)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile4() {
 		board.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile5() {
 		board.makeMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, true), QuaxTileColour.WHITE));
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ class TestQuaxBoard {
 		board.makeMove(new QuaxCoordinate(3, 4, true), QuaxTileColour.BLACK);
 		board.makeMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(new QuaxCoordinate(2, 3, false)));
+		assertFalse(board.validMove(new QuaxCoordinate(2, 3, false), QuaxTileColour.BLACK));
 	}
 
 	@Test
@@ -118,7 +118,7 @@ class TestQuaxBoard {
 		for (int i = 0; i < 11; i++) {
 			board.makeMove(new QuaxCoordinate(6, i, true), QuaxTileColour.BLACK);
 		}
-		assertFalse(board.validMove(new QuaxCoordinate(8, 8, true)));
+		assertFalse(board.validMove(new QuaxCoordinate(8, 8, true), QuaxTileColour.WHITE));
 	}
 	
 	// Checks if a correctly-sized array is created for octagon's neighbours.
