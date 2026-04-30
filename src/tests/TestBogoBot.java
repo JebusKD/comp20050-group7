@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import controller.QuaxController;
-import player.BogoBot;
+import player.BotPlayer;
 import player.HumanPlayer;
 import types.QuaxTile;
 import types.QuaxTileColour;
@@ -15,7 +15,7 @@ public class TestBogoBot {
 	@Test
 	void testBogoBot1() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(human, bot);
 		
@@ -25,7 +25,7 @@ public class TestBogoBot {
 	@Test
 	void testBogoBot2() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -35,7 +35,7 @@ public class TestBogoBot {
 	@Test
 	void testBogoBot3() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 		
@@ -51,7 +51,7 @@ public class TestBogoBot {
 	@Test
 	void testBogoBotPieRule() {
 		HumanPlayer human = new HumanPlayer();
-		BogoBot bot = new BogoBot();
+		BotPlayer bot = new BotPlayer();
 		
 		QuaxController controller = new QuaxController(bot, human);
 
@@ -63,8 +63,8 @@ public class TestBogoBot {
 
 	@Test
 	void testBogoBotVersusBogoBot() {
-		BogoBot b1 = new BogoBot();
-		BogoBot b2 = new BogoBot();
+		BotPlayer b1 = new BotPlayer();
+		BotPlayer b2 = new BotPlayer();
 		
 		/* Creating a QuaxController automatically starts the game - and
 		 * in our instance we have two Bogo Bots who will keep making
