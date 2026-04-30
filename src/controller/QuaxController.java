@@ -152,7 +152,9 @@ public class QuaxController {
         if (quaxBoard.validMove(coords, c)) {
             quaxBoard.makeMove(coords, c);
             if (moveSubmitter instanceof BotPlayer bot) {
+            	quaxUserInterface.setBotChosenMove(coords);
             	quaxUserInterface.setLinkedBot(bot);
+            	
             }
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 

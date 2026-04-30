@@ -29,7 +29,7 @@ public class UserInterfaceBoard {
     private static final double FRONT_HOURGLASS_GAP = 5.7;
     private static final double BACK_HOURGLASS_GAP = 11.4;
     
-    private static final String PREVIOUS_MOVE_ID = "tilecolour-green";
+    private static final String PREVIOUS_MOVE_STYLE = "tilecolour-green";
 
     private OctagonTile[][] octagonGridCells;
     private RhombusTile[][] rhombusGridCells;
@@ -58,30 +58,48 @@ public class UserInterfaceBoard {
             setTile(tile.getCoordinates(), tile.getTileColour());
         }
     }
-
-    public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-        if (q.isOctagon()) {
-            this.octagonGridCells[q.x()][q.y()].setColour(c);
+    
+    private Tile getTileFromCoordinate(QuaxCoordinate q) {
+    	Tile tile;
+    	if (q.isOctagon()) {
+            tile = this.octagonGridCells[q.x()][q.y()];
         }
         else {
-            this.rhombusGridCells[q.x()][q.y()].setColour(c);
+            tile = this.rhombusGridCells[q.x()][q.y()];
         }
+    	return tile;
+    }
+
+    public void setTile(QuaxCoordinate q, QuaxTileColour c) {
+        getTileFromCoordinate(q).setColour(c);
     }
 
     public void setTileBorder(QuaxCoordinate q, QuaxTileBorder b) {
-        if (q.isOctagon()) {
-            this.octagonGridCells[q.x()][q.y()].setBorder(b);
-        }
-        else {
-            this.rhombusGridCells[q.x()][q.y()].setBorder(b);
-        }
+    	getTileFromCoordinate(q).setBorder(b);
     }
+    
+   public void setBotChosenCell(QuaxCoordinate q) {
+	   clearBotChosenMove();
+	   getTileFromCoordinate(q).setPreviousMove();
+    }
+   
+   	private void clearBotChosenCell(QuaxCoordinate q) {
+   		getTileFromCoordinate(q).clearPreviousMove();
+   	}
 
     public void clearTileBorders() {
     	Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
     	
     	while (iterator.hasNext()) {
     		setTileBorder(iterator.next(), QuaxTileBorder.NONE);
+    	}
+    }
+    
+    public void clearBotChosenMove() {
+    	Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
+    	
+    	while (iterator.hasNext()) {
+    		clearBotChosenCell(iterator.next());
     	}
     }
 
@@ -257,6 +275,7 @@ public class UserInterfaceBoard {
         }
         
         void setPreviousMove();
+        void clearPreviousMove();
 
         QuaxCoordinate getCoordinate();
     }
@@ -283,7 +302,12 @@ public class UserInterfaceBoard {
         
         @Override
         public void setPreviousMove() {
-        	this.setId(PREVIOUS_MOVE_ID);
+        	this.getStyleClass().add(PREVIOUS_MOVE_STYLE);
+        }
+        
+        @Override
+        public void clearPreviousMove() {
+        	this.getStyleClass().remove(PREVIOUS_MOVE_STYLE);
         }
 
         @Override
@@ -313,7 +337,12 @@ public class UserInterfaceBoard {
 
         @Override
         public void setPreviousMove() {
-        	this.setId(PREVIOUS_MOVE_ID);
+        	this.getStyleClass().add(PREVIOUS_MOVE_STYLE);
+        }
+        
+        @Override
+        public void clearPreviousMove() {
+        	this.getStyleClass().remove(PREVIOUS_MOVE_STYLE);
         }
         
         @Override

@@ -25,4 +25,6 @@ public interface UserInterface {
 	void hideStrategy(QuaxBoard board);
 	
 	void setLinkedBot(BotPlayer bot);
+	
+	void setBotChosenMove(QuaxCoordinate c);
 }

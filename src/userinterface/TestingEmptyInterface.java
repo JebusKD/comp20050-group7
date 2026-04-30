@@ -44,4 +44,8 @@ public class TestingEmptyInterface implements UserInterface {
     @Override
     public void setLinkedBot(BotPlayer bot) {
     }
+    
+    @Override
+    public void setBotChosenMove(QuaxCoordinate c) {
+    }
 }
