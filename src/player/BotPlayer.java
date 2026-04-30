@@ -141,6 +141,7 @@ public class BotPlayer extends QuaxPlayer {
         StrategyBuilder sb = new StrategyBuilder();
         clearAllStrategyGroups();
         sb.initialiseStrategy(b);
+        sb.postStrategy(b);
     }
 
 
@@ -188,7 +189,7 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
-                    if (neighbour != null && isValidMove(neighbour, b, getPlayerColour())) {
+                    if (neighbour != null && !isUselessRhombus(neighbour, b) && isValidMove(neighbour, b, getPlayerColour())) {
                         if (neighbour.getStrategyValue() <= 2) {
                             neighbour.setStrategyValue(2);
                         }
@@ -213,10 +214,10 @@ public class BotPlayer extends QuaxPlayer {
         private void progressVertically(QuaxTile n, QuaxTile[][] neighbours) {
             if (n == neighbours[1][0] || n == neighbours[1][2]) {
                 if (getPlayerColour() == QuaxTileColour.BLACK) {
-                    assignStrategyValue(n, 4);
+                    assignStrategyValueIfLess(n, 4);
                 }
                 else {
-                    assignStrategyValue(n, 3);
+                    assignStrategyValueIfLess(n, 3);
                 }
             }
         }
@@ -224,10 +225,10 @@ public class BotPlayer extends QuaxPlayer {
         private void progressHorizontally(QuaxTile n, QuaxTile[][] neighbours) {
             if (n == neighbours[0][1] || n == neighbours[2][1]) {
                 if (getPlayerColour() == QuaxTileColour.WHITE) {
-                    assignStrategyValue(n, 4);
+                    assignStrategyValueIfLess(n, 4);
                 }
                 else {
-                    assignStrategyValue(n, 3);
+                    assignStrategyValueIfLess(n, 3);
                 }
             }
         }
@@ -255,16 +256,19 @@ public class BotPlayer extends QuaxPlayer {
          * nearby enemy tile.
          */
         private boolean isUselessRhombus(QuaxTile t, QuaxBoard b) {
-        	assert t instanceof Rhombus;
-        	int countOpponentTiles = 0;
-        	for (QuaxTile[] row : b.getNeighbours(t)) {
-        		for (QuaxTile n : row) {
-        			if (n.getTileColour() == getPlayerColour().flip()) {
-        				countOpponentTiles++;
-        			}
-        		}
+        	boolean result = false;
+        	if (t instanceof Rhombus) {
+	        	int countOpponentTiles = 0;
+	        	for (QuaxTile[] row : b.getNeighbours(t)) {
+	        		for (QuaxTile n : row) {
+	        			if (n.getTileColour() == getPlayerColour().flip()) {
+	        				countOpponentTiles++;
+	        			}
+	        		}
+	        	}
+	        	result = countOpponentTiles <= 1;
         	}
-        	return countOpponentTiles <= 1;
+        	return result;
         }
 
         private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
@@ -279,6 +283,11 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
+        private void assignStrategyValueIfLess(QuaxTile t, int value) {
+        	if (t.getStrategyValue() < value) {
+        		assignStrategyValue(t, value);
+        	}
+        }
 
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
@@ -291,6 +300,30 @@ public class BotPlayer extends QuaxPlayer {
             copyBoard.makeMove(coord, colour);
 
             return copyBoard.checkForWinningMove();
+        }
+        
+        private void postStrategy(QuaxBoard b) {
+        	
+        }
+        
+        private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
+        	int prevValue = t.getStrategyValue(),
+        			limit = Math.max(maximum, MAX_STRATEGIES);
+        	if (prevValue + increase > limit) {
+        		increase = limit - prevValue;
+        	}
+        	assignStrategyValue(t, prevValue + increase);
+        }
+        
+        private int vulnerableRhombusCount(QuaxBoard b) {
+        	Iterator<QuaxCoordinate> iterator = QuaxBoard.rhombusCoordinateIterator();
+        	int count = 0;
+        	while (iterator.hasNext()) {
+        		if (b.isValidRhombusForBoth(iterator.next())) {
+        			count++;
+        		}			
+        	}
+        	return count;
         }
     }
 

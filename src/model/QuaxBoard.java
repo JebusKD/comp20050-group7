@@ -107,6 +107,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return rhombusGrid[c.x()][c.y()];
 		}
 	}
+	
+	public QuaxTileColour getTileColour(QuaxCoordinate c) {
+		return getTile(c).getTileColour();
+	}
 
 	public int getMoveNumber() {
 		return this.moveNumber;
@@ -132,6 +136,16 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		QuaxTileGroup moveGroup = getTile(previousMove).getTileGroup();
 		return moveGroup.isWinningGroup();
 	}
+	
+	public QuaxTileColour currentColourTurn() {
+		QuaxTileColour result;
+		if (isStartingMove()) {
+			result = QuaxTileColour.BLACK;
+		} else {
+			result = getTileColour( previousMove() ).flip();
+		}
+		return result;
+	}
 
 	public boolean validMove(QuaxCoordinate q, QuaxTileColour colour) {
 		if (!checkForWinningMove() && (q.isOctagon() || isValidRhombusPlacement(q, colour))) {
@@ -140,6 +154,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		return false;
 	}
+	
+	public boolean validMove(QuaxCoordinate q) {
+		return validMove(q, currentColourTurn());
+	}
 
 	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour colour) {
         QuaxTile[][] n = getNeighbours(q);
@@ -147,7 +165,11 @@ public class QuaxBoard implements Iterable<QuaxTile> {
         return (n[0][0].isSameColour(colour) && n[1][1].isSameColour(colour))
 				|| (n[1][0].isSameColour(colour) && n[0][1].isSameColour(colour));
     }
-
+	
+	public boolean isValidRhombusForBoth(QuaxCoordinate c) {
+		return isValidRhombusPlacement(c, QuaxTileColour.BLACK)
+				&& isValidRhombusPlacement(c, QuaxTileColour.WHITE);
+	}
 
 	public boolean attemptPieRule() {
 		if (isPieRuleValid()) {
@@ -178,6 +200,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		moveManager.assignGroup(tile);
 		this.previousMove = q;
 		this.moveNumber++;
+	}
+	
+	public void makeMove(QuaxCoordinate q) {
+		makeMove(q, currentColourTurn());
 	}
 
 	/** Manage adding a tile to a group */
@@ -368,15 +394,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return new QuaxBoardCoordinateIterator();
 	}
 	
+	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
+		return new QuaxBoardRhombusCoordinateIterator();
+	}
+	
 	private static class QuaxBoardIterator implements Iterator<QuaxTile> {
-		private static final int MAX_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
+		private static final int NUM_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
 		
 		private int cursor;
-		private ArrayList<QuaxTile> elements;
+		private final ArrayList<QuaxTile> elements;
 		
 		public QuaxBoardIterator(QuaxBoard source) {
 			this.cursor = 0;
-			this.elements = new ArrayList<>(MAX_ELEMENTS);
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
 			
 			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
 				for (int j = 0; j < MAX_OCTAGONS; j++) {
@@ -393,7 +423,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		
 		@Override
 		public boolean hasNext() {
-			return cursor < MAX_ELEMENTS;
+			return cursor < NUM_ELEMENTS;
 		}
 		
 		@Override
@@ -409,7 +439,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
-		private QuaxBoardIterator boardIterator;
+		private final QuaxBoardIterator boardIterator;
 		
 		public QuaxBoardCoordinateIterator() {
 			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
@@ -423,6 +453,89 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		@Override
 		public QuaxCoordinate next() {
 			return boardIterator.nextCoordinate();
+		}
+	}
+	
+	private static class QuaxBoardRhombusIterator implements Iterator<QuaxTile> {
+		private static final int NUM_ELEMENTS = MAX_RHOMBUSES * MAX_RHOMBUSES;
+		
+		private int cursor;
+		private final ArrayList<QuaxTile> elements;
+		
+		public QuaxBoardRhombusIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
+			
+			for (int i = 0; i < MAX_RHOMBUSES; i++) {
+				for (int j = 0; j < MAX_RHOMBUSES; j++) {
+					this.elements.add(source.getRhombus(i, j));
+				}
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < NUM_ELEMENTS;
+		}
+		
+		@Override
+		public QuaxTile next() {
+			assert hasNext();
+			return elements.get(cursor++);
+		}
+		
+		private QuaxCoordinate nextCoordinate() {
+			return next().getCoordinates();
+		}
+	}
+	
+	private static class QuaxBoardRhombusCoordinateIterator implements Iterator<QuaxCoordinate> {
+		private final QuaxBoardRhombusIterator boardIterator;
+		
+		public QuaxBoardRhombusCoordinateIterator() {
+			this.boardIterator = new QuaxBoardRhombusIterator(new QuaxBoard());
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return boardIterator.hasNext();
+		}
+		
+		@Override
+		public QuaxCoordinate next() {
+			return boardIterator.nextCoordinate();
+		}
+	}
+	
+	public static class QuaxBoardPermutationIterator implements Iterator<QuaxBoard> {
+		private final ArrayList<QuaxBoard> elements;
+		private int cursor;
+		
+		private QuaxBoardPermutationIterator(QuaxBoard b) {
+			this.elements = new ArrayList<QuaxBoard>();
+			this.cursor = 0;
+			populatePermutations(b);
+		}
+		
+		private void populatePermutations(QuaxBoard b) {
+			for (QuaxTile t : b) {
+				QuaxBoard copy = new QuaxBoard(b);
+				QuaxCoordinate coordinate = t.getCoordinates();
+				if (copy.validMove(coordinate)) {
+					copy.makeMove(coordinate);
+				}
+				elements.addLast(copy);
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < elements.size();
+		}
+		
+		@Override
+		public QuaxBoard next() {
+			return elements.get(cursor);
 		}
 	}
 }
