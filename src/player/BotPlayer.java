@@ -11,8 +11,7 @@ public class BotPlayer extends QuaxPlayer {
 	private static boolean botHaste = false;
 
     public static final int MAX_STRATEGIES = 6;
-    // TODO for final submission MIN_THINKING_TIME will
-    // need to be upped to the 3-5 second range (Confirm)
+    // TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
 
     private QuaxTileStrategyGroup[] strategyGroups;
@@ -32,10 +31,9 @@ public class BotPlayer extends QuaxPlayer {
 
 
     /*
-     * TODO Outdated comment? - Fixed (ish)
-      Given a QuaxBoard b containing strategy values, chooses a move with
-      a random strategy value and returns it. If there is a tie, chooses
-      one move at random of the highest strategy values.
+      Given a QuaxBoard b containing strategy values, choose a group of tiles
+      with a certain strategy value. If there is a tie, chooses
+      one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard b) {
         QuaxTileStrategyGroup choice = selectStrategyGroup(b.getMoveNumber());

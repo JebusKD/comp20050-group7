@@ -13,7 +13,7 @@ public class PlayerTurnIndicator {
 
     private static final double HBOX_SPACING = 5;
 
-    private HBox turnTrackerBox;
+    private final HBox turnTrackerBox;
 
     private OctagonTurnIndicator octagonIndicator;
     private RhombusTurnIndicator rhombusIndicator;

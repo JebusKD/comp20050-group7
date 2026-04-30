@@ -22,6 +22,7 @@ public class QuaxController {
     private QuaxBoard quaxBoard;
     private final QuaxPlayer[] quaxPlayers;
 
+
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
@@ -71,33 +72,33 @@ public class QuaxController {
         startGame(p1, p2);
     }
 
-    private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-        this.quaxBoard = new QuaxBoard();
-
-        this.quaxPlayers[0] = p1;
-        this.quaxPlayers[1] = p2;
-
-        p1.setPlayerColour(QuaxTileColour.BLACK);
-        p2.setPlayerColour(QuaxTileColour.WHITE);
-
-        p1.setPlayerController(this);
-        p2.setPlayerController(this);
-
-        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
-
-        curPlayer().movePrompt(quaxBoard);
-    }
-
     private void startGameAgainstBot() {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BotPlayer();
-        
+
         if (RNG.nextInt() % 2 == 0) {
             startGame(human, bot);
         }
         else {
             startGame(bot, human);
         }
+    }
+
+    private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
+        this.quaxBoard = new QuaxBoard();
+
+        this.quaxPlayers[0] = p1;
+        this.quaxPlayers[1] = p2;
+
+        quaxPlayers[0].setPlayerColour(QuaxTileColour.BLACK);
+        quaxPlayers[1].setPlayerColour(QuaxTileColour.WHITE);
+
+        quaxPlayers[0].setPlayerController(this);
+        quaxPlayers[1].setPlayerController(this);
+
+        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
+
+        curPlayer().movePrompt(quaxBoard);
     }
 
 
@@ -155,7 +156,6 @@ public class QuaxController {
             if (moveSubmitter instanceof BotPlayer bot) {
             	quaxUserInterface.setBotChosenMove(coords);
             	quaxUserInterface.setLinkedBot(bot);
-            	
             }
 
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
@@ -171,7 +171,8 @@ public class QuaxController {
     }
 
 
-    /**  Methods for handling the strategic bot
+    /*
+     * Methods for handling the strategic bot
      *  Retrieve bot, manage showing/hiding strategy
      */
     public void showStrategy() {
@@ -190,6 +191,7 @@ public class QuaxController {
      * where test cases finish before bots can make their
      * moves and JavaFX will freeze or crash.
      */
+
     /*
      * The SingleThreadedExecutor will run on the main thread,
      * blocking JavaFX and any other operations until the

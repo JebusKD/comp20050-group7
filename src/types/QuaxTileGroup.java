@@ -56,6 +56,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 
+
 	public Iterator<QuaxTile> iterator() {
 		return groupMembers.iterator();
 	}

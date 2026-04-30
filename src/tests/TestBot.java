@@ -56,11 +56,12 @@ public class TestBot {
 		QuaxController controller = new QuaxController(bot, human);
 
 		controller.doPieRule();
-		
+
 		// After the human uses the Pie rule, Bot should immediately make another move.
 		assertEquals(3, controller.getMoveNumber());
 	}
 
+	// NOTE - May take a few minutes
 	@Test
 	void testBotVersusBot() {
 		BotPlayer b1 = new BotPlayer();

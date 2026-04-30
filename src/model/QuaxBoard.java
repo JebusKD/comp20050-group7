@@ -198,7 +198,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			assert c != QuaxTileColour.NONE;
 
 			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
-			expandGroup(newTile, nearGroups); // TODO - figure out output arguments
+			expandGroup(newTile, nearGroups);
 		}
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
@@ -298,7 +298,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
 			neighbours[0] = getLeftNeighbours(qc);
-			neighbours[1] = getVerticalNeighbours(qc); // TODO - do something with n[1][1] (own tile)
+			neighbours[1] = getVerticalNeighbours(qc);
 			neighbours[2] = getRightNeighbours(qc);
 
 			return neighbours;

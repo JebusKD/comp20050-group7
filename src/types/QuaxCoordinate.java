@@ -16,6 +16,7 @@ public class QuaxCoordinate {
 		this.octagonMove = octagonMove;
 	}
 
+
 	public int x() {
 		return this.x;
 	}
