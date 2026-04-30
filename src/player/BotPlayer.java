@@ -13,7 +13,7 @@ public class BotPlayer extends QuaxPlayer {
 	private static final long MIN_THINKING_TIME = 1000;
 	// TODO IGNORE_VALUE may be redundant.
 	static final int IGNORE_VALUE = Integer.MIN_VALUE;
-	static final Random RNG = new Random();
+	static final Random RNG = new Random(); // TODO - find all randoms
 
     private QuaxTileStrategyGroup[] strategyGroups;
     
@@ -31,6 +31,7 @@ public class BotPlayer extends QuaxPlayer {
         	strategyGroups[i] = new QuaxTileStrategyGroup();
         }
     }
+
 
     /*
      * TODO Outdated comment?
@@ -53,6 +54,31 @@ public class BotPlayer extends QuaxPlayer {
         int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
         return candidateMoves.get(index);
 	}
+
+
+    /* 5% chance of strat val 1
+    20% chance of strat val 2
+    25% chance of strat val 3
+    50% chance of strat 4
+    */
+    private int chooseStrategyValue() {
+        SplittableRandom random = new SplittableRandom();
+        int probability= random.nextInt(1,101);
+
+        if (probability <= 3) {
+            return 1;
+        }
+
+        if (probability <= 15) {
+            return 2;
+        }
+
+        if (probability <= 45) {
+            return 3;
+        }
+
+        return 4;
+    }
 
     public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
         assert (i <= MAX_STRATEGIES && i > 0);
@@ -77,29 +103,6 @@ public class BotPlayer extends QuaxPlayer {
         return moves;
     }
 
-    /* 5% chance of strat val 1
-        20% chance of strat val 2
-        25% chance of strat val 3
-        50% chance of strat 4
-        */
-    private int chooseStrategyValue() {
-        SplittableRandom random = new SplittableRandom();
-        int probability= random.nextInt(1,101);
-
-        if (probability <= 3) {
-            return 1;
-        }
-
-        if (probability <= 15) {
-            return 2;
-        }
-
-        if (probability <= 45) {
-            return 3;
-        }
-
-        return 4;
-    }
 
     private void assignTileToStrategyGroup(QuaxTile newTile) {
         QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(newTile.getStrategyValue());
@@ -141,7 +144,7 @@ public class BotPlayer extends QuaxPlayer {
         private void initialiseAllStrategyGroups(QuaxBoard b) {
 
             for (QuaxTile t : b) {
-                t.setStrategyValue(IGNORE_VALUE);
+                t.setStrategyValue(0);
                 if (!isValidMove(t, b)) {
                     continue;
                 }
@@ -232,7 +235,6 @@ public class BotPlayer extends QuaxPlayer {
     private boolean isValidMove(QuaxTile t, QuaxBoard b) {
         return b.validMove(t.getCoordinates());
     }
-
 
     public static void enableHaste() {
     	botHaste = true;

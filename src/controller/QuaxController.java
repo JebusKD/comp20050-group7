@@ -22,9 +22,6 @@ public class QuaxController {
     private QuaxBoard quaxBoard;
     private final QuaxPlayer[] quaxPlayers;
 
-    private boolean showingStrategy = false;
-
-
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
@@ -175,14 +172,6 @@ public class QuaxController {
     /**  Methods for handling the strategic bot
      *  Retrieve bot, manage showing/hiding strategy
      */
-    // TODO - Bot Cleanup - assertions break tests, but too many null checks --> DON'T RETURN NULL
-    public BotPlayer getBot() {
-        for (QuaxPlayer p : quaxPlayers) {
-            if (p instanceof BotPlayer) return (BotPlayer) p;
-        }
-        return null;
-    }
-
     public void showStrategy() {
         quaxUserInterface.showStrategy();
     }
