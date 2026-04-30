@@ -21,6 +21,8 @@ import static model.QuaxBoard.MAX_RHOMBUSES;
 import static userinterface.QuaxUserInterface.OCTAGON_GRID_GAP;
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
+import java.util.Iterator;
+
 
 public class UserInterfaceBoard {
 
@@ -73,6 +75,13 @@ public class UserInterfaceBoard {
         }
     }
 
+    public void clearTileBorders() {
+    	Iterator<QuaxCoordinate> iterator = QuaxBoard.coordinateIterator();
+    	
+    	while (iterator.hasNext()) {
+    		setTileBorder(iterator.next(), QuaxTileBorder.NONE);
+    	}
+    }
 
     private Rectangle createGradientBackground() {
         double size = OCTAGON_WIDTH * (MAX_OCTAGONS + 1)

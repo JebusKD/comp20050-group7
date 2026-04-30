@@ -149,10 +149,16 @@ public class QuaxController {
     }
 
     public boolean tryMove(QuaxCoordinate coords) {
-        QuaxTileColour c = curPlayer().getPlayerColour();
+    	QuaxPlayer moveSubmitter = curPlayer();
+        QuaxTileColour c = moveSubmitter.getPlayerColour();
 
         if (quaxBoard.validMove(coords)) {
             quaxBoard.makeMove(coords, c);
+
+            if (moveSubmitter instanceof BotPlayer bot) {
+            	quaxUserInterface.setLinkedBot(bot);
+            }
+
             quaxUserInterface.updateFromPreviousMove(quaxBoard);
 
             if (quaxBoard.checkForWinningMove()) {
@@ -182,25 +188,10 @@ public class QuaxController {
     }
 
     public void showStrategy() {
-        showingStrategy = true;
-        BotPlayer bot = getBot();
-        if (bot != null) {
-            quaxUserInterface.showStrategy(bot);
-        }
-    }
-
-    public void redoStrategy() {
-        if (showingStrategy) {
-            BotPlayer bot = getBot();
-            if (bot != null) {
-                quaxUserInterface.hideStrategy(quaxBoard);
-                quaxUserInterface.showStrategy(bot);
-            }
-        }
+        quaxUserInterface.showStrategy();
     }
 
     public void hideStrategy() {
-        showingStrategy = false;
         quaxUserInterface.hideStrategy(quaxBoard);
     }
 
