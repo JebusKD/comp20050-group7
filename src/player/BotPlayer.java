@@ -47,7 +47,7 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the highest strategy values.
      */
 	private QuaxCoordinate decideMove(QuaxBoard b) {
-        int randStrategyValue = 6;
+        int randStrategyValue = chooseStrategyValue();
         QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.size() == 0) {
@@ -89,9 +89,9 @@ public class BotPlayer extends QuaxPlayer {
             moves.add(t.getCoordinates());
         }
 
-        if (moves.isEmpty()) { //just in case candidateMoves is somehow empty
+        if (moves.isEmpty()) { // just in case candidateMoves is somehow empty
             for (QuaxTile t : b) {
-                if (b.validMove(t.getCoordinates(), this.getPlayerColour())) {
+                if (isValidMove(t, b)) {
                     moves.add(t.getCoordinates());
                 }
             }
@@ -100,6 +100,29 @@ public class BotPlayer extends QuaxPlayer {
         return moves;
     }
 
+    /* 5% chance of strat val 1
+        20% chance of strat val 2
+        25% chance of strat val 3
+        50% chance of strat 4
+        */
+    private int chooseStrategyValue() {
+        SplittableRandom random = new SplittableRandom();
+        int probability= random.nextInt(1,101);
+
+        if (probability <= 3) {
+            return 1;
+        }
+
+        if (probability <= 15) {
+            return 2;
+        }
+
+        if (probability <= 45) {
+            return 3;
+        }
+
+        return 4;
+    }
 
     private void assignTileToStrategyGroup(QuaxTile newTile) {
         QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(newTile.getStrategyValue());
@@ -118,13 +141,13 @@ public class BotPlayer extends QuaxPlayer {
 
 
     // how the bot decides strategy vals for the tiles
-    public void setUpStrategy(QuaxBoard b) {
+    private void setUpStrategy(QuaxBoard b) {
         StrategyBuilder sb = new StrategyBuilder();
         clearAllStrategyGroups();
         sb.initialiseAllStrategyGroups(b);
 
         for (QuaxTile t : b) {
-            if (!b.validMove(t.getCoordinates(), this.getPlayerColour())) {
+            if (!isValidMove(t, b)) {
                 if (t instanceof Octagon) {
                     sb.setOctagonStrategyValues(t, b);
                 }
@@ -145,7 +168,7 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile t : b) {
                 t.setStrategyValue(IGNORE_VALUE);
-                if (!b.validMove(t.getCoordinates(), getPlayerColour())) {
+                if (!isValidMove(t, b)) {
                     continue;
                 }
                 t.setStrategyValue(1);
@@ -162,7 +185,7 @@ public class BotPlayer extends QuaxPlayer {
                         continue;
                     }
 
-                    if (b.validMove(neighbour.getCoordinates(), getPlayerColour())) {
+                    if (isValidMove(neighbour, b)) {
                         neighbour.setStrategyValue(2);
                         assignTileToStrategyGroup(neighbour);
 
@@ -204,7 +227,7 @@ public class BotPlayer extends QuaxPlayer {
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
             t.setStrategyValue(4);
             assignTileToStrategyGroup(t);
-            if (b.validMove(t.getCoordinates(), getPlayerColour().flip())) {
+            if (isValidMove(t, b)) {
                 t.setStrategyValue(5);
                 assignTileToStrategyGroup(t);
             }
@@ -230,6 +253,12 @@ public class BotPlayer extends QuaxPlayer {
             return copyBoard.checkForWinningMove();
         }
     }
+
+
+    private boolean isValidMove(QuaxTile t, QuaxBoard b) {
+        return b.validMove(t.getCoordinates());
+    }
+
 
     public static void enableHaste() {
     	botHaste = true;
