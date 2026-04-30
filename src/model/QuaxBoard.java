@@ -135,13 +135,16 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return previousGroup().isWinningGroup();
 	}
 	
-	public QuaxTileColour currentColourTurn() {
+	private QuaxTileColour currentColourTurn() {
 		QuaxTileColour result;
+
 		if (isStartingMove()) {
 			result = QuaxTileColour.BLACK;
-		} else {
-			result = getTileColour( previousMove() ).flip();
 		}
+		else {
+			result = getTileColour(previousMove()).flip();
+		}
+
 		return result;
 	}
 
