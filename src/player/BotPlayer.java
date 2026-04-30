@@ -245,6 +245,10 @@ public class BotPlayer extends QuaxPlayer {
                 assignStrategyValue(t, 5);
             }
 
+            if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
+                assignStrategyValue(t, 6);
+            }
+        }
 
         private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
             // If human player can win, block the win
