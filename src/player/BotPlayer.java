@@ -16,8 +16,6 @@ public class BotPlayer extends QuaxPlayer {
 	private static final long MIN_THINKING_TIME = 1000;
 
     private QuaxTileStrategyGroup[] strategyGroups;
-    
-    private long startThinkingTime;
 
 
 	public BotPlayer() {
@@ -72,7 +70,7 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
-    /* //TODO - Fix probabilities
+    /* //TODO - Decide on probabilities, are we keeping them as this?
     1% chance of strat val 1
     14% chance of strat val 2
     25% chance of strat val 3
@@ -147,6 +145,19 @@ public class BotPlayer extends QuaxPlayer {
 
     private class StrategyBuilder {
 
+        private void initialiseAllStrategyGroups(QuaxBoard b) {
+            for (QuaxTile t : b) {
+                t.setStrategyValue(0);
+                if (!isValidMove(t, b)) {
+                    // TODO - Move setOctagonStrategyValues() here?
+                    continue;
+                }
+                t.setStrategyValue(1);
+                assignTileToStrategyGroup(t);
+            }
+        }
+
+
         private void initialiseStrategy(QuaxBoard b) {
             initialiseAllStrategyGroups(b);
 
@@ -163,23 +174,13 @@ public class BotPlayer extends QuaxPlayer {
                 //      set values depending on the board status
                 else {
                     if (t instanceof Rhombus) {
-                        assignStrategyValue(t, 4);
+                        setRhombusStrategyValue(t, b);
                     }
 
-                    setHighPriorityStrategyGroups(t, b);
+                    else {
+                        setHighPriorityStrategyGroups(t, b);
+                    }
                 }
-            }
-        }
-
-        private void initialiseAllStrategyGroups(QuaxBoard b) {
-            for (QuaxTile t : b) {
-                t.setStrategyValue(0);
-                if (!isValidMove(t, b)) {
-                    // TODO - Move setOctagonStrategyValues() here?
-                    continue;
-                }
-                t.setStrategyValue(1);
-                assignTileToStrategyGroup(t);
             }
         }
 
@@ -189,7 +190,7 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
-                    // TODO - do something about this
+                    // TODO - reduce null checks as much as possible & try to have no continues
                     if (neighbour == null) {
                         continue;
                     }
@@ -205,28 +206,44 @@ public class BotPlayer extends QuaxPlayer {
         }
 
         private void setProgressStrategy(QuaxTile t, QuaxTile n, QuaxTile[][] neighbours) {
-            if (t.getTileColour() == QuaxTileColour.BLACK) {
-                if (n == neighbours[1][0] || n == neighbours[1][2]) {
-                    if (getPlayerColour() == QuaxTileColour.BLACK) {
-                        assignStrategyValue(n, 4);
-                    }
-                    else {
-                        assignStrategyValue(n, 3);
-                    }
-                }
+            if (t.isBlack()) {
+                progressVertically(n, neighbours);
             }
 
             else {
-                if (n == neighbours[0][1] || n == neighbours[2][1]) {
-                    if (getPlayerColour() == QuaxTileColour.WHITE) {
-                        assignStrategyValue(n, 4);
-                    }
-                    else {
-                        assignStrategyValue(n, 3);
-                    }
+                progressHorizontally(n, neighbours);
+            }
+        }
+
+        private void progressVertically(QuaxTile n, QuaxTile[][] neighbours) {
+            if (n == neighbours[1][0] || n == neighbours[1][2]) {
+                if (getPlayerColour() == QuaxTileColour.BLACK) {
+                    assignStrategyValue(n, 4);
+                }
+                else {
+                    assignStrategyValue(n, 3);
                 }
             }
         }
+
+        private void progressHorizontally(QuaxTile n, QuaxTile[][] neighbours) {
+            if (n == neighbours[0][1] || n == neighbours[2][1]) {
+                if (getPlayerColour() == QuaxTileColour.WHITE) {
+                    assignStrategyValue(n, 4);
+                }
+                else {
+                    assignStrategyValue(n, 3);
+                }
+            }
+        }
+
+
+        private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
+            assignStrategyValue(t, 4);
+
+            if (b.validMove(t.getCoordinates(), getPlayerColour().flip())){
+                assignStrategyValue(t, 5);
+            }
 
 
         private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
@@ -268,7 +285,7 @@ public class BotPlayer extends QuaxPlayer {
 
 	@Override
 	public void movePrompt(QuaxBoard b) {
-		startThinkingTime = System.currentTimeMillis();
+        long startThinkingTime = System.currentTimeMillis();
 		
         this.getExecutor().execute(() -> {
             setUpStrategy(b);
