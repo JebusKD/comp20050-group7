@@ -11,6 +11,8 @@ public class BotPlayer extends QuaxPlayer {
 	private static boolean botHaste = false;
 
     public static final int MAX_STRATEGIES = 6;
+    // TODO for final submission MIN_THINKING_TIME will
+    // need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
 
     private QuaxTileStrategyGroup[] strategyGroups;
@@ -231,7 +233,7 @@ public class BotPlayer extends QuaxPlayer {
 
 
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
-            t.setStrategyValue(5);
+            t.setStrategyValue(4);
             assignTileToStrategyGroup(t);
         }
 
