@@ -38,14 +38,7 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the highest strategy values.
      */
 	private QuaxCoordinate decideMove(QuaxBoard b) {
-        int randStrategyValue = chooseStrategyValue();
-        QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
-
-        while (choice.size() == 0) {
-            randStrategyValue--;
-            choice = getStrategyGroupWithValue(randStrategyValue);
-        }
-
+        QuaxTileStrategyGroup choice = selectStrategyGroup(b.getMoveNumber());
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(b, choice);
 
@@ -53,17 +46,42 @@ public class BotPlayer extends QuaxPlayer {
         return candidateMoves.get(index);
 	}
 
+    private QuaxTileStrategyGroup selectStrategyGroup(int move) {
 
-    /* 5% chance of strat val 1
-    20% chance of strat val 2
+        if (move == 0) {
+            return getStrategyGroupWithValue(1);
+        }
+
+        if (getStrategyGroupWithValue(6).size() > 0) {
+            return getStrategyGroupWithValue(6);
+        }
+
+        if (getStrategyGroupWithValue(5).size() > 0) {
+            return getStrategyGroupWithValue(5);
+        }
+
+        int randStrategyValue = chooseStrategyValue();
+        QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);;
+
+        while (choice.size() == 0) {
+            randStrategyValue--;
+            choice = getStrategyGroupWithValue(randStrategyValue);
+        }
+
+        return choice;
+    }
+
+    /* //TODO - Fix probabilities
+    1% chance of strat val 1
+    14% chance of strat val 2
     25% chance of strat val 3
-    50% chance of strat 4
+    60% chance of strat 4
     */
     private int chooseStrategyValue() {
         SplittableRandom random = new SplittableRandom();
         int probability= random.nextInt(1,101);
 
-        if (probability <= 3) {
+        if (probability <= 1) {
             return 1;
         }
 
@@ -71,12 +89,13 @@ public class BotPlayer extends QuaxPlayer {
             return 2;
         }
 
-        if (probability <= 45) {
+        if (probability <= 40) {
             return 3;
         }
 
         return 4;
     }
+
 
     public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
         assert (i <= MAX_STRATEGIES && i > 0);
