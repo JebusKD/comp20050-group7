@@ -294,6 +294,10 @@ public class BotPlayer extends QuaxPlayer {
         	for (QuaxTile t : b) {
         		if (isUselessRhombus(t, b)) {
         			assignStrategyValue(t, 0);
+        		} else if (exploitsVulnerableRhombuses(t, b)) {
+        			upgradeStrategy(t, 1, 5);
+        		} else if (defendsVulnerableRhombuses(t, b)) {
+        			upgradeStrategy(t, 2, 5);
         		}
         	}
         }
@@ -313,11 +317,30 @@ public class BotPlayer extends QuaxPlayer {
         	while (iterator.hasNext()) {
         		if (b.isValidRhombusForBoth(iterator.next())) {
         			count++;
-        		}			
+        		}
         	}
         	return count;
         }
-
+        
+        private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        	boolean result = false;
+        	if (b.validMove(t)) {
+	        	QuaxBoard copy = new QuaxBoard(b);
+	        	int vulnerableCountBefore = vulnerableRhombusCount(copy);
+	        	copy.makeMove(t);
+	        	if (vulnerableCountBefore + 2 <= vulnerableRhombusCount(copy)) {
+	        		result = true;
+	        	}
+        	}
+        	return result;
+        }
+        
+        private boolean defendsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        	QuaxBoard copy = new QuaxBoard(b);
+        	copy.skipTurn();
+        	return exploitsVulnerableRhombuses(t, copy);
+        }
+        
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
             assignTileToStrategyGroup(t);

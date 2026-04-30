@@ -163,6 +163,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return validMove(q, currentColourTurn());
 	}
 
+	public boolean validMove(QuaxTile t) {
+		return validMove(t.getCoordinates());
+	}
+	
 	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour colour) {
         QuaxTile[][] n = getNeighbours(q);
 
@@ -210,6 +214,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		makeMove(q, currentColourTurn());
 	}
 
+	public void makeMove(QuaxTile t) {
+		makeMove(t.getCoordinates());
+	}
+	
+	public void skipTurn() {
+		this.moveNumber++;
+	}
+	
 	/** Manage adding a tile to a group */
 	private class GroupManager {
 
