@@ -40,6 +40,7 @@ public class QuaxUserInterface implements UserInterface {
     private WindowManager quaxUIWindow;
 
     private BotPlayer linkedBot;
+    private boolean hasLinkedBot;
     private QuaxCoordinate chosenMove;
     private boolean showingStrategy;
 
@@ -48,6 +49,7 @@ public class QuaxUserInterface implements UserInterface {
         this.quaxUIStage = stage;
         this.quaxUIBoard = new UserInterfaceBoard();
         this.showingStrategy = false;
+        this.hasLinkedBot = false;
 
         initialiseWindow();
         initialiseStylesheets();
@@ -148,7 +150,7 @@ public class QuaxUserInterface implements UserInterface {
     }
     
     private void updateStrategy() {
-    	if (linkedBot != null && showingStrategy) {
+    	if (hasLinkedBot && showingStrategy) {
     		quaxUIBoard.clearTileBorders();
     		quaxUIBoard.setBotChosenCell(chosenMove);
 	        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
@@ -172,11 +174,14 @@ public class QuaxUserInterface implements UserInterface {
 
     @Override
     public void setLinkedBot(BotPlayer bot) {
+    	assert bot != null;
+    	this.hasLinkedBot = true;
         this.linkedBot = bot;
     }
 
     @Override
     public void setBotChosenMove(QuaxCoordinate c) {
+    	assert c != null;
         this.chosenMove = c;
     }
 }

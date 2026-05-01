@@ -261,7 +261,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (tile.tileExists() && isOwnedTile(tile, c) &&
+					if (isOwnedTile(tile, c) &&
 							tileNotMemberOfGroup(nearbyGroups, tile)) {
 						nearbyGroups.add(tile.getTileGroup());
 					}
@@ -272,7 +272,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 		private boolean isOwnedTile(QuaxTile t, QuaxTileColour c) {
-			return (t != null && t.isSameColour(c));
+			return (t.tileExists() && t.isSameColour(c));
 		}
 
 		private boolean tileNotMemberOfGroup(ArrayList<QuaxTileGroup> groups, QuaxTile t) {
