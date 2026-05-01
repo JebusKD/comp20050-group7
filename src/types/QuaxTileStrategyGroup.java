@@ -2,32 +2,22 @@ package types;
 
 import java.util.*;
 
+// TODO Consider deleting this class, replacing instances with Linked Lists.
+public class QuaxTileStrategyGroup extends LinkedList<QuaxTile> {
+	// Required by list interface
+	private static final long serialVersionUID = 1L;
 
-public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
-
-    private LinkedList<QuaxTile> strategyMembers;
-
-
-    public QuaxTileStrategyGroup() {
-        this.strategyMembers = new LinkedList<>();
+	public QuaxTileStrategyGroup() {
+        super();
     }
 
 
     public void addTile(QuaxTile tile) {
-        strategyMembers.addFirst(tile);
+        add(tile);
     }
 
     public void removeTile(QuaxTile tile) {
-        strategyMembers.remove(tile);
+        remove(tile);
     }
 
-
-    public int size() {
-        return strategyMembers.size();
-    }
-
-
-    public Iterator<QuaxTile> iterator() {
-        return strategyMembers.iterator();
-    }
 }
