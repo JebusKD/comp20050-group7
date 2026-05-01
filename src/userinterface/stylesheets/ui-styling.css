@@ -128,3 +128,7 @@
 .tileoutline-base.tileoutline-4{
     -fx-stroke: hotpink;
 }
+
+.tileoutline-base.tileoutline-5{
+    -fx-stroke: cyan;
+}

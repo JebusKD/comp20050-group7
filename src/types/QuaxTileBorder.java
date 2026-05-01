@@ -36,6 +36,12 @@ public enum QuaxTileBorder {
         public String tileBorderStyle() {
             return "tileoutline-4";
         }
+    },
+    
+    CYAN {
+    	public String tileBorderStyle() {
+    		return "tileoutline-5";
+    	}
     };
 
     public abstract String tileBorderStyle();

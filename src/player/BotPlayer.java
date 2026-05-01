@@ -9,7 +9,7 @@ import types.*;
 
 public class BotPlayer extends QuaxPlayer {
 
-    public static final int MAX_STRATEGIES = 6;
+    public static final int MAX_STRATEGIES = 7;
     // TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
     private static boolean botHaste = false;
@@ -49,10 +49,14 @@ public class BotPlayer extends QuaxPlayer {
             return getStrategyGroupWithValue(1);
         }
 
-        if (getStrategyGroupWithValue(6).size() > 0) {
-            return getStrategyGroupWithValue(6);
+        if (getStrategyGroupWithValue(MAX_STRATEGIES).size() > 0) {
+            return getStrategyGroupWithValue(MAX_STRATEGIES);
         }
 
+        if (getStrategyGroupWithValue(MAX_STRATEGIES-1).size() > 0) {
+            return getStrategyGroupWithValue(MAX_STRATEGIES-1);
+        }
+        
         if (getStrategyGroupWithValue(5).size() > 0) {
             return getStrategyGroupWithValue(5);
         }
@@ -202,7 +206,7 @@ public class BotPlayer extends QuaxPlayer {
 
         // TODO - Clean these
         private void progressVertically(QuaxTile n, QuaxTile[][] neighbours) {
-            if (n == neighbours[1][0] || n == neighbours[1][2]) {
+        	if (n == neighbours[1][0] || n == neighbours[1][2]) {
                 if (getPlayerColour() == QuaxTileColour.BLACK) {
                     assignStrategyValueIfLess(n, 4);
                 }
@@ -262,12 +266,12 @@ public class BotPlayer extends QuaxPlayer {
         private void setHighPriorityStrategyGroups(QuaxTile t, QuaxBoard b) {
             // If human player can win, try to block the win
             if (checkForWin(t.getCoordinates(), b, getPlayerColour().flip())) {
-                assignStrategyValue(t, 5);
+                assignStrategyValue(t, MAX_STRATEGIES-1);
             }
 
             // If the bot can place any winning tile, assign the highest priority
             if (checkForWin(t.getCoordinates(), b, getPlayerColour())) {
-                assignStrategyValue(t, 6);
+                assignStrategyValue(t, MAX_STRATEGIES);
             }
         }
 
