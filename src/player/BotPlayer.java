@@ -284,6 +284,10 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
+        public static boolean isLowPriority(QuaxTile t) {
+        	return t.getStrategyValue() < MAX_STRATEGIES-1;
+        }
+        
         private void assignStrategyValueIfLess(QuaxTile t, int value) {
         	if (t.getStrategyValue() < value) {
         		assignStrategyValue(t, value);
@@ -299,18 +303,20 @@ public class BotPlayer extends QuaxPlayer {
         
         private void postStrategy(QuaxBoard b) {
         	for (QuaxTile t : b) {
-        		if (isUselessRhombus(t, b)) {
-        			assignStrategyValue(t, 0);
+        		if (t.isFree() && isLowPriority(t)) {
+        			if (isUselessRhombus(t, b)) {
+	        			assignStrategyValue(t, 0);
+	        		}
+	                else if (exploitsVulnerableRhombuses(t, b)) {
+	        			upgradeStrategy(t, 1, 5);
+	        		}
+	                else if (defendsVulnerableRhombuses(t, b)) {
+	        			upgradeStrategy(t, 2, 5);
+	        		}
+	                else if (createsOnlyOneVulnerableRhombus(t, b)) {
+	                	downgradeStrategy(t, 1, 2);
+	                }
         		}
-                else if (exploitsVulnerableRhombuses(t, b)) {
-        			upgradeStrategy(t, 1, 5);
-        		}
-                else if (defendsVulnerableRhombuses(t, b)) {
-        			upgradeStrategy(t, 2, 5);
-        		}
-                else if (createsOnlyOneVulnerableRhombus(t, b)) {
-                	downgradeStrategy(t, 1, 2);
-                }
         	}
         }
         
@@ -349,7 +355,7 @@ public class BotPlayer extends QuaxPlayer {
 	        	QuaxBoard copy = new QuaxBoard(b);
 	        	int vulnerableCountBefore = vulnerableRhombusCount(copy);
 	        	copy.makeMove(t);
-	        	result = vulnerableRhombusCount(b) - vulnerableCountBefore;
+	        	result = vulnerableRhombusCount(copy) - vulnerableCountBefore;
         	}
         	return result;
         }
@@ -369,11 +375,7 @@ public class BotPlayer extends QuaxPlayer {
         }
         
         private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
-	        boolean result = false;
-	    	if (b.validMove(t)) {
-	        	result = changeInVulnerableRhombuses(t, b) == 1;
-	    	}
-	    	return result;
+        	return changeInVulnerableRhombuses(t, b) == 1;
 	    }
 
         private void assignStrategyValue(QuaxTile t, int value) {
