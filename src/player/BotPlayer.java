@@ -227,6 +227,15 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
+        // TODO not sure if I can use these
+        /*
+        private static QuaxTile[][] rotateOctagonNeighbours(QuaxTile[][] neighbours) {
+        	assert neighbours[0].length == 3;
+        	return new QuaxTile[][]
+        			{ { neighbours[2][0], neighbours[1][0], neighbours[0][0] },
+        			  { neighbours[2][1], neighbours[1][1], neighbours[0][1] },
+        			  { neighbours[2][2], neighbours[1][2], neighbours[0][2] } };
+        }*/
 
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
         	if (isUselessRhombus(t, b)) {
@@ -299,6 +308,9 @@ public class BotPlayer extends QuaxPlayer {
                 else if (defendsVulnerableRhombuses(t, b)) {
         			upgradeStrategy(t, 2, 5);
         		}
+                else if (createsOnlyOneVulnerableRhombus(t, b)) {
+                	downgradeStrategy(t, 1, 2);
+                }
         	}
         }
         
@@ -309,6 +321,15 @@ public class BotPlayer extends QuaxPlayer {
         		increase = limit - prevValue;
         	}
         	assignStrategyValue(t, prevValue + increase);
+        }
+        
+        private void downgradeStrategy(QuaxTile t, int decrease, int minimum) {
+        	int prevValue = t.getStrategyValue(),
+        			limit = Math.max(minimum, 1);
+        	if (prevValue - decrease < limit) {
+        		decrease = prevValue - limit;
+        	}
+        	assignStrategyValue(t, prevValue - decrease);
         }
         
         private int vulnerableRhombusCount(QuaxBoard b) {
@@ -322,15 +343,21 @@ public class BotPlayer extends QuaxPlayer {
         	return count;
         }
         
-        private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
-        	boolean result = false;
+        private int changeInVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        	int result = 0;
         	if (b.validMove(t)) {
 	        	QuaxBoard copy = new QuaxBoard(b);
 	        	int vulnerableCountBefore = vulnerableRhombusCount(copy);
 	        	copy.makeMove(t);
-	        	if (vulnerableCountBefore + 2 <= vulnerableRhombusCount(copy)) {
-	        		result = true;
-	        	}
+	        	result = vulnerableRhombusCount(b) - vulnerableCountBefore;
+        	}
+        	return result;
+        }
+        
+        private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        	boolean result = false;
+        	if (b.validMove(t)) {
+	        	result = changeInVulnerableRhombuses(t, b) >= 2;
         	}
         	return result;
         }
@@ -340,7 +367,14 @@ public class BotPlayer extends QuaxPlayer {
         	copy.skipTurn();
         	return exploitsVulnerableRhombuses(t, copy);
         }
-
+        
+        private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
+	        boolean result = false;
+	    	if (b.validMove(t)) {
+	        	result = changeInVulnerableRhombuses(t, b) == 1;
+	    	}
+	    	return result;
+	    }
 
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
