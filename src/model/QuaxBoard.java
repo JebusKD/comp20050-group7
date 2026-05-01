@@ -327,7 +327,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return neighbours;
 	}
 
-	//TODO - Like why?
+	// TODO - Do we actually need this
 	public QuaxTile[][] getNeighbours(QuaxTile t) {
 		return getNeighbours(t.getCoordinates());
 	}
