@@ -550,7 +550,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
-	
+
+
+	// TODO - Is this used?
 	public static class QuaxBoardPermutationIterator implements Iterator<QuaxBoard> {
 		private final ArrayList<QuaxBoard> elements;
 		private int cursor;

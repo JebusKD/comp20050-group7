@@ -1,7 +1,6 @@
 package types;
 
-import javafx.event.Event;
-import javafx.event.EventType;
+import javafx.event.*;
 
 
 public class ButtonClickEvent extends Event {
