@@ -133,6 +133,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 		// TODO - violates LoD?
+		// I'm thinking we do similar to botHaste, a private static boolean gameWon that we check
 		return previousGroup().isWinningGroup();
 	}
 

@@ -25,17 +25,7 @@ public class QuaxController {
     private final QuaxPlayer[] quaxPlayers;
 
 
-    public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-        this.quaxExecutor = new SingleThreadExecutor();
-        this.quaxMoveSubmitter = new SingleThreadExecutor();
-
-        this.quaxPlayers = new QuaxPlayer[2];
-        this.quaxUserInterface = new TestingEmptyInterface();
-
-        startGame(p1, p2);
-    }
-
-    // Testing constructors - TODO, literally not anymore, outdated comment
+    // Start Game against Bot
     public QuaxController(Stage stage) {
         this(stage, true, false);
     }
@@ -61,6 +51,17 @@ public class QuaxController {
                 startTwoPlayerGame();
             }
         }
+    }
+
+    // Testing Constructor
+    public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
+        this.quaxExecutor = new SingleThreadExecutor();
+        this.quaxMoveSubmitter = new SingleThreadExecutor();
+
+        this.quaxPlayers = new QuaxPlayer[2];
+        this.quaxUserInterface = new TestingEmptyInterface();
+
+        startGame(p1, p2);
     }
 
 
