@@ -1,12 +1,11 @@
 package userinterface.interfacebuilders;
 
 import javafx.scene.shape.Polygon;
-import userinterface.SimpleStyleable;
 
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
-abstract class RhombusBase extends Polygon implements SimpleStyleable {
+abstract class RhombusBase extends Polygon{
 
     public RhombusBase() {
         this((OCTAGON_WIDTH - OctagonBase.SIDELENGTH) / 2);

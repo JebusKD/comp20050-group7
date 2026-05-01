@@ -1,12 +1,12 @@
 package userinterface.interfacebuilders;
 
+
 import javafx.scene.shape.Polygon;
-import userinterface.SimpleStyleable;
 
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
-abstract class OctagonBase extends Polygon implements SimpleStyleable {
+abstract class OctagonBase extends Polygon {
 
     public static final double SIDELENGTH = calculateSideLength(OCTAGON_WIDTH);
     private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);

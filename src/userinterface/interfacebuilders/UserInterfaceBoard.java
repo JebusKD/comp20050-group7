@@ -17,7 +17,6 @@ import javafx.scene.shape.Rectangle;
 import model.QuaxBoard;
 import types.*;
 import userinterface.QuaxUserInterface;
-import userinterface.SimpleStyleable;
 
 import static model.QuaxBoard.MAX_OCTAGONS;
 import static model.QuaxBoard.MAX_RHOMBUSES;
@@ -267,9 +266,9 @@ public class UserInterfaceBoard {
     }
 
 
-    private interface Tile extends SimpleStyleable {
+    private interface Tile extends Styleable {
     	default void removeTileColour() {
-    		this.removeAllStyleClasses(
+    		this.getStyleClass().removeAll(
     				QuaxTileColour.BLACK.tilecolourStyle(),
                     QuaxTileColour.WHITE.tilecolourStyle(),
                     QuaxTileColour.NONE.tilecolourStyle());
@@ -277,17 +276,17 @@ public class UserInterfaceBoard {
     	
         default void setColour(QuaxTileColour colour) {
         	this.removeTileColour();
-            this.addStyleClass(colour.tilecolourStyle());
+            this.getStyleClass().add(colour.tilecolourStyle());
         }
         
         default void setBorder(QuaxTileBorder border) {
             this.clearBorder();
-            this.addAllStyleClasses("tileoutline-base", border.tileBorderStyle());
+            this.getStyleClass().addAll("tileoutline-base", border.tileBorderStyle());
         }
         
         default void clearBorder() {
         	for (QuaxTileBorder b : QuaxUserInterface.STRATEGY_GROUP_BORDERS) {
-        		this.removeStyleClass(b.tileBorderStyle());
+        		this.getStyleClass().remove(b.tileBorderStyle());
         	}
         }
         
@@ -303,7 +302,7 @@ public class UserInterfaceBoard {
 
         public OctagonTile(QuaxCoordinate coordinate) {
             super();
-            this.addAllStyleClasses("tile", "tiletype-octagon");
+            this.getStyleClass().addAll("tile", "tiletype-octagon");
             this.setColour(QuaxTileColour.NONE);
             this.setBorder(QuaxTileBorder.NONE);
             this.octagonGridCoordinate = coordinate;
@@ -318,12 +317,12 @@ public class UserInterfaceBoard {
         
         @Override
         public void setPreviousMove() {
-        	this.addStyleClass(PREVIOUS_MOVE_STYLE);
+        	this.getStyleClass().add(PREVIOUS_MOVE_STYLE);
         }
         
         @Override
         public void clearPreviousMove() {
-        	this.removeStyleClass(PREVIOUS_MOVE_STYLE);
+        	this.getStyleClass().remove(PREVIOUS_MOVE_STYLE);
         }
 
         @Override
@@ -337,7 +336,7 @@ public class UserInterfaceBoard {
 
         public RhombusTile(QuaxCoordinate coordinate) {
             super();
-            this.addAllStyleClasses("tile", "tiletype-rhombus");
+            this.getStyleClass().addAll("tile", "tiletype-rhombus");
             this.setColour(QuaxTileColour.NONE);
             this.setBorder(QuaxTileBorder.NONE);
             this.rhombusGridCoordinate = coordinate;
@@ -352,12 +351,12 @@ public class UserInterfaceBoard {
 
         @Override
         public void setPreviousMove() {
-        	this.addStyleClass(PREVIOUS_MOVE_STYLE);
+        	this.getStyleClass().add(PREVIOUS_MOVE_STYLE);
         }
         
         @Override
         public void clearPreviousMove() {
-        	this.removeStyleClass(PREVIOUS_MOVE_STYLE);
+        	this.getStyleClass().remove(PREVIOUS_MOVE_STYLE);
         }
         
         @Override
