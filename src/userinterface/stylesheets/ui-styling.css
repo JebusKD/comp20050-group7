@@ -14,6 +14,7 @@
 
 }
 
+
 .rectangle-colour{
     -fx-fill: #FFFF
 }
@@ -31,6 +32,7 @@
     -fx-spacing: 8;
     -fx-background-color:#9F99ED;
 }
+
 
 .custom-title{
     -fx-font-family : "Georgia";
@@ -66,10 +68,16 @@
 .stratFive{
     -fx-font-family : "Georgia";
     -fx-font-size: 14px;
-    -fx-text-fill: purple;
+    -fx-text-fill:cyan;
 }
 
 .stratSix{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: purple;
+}
+
+.stratSeven{
     -fx-font-family : "Georgia";
     -fx-font-size: 14px;
     -fx-text-fill: deeppink;
@@ -109,26 +117,26 @@
     -fx-stroke-width:3;
 }
 
-.tileoutline-base.tileoutline-0 {
-    -fx-stroke:red;
-}
-
-.tileoutline-base.tileoutline-1 {
+.tileoutline-base.tileoutline-2 {
     -fx-stroke:blue;
 }
 
-.tileoutline-base.tileoutline-2{
+.tileoutline-base.tileoutline-3 {
     -fx-stroke:green;
 }
 
-.tileoutline-base.tileoutline-3{
+.tileoutline-base.tileoutline-4 {
+    -fx-stroke:red;
+}
+
+.tileoutline-base.tileoutline-5 {
+    -fx-stroke: cyan;
+}
+
+.tileoutline-base.tileoutline-6 {
     -fx-stroke:purple;
 }
 
-.tileoutline-base.tileoutline-4{
+.tileoutline-base.tileoutline-7 {
     -fx-stroke: hotpink;
-}
-
-.tileoutline-base.tileoutline-5{
-    -fx-stroke: cyan;
 }

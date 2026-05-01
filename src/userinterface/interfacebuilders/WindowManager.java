@@ -82,7 +82,7 @@ public class WindowManager {
     }
 
     public void initialiseStrategyColourCoding() {
-        ArrayList<Label> stratLabels = initialiseStrategyLabels();
+        Label[] stratLabels = initialiseStrategyLabels();
 
         strategyColourIndicator = new VBox(10);
         strategyColourIndicator.getChildren().addAll(stratLabels);
@@ -91,32 +91,29 @@ public class WindowManager {
         strategyColourIndicator.setId("ColourIndicator");
     }
 
-    private ArrayList<Label> initialiseStrategyLabels() {
-        ArrayList<Label> labels = new ArrayList<>(MAX_STRATEGIES);
+    private Label[] initialiseStrategyLabels() {
+        Label[] labels = new Label[MAX_STRATEGIES];
 
-        Label stratLabel = new Label("Strategy Value - SV");
-        stratLabel.getStyleClass().add("stratLabel");
-        labels.add(stratLabel);
+        labels[0] = new Label("Strategy Value - SV");
+        labels[0].getStyleClass().add("stratLabel");
 
-        Label stratTwo = new Label("SV2 - Low priority surrounding tile ");
-        stratTwo.getStyleClass().add("stratTwo");
-        labels.add(stratTwo);
+        labels[1] = new Label("SV2 - Low priority surrounding tile ");
+        labels[1].getStyleClass().add("stratTwo");
 
-        Label stratThree = new Label("SV3 - Block opponent ");
-        stratThree.getStyleClass().add("stratThree");
-        labels.add(stratThree);
+        labels[2] = new Label("SV3 - Block opponent ");
+        labels[2].getStyleClass().add("stratThree");
 
-        Label stratFour = new Label("SV4 - Progress self");
-        stratFour.getStyleClass().add("stratFour");
-        labels.add(stratFour);
+        labels[3] = new Label("SV4 - Progress self");
+        labels[3].getStyleClass().add("stratFour");
 
-        Label stratFive = new Label("SV5 - Opponent has winning move");
-        stratFive.getStyleClass().add("stratFive");
-        labels.add(stratFive);
+        labels[4] = new Label("SV5 - Key Move");
+        labels[4].getStyleClass().add("stratFive");
 
-        Label stratSix = new Label("SV6 - Winning move for self");
-        stratSix.getStyleClass().add("stratSix");
-        labels.add(stratSix);
+        labels[5] = new Label("SV6 - Opponent has winning move");
+        labels[5].getStyleClass().add("stratSix");
+
+        labels[6] = new Label("SV7 - Winning move for self");
+        labels[6].getStyleClass().add("stratSeven");
 
         return labels;
     }
