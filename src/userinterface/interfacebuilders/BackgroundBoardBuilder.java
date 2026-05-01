@@ -131,7 +131,7 @@ class BackgroundBoardBuilder {
         }
 
 
-        //TODO - Can this be split up?
+        // TODO - Can this be split up, do you think?
         private void setTopBottomCoordinateGrid() {
             GridPane top = new GridPane();
             GridPane bottom = new GridPane();
@@ -234,7 +234,7 @@ class BackgroundBoardBuilder {
             return octagonGrid;
         }
 
-        // TODO - Can split?
+        // TODO - Can this be split?
         private void initialiseOctagonGridRowColumns() {
             for (int i = 0; i < MAX_OCTAGONS ; i++) {
                 ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);

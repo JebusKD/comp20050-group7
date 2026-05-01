@@ -389,7 +389,7 @@ public class BotPlayer extends QuaxPlayer {
 	    }
         
         private static List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
-        	LinkedList<QuaxTileGroup> groups = new LinkedList<QuaxTileGroup>();
+        	LinkedList<QuaxTileGroup> groups = new LinkedList<>();
         	for (QuaxTile n : b.getNeighboursList(t)) {
         		if (n.isOccupied()) {
         			QuaxTileGroup tileGroup = n.getTileGroup();
@@ -402,8 +402,8 @@ public class BotPlayer extends QuaxPlayer {
         }
         
         private List<QuaxTileGroup> removeOpponentGroups(List<QuaxTileGroup> list) {
-        	LinkedList<QuaxTileGroup> copy = new LinkedList<QuaxTileGroup>(list),
-        							 found = new LinkedList<QuaxTileGroup>();
+        	LinkedList<QuaxTileGroup> copy = new LinkedList<>(list),
+        							 found = new LinkedList<>();
         	for (QuaxTileGroup g : copy) {
         		if (g.getGroupColour() != getPlayerColour()) {
         			found.add(g);
