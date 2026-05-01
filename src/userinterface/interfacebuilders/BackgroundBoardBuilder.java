@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
-import types.QuaxCoordinate;
 
+import static types.QuaxCoordinate.*;
 import static model.QuaxBoard.*;
 import static userinterface.QuaxUserInterface.*;
 import static userinterface.interfacebuilders.UserInterfaceBoard.*;
@@ -250,7 +250,7 @@ class BackgroundBoardBuilder {
         private void initialiseOctagonGridCells() {
             for (int i = 0; i < MAX_OCTAGONS ; i++) {
                 for (int j = 0; j < MAX_OCTAGONS ; j++) {
-                    OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
+                    OctagonTile newTile = new OctagonTile(newOctagonCoordinate(i, j));
                     newTile.setId("octagon" + i + "-" + j);
 
                     buildingOctagonGrid[i][j] = newTile;
@@ -301,7 +301,7 @@ class BackgroundBoardBuilder {
         private void initialiseRhombusGridCells() {
             for (int i = 0; i < MAX_RHOMBUSES; i++) {
                 for (int j = 0; j < MAX_RHOMBUSES; j++) {
-                    RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
+                    RhombusTile newTile = new RhombusTile(newRhombusCoordinate(i, j));
                     newTile.setId("rhombus" + i + "-" + j);
 
                     buildingRhombusGrid[i][j] = newTile;
