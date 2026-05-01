@@ -1,6 +1,8 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import types.Octagon;
@@ -65,7 +67,8 @@ class TestOctagon {
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(7, q.y());
 	}
-
+// TODO replace with tests for DistanceFromWalls
+	@Disabled
 	@Test
 	void testOnLow1() {
 		QuaxTile t = new Octagon(3, 10);
@@ -73,6 +76,7 @@ class TestOctagon {
 		assertTrue(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow2() {
 		QuaxTile t = new Octagon(3, 10);
@@ -80,6 +84,7 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow3() {
 		QuaxTile t = new Octagon(3, 10);
@@ -87,6 +92,7 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow4() {
 		QuaxTile t = new Octagon(0, 4);
@@ -94,6 +100,7 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow5() {
 		QuaxTile t = new Octagon(0, 4);
@@ -101,6 +108,7 @@ class TestOctagon {
 		assertTrue(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow6() {
 		QuaxTile t = new Octagon(0, 4);
@@ -108,6 +116,7 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow7() {
 		QuaxTile t = new Octagon(4, 6);
@@ -115,6 +124,7 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow8() {
 		QuaxTile t = new Octagon(4, 6);
@@ -122,13 +132,15 @@ class TestOctagon {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow9() {
 		QuaxTile t = new Octagon(4, 6);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onLow());
 	}
-	
+
+	@Disabled
 	@Test
 	void testOnHigh1() {
 		QuaxTile t = new Octagon(3, 0);
@@ -136,6 +148,7 @@ class TestOctagon {
 		assertTrue(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh2() {
 		QuaxTile t = new Octagon(3, 0);
@@ -143,48 +156,49 @@ class TestOctagon {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh3() {
 		QuaxTile t = new Octagon(3, 0);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh4() {
 		QuaxTile t = new Octagon(10, 4);
 		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh5() {
 		QuaxTile t = new Octagon(10, 4);
 		t.setTileColour(QuaxTileColour.WHITE);
 		assertTrue(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh6() {
 		QuaxTile t = new Octagon(10, 4);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh7() {
 		QuaxTile t = new Octagon(4, 6);
 		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh8() {
 		QuaxTile t = new Octagon(4, 6);
 		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.onHigh());
 	}
-	
+	@Disabled
 	@Test
 	void testOnHigh9() {
 		QuaxTile t = new Octagon(4, 6);

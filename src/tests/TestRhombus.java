@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import types.Rhombus;
@@ -66,7 +67,8 @@ class TestRhombus {
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(7, q.y());
 	}
-
+// TODO replace with tests for DistanceFromWalls
+	@Disabled
 	@Test
 	void testOnLow1() {
 		QuaxTile t = new Rhombus(3, 10);
@@ -74,6 +76,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow2() {
 		QuaxTile t = new Rhombus(3, 10);
@@ -81,6 +84,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow3() {
 		QuaxTile t = new Rhombus(3, 10);
@@ -88,6 +92,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow4() {
 		QuaxTile t = new Rhombus(0, 4);
@@ -95,6 +100,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow5() {
 		QuaxTile t = new Rhombus(0, 4);
@@ -102,6 +108,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow6() {
 		QuaxTile t = new Rhombus(0, 4);
@@ -109,6 +116,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow7() {
 		QuaxTile t = new Rhombus(4, 6);
@@ -116,6 +124,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow8() {
 		QuaxTile t = new Rhombus(4, 6);
@@ -123,6 +132,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnLow9() {
 		QuaxTile t = new Rhombus(4, 6);
@@ -130,6 +140,7 @@ class TestRhombus {
 		assertFalse(t.onLow());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh1() {
 		QuaxTile t = new Rhombus(3, 0);
@@ -137,6 +148,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh2() {
 		QuaxTile t = new Rhombus(3, 0);
@@ -144,6 +156,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh3() {
 		QuaxTile t = new Rhombus(3, 0);
@@ -151,6 +164,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh4() {
 		QuaxTile t = new Rhombus(9, 4);
@@ -158,6 +172,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh5() {
 		QuaxTile t = new Rhombus(9, 4);
@@ -165,6 +180,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh6() {
 		QuaxTile t = new Rhombus(9, 4);
@@ -172,6 +188,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh7() {
 		QuaxTile t = new Rhombus(4, 6);
@@ -179,6 +196,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh8() {
 		QuaxTile t = new Rhombus(4, 6);
@@ -186,6 +204,7 @@ class TestRhombus {
 		assertFalse(t.onHigh());
 	}
 	
+	@Disabled
 	@Test
 	void testOnHigh9() {
 		QuaxTile t = new Rhombus(4, 6);

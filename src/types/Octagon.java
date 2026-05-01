@@ -20,24 +20,6 @@ public class Octagon extends QuaxTile {
 	public QuaxCoordinate getCoordinates() {
 		return new QuaxCoordinate(xPosition, yPosition, true);
 	}
-
-	@Override
-	public boolean onLow() {
-		if (isFree()) {
-            return false;
-        }
-
-		return distanceToLowWall() == 0;
-	}
-
-	@Override
-	public boolean onHigh() {
-		if (isFree()) {
-            return false;
-        }
-
-		return distanceToHighWall() == 0;
-	}
 	
 	public int distanceToLowWall() {
 		assert isOccupied();

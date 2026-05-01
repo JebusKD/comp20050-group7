@@ -87,13 +87,4 @@ public abstract class QuaxTile {
 		return getTileColour() == c.flip();
 	}
 
-	// TODO - Move to Octagon only?
-	/*
-	 * Check if the tile is on
-	 * 	 the bottom or left (if BLACK or WHITE)
-	 *  and
-	 *   the top or the right (if BLACK or WHITE)
-	 */
-	public abstract boolean onLow();
-	public abstract boolean onHigh();
 }

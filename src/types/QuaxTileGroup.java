@@ -7,14 +7,9 @@ import java.util.LinkedList;
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	private final LinkedList<QuaxTile> groupMembers;
-	private boolean onColumnA_Row1;
-	private boolean onColumnK_Row11;
-
 
 	public QuaxTileGroup() {
 		this.groupMembers = new LinkedList<>();
-		this.onColumnA_Row1 = false;
-		this.onColumnK_Row11 = false;
 	}
 	
 	public QuaxTileGroup(QuaxTile initialMember) {
@@ -28,39 +23,27 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 	public boolean isWinningGroup() {
-		return onColumnA_Row1 && onColumnK_Row11;
+		return distanceToWalls() == 0;
 	}
 
 
 	public void addTile(QuaxTile tile) {
 		tile.setTileGroup(this);
 		groupMembers.addFirst(tile);
-
-		if (tile.onLow()) {
-            onColumnA_Row1 = true;
-        }
-		if (tile.onHigh()) {
-            onColumnK_Row11 = true;
-        }
 	}
 
 	public void merge(QuaxTileGroup mergee) {
-		this.onColumnA_Row1 = this.onColumnA_Row1 || mergee.onColumnA_Row1;
-		this.onColumnK_Row11 = this.onColumnK_Row11 || mergee.onColumnK_Row11;
-		
 		this.groupMembers.addAll(mergee.groupMembers);
 		for (QuaxTile t : mergee.groupMembers) {
 			t.setTileGroup(this);
 		}
 	}
 
-
-	// TODO could this be used to get rid of onColumnA_Row1?
 	public int distanceToWalls() {
 		return distanceToLowWall() + distanceToHighWall();
 	}
 
-	// TODO Added these for the bot, although could be used elsewhere or not at all.
+	// TODO explanatory comment
 	private int distanceToLowWall() {
 		int minimumDistance = 10;
 		for (QuaxTile t : this) {

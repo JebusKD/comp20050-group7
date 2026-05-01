@@ -20,14 +20,4 @@ public class Rhombus extends QuaxTile {
 		return new QuaxCoordinate(xPosition, yPosition, false);
 	}
 
-
-	@Override
-	public boolean onLow() {
-		return false;
-	}
-
-	@Override
-	public boolean onHigh() {
-		return false;
-	}
 }
