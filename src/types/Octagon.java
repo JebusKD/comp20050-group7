@@ -2,6 +2,7 @@ package types;
 
 import model.QuaxBoard;
 
+
 /*
  * Represent the Octagon tiles on the board
  */

@@ -86,5 +86,4 @@ public abstract class QuaxTile {
 		assert c != QuaxTileColour.NONE;
 		return getTileColour() == c.flip();
 	}
-
 }

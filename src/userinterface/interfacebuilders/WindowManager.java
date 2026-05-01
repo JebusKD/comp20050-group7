@@ -1,13 +1,11 @@
 package userinterface.interfacebuilders;
 
-
+import java.util.ArrayList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import static player.BotPlayer.MAX_STRATEGIES;
 import types.*;
-
-import java.util.ArrayList;
 
 
 public class WindowManager {

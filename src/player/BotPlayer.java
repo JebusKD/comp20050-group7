@@ -2,9 +2,9 @@ package player;
 
 import java.util.*;
 
+import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import types.*;
-import static controller.QuaxController.RNG;
 
 
 public class BotPlayer extends QuaxPlayer {

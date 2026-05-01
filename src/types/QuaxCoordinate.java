@@ -1,6 +1,7 @@
 package types;
 
-import model.QuaxBoard;
+import static model.QuaxBoard.*;
+
 
 public class QuaxCoordinate {
 
@@ -22,6 +23,7 @@ public class QuaxCoordinate {
 	public static QuaxCoordinate newRhombusCoordinate(int x, int y) {
 		return new QuaxCoordinate(x, y, false);
 	}
+
 
 	public int x() {
 		return this.x;
