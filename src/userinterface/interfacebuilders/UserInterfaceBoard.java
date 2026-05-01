@@ -16,6 +16,8 @@ import javafx.scene.shape.Rectangle;
 
 import model.QuaxBoard;
 import types.*;
+import userinterface.QuaxUserInterface;
+
 import static model.QuaxBoard.MAX_OCTAGONS;
 import static model.QuaxBoard.MAX_RHOMBUSES;
 import static userinterface.QuaxUserInterface.OCTAGON_GRID_GAP;
@@ -276,9 +278,16 @@ public class UserInterfaceBoard {
         }
         
         default void setBorder(QuaxTileBorder border) {
-            this.getStyleClass().removeAll("tileoutline-0", "tileoutline-1","tileoutline-2","tileoutline-3","tileoutline-4");
+            this.clearBorder();
             this.getStyleClass().add("tileoutline-base");
             this.getStyleClass().add(border.tileBorderStyle());
+        }
+        
+        default void clearBorder() {
+        	for (QuaxTileBorder b : QuaxUserInterface.STRATEGY_GROUP_BORDERS) {
+        		// TODO are all this.getStyleClass().remove(x) LOD violations?
+        		this.getStyleClass().remove(b.tileBorderStyle());
+        	}
         }
         
         void setPreviousMove();

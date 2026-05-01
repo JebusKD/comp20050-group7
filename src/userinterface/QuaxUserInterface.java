@@ -18,10 +18,11 @@ public class QuaxUserInterface implements UserInterface {
     public static final double OCTAGON_WIDTH = 40;
     public static final double OCTAGON_GRID_GAP = 1;
     
-    private static final QuaxTileBorder[] STRATEGY_GROUP_BORDERS = new QuaxTileBorder[] {
+    public static final QuaxTileBorder[] STRATEGY_GROUP_BORDERS = new QuaxTileBorder[] {
             QuaxTileBorder.NONE, QuaxTileBorder.BLUE,
             QuaxTileBorder.GREEN, QuaxTileBorder.RED,
-            QuaxTileBorder.PURPLE, QuaxTileBorder.PINK
+            QuaxTileBorder.CYAN, QuaxTileBorder.PURPLE,
+            QuaxTileBorder.PINK
     };
 
     private static final String[] STYLESHEETS = new String[] {

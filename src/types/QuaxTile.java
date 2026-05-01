@@ -72,7 +72,14 @@ public abstract class QuaxTile {
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
 	public boolean isSameColour(QuaxTileColour c) {
+		// TODO Any instance where NONE is used will return false,
+		// I'd suggest an assertion
 		return getTileColour() == c && c != QuaxTileColour.NONE;
+	}
+	
+	public boolean isOpponentColour(QuaxTileColour c) {
+		assert c != QuaxTileColour.NONE;
+		return getTileColour() == c.flip();
 	}
 
 	/*

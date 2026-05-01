@@ -456,7 +456,24 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return next().getCoordinates();
 		}
 	}
-
+	
+	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
+		private final QuaxBoardIterator boardIterator;
+		
+		public QuaxBoardCoordinateIterator() {
+			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return boardIterator.hasNext();
+		}
+		
+		@Override
+		public QuaxCoordinate next() {
+			return boardIterator.nextCoordinate();
+		}
+	}
 
 	public static Iterator<QuaxCoordinate> coordinateIterator() {
 		return new QuaxBoardCoordinateIterator();
