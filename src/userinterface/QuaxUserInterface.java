@@ -118,6 +118,7 @@ public class QuaxUserInterface implements UserInterface {
 
         else {
             QuaxTileColour colour = board.getTileColour(previousMove);
+
             this.setTile(previousMove, colour);
             this.turnIndicator.setIndicatorColour(colour.flip());
 

@@ -5,7 +5,7 @@ import java.util.*;
 import types.*;
 
 
-/** Manage the game board state during the game */
+/* Manage the game board state during the program */
 public class QuaxBoard implements Iterable<QuaxTile> {
 
     public static final int MAX_OCTAGONS = 11;
@@ -134,19 +134,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		// TODO - violates LoD?
 		return previousGroup().isWinningGroup();
 	}
-	
-	private QuaxTileColour currentColourTurn() {
-		QuaxTileColour result;
-
-		if (isStartingMove()) {
-			result = QuaxTileColour.BLACK;
-		}
-		else {
-			result = getTileColour(previousMove()).flip();
-		}
-
-		return result;
-	}
 
 	private QuaxTileGroup previousGroup() {
 		return getTile(previousMove).getTileGroup();
@@ -161,15 +148,29 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return false;
 	}
 
-	// TODO - Jamie please
 	public boolean validMove(QuaxCoordinate q) {
 		return validMove(q, currentColourTurn());
 	}
 
+	private QuaxTileColour currentColourTurn() {
+		QuaxTileColour result;
+
+		if (isStartingMove()) {
+			result = QuaxTileColour.BLACK;
+		}
+		else {
+			result = getTileColour(previousMove()).flip();
+		}
+
+		return result;
+	}
+
+
 	public boolean validMove(QuaxTile t) {
 		return validMove(t.getCoordinates());
 	}
-	
+
+
 	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour colour) {
         QuaxTile[][] n = getNeighbours(q);
 
@@ -213,8 +214,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.previousMove = q;
 		this.moveNumber++;
 	}
-	
-	public void makeMove(QuaxCoordinate q) {
+
 	private void makeMove(QuaxCoordinate q) {
 		makeMove(q, currentColourTurn());
 	}
@@ -250,6 +250,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
 			expandGroup(newTile, nearGroups);
 		}
+
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
 			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(MAX_ADJACENT_TILE_GROUPS);
@@ -299,6 +300,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return biggestGroup;
 		}
 
+		// TODO - Output argument?
 		private void mergeNearbyGroups(QuaxTileGroup largest, ArrayList<QuaxTileGroup> adjacentGroups) {
 			for (QuaxTileGroup g : adjacentGroups) {
 				if (g != largest) {
@@ -456,24 +458,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return next().getCoordinates();
 		}
 	}
-	
-	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
-		private final QuaxBoardIterator boardIterator;
-		
-		public QuaxBoardCoordinateIterator() {
-			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return boardIterator.hasNext();
-		}
-		
-		@Override
-		public QuaxCoordinate next() {
-			return boardIterator.nextCoordinate();
-		}
-	}
+
 
 	public static Iterator<QuaxCoordinate> coordinateIterator() {
 		return new QuaxBoardCoordinateIterator();

@@ -86,6 +86,7 @@ public class QuaxController {
         }
     }
 
+
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
         this.quaxBoard = new QuaxBoard();
         setQuaxPlayers(p1, p2);
@@ -187,6 +188,7 @@ public class QuaxController {
     public void hideStrategy() {
         quaxUserInterface.hideStrategy(quaxBoard);
     }
+
 
 
     /*

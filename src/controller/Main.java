@@ -3,6 +3,7 @@ package controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
 /*
  * Launch the game of Quax
  */

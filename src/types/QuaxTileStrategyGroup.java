@@ -5,7 +5,7 @@ import java.util.*;
 
 public class QuaxTileStrategyGroup implements Iterable<QuaxTile> {
 
-    private LinkedList<QuaxTile> strategyMembers;
+    private final LinkedList<QuaxTile> strategyMembers;
 
 
     public QuaxTileStrategyGroup() {

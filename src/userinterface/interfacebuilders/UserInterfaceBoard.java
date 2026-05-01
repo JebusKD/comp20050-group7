@@ -117,11 +117,6 @@ public class UserInterfaceBoard {
         return gridStack;
     }
 
-    private GridPane createBoardCoordinates() {
-        CoordinateBuilder coordBuild = new CoordinateBuilder();
-        return coordBuild.getCoordinateGrid();
-    }
-
     private class GridBuilder {
         private GridPane createOctagonGrid() {
             octagonGridCells = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
@@ -204,6 +199,13 @@ public class UserInterfaceBoard {
             }
         }
     }
+
+
+    private GridPane createBoardCoordinates() {
+        CoordinateBuilder coordBuild = new CoordinateBuilder();
+        return coordBuild.getCoordinateGrid();
+    }
+
 
 
     public StackPane getStackUIBoard() {

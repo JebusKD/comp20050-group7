@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
-	private LinkedList<QuaxTile> groupMembers;
+	private final LinkedList<QuaxTile> groupMembers;
 	private boolean onColumnA_Row1;
 	private boolean onColumnK_Row11;
 

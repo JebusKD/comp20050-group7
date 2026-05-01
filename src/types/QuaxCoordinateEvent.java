@@ -1,14 +1,13 @@
 package types;
 
-import javafx.event.Event;
-import javafx.event.EventType;
+import javafx.event.*;
 
 
 public class QuaxCoordinateEvent extends Event {
 
     public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 
-    private QuaxCoordinate coordinate;
+    private final QuaxCoordinate coordinate;
 
 
     public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
