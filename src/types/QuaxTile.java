@@ -3,7 +3,8 @@ package types;
 
 public abstract class QuaxTile {
 	
-	public static final QuaxTile OUT_OF_BOUNDS_TILE = new OutOfBoundsTile();
+	public static final QuaxTile OUT_OF_BOUNDS_TILE = new PlaceholderTile("out-of-bounds");
+	public static final QuaxTile HIDDEN_TILE = new PlaceholderTile("hidden");
 
 	private QuaxTileColour tileColour;
 	private QuaxTileGroup tileGroup;
@@ -94,70 +95,73 @@ public abstract class QuaxTile {
 		return getTileColour() == c.flip();
 	}
 	
-	public final boolean isOutOfBounds() {
-		return this == OUT_OF_BOUNDS_TILE;
+	public final boolean tileExists() {
+		return !(this instanceof PlaceholderTile);
 	}
 	
-	public final boolean isInBounds() {
-		return !isOutOfBounds();
-	}
-	
-	private static class OutOfBoundsTile extends QuaxTile {
-		private OutOfBoundsTile() {
+	private static class PlaceholderTile extends QuaxTile {
+		private final String type;
+		
+		private PlaceholderTile(String type) {
 			super();
+			this.type = type;
+		}
+		
+		private UnsupportedOperationException placeholderUsedException() {
+			return new UnsupportedOperationException("Cannot be invoked on " + type + " tile.");
 		}
 
 		@Override
 		public QuaxTileColour getTileColour() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public QuaxTileGroup getTileGroup() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public int getStrategyValue() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public void setTileColour(QuaxTileColour colour) {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public void setTileGroup(QuaxTileGroup tileGroup) {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public void setStrategyValue(int value) {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public QuaxCoordinate getCoordinates() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isFree() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isOccupied() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isBlack() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isWhite() {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isSameColour(QuaxTileColour c) {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		@Override
 		public boolean isOpponentColour(QuaxTileColour c) {
-			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+			throw placeholderUsedException();
 		}
 		
 	}

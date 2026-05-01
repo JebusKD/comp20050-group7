@@ -183,7 +183,7 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
-                    if (neighbour.isInBounds() && isValidStrategicMove(neighbour, b, getPlayerColour())) {
+                    if (neighbour.tileExists() && isValidStrategicMove(neighbour, b, getPlayerColour())) {
                         if (neighbour.getStrategyValue() <= 2) {
                             neighbour.setStrategyValue(2);
                         }

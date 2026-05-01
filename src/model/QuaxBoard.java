@@ -261,7 +261,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (tile.isInBounds() && isOwnedTile(tile, c) &&	tileNotMemberOfGroup(nearbyGroups, tile)) {
+					if (tile.tileExists() && isOwnedTile(tile, c) &&
+							tileNotMemberOfGroup(nearbyGroups, tile)) {
 						nearbyGroups.add(tile.getTileGroup());
 					}
 				}
@@ -317,7 +318,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	// TODO Is NeighbourFinder a static class?
-	// TODO Neighbours[1][1] for octagon is still null.
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
 		NeighbourFinder nf = new NeighbourFinder();
@@ -341,7 +341,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		LinkedList<QuaxTile> result = new LinkedList<>();
 		for (QuaxTile[] arr : getNeighbours(t)) {
 			for (QuaxTile n : arr) {
-				if (n != null) {
+				if (n.tileExists()) {
 					result.add(n);
 				}
 			}
@@ -353,22 +353,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	 * Handle searching for neighbours
 	 */
 	private class NeighbourFinder {
-		
-		private static QuaxTile[][] createEmptyOctagonNeighboursArray() {
-			return new QuaxTile[][] {
-				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
-				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
-				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE} };
-		}
-		
-		private static QuaxTile[][] createEmptyRhombusNeighboursArray() {
-			return new QuaxTile[][] {
-				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
-				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE} };
-		}
 
 		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
-			QuaxTile[][] neighbours = createEmptyRhombusNeighboursArray();
+			QuaxTile[][] neighbours = new QuaxTile[2][2];
 
 			neighbours[0][0] = getOctagon(qc.x(), qc.y());
 			neighbours[0][1] = getOctagon(qc.x(), qc.y() + 1);
@@ -380,7 +367,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 		private QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc) {
-			QuaxTile[][] neighbours = createEmptyOctagonNeighboursArray();
+			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
 			neighbours[0] = getLeftNeighbours(qc);
 			neighbours[1] = getVerticalNeighbours(qc);
@@ -391,7 +378,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		private QuaxTile[] getLeftNeighbours(QuaxCoordinate coordinate) {
 			int minusX = coordinate.x() - 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
-			QuaxTile[] adjTiles = new QuaxTile[3];
+			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (minusX >= 0) {
 				if (minusY >= 0) {
@@ -410,7 +397,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		private QuaxTile[] getRightNeighbours(QuaxCoordinate coordinate) {
 			int plusX = coordinate.x() + 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
-			QuaxTile[] adjTiles = new QuaxTile[3];
+			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (plusX <= MAX_RHOMBUSES) {
 				if (minusY >= 0) {
@@ -429,7 +416,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		private QuaxTile[] getVerticalNeighbours(QuaxCoordinate coordinate) {
 			int minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
-			QuaxTile[] adjTiles = new QuaxTile[3];
+			QuaxTile[] adjTiles = createOutOfBoundsRowWithHiddenCenter();
 
 			if (minusY >= 0) {
 				adjTiles[0] = octagonGrid[coordinate.x()][minusY];
@@ -440,6 +427,18 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			}
 
 			return adjTiles;
+		}
+		
+		private QuaxTile[] createOutOfBoundsRow() {
+			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
+									QuaxTile.OUT_OF_BOUNDS_TILE,
+									QuaxTile.OUT_OF_BOUNDS_TILE };
+		}
+		
+		private QuaxTile[] createOutOfBoundsRowWithHiddenCenter() {
+			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
+									QuaxTile.HIDDEN_TILE,
+									QuaxTile.OUT_OF_BOUNDS_TILE };
 		}
 	}
 

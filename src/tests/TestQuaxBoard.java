@@ -168,7 +168,7 @@ class TestQuaxBoard {
 		/*
 		  		oob  | oob  | null
 		  		-----+------+-----
-		  		oob  | null | tile
+		  		oob  | hide | tile
 		  		-----+------+-----
 		  		oob  | oob  | tile
 		 */
@@ -177,7 +177,7 @@ class TestQuaxBoard {
 		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][1]);
 		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][2]);
 		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][0]);
-		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][1]);
+		assertEquals(QuaxTile.HIDDEN_TILE, neighbours[1][1]);
 		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][2]);
 		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[2][0]);
 		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[2][1]);
