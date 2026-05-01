@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import types.QuaxTileColour;
+import userinterface.SimpleStyleable;
+
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
@@ -56,13 +58,13 @@ public class PlayerTurnIndicator {
     }
 
 
-    private interface TurnIndicatorShape extends Styleable {
+    private interface TurnIndicatorShape extends SimpleStyleable {
         default void setTurnTileColour(QuaxTileColour colour) {
             assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
 
-            this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
+            this.removeAllStyleClasses(QuaxTileColour.BLACK.tilecolourStyle(),
                                             QuaxTileColour.WHITE.tilecolourStyle());
-            this.getStyleClass().add(colour.tilecolourStyle());
+            this.addStyleClass(colour.tilecolourStyle());
         }
     }
 
@@ -76,7 +78,7 @@ public class PlayerTurnIndicator {
         public OctagonTurnIndicator(double width) {
             super(width);
             this.setId("Octagon-object"); // TODO Change this ID - also needs to be done in UI test
-            this.getStyleClass().add("turn-indicator-shape");
+            this.addStyleClass("turn-indicator-shape");
             this.setTurnTileColour(QuaxTileColour.BLACK);
         }
     }
@@ -87,15 +89,16 @@ public class PlayerTurnIndicator {
         public RhombusTurnIndicator() {
             super();
             this.setId("Rhombus-object"); // TODO Change this ID - also needs to be done in UI test
-            this.getStyleClass().add("turn-indicator-shape");
+            this.addStyleClass("turn-indicator-shape");
+            this.setTurnTileColour(QuaxTileColour.BLACK);
         }
     }
 
 
-    private static class TurnText extends Label {
+    private static class TurnText extends Label implements SimpleStyleable {
         public TurnText() {
             super();
-            this.getStyleClass().add("turn-label");
+            this.addStyleClass("turn-label");
             this.setId("Turn-text");
         }
 
