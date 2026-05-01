@@ -97,6 +97,13 @@ public abstract class QuaxTile {
 		return !(this instanceof PlaceholderTile);
 	}
 	
+	/* Placeholder tiles are used where a tile either exceeds
+	 * the bounds of the board (OUT_OF_BOUNDS_TILE) or where
+	 * code wishes to intentionally hide a tile from
+	 * sight (HIDDEN_TILE). Both of which replace
+	 * what else had to have been "null" references
+	 * in code for QuaxBoard.neighbours and related methods.
+	 */
 	private static class PlaceholderTile extends QuaxTile {
 		private final String type;
 		
