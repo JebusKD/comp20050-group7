@@ -76,7 +76,7 @@ public class PlayerTurnIndicator {
 
         public OctagonTurnIndicator(double width) {
             super(width);
-            this.setId("Octagon-object"); // TODO Change this ID - also needs to be done in UI test
+            this.setId("Octagon-Turn-Indicator");
             this.getStyleClass().add("turn-indicator-shape");
             this.setTurnTileColour(QuaxTileColour.BLACK);
         }
@@ -87,7 +87,7 @@ public class PlayerTurnIndicator {
 
         public RhombusTurnIndicator() {
             super();
-            this.setId("Rhombus-object"); // TODO Change this ID - also needs to be done in UI test
+            this.setId("Rhombus-Turn-Indicator");
             this.getStyleClass().add("turn-indicator-shape");
             this.setTurnTileColour(QuaxTileColour.BLACK);
         }
