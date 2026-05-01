@@ -43,7 +43,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		return distanceToLowWall() + distanceToHighWall();
 	}
 
-	/* //TODO - How about this?
+	/*
 	 * Calculate the minimum distance of the given tile group to  the edges of the board,
 	 * 	so the bot may find a more optimal tile to progress
 	 */

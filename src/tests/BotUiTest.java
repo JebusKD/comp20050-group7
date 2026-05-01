@@ -53,7 +53,7 @@ public class BotUiTest {
     //https://testfx.github.io/TestFX/docs/javadoc/testfx-core/javadoc/org.testfx/org/testfx/util/WaitForAsyncUtils.html
 
     @Test
-    public void BotAlwaysMakesMove(FxRobot robot){
+    public void BotAlwaysMakesMove(FxRobot robot) {
     	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     	WaitForAsyncUtils.waitForFxEvents();
     	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first

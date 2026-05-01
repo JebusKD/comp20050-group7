@@ -3,7 +3,6 @@ package userinterface.interfacebuilders;
 import java.util.Iterator;
 import javafx.css.Styleable;
 import javafx.event.EventHandler;
-import javafx.geometry.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -25,7 +24,7 @@ public class UserInterfaceBoard {
     public UserInterfaceBoard() {
         BackgroundBoardBuilder bgBuilder = new BackgroundBoardBuilder();
 
-        this.stackUIBoard = new StackPane(bgBuilder.createBoard());
+        this.stackUIBoard = new StackPane(bgBuilder.initialiseBoard());
         this.octagonGridCells = bgBuilder.getOctagonTileGrid();
         this.rhombusGridCells = bgBuilder.getRhombusTileGrid();
     }

@@ -50,7 +50,7 @@ public class QuaxUITest {
     @Test
     void WinningMove(FxRobot robot){
 
-        for(int i = 0 ; i < 10 ; i++){
+        for(int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
         }
@@ -146,7 +146,7 @@ public class QuaxUITest {
 
     @Test
     void WinLabelIsDisplayedBlack(FxRobot robot){
-        for(int i = 0; i < 10;i++){
+        for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
         }
@@ -159,7 +159,7 @@ public class QuaxUITest {
     @Test
     void WinLabelIsDisplayedWhite(FxRobot robot){
     	robot.clickOn("#octagon8-0"); // Waste Black's first move
-        for(int i = 0; i < 10;i++){
+        for(int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon" + i + "-3");
             robot.clickOn("#octagon" + i + "-6");
         }
@@ -173,7 +173,7 @@ public class QuaxUITest {
     void WinLabelIsDisplayed(FxRobot robot){
         QuaxBoard board = controller.getQuaxBoard();
 
-        for(int i = 0; i < 10;i++){
+        for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
         }
@@ -187,9 +187,8 @@ public class QuaxUITest {
     void ShowTitleExists(FxRobot robot){assertNotNull(robot.lookup("#Title").query());}
 
     @Test
-    void  ShowTitleTextCorrect(FxRobot robot){
+    void ShowTitleTextCorrect(FxRobot robot){
         Label title = robot.lookup("#Title").queryAs(Label.class);
         assertEquals("Quax (Human V Bot)",title.getText());
     }
-
 }

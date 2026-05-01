@@ -1,14 +1,13 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.QuaxBoard;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
+import static types.QuaxCoordinate.*;
+import types.*;
+
 
 class TestQuaxBoard {
 
@@ -21,62 +20,62 @@ class TestQuaxBoard {
 	
 	@Test
 	void testMakeMove1() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(4, 7), QuaxTileColour.BLACK);
+		board.makeMove(newOctagonCoordinate(4, 7), QuaxTileColour.BLACK);
 		
-		assertEquals(board.getTile(QuaxCoordinate.newOctagonCoordinate(4, 7)).getTileColour(), QuaxTileColour.BLACK);
+		assertEquals(board.getTile(newOctagonCoordinate(4, 7)).getTileColour(), QuaxTileColour.BLACK);
 	}
 	
 	@Test
 	void testMakeMove2() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
 		
-		assertEquals(board.getTile(QuaxCoordinate.newOctagonCoordinate(2, 3)).getTileColour(), QuaxTileColour.WHITE);
+		assertEquals(board.getTile(newOctagonCoordinate(2, 3)).getTileColour(), QuaxTileColour.WHITE);
 	}
 	
 	@Test
 	void testOccupiedTile1() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.BLACK));
+		assertFalse(board.validMove(newOctagonCoordinate(2, 3), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile2() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2,3), QuaxTileColour.WHITE);
+		board.makeMove(newOctagonCoordinate(2,3), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.WHITE));
+		assertFalse(board.validMove(newOctagonCoordinate(2, 3), QuaxTileColour.WHITE));
 	}
 	
 	@Test
 	void testOccupiedTile3() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(3, 4), QuaxTileColour.WHITE);
-		board.makeMove(QuaxCoordinate.newRhombusCoordinate(2, 3), QuaxTileColour.WHITE);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.WHITE);
+		board.makeMove(newOctagonCoordinate(3, 4), QuaxTileColour.WHITE);
+		board.makeMove(newRhombusCoordinate(2, 3), QuaxTileColour.WHITE);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newRhombusCoordinate(2, 3), QuaxTileColour.BLACK));
+		assertFalse(board.validMove(newRhombusCoordinate(2, 3), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile4() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.BLACK));
+		assertFalse(board.validMove(newOctagonCoordinate(2, 3), QuaxTileColour.BLACK));
 	}
 	
 	@Test
 	void testOccupiedTile5() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.WHITE));
+		assertFalse(board.validMove(newOctagonCoordinate(2, 3), QuaxTileColour.WHITE));
 	}
 	
 	@Test
 	void testOccupiedTile6() {
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
-		board.makeMove(QuaxCoordinate.newOctagonCoordinate(3, 4), QuaxTileColour.BLACK);
-		board.makeMove(QuaxCoordinate.newRhombusCoordinate(2, 3), QuaxTileColour.BLACK);
+		board.makeMove(newOctagonCoordinate(2, 3), QuaxTileColour.BLACK);
+		board.makeMove(newOctagonCoordinate(3, 4), QuaxTileColour.BLACK);
+		board.makeMove(newRhombusCoordinate(2, 3), QuaxTileColour.BLACK);
 		
-		assertFalse(board.validMove(QuaxCoordinate.newRhombusCoordinate(2, 3), QuaxTileColour.BLACK));
+		assertFalse(board.validMove(newRhombusCoordinate(2, 3), QuaxTileColour.BLACK));
 	}
 
 	@Test
@@ -124,7 +123,7 @@ class TestQuaxBoard {
 	// Checks if a correctly-sized array is created for octagon's neighbours.
 	@Test
 	void testNeighboursArraySize1() {
-		QuaxTile[][] neighbours = board.getNeighbours(QuaxCoordinate.newOctagonCoordinate(5, 5));
+		QuaxTile[][] neighbours = board.getNeighbours(newOctagonCoordinate(5, 5));
 		assertEquals(3, neighbours.length);
 		assertEquals(3, neighbours[0].length);
 		assertEquals(3, neighbours[1].length);

@@ -87,10 +87,10 @@ public class QuaxUserInterface implements UserInterface {
         sideBar.getStyleClass().add("vbox");
 
 
-        this.interfaceScene = new Scene(initialiseOuterGrid(sideBar));
+        this.interfaceScene = new Scene(createOuterGrid(sideBar));
     }
 
-    private GridPane initialiseOuterGrid(VBox extrasBar) {
+    private GridPane createOuterGrid(VBox extrasBar) {
         GridPane outer = new GridPane();
 
         outer.add(quaxUIWindow.createTitle(),0,0);

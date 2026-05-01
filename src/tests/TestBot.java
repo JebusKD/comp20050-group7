@@ -67,6 +67,7 @@ public class TestBot {
 		assertEquals(3, controller.getMoveNumber());
 	}
 
+	// NOTE: This may take a little longer (~3 seconds)
 	@Test
 	void testBotVersusBot() {
 		BotPlayer b1 = new BotPlayer();

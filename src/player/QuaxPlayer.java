@@ -46,13 +46,13 @@ public abstract class QuaxPlayer {
     }
 
 
-    public abstract void movePrompt(QuaxBoard b);
+    public abstract void movePrompt(QuaxBoard board);
 
     protected void submitMove(QuaxCoordinate move) {
     	getSubmitter().execute(new Runnable() {
 			@Override
 			public void run() {
-				playerController.tryMove(move);
+				playerController.attemptMove(move);
 			}
 		});
 	}

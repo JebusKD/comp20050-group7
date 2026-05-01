@@ -39,8 +39,8 @@ public class BotPlayer extends QuaxPlayer {
       with a certain strategy value. If there is a tie, chooses
       one move at random of the group.
      */
-	private QuaxCoordinate decideMove(QuaxBoard b) {
-        LinkedList<QuaxTile> choice = selectStrategyGroup(b.getMoveNumber());
+	private QuaxCoordinate decideMove(QuaxBoard board) {
+        LinkedList<QuaxTile> choice = selectStrategyGroup(board.getMoveNumber());
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
 
@@ -138,19 +138,19 @@ public class BotPlayer extends QuaxPlayer {
 
 
     // how the bot decides strategy vals for the tiles
-    private void setUpStrategy(QuaxBoard b) {
+    private void setUpStrategy(QuaxBoard board) {
         clearAllStrategyGroups();
-        sb.initialiseStrategy(b);
-        sb.postStrategy(b);
+        sb.initialiseStrategy(board);
+        sb.postStrategy(board);
     }
 
 
     private class StrategyBuilder {
 
-        private void initialiseAllStrategyGroups(QuaxBoard b) {
-            for (QuaxTile t : b) {
+        private void initialiseAllStrategyGroups(QuaxBoard board) {
+            for (QuaxTile t : board) {
                 t.setStrategyValue(0);
-                if (isValidStrategicMove(t, b, getPlayerColour())) {
+                if (isValidStrategicMove(t, board, getPlayerColour())) {
                     assignStrategyValue(t, 1);
                 }
             }
@@ -181,13 +181,13 @@ public class BotPlayer extends QuaxPlayer {
         }
 
 
-        private void setOctagonStrategyValues(QuaxTile t, QuaxBoard b) {
-            QuaxTile[][] neighbours = b.getNeighbours(t.getCoordinates());
+        private void setOctagonStrategyValues(QuaxTile t, QuaxBoard board) {
+            QuaxTile[][] neighbours = board.getNeighbours(t.getCoordinates());
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
                     // If tile is adjacent to an already owned one, it has a base strategy value of 2
-                    if (neighbour.tileExists() && isValidStrategicMove(neighbour, b, getPlayerColour())) {
+                    if (neighbour.tileExists() && isValidStrategicMove(neighbour, board, getPlayerColour())) {
                         if (neighbour.getStrategyValue() <= 2) {
                             neighbour.setStrategyValue(2);
                         }
@@ -235,14 +235,14 @@ public class BotPlayer extends QuaxPlayer {
         }
 
 
-        private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
-        	if (isLowPriorityRhombus(t, b)) {
+        private void setRhombusStrategyValue(QuaxTile t, QuaxBoard board) {
+        	if (isLowPriorityRhombus(t, board)) {
         		assignStrategyValue(t, 0);
         	}
             else {
                 // If not a low-priority rhombus, the human player can place the rhombus as well,
                 //      so assign it the second-highest priority, to block it
-	            if (isValidStrategicMove(t, b, getPlayerColour().flip())){
+	            if (isValidStrategicMove(t, board, getPlayerColour().flip())) {
 	                assignStrategyValue(t, 5);
 	            }
         	}
@@ -290,6 +290,11 @@ public class BotPlayer extends QuaxPlayer {
         	if (t.getStrategyValue() < value) {
         		assignStrategyValue(t, value);
         	}
+        }
+
+        private void assignStrategyValue(QuaxTile t, int value) {
+            t.setStrategyValue(value);
+            assignTileToStrategyGroup(t);
         }
 
         private boolean checkForWin(QuaxCoordinate coord, QuaxBoard b, QuaxTileColour colour) {
@@ -434,14 +439,6 @@ public class BotPlayer extends QuaxPlayer {
         		}
         	}
         }
-
-
-        private void assignStrategyValue(QuaxTile t, int value) {
-            t.setStrategyValue(value);
-            assignTileToStrategyGroup(t);
-        }
-
-        // TODO - May have deleted assignSVifLess() !!!
     }
 
 
@@ -456,12 +453,12 @@ public class BotPlayer extends QuaxPlayer {
 
 
 	@Override
-	public void movePrompt(QuaxBoard b) {
+	public void movePrompt(QuaxBoard board) {
         long startThinkingTime = System.currentTimeMillis();
 		
         this.getExecutor().execute(() -> {
-            setUpStrategy(b);
-        	QuaxCoordinate move = decideMove(b);
+            setUpStrategy(board);
+        	QuaxCoordinate move = decideMove(board);
         	
         	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME) {
                 ;

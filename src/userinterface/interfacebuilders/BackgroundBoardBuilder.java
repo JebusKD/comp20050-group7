@@ -17,12 +17,11 @@ class BackgroundBoardBuilder {
     private static final double FRONT_HOURGLASS_GAP = 5.7;
     private static final double BACK_HOURGLASS_GAP = 11.4;
 
-    // TODO - Is this the best way of doing this?
     private OctagonTile[][] buildingOctagonGrid;
     private RhombusTile[][] buildingRhombusGrid;
 
 
-    public StackPane createBoard() {
+    public StackPane initialiseBoard() {
         StackPane board = new StackPane(
                 createGradientBackground(),
                 createBehindHourglass(),
@@ -90,22 +89,19 @@ class BackgroundBoardBuilder {
 
     private GridPane createBoardCoordinates() {
         CoordinateBuilder coordBuild = new CoordinateBuilder();
-        return coordBuild.getCoordinateGrid();
+        return coordBuild.createCoordinateGrid();
     }
 
-    private class CoordinateBuilder {
+    private static class CoordinateBuilder {
 
         private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
 
-        private final GridPane coordinateGrid;
+        private GridPane coordinateGrid;
 
 
-        private CoordinateBuilder() {
+        private GridPane createCoordinateGrid() {
             coordinateGrid = new GridPane();
             createBoardCoordinates();
-        }
-
-        private GridPane getCoordinateGrid() {
             return coordinateGrid;
         }
 
@@ -121,17 +117,16 @@ class BackgroundBoardBuilder {
 
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints
-                                ((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
+                                            ((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
 
             this.coordinateGrid.getRowConstraints().add(new RowConstraints());
-            this.coordinateGrid.getRowConstraints().add(new RowConstraints(
-                                (MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
+            this.coordinateGrid.getRowConstraints().add(new RowConstraints
+                                            ((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
             this.coordinateGrid.getRowConstraints().add(new RowConstraints());
         }
 
 
-        // TODO - Can this be split up, do you think?
         private void setTopBottomCoordinateGrid() {
             GridPane top = new GridPane();
             GridPane bottom = new GridPane();
@@ -144,7 +139,7 @@ class BackgroundBoardBuilder {
             bottom.setHgap(OCTAGON_GRID_GAP);
             bottom.setAlignment(Pos.CENTER);
 
-            for (int i = 0; i < MAX_OCTAGONS; i++){
+            for (int i = 0; i < MAX_OCTAGONS; i++) {
                 top.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
                 bottom.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
 
@@ -180,7 +175,7 @@ class BackgroundBoardBuilder {
             right.setVgap(OCTAGON_GRID_GAP);
             right.setAlignment(Pos.CENTER);
 
-            for (int j = 0 ; j < MAX_OCTAGONS; j++){
+            for (int j = 0 ; j < MAX_OCTAGONS; j++) {
                 left.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
                 right.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
 
@@ -234,7 +229,6 @@ class BackgroundBoardBuilder {
             return octagonGrid;
         }
 
-        // TODO - Can this be split?
         private void initialiseOctagonGridRowColumns() {
             for (int i = 0; i < MAX_OCTAGONS ; i++) {
                 ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);

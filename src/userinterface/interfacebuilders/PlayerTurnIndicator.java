@@ -20,12 +20,12 @@ public class PlayerTurnIndicator {
 
 
     public PlayerTurnIndicator() {
-        this.turnTrackerBox = createTurnTracker();
+        this.turnTrackerBox = initialiseTurnTracker();
         this.setIndicatorColour(QuaxTileColour.BLACK);
     }
 
 
-    private HBox createTurnTracker() {
+    private HBox initialiseTurnTracker() {
         HBox box = new HBox(HBOX_SPACING);
         createComponents();
 
