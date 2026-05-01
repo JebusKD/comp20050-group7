@@ -1,21 +1,27 @@
 package types;
 
+import model.QuaxBoard;
 
 public class QuaxCoordinate {
 
 	private final int x;
 	private final int y;
-	private final boolean octagonMove;
+	private final boolean isOctagon;
 
-
-	// TODO Flag argument, see clean code "Error Handling"
-	// Change this constructor to private and construct via static methods
-	public QuaxCoordinate(int x, int y, boolean octagonMove) {
+	private QuaxCoordinate(int x, int y, boolean isOctagon) {
+		// TODO Error check are coordinates valid.
 		this.x = x;
 		this.y = y;
-		this.octagonMove = octagonMove;
+		this.isOctagon = isOctagon;
 	}
 
+	public static QuaxCoordinate newOctagonCoordinate(int x, int y) {
+		return new QuaxCoordinate(x, y, true);
+	}
+	
+	public static QuaxCoordinate newRhombusCoordinate(int x, int y) {
+		return new QuaxCoordinate(x, y, false);
+	}
 
 	public int x() {
 		return this.x;
@@ -26,10 +32,10 @@ public class QuaxCoordinate {
 	}
 	
 	public boolean isOctagon() {
-		return octagonMove;
+		return isOctagon;
 	}
 	
 	public boolean isRhombus() {
-		return !octagonMove;
+		return !isOctagon();
 	}
 }

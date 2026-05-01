@@ -55,6 +55,6 @@ public class TestQuaxBoardIteration {
 		for (QuaxTile t : b) {
 			t.setStrategyValue(21);
 		}
-		assertEquals(21, b.getTile(new QuaxCoordinate(1, 9, true)).getStrategyValue());
+		assertEquals(21, b.getTile(QuaxCoordinate.newOctagonCoordinate(1, 9)).getStrategyValue());
 	}
 }

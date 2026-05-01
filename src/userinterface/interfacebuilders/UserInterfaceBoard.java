@@ -141,7 +141,7 @@ public class UserInterfaceBoard {
         private void initialiseOctagonGridCells(GridPane oGrid) {
             for (int i = 0; i < MAX_OCTAGONS ; i++) {
                 for (int j = 0; j < MAX_OCTAGONS ; j++) {
-                    OctagonTile newTile = new OctagonTile(new QuaxCoordinate(i, j, true));
+                    OctagonTile newTile = new OctagonTile(QuaxCoordinate.newOctagonCoordinate(i, j));
                     newTile.setId("octagon" + i + "-" + j);
                     octagonGridCells[i][j] = newTile;
                     oGrid.add(newTile, i, j);
@@ -190,7 +190,7 @@ public class UserInterfaceBoard {
         private void initialiseRhombusGridCells(GridPane rGrid) {
             for (int i = 0; i < MAX_RHOMBUSES; i++) {
                 for (int j = 0; j < MAX_RHOMBUSES; j++) {
-                    RhombusTile newTile = new RhombusTile(new QuaxCoordinate(i, j, false));
+                    RhombusTile newTile = new RhombusTile(QuaxCoordinate.newRhombusCoordinate(i, j));
                     newTile.setId("rhombus" + i + "-" + j);
                     rhombusGridCells[i][j] = newTile;
                     rGrid.add(newTile, i, j);

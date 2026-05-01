@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import controller.QuaxController;
@@ -11,6 +12,11 @@ import types.QuaxTile;
 import types.QuaxTileColour;
 
 public class TestBot {
+	
+	@BeforeAll
+	static void setup() {
+		BotPlayer.enableHaste();
+	}
 	
 	@Test
 	void testBot1() {
@@ -61,8 +67,6 @@ public class TestBot {
 		assertEquals(3, controller.getMoveNumber());
 	}
 
-	// TODO: NOTE - May take a few minutes
-	/*
 	@Test
 	void testBotVersusBot() {
 		BotPlayer b1 = new BotPlayer();
@@ -77,5 +81,4 @@ public class TestBot {
 		// Check to see did the bots complete the game
 		assertTrue(controller.getQuaxBoard().checkForWinningMove());
 	}
-	*/
 }
