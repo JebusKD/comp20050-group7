@@ -1,6 +1,7 @@
 package userinterface.interfacebuilders;
 
 import javafx.scene.shape.Polygon;
+
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 

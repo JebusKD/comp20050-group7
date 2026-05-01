@@ -67,145 +67,65 @@ class TestOctagon {
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(7, q.y());
 	}
-// TODO replace with tests for DistanceFromWalls
-	@Disabled
+
+
 	@Test
-	void testOnLow1() {
-		QuaxTile t = new Octagon(3, 10);
+	void testDistanceToLowWall1() {
+		Octagon t = new Octagon(3, 10);
 		t.setTileColour(QuaxTileColour.BLACK);
-		assertTrue(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow2() {
-		QuaxTile t = new Octagon(3, 10);
-		t.setTileColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow3() {
-		QuaxTile t = new Octagon(3, 10);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow4() {
-		QuaxTile t = new Octagon(0, 4);
-		t.setTileColour(QuaxTileColour.BLACK);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow5() {
-		QuaxTile t = new Octagon(0, 4);
-		t.setTileColour(QuaxTileColour.WHITE);
-		assertTrue(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow6() {
-		QuaxTile t = new Octagon(0, 4);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow7() {
-		QuaxTile t = new Octagon(4, 6);
-		t.setTileColour(QuaxTileColour.BLACK);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow8() {
-		QuaxTile t = new Octagon(4, 6);
-		t.setTileColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
-	}
-	
-	@Disabled
-	@Test
-	void testOnLow9() {
-		QuaxTile t = new Octagon(4, 6);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
+		assertEquals(10, t.distanceToLowWall());
 	}
 
-	@Disabled
 	@Test
-	void testOnHigh1() {
-		QuaxTile t = new Octagon(3, 0);
+	void testDistanceToLowWall2() {
+		Octagon t = new Octagon(6, 2);
 		t.setTileColour(QuaxTileColour.BLACK);
-		assertTrue(t.onHigh());
+		assertEquals(2, t.distanceToLowWall());
 	}
-	
-	@Disabled
+
 	@Test
-	void testOnHigh2() {
-		QuaxTile t = new Octagon(3, 0);
+	void testDistanceToLowWall3() {
+		Octagon t = new Octagon(3, 10);
 		t.setTileColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
+		assertEquals(3, t.distanceToLowWall());
 	}
-	
-	@Disabled
+
 	@Test
-	void testOnHigh3() {
-		QuaxTile t = new Octagon(3, 0);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
+	void testDistanceToLowWall4() {
+		Octagon t = new Octagon(6, 2);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertEquals(6, t.distanceToLowWall());
 	}
-	@Disabled
+
 	@Test
-	void testOnHigh4() {
-		QuaxTile t = new Octagon(10, 4);
+	void testDistanceToHighWall1() {
+		Octagon t = new Octagon(3, 10);
 		t.setTileColour(QuaxTileColour.BLACK);
-		assertFalse(t.onHigh());
+		assertEquals(0, t.distanceToHighWall());
 	}
-	@Disabled
+
 	@Test
-	void testOnHigh5() {
-		QuaxTile t = new Octagon(10, 4);
-		t.setTileColour(QuaxTileColour.WHITE);
-		assertTrue(t.onHigh());
-	}
-	@Disabled
-	@Test
-	void testOnHigh6() {
-		QuaxTile t = new Octagon(10, 4);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
-	}
-	@Disabled
-	@Test
-	void testOnHigh7() {
-		QuaxTile t = new Octagon(4, 6);
+	void testDistanceToHighWall2() {
+		Octagon t = new Octagon(6, 2);
 		t.setTileColour(QuaxTileColour.BLACK);
-		assertFalse(t.onHigh());
+		assertEquals(8, t.distanceToHighWall());
 	}
-	@Disabled
+
 	@Test
-	void testOnHigh8() {
-		QuaxTile t = new Octagon(4, 6);
+	void testDistanceToHighWall3() {
+		Octagon t = new Octagon(3, 10);
 		t.setTileColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
+		assertEquals(7, t.distanceToHighWall());
 	}
-	@Disabled
+
 	@Test
-	void testOnHigh9() {
-		QuaxTile t = new Octagon(4, 6);
-		t.setTileColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
+	void testDistanceToHighWall4() {
+		Octagon t = new Octagon(6, 2);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertEquals(4, t.distanceToHighWall());
 	}
-	
+
+
 	@Test
 	void testIsFree1() {
 		QuaxTile t = new Octagon(5, 5);
@@ -253,7 +173,6 @@ class TestOctagon {
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.isBlack());
 	}
-
 
 	@Test
 	void testIsBlack4() {

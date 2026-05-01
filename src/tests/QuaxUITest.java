@@ -81,13 +81,13 @@ public class QuaxUITest {
 
     @Test
     void OctagonObjectDisplayExists(FxRobot robot){
-        Node turnOct = robot.lookup("#Octagon-object").query();
+        Node turnOct = robot.lookup("#Octagon-Turn-Indicator").query();
         assertTrue(turnOct.isVisible());
     }
 
     @Test
     void RhombusObjectDisplayExists(FxRobot robot){
-        Node turnRhombus = robot.lookup("#Rhombus-object").query();
+        Node turnRhombus = robot.lookup("#Rhombus-Turn-Indicator").query();
         assertTrue(turnRhombus.isVisible());
     }
 

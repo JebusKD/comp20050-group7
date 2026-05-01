@@ -1,5 +1,6 @@
 package userinterface.interfacebuilders;
 
+import java.util.Iterator;
 import javafx.css.Styleable;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -9,8 +10,6 @@ import javafx.scene.layout.*;
 import model.QuaxBoard;
 import types.*;
 import userinterface.QuaxUserInterface;
-
-import java.util.Iterator;
 
 
 public class UserInterfaceBoard {

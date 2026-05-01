@@ -2,6 +2,7 @@ package types;
 
 import java.util.*;
 
+
 // TODO Consider deleting this class, replacing instances with Linked Lists.
 public class QuaxTileStrategyGroup extends LinkedList<QuaxTile> {
 	// Required by list interface
