@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import types.QuaxTileColour;
-
 import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
 
 
@@ -58,6 +57,7 @@ public class PlayerTurnIndicator {
 
 
     private interface TurnIndicatorShape extends Styleable {
+
         default void setTurnTileColour(QuaxTileColour colour) {
             assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
 

@@ -80,12 +80,14 @@ public abstract class QuaxTile {
 		assert c == QuaxTileColour.BLACK || c == QuaxTileColour.WHITE;
 		return getTileColour() == c;
 	}
-	
+
+	// TODO - Will this be used?
 	public boolean isOpponentColour(QuaxTileColour c) {
 		assert c != QuaxTileColour.NONE;
 		return getTileColour() == c.flip();
 	}
 
+	// TODO - Move to Octagon only?
 	/*
 	 * Check if the tile is on
 	 * 	 the bottom or left (if BLACK or WHITE)

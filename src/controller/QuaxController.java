@@ -37,7 +37,7 @@ public class QuaxController {
         startGame(p1, p2);
     }
 
-    // Testing constructors
+    // Testing constructors - TODO, literally not anymore, outdated comment
     public QuaxController(Stage stage) {
         this(stage, true, false);
     }

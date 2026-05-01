@@ -124,6 +124,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+
 	/* Move validation checks */
 	public boolean checkForWinningMove() {
 		// Cannot win on first move
@@ -333,7 +334,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public List<QuaxTile> getNeighboursList(QuaxTile t) {
-		LinkedList<QuaxTile> result = new LinkedList<QuaxTile>();
+		LinkedList<QuaxTile> result = new LinkedList<>();
 		for (QuaxTile[] arr : getNeighbours(t)) {
 			for (QuaxTile n : arr) {
 				if (n != null) {
