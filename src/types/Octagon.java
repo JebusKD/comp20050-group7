@@ -1,5 +1,6 @@
 package types;
 
+import model.QuaxBoard;
 
 /*
  * Represent the Octagon tiles on the board
@@ -26,7 +27,7 @@ public class Octagon extends QuaxTile {
             return false;
         }
 
-		return (xPosition == 0 && isWhite()) || (yPosition == 10 && isBlack());
+		return distanceToLowWall() == 0;
 	}
 
 	@Override
@@ -35,6 +36,26 @@ public class Octagon extends QuaxTile {
             return false;
         }
 
-		return (xPosition == 10 && isWhite()) || (yPosition == 0 && isBlack());
+		return distanceToHighWall() == 0;
+	}
+	
+	public int distanceToLowWall() {
+		assert isOccupied();
+		if (getTileColour() == QuaxTileColour.BLACK) {
+			return yPosition;
+		}
+		else {
+			return xPosition;
+		}
+	}
+
+	public int distanceToHighWall() {
+		assert isOccupied();
+		if (getTileColour() == QuaxTileColour.BLACK) {
+			return QuaxBoard.MAX_OCTAGONS - (yPosition + 1);
+		}
+		else {
+			return QuaxBoard.MAX_OCTAGONS - (xPosition + 1);
+		}
 	}
 }

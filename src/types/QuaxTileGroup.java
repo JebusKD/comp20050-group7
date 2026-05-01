@@ -53,9 +53,36 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 			t.setTileGroup(this);
 		}
 	}
+// TODO Added these for the bot, although could be used elsewhere or not at all.
+	public int distanceToLowWall() {
+		int minimumDistance = 10;
+		for (QuaxTile t : this) {
+			if (t instanceof Octagon o) {
+				minimumDistance = Math.min(o.distanceToLowWall(), minimumDistance);
+			}
+		}
+		return minimumDistance;
+	}
 
-
-
+	public int distanceToHighWall() {
+		int minimumDistance = 10;
+		for (QuaxTile t : this) {
+			if (t instanceof Octagon o) {
+				minimumDistance = Math.min(o.distanceToHighWall(), minimumDistance);
+			}
+		}
+		return minimumDistance;
+	}
+	// TODO could this be used to get rid of onColumnA_Row1?
+	public int distanceToWalls() {
+		return distanceToLowWall() + distanceToHighWall();
+	}
+	
+	public QuaxTileColour getGroupColour() {
+		assert groupMembers.size() > 0;
+		return groupMembers.get(0).getTileColour();
+	}
+	
 	public Iterator<QuaxTile> iterator() {
 		return groupMembers.iterator();
 	}

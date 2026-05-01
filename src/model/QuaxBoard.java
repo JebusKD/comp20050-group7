@@ -331,6 +331,18 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public QuaxTile[][] getNeighbours(QuaxTile t) {
 		return getNeighbours(t.getCoordinates());
 	}
+	
+	public List<QuaxTile> getNeighboursList(QuaxTile t) {
+		LinkedList<QuaxTile> result = new LinkedList<QuaxTile>();
+		for (QuaxTile[] arr : getNeighbours(t)) {
+			for (QuaxTile n : arr) {
+				if (n != null) {
+					result.add(n);
+				}
+			}
+		}
+		return result;
+	}
 
 	/*
 	 * Handle searching for neighbours
