@@ -65,6 +65,9 @@ public abstract class QuaxTile {
 	public boolean isFree() {
 		return getTileColour() == QuaxTileColour.NONE;
 	}
+	public boolean isOccupied() {
+		return !isFree();
+	}
 	public boolean isBlack() {
 		return getTileColour() == QuaxTileColour.BLACK;
 	}

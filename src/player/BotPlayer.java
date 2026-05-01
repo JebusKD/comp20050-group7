@@ -14,11 +14,13 @@ public class BotPlayer extends QuaxPlayer {
 	private static final long MIN_THINKING_TIME = 1000;
     private static boolean botHaste = false;
 
+    private final StrategyBuilder sb;
     private final QuaxTileStrategyGroup[] strategyGroups;
 
 
 	public BotPlayer() {
 		super();
+		sb = new StrategyBuilder();
 		strategyGroups = new QuaxTileStrategyGroup[MAX_STRATEGIES];
         clearAllStrategyGroups();
 	}
@@ -133,7 +135,6 @@ public class BotPlayer extends QuaxPlayer {
 
     // how the bot decides strategy vals for the tiles
     private void setUpStrategy(QuaxBoard b) {
-        StrategyBuilder sb = new StrategyBuilder();
         clearAllStrategyGroups();
         sb.initialiseStrategy(b);
         sb.postStrategy(b);
@@ -284,7 +285,7 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
-        public static boolean isLowPriority(QuaxTile t) {
+        private static boolean isLowPriority(QuaxTile t) {
         	return t.getStrategyValue() < MAX_STRATEGIES-1;
         }
         
@@ -318,24 +319,30 @@ public class BotPlayer extends QuaxPlayer {
 	                }
         		}
         	}
+        	
+        	avoidWeakGroupContributions(b, 2, 2);
         }
         
         private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
         	int prevValue = t.getStrategyValue(),
         			limit = Math.max(maximum, MAX_STRATEGIES);
-        	if (prevValue + increase > limit) {
-        		increase = limit - prevValue;
+        	if (prevValue < limit) {
+	        	if (prevValue + increase > limit) {
+	        		increase = limit - prevValue;
+	        	}
+	        	assignStrategyValue(t, prevValue + increase);
         	}
-        	assignStrategyValue(t, prevValue + increase);
         }
         
         private void downgradeStrategy(QuaxTile t, int decrease, int minimum) {
         	int prevValue = t.getStrategyValue(),
-        			limit = Math.max(minimum, 1);
-        	if (prevValue - decrease < limit) {
-        		decrease = prevValue - limit;
+        			limit = Math.max(minimum, 0);
+        	if (prevValue > limit) {
+	        	if (prevValue - decrease < limit) {
+	        		decrease = prevValue - limit;
+	        	}
+	        	assignStrategyValue(t, prevValue - decrease);
         	}
-        	assignStrategyValue(t, prevValue - decrease);
         }
         
         private int vulnerableRhombusCount(QuaxBoard b) {
@@ -377,6 +384,54 @@ public class BotPlayer extends QuaxPlayer {
         private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
         	return changeInVulnerableRhombuses(t, b) == 1;
 	    }
+        
+        private static List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
+        	LinkedList<QuaxTileGroup> groups = new LinkedList<QuaxTileGroup>();
+        	for (QuaxTile n : b.getNeighboursList(t)) {
+        		if (n.isOccupied()) {
+        			QuaxTileGroup tileGroup = n.getTileGroup();
+        			if (!groups.contains(tileGroup)) {
+        				groups.add(tileGroup);
+        			}
+        		}
+        	}
+        	return groups;
+        }
+        
+        private List<QuaxTileGroup> removeOpponentGroups(List<QuaxTileGroup> list) {
+        	LinkedList<QuaxTileGroup> copy = new LinkedList<QuaxTileGroup>(list),
+        							 found = new LinkedList<QuaxTileGroup>();
+        	for (QuaxTileGroup g : copy) {
+        		if (g.getGroupColour() != getPlayerColour()) {
+        			found.add(g);
+        		}
+        	}
+        	copy.removeAll(found);
+        	return copy;
+        }
+        
+        private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile t, QuaxBoard b) {
+        	return removeOpponentGroups(nearbyTileGroups(t, b));
+        }
+        
+        private void avoidWeakGroupContributions(QuaxBoard board, int decrease, int minimum) {
+        	for (QuaxTile tile : board) {
+        		List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, board);
+        		// TODO better comment - Joining two groups together is fine
+        		if (tile.isFree() && nearbyGroupsBefore.size() == 1) {
+        			QuaxTileGroup groupBefore = nearbyGroupsBefore.get(0);
+        			
+        			QuaxBoard copy = new QuaxBoard(board);
+        			copy.makeMove(tile);
+        			
+        			QuaxTileGroup groupAfter = ownedNearbyGroups(tile, copy).get(0);
+        			
+        			if (groupBefore.distanceToWalls() == groupAfter.distanceToWalls()) {
+        				downgradeStrategy(tile, decrease, minimum);
+        			}
+        		}
+        	}
+        }
 
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
