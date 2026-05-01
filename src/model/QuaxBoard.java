@@ -261,7 +261,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (tile.tileExists() && isOwnedTile(tile, c) &&
+					if (tile.tileExists() && tile.isSameColour(c) &&
 							tileNotMemberOfGroup(nearbyGroups, tile)) {
 						nearbyGroups.add(tile.getTileGroup());
 					}
@@ -269,10 +269,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			}
 
 			return nearbyGroups;
-		}
-
-		private boolean isOwnedTile(QuaxTile t, QuaxTileColour c) {
-			return (t != null && t.isSameColour(c));
 		}
 
 		private boolean tileNotMemberOfGroup(ArrayList<QuaxTileGroup> groups, QuaxTile t) {
@@ -305,7 +301,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return biggestGroup;
 		}
 
-		// TODO - Output argument?
 		private void mergeNearbyGroups(QuaxTileGroup largest, ArrayList<QuaxTileGroup> adjacentGroups) {
 			for (QuaxTileGroup g : adjacentGroups) {
 				if (g != largest) {
@@ -317,29 +312,23 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	// TODO Is NeighbourFinder a static class?
+
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
-		NeighbourFinder nf = new NeighbourFinder();
 
 		if (q.isOctagon()) {
-			neighbours = nf.getOctagonNeighbours(q);
+			neighbours = NeighbourFinder.getOctagonNeighbours(q, this);
 		}
 		else {
-			neighbours = nf.getRhombusNeighbours(q);
+			neighbours = NeighbourFinder.getRhombusNeighbours(q, this);
 		}
 
 		return neighbours;
 	}
 
-	// TODO - Do we actually need this
-	public QuaxTile[][] getNeighbours(QuaxTile t) {
-		return getNeighbours(t.getCoordinates());
-	}
-	
 	public List<QuaxTile> getNeighboursList(QuaxTile t) {
 		LinkedList<QuaxTile> result = new LinkedList<>();
-		for (QuaxTile[] arr : getNeighbours(t)) {
+		for (QuaxTile[] arr : getNeighbours(t.getCoordinates())) {
 			for (QuaxTile n : arr) {
 				if (n.tileExists()) {
 					result.add(n);
@@ -352,90 +341,91 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	/*
 	 * Handle searching for neighbours
 	 */
-	private class NeighbourFinder {
+	private static class NeighbourFinder {
 
-		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
+		private static QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc, QuaxBoard b) {
 			QuaxTile[][] neighbours = new QuaxTile[2][2];
 
-			neighbours[0][0] = getOctagon(qc.x(), qc.y());
-			neighbours[0][1] = getOctagon(qc.x(), qc.y() + 1);
-			neighbours[1][0] = getOctagon(qc.x() + 1, qc.y());
-			neighbours[1][1] = getOctagon(qc.x() + 1, qc.y() + 1);
+			neighbours[0][0] = b.getOctagon(qc.x(), qc.y());
+			neighbours[0][1] = b.getOctagon(qc.x(), qc.y() + 1);
+			neighbours[1][0] = b.getOctagon(qc.x() + 1, qc.y());
+			neighbours[1][1] = b.getOctagon(qc.x() + 1, qc.y() + 1);
 
 			return neighbours;
 		}
 
 
-		private QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc) {
+		private static QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc, QuaxBoard b) {
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
-			neighbours[0] = getLeftNeighbours(qc);
-			neighbours[1] = getVerticalNeighbours(qc);
-			neighbours[2] = getRightNeighbours(qc);
+			neighbours[0] = getLeftNeighbours(qc, b);
+			neighbours[1] = getVerticalNeighbours(qc, b);
+			neighbours[2] = getRightNeighbours(qc, b);
 
 			return neighbours;
 		}
 
-		private QuaxTile[] getLeftNeighbours(QuaxCoordinate coordinate) {
+		private static QuaxTile[] getLeftNeighbours(QuaxCoordinate coordinate, QuaxBoard b) {
 			int minusX = coordinate.x() - 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (minusX >= 0) {
 				if (minusY >= 0) {
-					adjTiles[0] = getRhombus(minusX, minusY);
+					adjTiles[0] = b.getRhombus(minusX, minusY);
 				}
 
-				adjTiles[1] = getOctagon(minusX, coordinate.y());
+				adjTiles[1] = b.getOctagon(minusX, coordinate.y());
 
 				if (plusY <= MAX_RHOMBUSES) {
-					adjTiles[2] = getRhombus(minusX, coordinate.y());
+					adjTiles[2] = b.getRhombus(minusX, coordinate.y());
 				}
 			}
 
 			return adjTiles;
 		}
 
-		private QuaxTile[] getRightNeighbours(QuaxCoordinate coordinate) {
+		private static QuaxTile[] getRightNeighbours(QuaxCoordinate coordinate, QuaxBoard b) {
 			int plusX = coordinate.x() + 1, minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (plusX <= MAX_RHOMBUSES) {
 				if (minusY >= 0) {
-					adjTiles[0] = rhombusGrid[coordinate.x()][minusY];
+					adjTiles[0] = b.getRhombus(coordinate.x(), minusY);
 				}
 
-				adjTiles[1] = octagonGrid[plusX][coordinate.y()];
+				adjTiles[1] = b.octagonGrid[plusX][coordinate.y()];
 
 				if (plusY <= MAX_RHOMBUSES) {
-					adjTiles[2] = rhombusGrid[coordinate.x()][coordinate.y()];
+					adjTiles[2] = b.getRhombus(coordinate.x(), coordinate.y());
 				}
 			}
 
 			return adjTiles;
 		}
 
-		private QuaxTile[] getVerticalNeighbours(QuaxCoordinate coordinate) {
+		private static QuaxTile[] getVerticalNeighbours(QuaxCoordinate coordinate, QuaxBoard b) {
 			int minusY = coordinate.y() - 1, plusY = coordinate.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRowWithHiddenCenter();
 
 			if (minusY >= 0) {
-				adjTiles[0] = octagonGrid[coordinate.x()][minusY];
+				adjTiles[0] = b.getOctagon(coordinate.x(), minusY);
 			}
 
 			if (plusY <= MAX_RHOMBUSES) {
-				adjTiles[2] = octagonGrid[coordinate.x()][plusY];
+				adjTiles[2] = b.getOctagon(coordinate.x(), plusY);
 			}
 
 			return adjTiles;
 		}
-		
-		private QuaxTile[] createOutOfBoundsRow() {
+
+
+		private static QuaxTile[] createOutOfBoundsRow() {
 			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE };
 		}
 		
-		private QuaxTile[] createOutOfBoundsRowWithHiddenCenter() {
+		private static QuaxTile[] createOutOfBoundsRowWithHiddenCenter() {
 			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.HIDDEN_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE };

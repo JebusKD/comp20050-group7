@@ -264,7 +264,7 @@ public class BotPlayer extends QuaxPlayer {
 
         	if (t instanceof Rhombus) {
 	        	int countOpponentTiles = 0;
-	        	for (QuaxTile[] row : b.getNeighbours(t)) {
+	        	for (QuaxTile[] row : b.getNeighbours(t.getCoordinates())) {
 	        		for (QuaxTile n : row) {
 	        			if (n.getTileColour() == getPlayerColour().flip()) {
 	        				countOpponentTiles++;

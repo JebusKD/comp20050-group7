@@ -94,14 +94,14 @@ public class QuaxUITest {
     @Test
     void TurnOctagonObject_ChangesColour(FxRobot robot){
         robot.clickOn("#octagon5-5");
-        Node turnOct = robot.lookup("#Octagon-object").query();
+        Node turnOct = robot.lookup("#Octagon-Turn-Indicator").query();
         assertTrue(turnOct.getStyleClass().contains("tilecolour-white"));
     }
 
     @Test
     void TurnRhombusObject_ChangesColour(FxRobot robot){
         robot.clickOn("#octagon5-5");
-        Node turnRhombus = robot.lookup("#Rhombus-object").query();
+        Node turnRhombus = robot.lookup("#Rhombus-Turn-Indicator").query();
         assertTrue(turnRhombus.getStyleClass().contains("tilecolour-white"));
     }
 
