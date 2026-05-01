@@ -20,7 +20,8 @@ public class Octagon extends QuaxTile {
 	public QuaxCoordinate getCoordinates() {
 		return QuaxCoordinate.newOctagonCoordinate(xPosition, yPosition);
 	}
-	
+
+
 	public int distanceToLowWall() {
 		assert isOccupied();
 		if (getTileColour() == QuaxTileColour.BLACK) {

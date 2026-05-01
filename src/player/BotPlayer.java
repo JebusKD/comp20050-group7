@@ -2,9 +2,9 @@ package player;
 
 import java.util.*;
 
-import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import types.*;
+import static controller.QuaxController.RNG;
 
 
 public class BotPlayer extends QuaxPlayer {
@@ -40,11 +40,12 @@ public class BotPlayer extends QuaxPlayer {
 	private QuaxCoordinate decideMove(QuaxBoard b) {
         QuaxTileStrategyGroup choice = selectStrategyGroup(b.getMoveNumber());
 
-        ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(b, choice);
+        ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
 
         int index = Math.abs(RNG.nextInt()) % candidateMoves.size();
         return candidateMoves.get(index);
 	}
+
 
     private QuaxTileStrategyGroup selectStrategyGroup(int move) {
         if (move == 0) {
@@ -66,7 +67,7 @@ public class BotPlayer extends QuaxPlayer {
         int randStrategyValue = chooseStrategyValue();
         QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
 
-        while (choice.size() == 0) {
+        while (choice.isEmpty()) {
             randStrategyValue--;
             choice = getStrategyGroupWithValue(randStrategyValue);
         }
@@ -105,7 +106,7 @@ public class BotPlayer extends QuaxPlayer {
         return strategyGroups[i - 1];
     }
 
-    private ArrayList<QuaxCoordinate> getPotentialMoves(QuaxBoard b, QuaxTileStrategyGroup tsg) {
+    private ArrayList<QuaxCoordinate> getPotentialMoves(QuaxTileStrategyGroup tsg) {
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
 
         for (QuaxTile t : tsg) {
@@ -243,6 +244,7 @@ public class BotPlayer extends QuaxPlayer {
         		assignStrategyValue(t, 0);
         	}
             else {
+                // TODO - This means every Rhombus has either SV 0 or 5. It only places Rhombuses on critical moves then
                 // All placeable Rhombus tiles have a base strategy value of 4
                 assignStrategyValue(t, 4);
 
@@ -259,6 +261,7 @@ public class BotPlayer extends QuaxPlayer {
          */
         private boolean isUselessRhombus(QuaxTile t, QuaxBoard b) {
         	boolean result = false;
+
         	if (t instanceof Rhombus) {
 	        	int countOpponentTiles = 0;
 	        	for (QuaxTile[] row : b.getNeighbours(t)) {
@@ -419,12 +422,12 @@ public class BotPlayer extends QuaxPlayer {
         		List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, board);
         		// TODO better comment - Joining two groups together is fine
         		if (tile.isFree() && nearbyGroupsBefore.size() == 1) {
-        			QuaxTileGroup groupBefore = nearbyGroupsBefore.get(0);
+        			QuaxTileGroup groupBefore = nearbyGroupsBefore.getFirst();
         			
         			QuaxBoard copy = new QuaxBoard(board);
         			copy.makeMove(tile);
         			
-        			QuaxTileGroup groupAfter = ownedNearbyGroups(tile, copy).get(0);
+        			QuaxTileGroup groupAfter = ownedNearbyGroups(tile, copy).getFirst();
         			
         			if (groupBefore.distanceToWalls() == groupAfter.distanceToWalls()) {
         				downgradeStrategy(tile, decrease, minimum);
@@ -438,6 +441,7 @@ public class BotPlayer extends QuaxPlayer {
             assignTileToStrategyGroup(t);
         }
     }
+
 
     private boolean isValidStrategicMove(QuaxTile t, QuaxBoard b, QuaxTileColour c) {
         return b.validMove(t.getCoordinates(), c);

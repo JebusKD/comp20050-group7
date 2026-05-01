@@ -133,6 +133,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 		// TODO - violates LoD?
+		// I'm thinking we do similar to botHaste, a private static boolean gameWon that we check
 		return previousGroup().isWinningGroup();
 	}
 
@@ -566,7 +567,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
-	
+
+
+	// TODO - Is this used?
 	public static class QuaxBoardPermutationIterator implements Iterator<QuaxBoard> {
 		private final ArrayList<QuaxBoard> elements;
 		private int cursor;

@@ -72,9 +72,11 @@ public class TestBot {
 		BotPlayer b1 = new BotPlayer();
 		BotPlayer b2 = new BotPlayer();
 		
-		// Creating a QuaxController automatically starts the game - and
-		// in our instance we have two Bots who will keep making
-		// moves until the game is over.
+		/*
+			Creating a QuaxController automatically starts the game - and
+			 in our instance we have two Bots who will keep making
+			 moves until the game is over.
+		 */
 
 		QuaxController controller = new QuaxController(b1, b2);
 		
