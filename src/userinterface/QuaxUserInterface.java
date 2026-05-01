@@ -32,10 +32,10 @@ public class QuaxUserInterface implements UserInterface {
             "/userinterface/stylesheets/button-styling.css"
     };
 
-    private Stage quaxUIStage;
+    private final Stage quaxUIStage;
     private Scene interfaceScene;
 
-    private UserInterfaceBoard quaxUIBoard;
+    private final UserInterfaceBoard quaxUIBoard;
     private PlayerTurnIndicator turnIndicator;
     private WindowManager quaxUIWindow;
 
