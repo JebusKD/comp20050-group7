@@ -15,19 +15,21 @@ public class BotPlayer extends QuaxPlayer {
     private static boolean botHaste = false;
 
     private final StrategyBuilder sb;
-    private final QuaxTileStrategyGroup[] strategyGroups;
+    private ArrayList<LinkedList<QuaxTile>> strategyGroups;
 
 
 	public BotPlayer() {
 		super();
 		sb = new StrategyBuilder();
-		strategyGroups = new QuaxTileStrategyGroup[MAX_STRATEGIES];
+		strategyGroups = new ArrayList<>(MAX_STRATEGIES);
         clearAllStrategyGroups();
 	}
 
     private void clearAllStrategyGroups() {
-        for (int i = 0; i < MAX_STRATEGIES; i++) {
-        	strategyGroups[i] = new QuaxTileStrategyGroup();
+        strategyGroups = new ArrayList<>(MAX_STRATEGIES);
+
+        for (int i = 0 ; i < MAX_STRATEGIES; i++) {
+        	strategyGroups.add(new LinkedList<>());
         }
     }
 
@@ -38,7 +40,7 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard b) {
-        QuaxTileStrategyGroup choice = selectStrategyGroup(b.getMoveNumber());
+        LinkedList<QuaxTile> choice = selectStrategyGroup(b.getMoveNumber());
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
 
@@ -47,7 +49,8 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
 
-    private QuaxTileStrategyGroup selectStrategyGroup(int move) {
+    // TODO - Less returns
+    private LinkedList<QuaxTile> selectStrategyGroup(int move) {
         if (move == 0) {
             return getStrategyGroupWithValue(1);
         }
@@ -65,7 +68,7 @@ public class BotPlayer extends QuaxPlayer {
         }
 
         int randStrategyValue = chooseStrategyValue();
-        QuaxTileStrategyGroup choice = getStrategyGroupWithValue(randStrategyValue);
+        LinkedList<QuaxTile> choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.isEmpty()) {
             randStrategyValue--;
@@ -75,7 +78,7 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
-    /* //TODO - Decide on probabilities, are we keeping them as this?
+    /* //TODO - Decide on probabilities, are we keeping them as this? ALSO 1 return/method???
     1% chance of strat val 1
     14% chance of strat val 2
     25% chance of strat val 3
@@ -101,12 +104,12 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
-    public QuaxTileStrategyGroup getStrategyGroupWithValue(int i) {
+    public LinkedList<QuaxTile> getStrategyGroupWithValue(int i) {
         assert (i <= MAX_STRATEGIES && i > 0);
-        return strategyGroups[i - 1];
+        return strategyGroups.get(i - 1);
     }
 
-    private ArrayList<QuaxCoordinate> getPotentialMoves(QuaxTileStrategyGroup tsg) {
+    private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> tsg) {
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
 
         for (QuaxTile t : tsg) {
@@ -122,14 +125,14 @@ public class BotPlayer extends QuaxPlayer {
 
         int strategyValue = newTile.getStrategyValue();
         if (strategyValue > 0 && strategyValue <= MAX_STRATEGIES) {
-	        QuaxTileStrategyGroup tileSGroup = getStrategyGroupWithValue(strategyValue);
-	        tileSGroup.addTile(newTile);
+            LinkedList<QuaxTile> tileSGroup = getStrategyGroupWithValue(strategyValue);
+	        tileSGroup.add(newTile);
         }
     }
 
     private void removeTileFromAllStrategyGroups(QuaxTile targetTile) {
-        for (QuaxTileStrategyGroup g : strategyGroups) {
-        	g.removeTile(targetTile);
+        for (LinkedList<QuaxTile> g : strategyGroups) {
+        	g.remove(targetTile);
         }
     }
 
@@ -183,12 +186,14 @@ public class BotPlayer extends QuaxPlayer {
 
             for (QuaxTile[] row : neighbours) {
                 for (QuaxTile neighbour : row) {
+                    // If tile is adjacent to an already owned one, it has a base strategy value of 2
                     if (neighbour.tileExists() && isValidStrategicMove(neighbour, b, getPlayerColour())) {
                         if (neighbour.getStrategyValue() <= 2) {
                             neighbour.setStrategyValue(2);
                         }
                         assignTileToStrategyGroup(neighbour);
 
+                        // If the move is not game-changing, set progressing tile strategy values
                         if (neighbour.getStrategyValue() <= 4) {
                             setProgressStrategy(t, neighbour, neighbours);
                         }
@@ -229,27 +234,14 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
-        // TODO not sure if I can use these
-        /*
-        private static QuaxTile[][] rotateOctagonNeighbours(QuaxTile[][] neighbours) {
-        	assert neighbours[0].length == 3;
-        	return new QuaxTile[][]
-        			{ { neighbours[2][0], neighbours[1][0], neighbours[0][0] },
-        			  { neighbours[2][1], neighbours[1][1], neighbours[0][1] },
-        			  { neighbours[2][2], neighbours[1][2], neighbours[0][2] } };
-        }*/
 
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard b) {
-        	if (isUselessRhombus(t, b)) {
+        	if (isLowPriorityRhombus(t, b)) {
         		assignStrategyValue(t, 0);
         	}
             else {
-                // TODO - This means every Rhombus has either SV 0 or 5. It only places Rhombuses on critical moves then
-                // All placeable Rhombus tiles have a base strategy value of 4
-                assignStrategyValue(t, 4);
-
-                // If the human player can place the tile as well,
-                //      assign it the second-highest priority, to block it
+                // If not a low-priority rhombus, the human player can place the rhombus as well,
+                //      so assign it the second-highest priority, to block it
 	            if (isValidStrategicMove(t, b, getPlayerColour().flip())){
 	                assignStrategyValue(t, 5);
 	            }
@@ -259,7 +251,7 @@ public class BotPlayer extends QuaxPlayer {
         /* "Useless Rhombus" is defined as having at most 1
          * nearby enemy tile.
          */
-        private boolean isUselessRhombus(QuaxTile t, QuaxBoard b) {
+        private boolean isLowPriorityRhombus(QuaxTile t, QuaxBoard b) {
         	boolean result = false;
 
         	if (t instanceof Rhombus) {
@@ -288,10 +280,12 @@ public class BotPlayer extends QuaxPlayer {
             }
         }
 
+
         private static boolean isLowPriority(QuaxTile t) {
         	return t.getStrategyValue() < MAX_STRATEGIES-1;
         }
-        
+
+
         private void assignStrategyValueIfLess(QuaxTile t, int value) {
         	if (t.getStrategyValue() < value) {
         		assignStrategyValue(t, value);
@@ -304,11 +298,13 @@ public class BotPlayer extends QuaxPlayer {
 
             return copyBoard.checkForWinningMove();
         }
-        
+
+
+        // TODO - Rename this, or give an explanation
         private void postStrategy(QuaxBoard b) {
         	for (QuaxTile t : b) {
         		if (t.isFree() && isLowPriority(t)) {
-        			if (isUselessRhombus(t, b)) {
+        			if (isLowPriorityRhombus(t, b)) {
 	        			assignStrategyValue(t, 0);
 	        		}
 	                else if (exploitsVulnerableRhombuses(t, b)) {
@@ -347,7 +343,8 @@ public class BotPlayer extends QuaxPlayer {
 	        	assignStrategyValue(t, prevValue - decrease);
         	}
         }
-        
+
+        // TODO - Explain these
         private int vulnerableRhombusCount(QuaxBoard b) {
         	Iterator<QuaxCoordinate> iterator = QuaxBoard.rhombusCoordinateIterator();
         	int count = 0;
@@ -387,7 +384,8 @@ public class BotPlayer extends QuaxPlayer {
         private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
         	return changeInVulnerableRhombuses(t, b) == 1;
 	    }
-        
+
+
         private static List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
         	LinkedList<QuaxTileGroup> groups = new LinkedList<>();
         	for (QuaxTile n : b.getNeighboursList(t)) {
@@ -416,7 +414,8 @@ public class BotPlayer extends QuaxPlayer {
         private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile t, QuaxBoard b) {
         	return removeOpponentGroups(nearbyTileGroups(t, b));
         }
-        
+
+
         private void avoidWeakGroupContributions(QuaxBoard board, int decrease, int minimum) {
         	for (QuaxTile tile : board) {
         		List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, board);
@@ -436,10 +435,13 @@ public class BotPlayer extends QuaxPlayer {
         	}
         }
 
+
         private void assignStrategyValue(QuaxTile t, int value) {
             t.setStrategyValue(value);
             assignTileToStrategyGroup(t);
         }
+
+        // TODO - May have deleted assignSVifLess() !!!
     }
 
 

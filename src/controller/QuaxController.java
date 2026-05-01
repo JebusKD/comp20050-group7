@@ -176,10 +176,7 @@ public class QuaxController {
     }
 
 
-    /*
-     * Methods for handling the strategic bot
-     *  Retrieve bot, manage showing/hiding strategy
-     */
+
     public void showStrategy() {
         quaxUserInterface.showStrategy();
     }
