@@ -119,7 +119,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return previousMove;
 	}
 
-	private boolean isStartingMove() {
+	public boolean isStartingMove() {
 		return previousMove == null;
 	}
 

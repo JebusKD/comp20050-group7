@@ -110,13 +110,13 @@ public class QuaxUserInterface implements UserInterface {
 
 
     public void updateFromPreviousMove(QuaxBoard board) {
-        QuaxCoordinate previousMove = board.previousMove();
         updateStrategy();
-        if (previousMove == null) {
+        if (board.isStartingMove()) {
             this.turnIndicator.setIndicatorColour(QuaxTileColour.BLACK);
         }
 
         else {
+            QuaxCoordinate previousMove = board.previousMove();
             QuaxTileColour colour = board.getTileColour(previousMove);
 
             this.setTile(previousMove, colour);
