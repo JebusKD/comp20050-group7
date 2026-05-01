@@ -44,7 +44,7 @@ class TestBoardCopying {
 		
 		QuaxBoard b = new QuaxBoard();
 		
-		b.makeMove(new QuaxCoordinate(5, 4, true), QuaxTileColour.BLACK);
+		b.makeMove(QuaxCoordinate.newOctagonCoordinate(5, 4), QuaxTileColour.BLACK);
 		
 		Octagon c = new Octagon(b.getOctagon(5, 4));
 		assertNull(c.getTileGroup());
@@ -83,10 +83,10 @@ class TestBoardCopying {
 		QuaxBoard b = new QuaxBoard();
 		
 		// Add octagons to permit the rhombus move
-		b.makeMove(new QuaxCoordinate(5, 4, true), QuaxTileColour.BLACK);
-		b.makeMove(new QuaxCoordinate(6, 5, true), QuaxTileColour.BLACK);
+		b.makeMove(QuaxCoordinate.newOctagonCoordinate(5, 4), QuaxTileColour.BLACK);
+		b.makeMove(QuaxCoordinate.newOctagonCoordinate(6, 5), QuaxTileColour.BLACK);
 		
-		b.makeMove(new QuaxCoordinate(5, 4, false), QuaxTileColour.BLACK);
+		b.makeMove(QuaxCoordinate.newRhombusCoordinate(5, 4), QuaxTileColour.BLACK);
 		
 		Rhombus c = new Rhombus(b.getRhombus(5, 4));
 		assertNull(c.getTileGroup());

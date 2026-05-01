@@ -18,7 +18,7 @@ public class Octagon extends QuaxTile {
 
 	@Override
 	public QuaxCoordinate getCoordinates() {
-		return new QuaxCoordinate(xPosition, yPosition, true);
+		return QuaxCoordinate.newOctagonCoordinate(xPosition, yPosition);
 	}
 	
 	public int distanceToLowWall() {

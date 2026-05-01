@@ -31,7 +31,6 @@ public class UserInterfaceBoard {
         this.rhombusGridCells = bgBuilder.getRhombusTileGrid();
     }
 
-
     public StackPane getStackUIBoard() {
         return this.stackUIBoard;
     }
