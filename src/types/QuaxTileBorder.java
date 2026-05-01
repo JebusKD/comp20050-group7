@@ -37,7 +37,7 @@ public enum QuaxTileBorder {
             return "tileoutline-4";
         }
     },
-    
+    // TODO - Reorder based on SV correlation (SV1,2,3,4,5,6,7)
     CYAN {
     	public String tileBorderStyle() {
     		return "tileoutline-5";
