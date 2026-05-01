@@ -160,28 +160,28 @@ class TestQuaxBoard {
 		assertEquals(QuaxTileColour.WHITE, neighbours[1][1].getTileColour());
 	}
 	
-	// Ensures the correct entries in neighbours are indeed null/not null
+	// Ensures the correct entries in neighbours are indeed out of bounds/in bounds (oob)
 	@Test
 	void testNeighboursStructure1() {
 		QuaxTile[][] neighbours = board.getNeighbours(QuaxCoordinate.newOctagonCoordinate(0, 0));
 		// Octagon in top-left corner
 		/*
-		  		null | null | null
+		  		oob  | oob  | null
 		  		-----+------+-----
-		  		null | null | tile
+		  		oob  | null | tile
 		  		-----+------+-----
-		  		null | tile | tile
+		  		oob  | oob  | tile
 		 */
 		
-		assertNull(neighbours[0][0]);
-		assertNull(neighbours[0][1]);
-		assertNull(neighbours[0][2]);
-		assertNull(neighbours[1][0]);
-		assertNull(neighbours[1][1]);
-		assertNotNull(neighbours[1][2]);
-		assertNull(neighbours[2][0]);
-		assertNotNull(neighbours[2][1]);
-		assertNotNull(neighbours[2][2]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][0]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][1]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][2]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][0]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][1]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][2]);
+		assertEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[2][0]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[2][1]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[2][2]);
 		
 	}
 	
@@ -196,10 +196,10 @@ class TestQuaxBoard {
 	void testNeighboursStructure2() {
 		QuaxTile[][] neighbours = board.getNeighbours(QuaxCoordinate.newRhombusCoordinate(0, 0));
 		
-		assertNotNull(neighbours[0][0]);
-		assertNotNull(neighbours[0][1]);
-		assertNotNull(neighbours[1][0]);
-		assertNotNull(neighbours[1][1]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][0]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[0][1]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][0]);
+		assertNotEquals(QuaxTile.OUT_OF_BOUNDS_TILE, neighbours[1][1]);
 		
 	}
 	

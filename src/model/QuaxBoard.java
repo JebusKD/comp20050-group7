@@ -173,6 +173,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	private boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour colour) {
+		assert q.isRhombus();
         QuaxTile[][] n = getNeighbours(q);
 
         return (n[0][0].isSameColour(colour) && n[1][1].isSameColour(colour))
@@ -244,9 +245,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 		private void assignGroup(QuaxTile newTile) {
-			QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
 			QuaxTileColour c = newTile.getTileColour();
 			assert c != QuaxTileColour.NONE;
+			
+			QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
 
 			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
 			expandGroup(newTile, nearGroups);
@@ -258,7 +260,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (isOwnedTile(tile, c) &&	tileNotMemberOfGroup(nearbyGroups, tile)) {
+					if (tile.isInBounds() && isOwnedTile(tile, c) &&	tileNotMemberOfGroup(nearbyGroups, tile)) {
 						nearbyGroups.add(tile.getTileGroup());
 					}
 				}
@@ -313,7 +315,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-
+	// TODO Is NeighbourFinder a static class?
+	// TODO Neighbours[1][1] for octagon is still null.
 	public QuaxTile[][] getNeighbours(QuaxCoordinate q) {
 		QuaxTile[][] neighbours;
 		NeighbourFinder nf = new NeighbourFinder();
@@ -349,9 +352,22 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	 * Handle searching for neighbours
 	 */
 	private class NeighbourFinder {
+		
+		private static QuaxTile[][] createEmptyOctagonNeighboursArray() {
+			return new QuaxTile[][] {
+				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
+				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
+				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE} };
+		}
+		
+		private static QuaxTile[][] createEmptyRhombusNeighboursArray() {
+			return new QuaxTile[][] {
+				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE},
+				{QuaxTile.OUT_OF_BOUNDS_TILE, QuaxTile.OUT_OF_BOUNDS_TILE} };
+		}
 
 		private QuaxTile[][] getRhombusNeighbours(QuaxCoordinate qc) {
-			Octagon[][] neighbours = new Octagon[2][2];
+			QuaxTile[][] neighbours = createEmptyRhombusNeighboursArray();
 
 			neighbours[0][0] = getOctagon(qc.x(), qc.y());
 			neighbours[0][1] = getOctagon(qc.x(), qc.y() + 1);
@@ -363,7 +379,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 		private QuaxTile[][] getOctagonNeighbours(QuaxCoordinate qc) {
-			QuaxTile[][] neighbours = new QuaxTile[3][3];
+			QuaxTile[][] neighbours = createEmptyOctagonNeighboursArray();
 
 			neighbours[0] = getLeftNeighbours(qc);
 			neighbours[1] = getVerticalNeighbours(qc);

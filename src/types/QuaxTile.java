@@ -2,6 +2,8 @@ package types;
 
 
 public abstract class QuaxTile {
+	
+	public static final QuaxTile OUT_OF_BOUNDS_TILE = new OutOfBoundsTile();
 
 	private QuaxTileColour tileColour;
 	private QuaxTileGroup tileGroup;
@@ -29,6 +31,11 @@ public abstract class QuaxTile {
 		this.yPosition = t.yPosition;
 	}
 
+	/* Private constructor used exclusively to construct OutOfBoundsTile. */
+	private QuaxTile() {
+		this.xPosition = -1;
+		this.yPosition = -1;
+	}
 
 	public QuaxTileColour getTileColour() {
 		return this.tileColour;
@@ -85,6 +92,74 @@ public abstract class QuaxTile {
 	public boolean isOpponentColour(QuaxTileColour c) {
 		assert c != QuaxTileColour.NONE;
 		return getTileColour() == c.flip();
+	}
+	
+	public final boolean isOutOfBounds() {
+		return this == OUT_OF_BOUNDS_TILE;
+	}
+	
+	public final boolean isInBounds() {
+		return !isOutOfBounds();
+	}
+	
+	private static class OutOfBoundsTile extends QuaxTile {
+		private OutOfBoundsTile() {
+			super();
+		}
+
+		@Override
+		public QuaxTileColour getTileColour() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public QuaxTileGroup getTileGroup() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public int getStrategyValue() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public void setTileColour(QuaxTileColour colour) {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public void setTileGroup(QuaxTileGroup tileGroup) {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public void setStrategyValue(int value) {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public QuaxCoordinate getCoordinates() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isFree() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isOccupied() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isBlack() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isWhite() {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isSameColour(QuaxTileColour c) {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		@Override
+		public boolean isOpponentColour(QuaxTileColour c) {
+			throw new UnsupportedOperationException("Cannot be invoked on out-of-bounds tile.");
+		}
+		
 	}
 
 }
