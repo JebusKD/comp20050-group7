@@ -160,7 +160,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		return false;
 	}
-	
+
+	// TODO - Jamie please
 	public boolean validMove(QuaxCoordinate q) {
 		return validMove(q, currentColourTurn());
 	}
@@ -214,6 +215,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 	
 	public void makeMove(QuaxCoordinate q) {
+	private void makeMove(QuaxCoordinate q) {
 		makeMove(q, currentColourTurn());
 	}
 
@@ -322,7 +324,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		return neighbours;
 	}
-	
+
+	//TODO - Like why?
 	public QuaxTile[][] getNeighbours(QuaxTile t) {
 		return getNeighbours(t.getCoordinates());
 	}
@@ -458,7 +461,26 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public static Iterator<QuaxCoordinate> coordinateIterator() {
 		return new QuaxBoardCoordinateIterator();
 	}
-	
+
+	private static class QuaxBoardCoordinateIterator implements Iterator<QuaxCoordinate> {
+		private final QuaxBoardIterator boardIterator;
+
+		public QuaxBoardCoordinateIterator() {
+			this.boardIterator = new QuaxBoardIterator(new QuaxBoard());
+		}
+
+		@Override
+		public boolean hasNext() {
+			return boardIterator.hasNext();
+		}
+
+		@Override
+		public QuaxCoordinate next() {
+			return boardIterator.nextCoordinate();
+		}
+	}
+
+
 	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
 		return new QuaxBoardRhombusCoordinateIterator();
 	}
