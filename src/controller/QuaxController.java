@@ -32,8 +32,6 @@ public class QuaxController {
         this.quaxPlayers = new QuaxPlayer[2];
         this.quaxUserInterface = new TestingEmptyInterface();
 
-        //BotPlayer.enableHaste(); TODO - Uncomment on submission
-        
         startGame(p1, p2);
     }
 
