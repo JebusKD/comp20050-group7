@@ -11,7 +11,7 @@ import org.junit.platform.suite.api.Suite;
 	Sprint3TestSuite.class,
 	QuaxUITest.class,
 	BotUiTest.class,
-	StratValuesTesting.class
+	TestStrategyValues.class
 })
 @DisplayName("Quax Unit Tests")
 class QuaxTestSuite {

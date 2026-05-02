@@ -9,13 +9,11 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
-import player.*;
-import types.*;
 
 import java.util.concurrent.*;
 
 @ExtendWith(ApplicationExtension.class)
-public class StratValuesTesting {
+public class TestStrategyValues {
 
     private QuaxController controller;
 
@@ -25,7 +23,7 @@ public class StratValuesTesting {
     }
 
     @Test
-    void stratValsUpdate(FxRobot robot){
+    void testStrategyValuesUpdate(FxRobot robot){
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         robot.clickOn("#octagon5-5");
