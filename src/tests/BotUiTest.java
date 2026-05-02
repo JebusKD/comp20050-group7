@@ -9,11 +9,8 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 import controller.QuaxController;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.api.FxAssert.verifyThat;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import player.BotPlayer;
 import types.QuaxTileColour;
@@ -26,37 +23,41 @@ public class BotUiTest {
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,true, false);//human v bot game now
+        //human v bot game now
+        controller = new QuaxController(stage,true, false);
     }
 
     @Test
-    public void BotMovesIfFirstOrNotIfSecond(FxRobot robot)  {
+    public void testBotMovesIfFirstOrNotIfSecond(FxRobot robot)  {
     	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     	// Wait for the bot to make a move, after that, ensure it's no longer the bot's turn.
     	WaitForAsyncUtils.waitForFxEvents();
     	// Bot should automatically make a move if possible, so should always be the human's turn.
-    	scheduler.schedule(() ->{
+    	scheduler.schedule(() -> {
             
     		assertFalse(controller.curPlayer() instanceof BotPlayer);
+
         	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
         		assertEquals(0,controller.getQuaxBoard().getMoveNumber()); //robot has not moved
         	}
+
         	else { // Otherwise, bot moves first and makes exactly one move.
         		assertEquals(1,controller.getQuaxBoard().getMoveNumber());
         	}
+
         },3, TimeUnit.SECONDS);
-    	
 	}
-  
 
-
+    // TODO - Get rid of this?
     //https://testfx.github.io/TestFX/docs/javadoc/testfx-core/javadoc/org.testfx/org/testfx/util/WaitForAsyncUtils.html
 
     @Test
-    public void BotAlwaysMakesMove(FxRobot robot) {
+    public void testBotAlwaysMakesMove(FxRobot robot) {
     	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     	WaitForAsyncUtils.waitForFxEvents();
-    	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
+
+        // Human goes first
+    	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) {
     		robot.clickOn("#octagon5-5");
     		WaitForAsyncUtils.waitForFxEvents();
     		
@@ -66,7 +67,7 @@ public class BotUiTest {
 
              //robot went after human
     	}
-		else{
+		else {
 			scheduler.schedule(() ->{
                 assertEquals(1,controller.getQuaxBoard().getMoveNumber());;
             },3, TimeUnit.SECONDS);
@@ -74,25 +75,33 @@ public class BotUiTest {
             //robot is BLACK so has moved
         }
     }
-    
+
+
     @Test
-    void StratColourIndicatorAppearsWhenShowStratActive(FxRobot robot){
+    void testStrategyColourIndicatorInvisibleOnGameStart(FxRobot robot){
+        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
+    }
+
+    @Test
+    void testStrategyColourIndicatorAppearsWhenShowStrategyActive(FxRobot robot) {
         robot.clickOn("#showStrat");
+
         assertTrue(robot.lookup("#ColourIndicator").query().isVisible());
     }
 
     @Test
-    void StratColourIndicatorDisappearsWhenShowStratInactive(FxRobot robot){
+    void testStrategyColourIndicatorDisappearsWhenShowStrategyInactive(FxRobot robot) {
         robot.clickOn("#showStrat");
         robot.clickOn("#hideStrat");
-        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
 
+        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
     }
 
     @Test
-    void hideStratRemovesAllBorders(FxRobot robot){
+    void testHideStrategyRemovesAllBorders(FxRobot robot){
         robot.clickOn("#showStrat");
         robot.clickOn("#hideStrat");
+
         assertEquals(221, robot.lookup(".tileoutline-base").queryAll().size());
     }
 }
