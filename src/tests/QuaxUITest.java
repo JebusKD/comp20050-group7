@@ -56,7 +56,7 @@ public class QuaxUITest {
 
         for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
-            robot.clickOn("#octagon1-" + i); // TODO - Do we need this?
+            robot.clickOn("#octagon1-" + i);
         }
 
         robot.clickOn("#octagon5-10");
