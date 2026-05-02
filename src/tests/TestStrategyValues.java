@@ -31,8 +31,8 @@ public class TestStrategyValues {
         robot.clickOn("#showStrat");
 
         scheduler.schedule(() ->{
-            assertTrue(!robot.lookup(".tileoutline-base.tileoutline-1").queryAll().isEmpty());
-            assertTrue(!robot.lookup(".tileoutline-base.tileoutline-4").queryAll().isEmpty());
+            assertFalse(robot.lookup(".tileoutline-base.tileoutline-1").queryAll().isEmpty());
+            assertFalse(robot.lookup(".tileoutline-base.tileoutline-4").queryAll().isEmpty());
         },3, TimeUnit.SECONDS);
     }
 }
