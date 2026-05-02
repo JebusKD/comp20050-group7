@@ -47,6 +47,7 @@ public class PlayerTurnIndicator {
         this.turnText.setTurnColour(colour);
     }
 
+
     public HBox getTurnTrackerBox() {
         return this.turnTrackerBox;
     }
