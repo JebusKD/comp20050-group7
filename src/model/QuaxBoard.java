@@ -90,6 +90,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+
 	public Octagon getOctagon(int x, int y) {
 		return this.octagonGrid[x][y];
 	}
@@ -141,7 +142,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return getTile(previousMove).getTileGroup();
 	}
 
-
 	public boolean validMove(QuaxCoordinate coord, QuaxTileColour colour) {
 		if (!checkForWinningMove() && (coord.isOctagon() || isValidRhombusPlacement(coord, colour))) {
 			return getTile(coord).isFree();
@@ -167,7 +167,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return result;
 	}
 
-
 	private boolean isValidRhombusPlacement(QuaxCoordinate coord, QuaxTileColour colour) {
 		assert coord.isRhombus();
         QuaxTile[][] n = getNeighbours(coord);
@@ -180,6 +179,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return isValidRhombusPlacement(coord, QuaxTileColour.BLACK)
 				&& isValidRhombusPlacement(coord, QuaxTileColour.WHITE);
 	}
+
 
 
 	public boolean attemptPieRule() {
@@ -305,16 +305,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	public QuaxTile[][] getNeighbours(QuaxCoordinate coord) {
-		QuaxTile[][] neighbours;
-
-		if (coord.isOctagon()) {
-			neighbours = NeighbourFinder.getOctagonNeighbours(coord, this);
-		}
-		else {
-			neighbours = NeighbourFinder.getRhombusNeighbours(coord, this);
-		}
-
-		return neighbours;
+		return NeighbourFinder.getCoordinateNeighbours(coord, this);
 	}
 
 	// TODO - Do we actually need this
@@ -339,6 +330,15 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	 */
 	private static class NeighbourFinder {
 
+		private static QuaxTile[][] getCoordinateNeighbours(QuaxCoordinate coord, QuaxBoard b) {
+			if (coord.isOctagon()) {
+				return getOctagonNeighbours(coord, b);
+			}
+			else {
+				return getRhombusNeighbours(coord, b);
+			}
+		}
+
 		private static QuaxTile[][] getRhombusNeighbours(QuaxCoordinate coord, QuaxBoard b) {
 			QuaxTile[][] neighbours = new QuaxTile[2][2];
 
@@ -349,6 +349,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			return neighbours;
 		}
+
 
 
 		private static QuaxTile[][] getOctagonNeighbours(QuaxCoordinate coordinate, QuaxBoard b) {
@@ -413,6 +414,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 			return adjTiles;
 		}
+
 
 
 		private static QuaxTile[] createOutOfBoundsRow() {
