@@ -17,8 +17,7 @@ class BackgroundBoardBuilder {
     private static final double FRONT_HOURGLASS_GAP = 5.7;
     private static final double BACK_HOURGLASS_GAP = 11.4;
 
-    private OctagonTile[][] buildingOctagonGrid;
-    private RhombusTile[][] buildingRhombusGrid;
+    private GridBuilder gridBuilder;
 
 
     public StackPane initialiseBoard() {
@@ -200,10 +199,10 @@ class BackgroundBoardBuilder {
 
 
     private StackPane createGrid() {
-        GridBuilder gb = new GridBuilder();
+        gridBuilder = new GridBuilder();
         StackPane gridStack = new StackPane(
-                gb.createOctagonGrid(),
-                gb.createRhombusGrid()
+                gridBuilder.createOctagonGrid(),
+                gridBuilder.createRhombusGrid()
         );
 
         gridStack.setMaxHeight(Region.USE_PREF_SIZE);
@@ -212,10 +211,13 @@ class BackgroundBoardBuilder {
         return gridStack;
     }
 
-    private class GridBuilder {
+    private static class GridBuilder {
 
         private GridPane octagonGrid;
         private GridPane rhombusGrid;
+
+        private OctagonTile[][] buildingOctagonGrid;
+        private RhombusTile[][] buildingRhombusGrid;
 
 
         private GridPane createOctagonGrid() {
@@ -301,14 +303,23 @@ class BackgroundBoardBuilder {
                 }
             }
         }
+
+
+        private OctagonTile[][] getBuiltOctagonGrid() {
+            return buildingOctagonGrid;
+        }
+
+        private RhombusTile[][] getBuiltRhombusGrid() {
+            return buildingRhombusGrid;
+        }
     }
 
 
     public OctagonTile[][] getOctagonTileGrid() {
-        return buildingOctagonGrid;
+        return gridBuilder.getBuiltOctagonGrid();
     }
 
     public RhombusTile[][] getRhombusTileGrid() {
-        return buildingRhombusGrid;
+        return gridBuilder.getBuiltRhombusGrid();
     }
 }
