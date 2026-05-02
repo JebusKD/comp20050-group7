@@ -91,19 +91,19 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	public Octagon getOctagon(int x, int y) {
-		return octagonGrid[x][y];
+		return this.octagonGrid[x][y];
 	}
 	
 	public Rhombus getRhombus(int x, int y) {
-		return rhombusGrid[x][y];
+		return this.rhombusGrid[x][y];
 	}
 	
 	public QuaxTile getTile(QuaxCoordinate coord) {
 		if (coord.isOctagon()) {
-			return octagonGrid[coord.x()][coord.y()];
+			return this.getOctagon(coord.x(),coord.y());
 		}
 		else {
-			return rhombusGrid[coord.x()][coord.y()];
+			return this.getRhombus(coord.x(),coord.y());
 		}
 	}
 	
@@ -213,12 +213,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		this.moveNumber++;
 	}
 
-	private void makeMove(QuaxCoordinate coord) {
-		makeMove(coord, currentColourTurn());
-	}
-
 	public void makeMove(QuaxTile t) {
-		makeMove(t.getCoordinates());
+		makeMove(t.getCoordinates(), currentColourTurn());
 	}
 	
 	public void skipTurn() {

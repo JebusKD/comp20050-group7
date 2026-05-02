@@ -26,12 +26,12 @@ public abstract class QuaxPlayer {
 
     protected Executor getExecutor() {
         assert playerController != null;
-        return playerController.getQuaxExecutor();
+        return this.playerController.getQuaxExecutor();
     }
     
     private Executor getSubmitter() {
         assert playerController != null;
-        return playerController.getQuaxMoveSubmitter();
+        return this.playerController.getQuaxMoveSubmitter();
     }
 
 

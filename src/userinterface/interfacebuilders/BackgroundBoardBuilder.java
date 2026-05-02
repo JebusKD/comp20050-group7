@@ -21,16 +21,13 @@ class BackgroundBoardBuilder {
 
 
     public StackPane initialiseBoard() {
-        StackPane board = new StackPane(
+        return new StackPane(
                 createGradientBackground(),
                 createBehindHourglass(),
                 createHourglass(),
                 createGridBackground(),
                 createBoardCoordinates(),
-                createGrid()
-        );
-
-        return board;
+                createGrid());
     }
 
 
@@ -85,6 +82,7 @@ class BackgroundBoardBuilder {
 
         return background;
     }
+
 
     private GridPane createBoardCoordinates() {
         CoordinateBuilder coordBuild = new CoordinateBuilder();
