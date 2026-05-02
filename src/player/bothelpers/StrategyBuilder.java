@@ -1,0 +1,233 @@
+package player.bothelpers;
+
+import java.util.*;
+
+import model.QuaxBoard;
+import player.BotPlayer;
+import static player.BotPlayer.MAX_STRATEGIES;
+import types.*;
+
+
+public class StrategyBuilder {
+
+    private final BotPlayer linkedBot;
+
+    
+    public StrategyBuilder(BotPlayer bot) {
+        this.linkedBot = bot;
+    }
+
+
+    public QuaxTileColour botColour() {
+        return linkedBot.getPlayerColour();
+    }
+
+    private ArrayList<LinkedList<QuaxTile>> getBotStrategyGroups() {
+        ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(MAX_STRATEGIES);
+
+        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
+            strategyGroups.add(linkedBot.getStrategyGroupWithValue(i));
+        }
+
+        return strategyGroups;
+    }
+
+
+    public void initialiseStrategy(QuaxBoard b) {
+        initialiseAllStrategyGroups(b);
+        BasicBotStrategist simpleBot = new BasicBotStrategist(b);
+
+        simpleBot.createSimpleStrategy();
+    }
+
+
+    private void initialiseAllStrategyGroups(QuaxBoard board) {
+        for (QuaxTile t : board) {
+            t.setStrategyValue(0);
+            if (isValidStrategicMove(t, board, botColour())) {
+                assignStrategyValue(t, 1);
+            }
+        }
+    }
+
+    void assignStrategyValue(QuaxTile t, int value) {
+        t.setStrategyValue(value);
+        assignTileToStrategyGroup(t);
+    }
+
+    private void assignTileToStrategyGroup(QuaxTile newTile) {
+        removeTileFromAllStrategyGroups(newTile);
+        int strategyValue = newTile.getStrategyValue();
+
+        if (strategyValue > 0 && strategyValue <= MAX_STRATEGIES) {
+            LinkedList<QuaxTile> stratGroup = linkedBot.getStrategyGroupWithValue(strategyValue);
+            stratGroup.add(newTile);
+        }
+    }
+
+    private void removeTileFromAllStrategyGroups(QuaxTile targetTile) {
+        for (LinkedList<QuaxTile> g : getBotStrategyGroups()) {
+            g.remove(targetTile);
+        }
+    }
+
+
+    private boolean isValidStrategicMove(QuaxTile t, QuaxBoard b, QuaxTileColour c) {
+        return b.validMove(t.getCoordinates(), c);
+    }
+
+
+    /* "Useless Rhombus" is defined as having at most 1
+     * nearby enemy tile.
+     */
+    boolean isLowPriorityRhombus(QuaxTile t, QuaxBoard b) {
+        boolean result = false;
+
+        if (t instanceof Rhombus) {
+            int countOpponentTiles = 0;
+            for (QuaxTile[] row : b.getNeighbours(t.getCoordinates())) {
+                for (QuaxTile n : row) {
+                    if (n.getTileColour() == botColour().flip()) {
+                        countOpponentTiles++;
+                    }
+                }
+            }
+            result = countOpponentTiles <= 1;
+        }
+        return result;
+    }
+
+
+    private class BasicBotStrategist {
+
+        private final QuaxBoard simpleBoard;
+
+
+        private BasicBotStrategist(QuaxBoard b) {
+            this.simpleBoard = b;
+        }
+
+
+        private void createSimpleStrategy() {
+            for (QuaxTile t : simpleBoard) {
+                // If the tile being checked is an already owned Octagon tile,
+                //      set the strategy value of the tiles around it
+                if (!isValidStrategicMove(t, simpleBoard, botColour())) {
+                    if (t instanceof Octagon) {
+                        setOctagonStrategyValues(t);
+                    }
+                }
+
+                // If the tile being checked is valid, ignoring unplaced Octagon tiles,
+                //      set values depending on the board status
+                else {
+                    if (t instanceof Rhombus) {
+                        setRhombusStrategyValue(t);
+                    }
+
+                    setHighPriorityStrategyGroups(t);
+                }
+            }
+        }
+
+
+        private void setOctagonStrategyValues(QuaxTile t) {
+            QuaxTile[][] neighbours = simpleBoard.getNeighbours(t.getCoordinates());
+
+            for (QuaxTile[] row : neighbours) {
+                for (QuaxTile neighbour : row) {
+                    // If tile is adjacent to an already owned one, it has a base strategy value of 2
+                    if (neighbour.tileExists() && isValidStrategicMove(neighbour, simpleBoard, botColour())) {
+                        if (neighbour.getStrategyValue() <= 2) {
+                            neighbour.setStrategyValue(2);
+                        }
+                        assignTileToStrategyGroup(neighbour);
+
+                        // If the move is not game-changing, set progressing tile strategy values
+                        if (neighbour.getStrategyValue() <= 4) {
+                            setProgressStrategy(t, neighbour, neighbours);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void setProgressStrategy(QuaxTile t, QuaxTile n, QuaxTile[][] neighbours) {
+            if (t.isBlack()) {
+                progressVertically(n, neighbours);
+            }
+            else {
+                progressHorizontally(n, neighbours);
+            }
+        }
+
+        private void progressVertically(QuaxTile n, QuaxTile[][] neighbours) {
+            if (n == neighbours[1][0] || n == neighbours[1][2]) {
+                if (botColour() == QuaxTileColour.BLACK) {
+                    assignStrategyValueIfLess(n, 4);
+                }
+                else {
+                    assignStrategyValueIfLess(n, 3);
+                }
+            }
+        }
+
+        private void progressHorizontally(QuaxTile n, QuaxTile[][] neighbours) {
+            if (n == neighbours[0][1] || n == neighbours[2][1]) {
+                if (botColour() == QuaxTileColour.WHITE) {
+                    assignStrategyValueIfLess(n, 4);
+                }
+                else {
+                    assignStrategyValueIfLess(n, 3);
+                }
+            }
+        }
+
+
+        private void setRhombusStrategyValue(QuaxTile t) {
+            if (isLowPriorityRhombus(t, simpleBoard)) {
+                assignStrategyValue(t, 0);
+            }
+            else {
+                // If not a low-priority rhombus, the human player can place the rhombus as well,
+                //      so assign it the second-highest priority, to block it
+                if (isValidStrategicMove(t, simpleBoard, botColour().flip())) {
+                    assignStrategyValue(t, 5);
+                }
+            }
+        }
+
+        private void setHighPriorityStrategyGroups(QuaxTile t) {
+            // If human player can win, try to block the win
+            if (checkForWin(t.getCoordinates(), botColour().flip())) {
+                assignStrategyValue(t, MAX_STRATEGIES-1);
+            }
+
+            // If the bot can place any winning tile, assign the highest priority
+            if (checkForWin(t.getCoordinates(), botColour())) {
+                assignStrategyValue(t, MAX_STRATEGIES);
+            }
+        }
+
+
+        private void assignStrategyValueIfLess(QuaxTile t, int value) {
+            if (t.getStrategyValue() < value) {
+                assignStrategyValue(t, value);
+            }
+        }
+
+        private boolean checkForWin(QuaxCoordinate coord, QuaxTileColour colour) {
+            QuaxBoard copyBoard = new QuaxBoard(simpleBoard);
+            copyBoard.makeMove(coord, colour);
+
+            return copyBoard.checkForWinningMove();
+        }
+    }
+
+
+    public void refineStrategy(QuaxBoard b) {
+        BotStrategyImprover smarterBot = new BotStrategyImprover(b, this);
+
+        smarterBot.improveStrategy();
+    }
+}
