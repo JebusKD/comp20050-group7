@@ -14,13 +14,13 @@ public class BotPlayer extends QuaxPlayer {
 	private static final long MIN_THINKING_TIME = 1000;
     private static boolean botHaste = false;
 
-    private final StrategyBuilder sb;
+    private final StrategyBuilder strategyBuilder;
     private ArrayList<LinkedList<QuaxTile>> strategyGroups;
 
 
 	public BotPlayer() {
 		super();
-		sb = new StrategyBuilder();
+		strategyBuilder = new StrategyBuilder();
 		strategyGroups = new ArrayList<>(MAX_STRATEGIES);
         clearAllStrategyGroups();
 	}
@@ -49,7 +49,7 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
 
-    // TODO - Less returns
+    // TODO - Less returns - Remove random group altogether?
     private LinkedList<QuaxTile> selectStrategyGroup(int move) {
         if (move == 0) {
             return getStrategyGroupWithValue(1);
@@ -67,7 +67,7 @@ public class BotPlayer extends QuaxPlayer {
             return getStrategyGroupWithValue(5);
         }
 
-        int randStrategyValue = chooseStrategyValue();
+        int randStrategyValue = chooseRandomStrategyValue();
         LinkedList<QuaxTile> choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.isEmpty()) {
@@ -78,13 +78,14 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
+
     /* //TODO - Decide on probabilities, are we keeping them as this? ALSO 1 return/method???
     1% chance of strat val 1
     14% chance of strat val 2
     25% chance of strat val 3
     60% chance of strat 4
     */
-    private int chooseStrategyValue() {
+    private int chooseRandomStrategyValue() {
         SplittableRandom random = new SplittableRandom();
         int probability= random.nextInt(1,101);
 
@@ -109,10 +110,11 @@ public class BotPlayer extends QuaxPlayer {
         return strategyGroups.get(i - 1);
     }
 
-    private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> tsg) {
+
+    private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
 
-        for (QuaxTile t : tsg) {
+        for (QuaxTile t : stratGroup) {
             moves.add(t.getCoordinates());
         }
 
@@ -120,13 +122,14 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
+
     private void assignTileToStrategyGroup(QuaxTile newTile) {
         removeTileFromAllStrategyGroups(newTile);
-
         int strategyValue = newTile.getStrategyValue();
+
         if (strategyValue > 0 && strategyValue <= MAX_STRATEGIES) {
-            LinkedList<QuaxTile> tileSGroup = getStrategyGroupWithValue(strategyValue);
-	        tileSGroup.add(newTile);
+            LinkedList<QuaxTile> stratGroup = getStrategyGroupWithValue(strategyValue);
+            stratGroup.add(newTile);
         }
     }
 
@@ -140,9 +143,36 @@ public class BotPlayer extends QuaxPlayer {
     // how the bot decides strategy vals for the tiles
     private void setUpStrategy(QuaxBoard board) {
         clearAllStrategyGroups();
-        sb.initialiseStrategy(board);
-        sb.postStrategy(board);
+        strategyBuilder.initialiseStrategy(board);
+        strategyBuilder.postStrategy(board);
     }
+
+
+    private boolean isValidStrategicMove(QuaxTile t, QuaxBoard b, QuaxTileColour c) {
+        return b.validMove(t.getCoordinates(), c);
+    }
+
+
+    public static void enableHaste() {
+    	botHaste = true;
+    }
+
+
+	@Override
+	public void movePrompt(QuaxBoard board) {
+        long startThinkingTime = System.currentTimeMillis();
+		
+        this.getExecutor().execute(() -> {
+            setUpStrategy(board);
+        	QuaxCoordinate move = decideMove(board);
+        	
+        	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME) {
+                ;
+            }
+            submitMove(move);
+        });
+	}
+
 
 
     private class StrategyBuilder {
@@ -160,7 +190,7 @@ public class BotPlayer extends QuaxPlayer {
             initialiseAllStrategyGroups(b);
 
             for (QuaxTile t : b) {
-                // If the tile being checked is not valid, i.e. already owned,
+                // If the tile being checked is an already owned Octagon tile,
                 //      set the strategy value of the tiles around it
                 if (!isValidStrategicMove(t, b, getPlayerColour())) {
                     if (t instanceof Octagon) {
@@ -168,7 +198,7 @@ public class BotPlayer extends QuaxPlayer {
                     }
                 }
 
-                // If the tile being checked is valid, ignoring unplaced Octagons,
+                // If the tile being checked is valid, ignoring unplaced Octagon tiles,
                 //      set values depending on the board status
                 else {
                     if (t instanceof Rhombus) {
@@ -233,6 +263,7 @@ public class BotPlayer extends QuaxPlayer {
                 }
             }
         }
+
 
 
         private void setRhombusStrategyValue(QuaxTile t, QuaxBoard board) {
@@ -440,30 +471,4 @@ public class BotPlayer extends QuaxPlayer {
         	}
         }
     }
-
-
-    private boolean isValidStrategicMove(QuaxTile t, QuaxBoard b, QuaxTileColour c) {
-        return b.validMove(t.getCoordinates(), c);
-    }
-
-
-    public static void enableHaste() {
-    	botHaste = true;
-    }
-
-
-	@Override
-	public void movePrompt(QuaxBoard board) {
-        long startThinkingTime = System.currentTimeMillis();
-		
-        this.getExecutor().execute(() -> {
-            setUpStrategy(board);
-        	QuaxCoordinate move = decideMove(board);
-        	
-        	while (!botHaste && System.currentTimeMillis() - startThinkingTime < MIN_THINKING_TIME) {
-                ;
-            }
-            submitMove(move);
-        });
-	}
 }
