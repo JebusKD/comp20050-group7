@@ -327,6 +327,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	/*
 	 * Handle searching for neighbours
+	 * //TODO - make proper nested class - instance of Board, etc.?
 	 */
 	private static class NeighbourFinder {
 

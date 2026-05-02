@@ -20,7 +20,7 @@ class BackgroundBoardBuilder {
     private GridBuilder gridBuilder;
 
 
-    public StackPane initialiseBoard() {
+    StackPane initialiseBoard() {
         return new StackPane(
                 createGradientBackground(),
                 createBehindHourglass(),

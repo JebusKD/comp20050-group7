@@ -202,7 +202,7 @@ public class QuaxController {
      * 
      * This is used in integration tests not involving the UI.
      */
-    public static class SingleThreadExecutor implements Executor {
+    private static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {
             r.run();
         }
@@ -215,7 +215,7 @@ public class QuaxController {
      * 
      * This is used for bots to compute their moves.
      */
-    public static class MultithreadedExecutor implements Executor {
+    private static class MultithreadedExecutor implements Executor {
     	public void execute(Runnable r) {
 			new Thread(r).start();
 		}
@@ -228,7 +228,7 @@ public class QuaxController {
      * 
      * This is used for bots to submit computed moves.
      */
-    public static class JavaFXPlatformExecutor implements Executor {
+    private static class JavaFXPlatformExecutor implements Executor {
     	public void execute(Runnable r) {
     		Platform.runLater(r);
     	}
