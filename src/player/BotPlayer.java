@@ -322,10 +322,12 @@ public class BotPlayer extends QuaxPlayer {
 	                	downgradeStrategy(t, 1, 2);
 	                }
         			
-        			avoidWeakGroupContributions(b, 2, 2);
         		}
         		
         	}
+        	
+        	avoidWeakGroupContributions(b, 2, 2);
+        	diagonalPathfinding(b);
         	
         }
         
@@ -443,6 +445,63 @@ public class BotPlayer extends QuaxPlayer {
         			}
         		}
         	}
+        }
+        
+        private void diagonalPathfinding(QuaxBoard board) {
+        	// TODO Octagon iterator
+        	for (QuaxTile t : board) {
+        		if (t instanceof Octagon center) {
+        			if (center.isSameColour(getPlayerColour())) {
+	        			QuaxTile[][] neighbours = board.getSquareOctagonNeighbours(center);
+	        			
+	        			for (int i = -1; i <= 1; i++) {
+	        				if (opponentBlockingPath(neighbours, i)) {
+	        					for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
+	        						if (ahead.tileExists() && ahead.getStrategyValue() == 3) {
+	        							upgradeStrategy(ahead, 1, 4);
+	        						}
+	        					}
+	        				}
+	        			}
+	        		}
+        		}
+        	}
+        }
+        
+        private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
+        	assert direction == -1 || direction == 1;
+        	
+        	boolean result = false;
+        	QuaxTile[] pathAhead = neighboursAhead(neighbours, direction);
+        	
+        	if (pathAhead[1].tileExists()) {
+        		result = pathAhead[1].isOpponentColour(getPlayerColour());
+        	}
+        	return result;
+        }
+        
+        private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
+        	assert neighbours.length == 3 && neighbours[0].length == 3 && (direction == -1 || direction == 1);
+        	QuaxTile[] neighboursAhead;
+        	if (getPlayerColour() == QuaxTileColour.BLACK) {
+        		neighboursAhead = getNeighboursRow(neighbours, 1 + direction);
+        	}
+        	else {
+        		neighboursAhead = getNeighboursColumn(neighbours, 1 + direction);
+        	}
+        	return neighboursAhead;
+        }
+        
+        private QuaxTile[] getNeighboursRow(QuaxTile[][] neighbours, int index) {
+        	return neighbours[index];
+        }
+        
+        private QuaxTile[] getNeighboursColumn(QuaxTile[][] neighbours, int index) {
+        	QuaxTile[] column = new QuaxTile[3];
+        	for (int i = 0; i < 3; i++) {
+        		column[i] = neighbours[i][index];
+        	}
+        	return column;
         }
     }
 

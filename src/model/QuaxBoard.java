@@ -300,6 +300,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				}
 			}
 		}
+
 	}
 
 
@@ -332,6 +333,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			}
 		}
 		return result;
+	}
+	
+	public QuaxTile[][] getSquareOctagonNeighbours(Octagon o) {
+		return NeighbourFinder.getSquareOctagonNeighbours(o.getCoordinates(), this);
 	}
 
 	/*
@@ -425,6 +430,38 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.HIDDEN_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE };
+		}
+		
+		private static QuaxTile[][] getSquareOctagonNeighbours(QuaxCoordinate coordinate, QuaxBoard board) {
+			assert board != null && coordinate != null && coordinate.isOctagon();
+			QuaxTile[][] neighbours = new QuaxTile[3][3];
+			for (int i = -1; i <= 1; i++) {
+				neighbours[i+1] = createOctagonSquareNeighboursArray(coordinate, board, i);
+			}
+			return neighbours;
+		}
+		
+		private static QuaxTile[] createOctagonSquareNeighboursArray(QuaxCoordinate center, QuaxBoard board, int verticalOffset) {
+			
+			QuaxTile[] array;
+			if (verticalOffset == 0) {
+				array = createOutOfBoundsRowWithHiddenCenter();
+			} else {
+				array = createOutOfBoundsRow();
+			}
+			
+			int y = center.y() + verticalOffset;
+			if (y >= 0 && y < MAX_OCTAGONS) {
+				for (int i = -1; i <= 1; i++) {
+					int x = center.x() + i;
+					if (x >= 0 && x < MAX_OCTAGONS) {
+						array[i+1] = board.getOctagon(x, y);
+					}
+					
+				}
+			}
+			
+			return array;
 		}
 	}
 
