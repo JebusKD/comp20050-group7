@@ -186,19 +186,6 @@ public class QuaxUITest {
 
         assertEquals("WHITE wins", winLabel.getText());
     }
-    
-    @Test
-    void testWinLabelIsDisplayed(FxRobot robot) { //TODO - Why do we have a duplicate test?
-        for (int i = 0 ; i < 10 ; i++) {
-            robot.clickOn("#octagon5-" + i);
-            robot.clickOn("#octagon1-" + i);
-        }
-
-        robot.clickOn("#octagon5-10");
-        Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
-
-        assertEquals("BLACK wins",winLabel.getText());
-    }
 
 
     @Test

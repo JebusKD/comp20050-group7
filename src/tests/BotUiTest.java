@@ -48,9 +48,6 @@ public class BotUiTest {
         },3, TimeUnit.SECONDS);
 	}
 
-    // TODO - Get rid of this?
-    //https://testfx.github.io/TestFX/docs/javadoc/testfx-core/javadoc/org.testfx/org/testfx/util/WaitForAsyncUtils.html
-
     @Test
     public void testBotAlwaysMakesMove(FxRobot robot) {
     	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
