@@ -313,7 +313,7 @@ public class BotPlayer extends QuaxPlayer {
 	        			assignStrategyValue(t, 0);
 	        		}
 	                else if (exploitsVulnerableRhombuses(t, b)) {
-	        			upgradeStrategy(t, 1, 5);
+	        			upgradeStrategy(t, 2, 5);
 	        		}
 	                else if (defendsVulnerableRhombuses(t, b)) {
 	        			upgradeStrategy(t, 2, 5);
