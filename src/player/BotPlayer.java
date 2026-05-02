@@ -321,10 +321,12 @@ public class BotPlayer extends QuaxPlayer {
 	                else if (createsOnlyOneVulnerableRhombus(t, b)) {
 	                	downgradeStrategy(t, 1, 2);
 	                }
+        			
+        			avoidWeakGroupContributions(b, 2, 2);
         		}
+        		
         	}
         	
-        	avoidWeakGroupContributions(b, 2, 2);
         }
         
         private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
@@ -339,14 +341,17 @@ public class BotPlayer extends QuaxPlayer {
         }
         
         private void downgradeStrategy(QuaxTile t, int decrease, int minimum) {
-        	int prevValue = t.getStrategyValue(),
-        			limit = Math.max(minimum, 0);
-        	if (prevValue > limit) {
-	        	if (prevValue - decrease < limit) {
-	        		decrease = prevValue - limit;
+        	if (isLowPriority(t)) {
+	        	int prevValue = t.getStrategyValue(),
+	        			limit = Math.max(minimum, 0);
+	        	if (prevValue > limit) {
+		        	if (prevValue - decrease < limit) {
+		        		decrease = prevValue - limit;
+		        	}
+		        	assignStrategyValue(t, prevValue - decrease);
 	        	}
-	        	assignStrategyValue(t, prevValue - decrease);
         	}
+
         }
 
         // TODO - Explain these
