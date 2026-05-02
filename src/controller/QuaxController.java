@@ -92,7 +92,7 @@ public class QuaxController {
 
         this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
 
-        curPlayer().movePrompt(quaxBoard);
+        currentPlayer().movePrompt(quaxBoard);
     }
 
     private void setQuaxPlayers(QuaxPlayer p1, QuaxPlayer p2) {
@@ -107,7 +107,7 @@ public class QuaxController {
     }
 
 
-    public QuaxPlayer curPlayer() {
+    public QuaxPlayer currentPlayer() {
         return quaxPlayers[getMoveNumber() % 2];
     }
 
@@ -147,12 +147,12 @@ public class QuaxController {
             quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
 
             quaxUserInterface.setPieRuleVisibility(false);
-            curPlayer().movePrompt(getQuaxBoard());
+            currentPlayer().movePrompt(getQuaxBoard());
         }
     }
 
     public void attemptMove(QuaxCoordinate coords) {
-    	QuaxPlayer moveSubmitter = curPlayer();
+    	QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
 
         if (quaxBoard.validMove(coords, moveColour)) {
@@ -170,7 +170,7 @@ public class QuaxController {
                 quaxUserInterface.hideTurnTracker();
             }
             else {
-                curPlayer().movePrompt(quaxBoard);
+                currentPlayer().movePrompt(quaxBoard);
             }
         }
     }

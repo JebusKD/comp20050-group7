@@ -35,9 +35,9 @@ public class BotUiTest {
     	// Bot should automatically make a move if possible, so should always be the human's turn.
     	scheduler.schedule(() -> {
             
-    		assertFalse(controller.curPlayer() instanceof BotPlayer);
+    		assertFalse(controller.currentPlayer() instanceof BotPlayer);
 
-        	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
+        	if (controller.currentPlayer().getPlayerColour() == QuaxTileColour.BLACK) { // Human goes first
         		assertEquals(0,controller.getQuaxBoard().getMoveNumber()); //robot has not moved
         	}
 
@@ -54,7 +54,7 @@ public class BotUiTest {
     	WaitForAsyncUtils.waitForFxEvents();
 
         // Human goes first
-    	if (controller.curPlayer().getPlayerColour() == QuaxTileColour.BLACK) {
+    	if (controller.currentPlayer().getPlayerColour() == QuaxTileColour.BLACK) {
     		robot.clickOn("#octagon5-5");
     		WaitForAsyncUtils.waitForFxEvents();
     		

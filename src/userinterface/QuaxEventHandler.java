@@ -14,7 +14,7 @@ public class QuaxEventHandler {
         stage.addEventHandler(QuaxCoordinateEvent.TILE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(QuaxCoordinateEvent coords) {
-                if (controller.curPlayer() instanceof HumanPlayer) {
+                if (controller.currentPlayer() instanceof HumanPlayer) {
                     controller.attemptMove(coords.coordinate());
                 }
             }
@@ -22,7 +22,7 @@ public class QuaxEventHandler {
         stage.addEventHandler(ButtonClickEvent.PIE_RULE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(ButtonClickEvent event) {
-                if (controller.curPlayer() instanceof HumanPlayer) {
+                if (controller.currentPlayer() instanceof HumanPlayer) {
                     controller.doPieRule();
                 }
             }

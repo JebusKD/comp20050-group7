@@ -92,7 +92,6 @@ public abstract class QuaxTile {
 		return getTileColour() == c;
 	}
 
-	// TODO - Will this be used?
 	public boolean isOpponentColour(QuaxTileColour c) {
 		assert c != QuaxTileColour.NONE;
 		return getTileColour() == c.flip();
@@ -185,10 +184,10 @@ public abstract class QuaxTile {
 		public boolean isSameColour(QuaxTileColour c) {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public boolean isOpponentColour(QuaxTileColour c) {
 			throw placeholderUsedException();
 		}
-		
 	}
 }

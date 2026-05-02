@@ -30,8 +30,8 @@ class TestPieRule {
 		testQuaxController.attemptMove(newOctagonCoordinate(3, 3));
 		testQuaxController.doPieRule();
 
-		assertEquals(QuaxTileColour.WHITE, testQuaxController.curPlayer().getPlayerColour());
-		assertEquals(tester1, testQuaxController.curPlayer());
+		assertEquals(QuaxTileColour.WHITE, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
 
 
@@ -39,8 +39,8 @@ class TestPieRule {
 	void testPieRuleFailure1() {
 		testQuaxController.doPieRule();
 
-		assertEquals(QuaxTileColour.BLACK, testQuaxController.curPlayer().getPlayerColour());
-		assertEquals(tester1, testQuaxController.curPlayer());
+		assertEquals(QuaxTileColour.BLACK, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
 	
 	@Test
@@ -49,8 +49,8 @@ class TestPieRule {
 		testQuaxController.attemptMove(newOctagonCoordinate(3, 4));
 		testQuaxController.doPieRule();
 
-		assertEquals(QuaxTileColour.BLACK, testQuaxController.curPlayer().getPlayerColour());
-		assertEquals(tester1, testQuaxController.curPlayer());
+		assertEquals(QuaxTileColour.BLACK, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ class TestPieRule {
 		testQuaxController.attemptMove(newOctagonCoordinate(3, 5));
 		testQuaxController.doPieRule();
 
-		assertEquals(QuaxTileColour.WHITE, testQuaxController.curPlayer().getPlayerColour());
-		assertEquals(tester2, testQuaxController.curPlayer());
+		assertEquals(QuaxTileColour.WHITE, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester2, testQuaxController.currentPlayer());
 	}
 }
