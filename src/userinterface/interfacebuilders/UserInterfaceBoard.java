@@ -15,8 +15,8 @@ public class UserInterfaceBoard {
 
     private static final String PREVIOUS_MOVE_STYLE = "tilecolour-green";
 
-    private OctagonTile[][] octagonGridCells;
-    private RhombusTile[][] rhombusGridCells;
+    private final OctagonTile[][] octagonGridCells;
+    private final RhombusTile[][] rhombusGridCells;
 
     private final StackPane stackUIBoard;
 

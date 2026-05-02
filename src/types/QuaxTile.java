@@ -18,6 +18,7 @@ public abstract class QuaxTile {
 	public QuaxTile(int x, int y) {
 		this.tileColour = QuaxTileColour.NONE;
 		this.tileGroup = null;
+
 		this.strategyValue = 0;
 		this.xPosition = x;
 		this.yPosition = y;
@@ -37,6 +38,7 @@ public abstract class QuaxTile {
 		this.xPosition = -1;
 		this.yPosition = -1;
 	}
+
 
 	public QuaxTileColour getTileColour() {
 		return this.tileColour;
@@ -67,6 +69,7 @@ public abstract class QuaxTile {
 
 	public abstract QuaxCoordinate getCoordinates();
 
+
 	/*
 	 * Shorthand boolean checks for brevity
 	 */
@@ -76,12 +79,14 @@ public abstract class QuaxTile {
 	public boolean isOccupied() {
 		return !isFree();
 	}
+
 	public boolean isBlack() {
 		return getTileColour() == QuaxTileColour.BLACK;
 	}
 	public boolean isWhite() {
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
+
 	public boolean isSameColour(QuaxTileColour c) {
 		assert c == QuaxTileColour.BLACK || c == QuaxTileColour.WHITE;
 		return getTileColour() == c;
@@ -105,13 +110,16 @@ public abstract class QuaxTile {
 	 * in code for QuaxBoard.neighbours and related methods.
 	 */
 	private static class PlaceholderTile extends QuaxTile {
+
 		private final String type;
-		
+
+
 		private PlaceholderTile(String type) {
 			super();
 			this.type = type;
 		}
-		
+
+
 		private UnsupportedOperationException placeholderUsedException() {
 			return new UnsupportedOperationException("Cannot be invoked on " + type + " tile.");
 		}
@@ -124,42 +132,55 @@ public abstract class QuaxTile {
 		public QuaxTileGroup getTileGroup() {
 			throw placeholderUsedException();
 		}
+
+
 		@Override
 		public int getStrategyValue() {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public void setTileColour(QuaxTileColour colour) {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public void setTileGroup(QuaxTileGroup tileGroup) {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public void setStrategyValue(int value) {
 			throw placeholderUsedException();
 		}
+
+
 		@Override
 		public QuaxCoordinate getCoordinates() {
 			throw placeholderUsedException();
 		}
+
+
 		@Override
 		public boolean isFree() {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public boolean isOccupied() {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public boolean isBlack() {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public boolean isWhite() {
 			throw placeholderUsedException();
 		}
+
 		@Override
 		public boolean isSameColour(QuaxTileColour c) {
 			throw placeholderUsedException();

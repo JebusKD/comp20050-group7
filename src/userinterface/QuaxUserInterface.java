@@ -40,8 +40,9 @@ public class QuaxUserInterface implements UserInterface {
     private WindowManager quaxUIWindow;
 
     private BotPlayer linkedBot;
-    private boolean hasLinkedBot;
     private QuaxCoordinate chosenMove;
+
+    private boolean hasLinkedBot;
     private boolean showingStrategy;
 
 
@@ -79,7 +80,7 @@ public class QuaxUserInterface implements UserInterface {
         quaxUIWindow.initialiseWinLabel();
         quaxUIWindow.initialiseStrategyColourCoding();
 
-        this.turnIndicator = new PlayerTurnIndicator();
+        turnIndicator = new PlayerTurnIndicator();
 
         sideBar.getChildren().addAll(turnIndicator.getTurnTrackerBox(),
                                         quaxUIWindow.getWinLabel(),
@@ -87,7 +88,7 @@ public class QuaxUserInterface implements UserInterface {
         sideBar.getStyleClass().add("vbox");
 
 
-        this.interfaceScene = new Scene(createOuterGrid(sideBar));
+        interfaceScene = new Scene(createOuterGrid(sideBar));
     }
 
     private GridPane createOuterGrid(VBox extrasBar) {
@@ -113,6 +114,7 @@ public class QuaxUserInterface implements UserInterface {
 
     public void updateFromPreviousMove(QuaxBoard board) {
         updateStrategy();
+
         if (board.isStartingMove()) {
             this.turnIndicator.setIndicatorColour(QuaxTileColour.BLACK);
         }
@@ -153,6 +155,7 @@ public class QuaxUserInterface implements UserInterface {
     	if (hasLinkedBot && showingStrategy) {
     		quaxUIBoard.clearTileBorders();
     		quaxUIBoard.setBotChosenCell(chosenMove);
+
 	        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
 	            for (QuaxTile t : linkedBot.getStrategyGroupWithValue(i)) {
 	                quaxUIBoard.setTileBorder(t.getCoordinates(), STRATEGY_GROUP_BORDERS[i - 1]);
@@ -161,10 +164,12 @@ public class QuaxUserInterface implements UserInterface {
     	}
     }
 
+
     @Override
     public void hideStrategy(QuaxBoard board) {
     	this.showingStrategy = false;
     	this.quaxUIBoard.clearBotChosenMove();
+
         for (QuaxTile t : board) {
             this.quaxUIBoard.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
         }
