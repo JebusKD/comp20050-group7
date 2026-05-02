@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import types.Octagon;
@@ -97,6 +96,7 @@ class TestOctagon {
 		assertEquals(6, t.distanceToLowWall());
 	}
 
+
 	@Test
 	void testDistanceToHighWall1() {
 		Octagon t = new Octagon(3, 10);
@@ -127,96 +127,97 @@ class TestOctagon {
 
 
 	@Test
-	void testIsFree1() {
+	void testOctagonIsFree1() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
-	void testIsFree2() {
+	void testOctagonIsFree2() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
-	void testIsFree3() {
+	void testOctagonIsFree3() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertTrue(t.isFree());
 	}
 	
 	@Test
-	void testIsFree4() {
+	void testOctagonIsFree4() {
 		QuaxTile t = new Octagon(5, 5);
 		assertTrue(t.isFree());
 	}
 
+
 	@Test
-	void testIsBlack1() {
+	void testOctagonIsBlack1() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.BLACK);
 		assertTrue(t.isBlack());
 	}
 
 	@Test
-	void testIsBlack2() {
+	void testOctagonIsBlack2() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.isBlack());
 	}
 
 	@Test
-	void testIsBlack3() {
+	void testOctagonIsBlack3() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.isBlack());
 	}
 
 	@Test
-	void testIsBlack4() {
+	void testOctagonIsBlack4() {
 		QuaxTile t = new Octagon(5, 5);
 		assertFalse(t.isBlack());
 	}
 
 	@Test
-	void testIsWhite1() {
+	void testOctagonIsWhite1() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.isWhite());
 	}
 
 	@Test
-	void testIsWhite2() {
+	void testOctagonIsWhite2() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.WHITE);
 		assertTrue(t.isWhite());
 	}
 
 	@Test
-	void testIsWhite3() {
+	void testOctagonIsWhite3() {
 		QuaxTile t = new Octagon(5, 5);
 		t.setTileColour(QuaxTileColour.NONE);
 		assertFalse(t.isWhite());
 	}
 
-
 	@Test
-	void testIsWhite4() {
+	void testOctagonIsWhite4() {
 		QuaxTile t = new Octagon(5, 5);
 		assertFalse(t.isWhite());
 	}
 
 	
 	@Test
-	void testUnassignedGroup() {
+	void testOctagonUnassignedGroup() {
 		QuaxTile t = new Octagon(5, 5);
 		assertNull(t.getTileGroup());
 	}
-	
+
+
 	@Test
-	void testStrategyValue() {
+	void testOctagonStrategyValue() {
 		QuaxTile t = new Octagon(3, 2);
 		t.setStrategyValue(5);
 		assertEquals(5, t.getStrategyValue());

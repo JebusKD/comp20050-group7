@@ -19,56 +19,62 @@ import types.QuaxTileColour;
 @ExtendWith(ApplicationExtension.class)
 public class QuaxUITest {
 
-	private QuaxController controller;
+	private QuaxController testUIController;
 
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,false, false);//human v human game for testing
+        // human v human game for testing
+        testUIController = new QuaxController(stage,false, false);
     }
 
+
     @Test
-    void ShowStrategyButtonExists(FxRobot robot) {
+    void testShowStrategyButtonExists(FxRobot robot) {
         assertNotNull(robot.lookup("Show Strategy").query());
     }
 
     @Test
-    void HideStrategyButtonExists(FxRobot robot) {
+    void testHideStrategyButtonExists(FxRobot robot) {
         assertNotNull(robot.lookup("Hide Strategy").query());
     }
 
     @Test
-    void PieRuleButtonExists(FxRobot robot){
+    void testPieRuleButtonExists(FxRobot robot){
         assertNotNull(robot.lookup("PieRule").query());
     }
 
+
     @Test
-    void OctagonClicked(FxRobot robot) {
+    void testOctagonClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
-        assertEquals(QuaxTileColour.BLACK,controller.getQuaxBoard().getOctagon(5,5).getTileColour());
+
+        assertEquals(QuaxTileColour.BLACK, testUIController.getQuaxBoard().getOctagon(5,5).getTileColour());
     }
 
     @Test
-    void WinningMove(FxRobot robot){
+    void testWinningMove(FxRobot robot) {
 
-        for(int i = 0 ; i < 10 ; i++) {
+        for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
-            robot.clickOn("#octagon1-" + i);
+            robot.clickOn("#octagon1-" + i); // TODO - Do we need this?
         }
 
         robot.clickOn("#octagon5-10");
-        assertTrue(controller.getQuaxBoard().checkForWinningMove());
+
+        assertTrue(testUIController.getQuaxBoard().checkForWinningMove());
     }
 
     @Test
-    void InvalidRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getQuaxBoard();
+    void testInvalidRhombusPlacement(FxRobot robot) {
+        QuaxBoard board = testUIController.getQuaxBoard();
         robot.clickOn("#rhombus5-5");
+
         assertEquals(QuaxTileColour.NONE,board.getRhombus(5,5).getTileColour());
     }
 
     @Test
-    void validRhombusPlacement(FxRobot robot){
-        QuaxBoard board = controller.getQuaxBoard();
+    void validRhombusPlacement(FxRobot robot) {
+        QuaxBoard board = testUIController.getQuaxBoard();
 
         robot.clickOn("#octagon5-5"); //Black goes first
         robot.clickOn("#octagon0-0"); //just have white turn click somewhere else
@@ -76,76 +82,85 @@ public class QuaxUITest {
         robot.clickOn("#octagon0-1");
 
         robot.clickOn("#rhombus5-5");
+
         assertEquals(QuaxTileColour.BLACK, board.getRhombus(5,5).getTileColour());
     }
 
+
     @Test
-    void OctagonObjectDisplayExists(FxRobot robot){
+    void testOctagonTurnIndicatorExists(FxRobot robot) {
         Node turnOct = robot.lookup("#Octagon-Turn-Indicator").query();
+
         assertTrue(turnOct.isVisible());
     }
 
     @Test
-    void RhombusObjectDisplayExists(FxRobot robot){
+    void testRhombusTurnIndicatorDisplayExists(FxRobot robot) {
         Node turnRhombus = robot.lookup("#Rhombus-Turn-Indicator").query();
+
         assertTrue(turnRhombus.isVisible());
     }
 
     @Test
-    void TurnOctagonObject_ChangesColour(FxRobot robot){
+    void testOctagonTurnIndicatorChangesColour(FxRobot robot) {
         robot.clickOn("#octagon5-5");
         Node turnOct = robot.lookup("#Octagon-Turn-Indicator").query();
+
         assertTrue(turnOct.getStyleClass().contains("tilecolour-white"));
     }
 
     @Test
-    void TurnRhombusObject_ChangesColour(FxRobot robot){
+    void testRhombusTurnIndicatorChangesColour(FxRobot robot) {
         robot.clickOn("#octagon5-5");
         Node turnRhombus = robot.lookup("#Rhombus-Turn-Indicator").query();
+
         assertTrue(turnRhombus.getStyleClass().contains("tilecolour-white"));
     }
 
+
     @Test
-    void PieRuleButtonInvisibleOnceClicked(FxRobot robot) {
+    void testPieRuleButtonInvisibleOnceClicked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
         robot.clickOn("#PieRule");
         WaitForAsyncUtils.waitForFxEvents();
+
         assertFalse(robot.lookup("#PieRule").query().isVisible());
     }
 
     @Test
-    void PieRuleButtonLocked(FxRobot robot){
+    void testPieRuleButtonLocked(FxRobot robot) {
         robot.clickOn("#octagon5-5");
         robot.clickOn("#octagon0-0");
-        assertFalse(robot.lookup("#PieRule").query().isVisible());//Pie rule should disappear
 
+        assertFalse(robot.lookup("#PieRule").query().isVisible());//Pie rule should disappear
     }
 
     @Test
-    void PieRuleSwapsPlayerColours(FxRobot robot){
+    void testPieRuleSwapsPlayerColours(FxRobot robot) {
         robot.clickOn("#octagon5-5"); //player one makes move
         robot.clickOn("#PieRule"); //player two clicks PieRule
 
         //player one should now be the colour player two started out as
-        assertEquals(QuaxTileColour.WHITE,controller.getFirstPlayerColour());
+        assertEquals(QuaxTileColour.WHITE, testUIController.getFirstPlayerColour());
         //player two should now be the colour player one started out as
-        assertEquals(QuaxTileColour.BLACK,controller.getSecondPlayerColour());
+        assertEquals(QuaxTileColour.BLACK, testUIController.getSecondPlayerColour());
 
-    }
-
-    @Test
-    void NumberCoordsExist(FxRobot robot){
-        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size()); //there is 22 of each coordinate type, all with the same styling
     }
 
 
     @Test
-    void LetterCoordsExist(FxRobot robot){
+    void testNumberCoordinatesExist(FxRobot robot) {
+        //there is 22 of each coordinate type, all with the same styling
+        assertEquals(22, robot.lookup(".coordinate-number-style").queryAll().size());
+    }
+
+    @Test
+    void testLetterCoordinatesExist(FxRobot robot) {
         assertEquals(22, robot.lookup(".coordinate-letter-style").queryAll().size());
     }
 
     @Test
-    void WinLabelIsDisplayedBlack(FxRobot robot){
+    void testWinLabelIsDisplayedBlack(FxRobot robot) {
         for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
@@ -153,26 +168,27 @@ public class QuaxUITest {
 
         robot.clickOn("#octagon5-10");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
-        assertEquals("BLACK wins",winLabel.getText());
+
+        assertEquals("BLACK wins", winLabel.getText());
     }
     
     @Test
-    void WinLabelIsDisplayedWhite(FxRobot robot){
+    void testWinLabelIsDisplayedWhite(FxRobot robot){
     	robot.clickOn("#octagon8-0"); // Waste Black's first move
-        for(int i = 0 ; i < 10 ; i++) {
+
+        for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon" + i + "-3");
             robot.clickOn("#octagon" + i + "-6");
         }
 
         robot.clickOn("#octagon10-3");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
-        assertEquals("WHITE wins",winLabel.getText());
+
+        assertEquals("WHITE wins", winLabel.getText());
     }
     
     @Test
-    void WinLabelIsDisplayed(FxRobot robot){
-        QuaxBoard board = controller.getQuaxBoard();
-
+    void testWinLabelIsDisplayed(FxRobot robot) { //TODO - Why do we have a duplicate test?
         for (int i = 0 ; i < 10 ; i++) {
             robot.clickOn("#octagon5-" + i);
             robot.clickOn("#octagon1-" + i);
@@ -180,15 +196,20 @@ public class QuaxUITest {
 
         robot.clickOn("#octagon5-10");
         Label winLabel = robot.lookup(".win-label").queryAs(Label.class);
+
         assertEquals("BLACK wins",winLabel.getText());
     }
 
-    @Test
-    void ShowTitleExists(FxRobot robot){assertNotNull(robot.lookup("#Title").query());}
 
     @Test
-    void ShowTitleTextCorrect(FxRobot robot){
+    void testShowTitleExists(FxRobot robot) {
+        assertNotNull(robot.lookup("#Title").query());
+    }
+
+    @Test
+    void testShowTitleTextCorrect(FxRobot robot) {
         Label title = robot.lookup("#Title").queryAs(Label.class);
+
         assertEquals("Quax (Human V Bot)",title.getText());
     }
 }

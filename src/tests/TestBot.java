@@ -17,7 +17,8 @@ public class TestBot {
 	static void setup() {
 		BotPlayer.enableHaste();
 	}
-	
+
+
 	@Test
 	void testBot1() {
 		HumanPlayer human = new HumanPlayer();
@@ -27,7 +28,8 @@ public class TestBot {
 		
 		assertEquals(0, controller.getMoveNumber());
 	}
-	
+
+
 	@Test
 	void testBot2() {
 		HumanPlayer human = new HumanPlayer();
@@ -37,7 +39,8 @@ public class TestBot {
 		
 		assertEquals(1, controller.getMoveNumber());
 	}
-	
+
+
 	@Test
 	void testBot3() {
 		HumanPlayer human = new HumanPlayer();
@@ -53,7 +56,8 @@ public class TestBot {
 		}
 		assertEquals(1, count);
 	}
-	
+
+
 	@Test
 	void testBotPieRule() {
 		HumanPlayer human = new HumanPlayer();
@@ -66,6 +70,7 @@ public class TestBot {
 		// After the human uses the Pie rule, Bot should immediately make another move.
 		assertEquals(3, controller.getMoveNumber());
 	}
+
 
 	// NOTE: This may take a little longer (~3 seconds)
 	@Test

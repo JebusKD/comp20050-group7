@@ -4,10 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import types.Rhombus;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
+import types.*;
 
 class TestRhombus {
 
@@ -94,6 +91,62 @@ class TestRhombus {
 		QuaxTile t = new Rhombus(5, 5);
 		assertTrue(t.isFree());
 	}
+
+
+	@Test
+	void testRhombusIsBlack1() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertTrue(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack2() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack3() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack4() {
+		QuaxTile t = new Rhombus(5, 5);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsWhite1() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertFalse(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite2() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertTrue(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite3() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite4() {
+		QuaxTile t = new Rhombus(5, 5);
+		assertFalse(t.isWhite());
+	}
+
 
 
 	@Test

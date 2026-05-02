@@ -41,7 +41,8 @@ class TestQuaxTileGroup {
 		QuaxTileGroup g = new QuaxTileGroup(t);
 		assertTrue(g == t.getTileGroup());
 	}
-	
+
+
 	@Test
 	void testSize1() {
 		QuaxTileGroup g = new QuaxTileGroup();
@@ -71,6 +72,7 @@ class TestQuaxTileGroup {
 		g.addTile(new Rhombus(4, 2));
 		assertEquals(5, g.size());
 	}
+
 
 	@Test
 	void testIsWinningGroup1() {
@@ -123,9 +125,10 @@ class TestQuaxTileGroup {
 		
 		assertTrue(g.isWinningGroup());
 	}
-	
+
+
 	@Test
-	void testMerge1() {
+	void testMergeGroups1() {
 		QuaxTileGroup g1 = new QuaxTileGroup(new Octagon(0, 1));
 		QuaxTileGroup g2 = new QuaxTileGroup();
 		
@@ -135,7 +138,7 @@ class TestQuaxTileGroup {
 	}
 	
 	@Test
-	void testMerge2() {
+	void testMergeGroups2() {
 		QuaxTileGroup g1 = new QuaxTileGroup(new Octagon(0, 1));
 		QuaxTileGroup g2 = new QuaxTileGroup(new Octagon(5, 6));
 		
@@ -145,7 +148,7 @@ class TestQuaxTileGroup {
 	}
 	
 	@Test
-	void testMerge3() {
+	void testMergeGroups3() {
 		QuaxTileGroup g1 = new QuaxTileGroup();
 		QuaxTileGroup g2 = new QuaxTileGroup();
 		
@@ -161,7 +164,8 @@ class TestQuaxTileGroup {
 		
 		assertEquals(7, g1.size());
 	}
-	
+
+
 	@Test
 	void testMergeWinningGroup1() {
 		QuaxTileGroup g1 = new QuaxTileGroup();
