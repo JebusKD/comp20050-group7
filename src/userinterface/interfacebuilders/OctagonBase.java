@@ -9,7 +9,6 @@ abstract class OctagonBase extends Polygon {
     public static final double SIDELENGTH = calculateSideLength(OCTAGON_WIDTH);
     private static final double[] POINTS = generatePolygonPoints(OCTAGON_WIDTH);
 
-    // TODO - Are the extra constructors really necessary?
     public OctagonBase() {
         super(POINTS);
     }

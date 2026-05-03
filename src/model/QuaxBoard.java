@@ -100,10 +100,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	
 	public QuaxTile getTile(QuaxCoordinate coord) {
 		if (coord.isOctagon()) {
-			return this.getOctagon(coord.x(),coord.y());
+			return getOctagon(coord.x(), coord.y());
 		}
 		else {
-			return this.getRhombus(coord.x(),coord.y());
+			return getRhombus(coord.x(), coord.y());
 		}
 	}
 	
@@ -150,8 +150,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return false;
 	}
 
-	public boolean validMove(QuaxTile t) {
-		return validMove(t.getCoordinates(), currentColourTurn());
+	public boolean validMove(QuaxTile tile) {
+		return validMove(tile.getCoordinates(), currentColourTurn());
 	}
 
 
@@ -248,13 +248,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 
 
-		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour c) {
+		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour colour) {
 			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(MAX_ADJACENT_TILE_GROUPS);
 
 			for (QuaxTile[] tileArray : neighbours) {
 				for (QuaxTile tile : tileArray) {
-					if (tile.tileExists() && tile.isSameColour(c) &&
-							tileNotMemberOfGroup(nearbyGroups, tile)) {
+					if (tile.tileExists() && tile.isSameColour(colour)
+							&& tileNotMemberOfGroup(nearbyGroups, tile)) {
+
 						nearbyGroups.add(tile.getTileGroup());
 					}
 				}
@@ -306,24 +307,28 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 
-	public QuaxTile[][] getNeighbours(QuaxCoordinate coord) {
-		return NeighbourFinder.getCoordinateNeighbours(coord, this);
+	public QuaxTile[][] getNeighbours(QuaxCoordinate centreCoord) {
+		NeighbourFinder nf = new NeighbourFinder(this, centreCoord);
+		return nf.getCoordinateNeighbours();
 	}
 
-	public List<QuaxTile> getNeighboursList(QuaxTile t) {
+	public List<QuaxTile> getNeighboursList(QuaxTile centreTile) {
 		LinkedList<QuaxTile> result = new LinkedList<>();
-		for (QuaxTile[] arr : getNeighbours(t.getCoordinates())) {
+
+		for (QuaxTile[] arr : getNeighbours(centreTile.getCoordinates())) {
 			for (QuaxTile n : arr) {
 				if (n.tileExists()) {
 					result.add(n);
 				}
 			}
 		}
+
 		return result;
 	}
 	
 	public QuaxTile[][] getSquareOctagonNeighbours(Octagon o) {
-		return NeighbourFinder.getSquareOctagonNeighbours(o.getCoordinates(), this);
+		NeighbourFinder nf = new NeighbourFinder(this, o.getCoordinates());
+		return nf.getSquareOctagonNeighbours();
 	}
 
 	/*
@@ -332,135 +337,150 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	 */
 	private static class NeighbourFinder {
 
-		private static QuaxTile[][] getCoordinateNeighbours(QuaxCoordinate coord, QuaxBoard b) {
+		private final QuaxBoard searchBoard;
+		private final QuaxCoordinate searchCoordinate;
+
+		private NeighbourFinder(QuaxBoard board, QuaxCoordinate coordinate) {
+			this.searchBoard = board;
+			this.searchCoordinate = coordinate;
+		}
+
+		private QuaxTile[][] getCoordinateNeighbours() {
 			QuaxTile[][] neighbours;
 
-			if (coord.isOctagon()) {
-				neighbours = getOctagonNeighbours(coord, b);
+			if (searchCoordinate.isOctagon()) {
+				neighbours = getOctagonNeighbours();
 			}
 			else {
-				neighbours = getRhombusNeighbours(coord, b);
+				neighbours = getRhombusNeighbours();
 			}
 
 			return neighbours;
 		}
 
 
-		private static QuaxTile[][] getRhombusNeighbours(QuaxCoordinate coord, QuaxBoard b) {
+		private QuaxTile[][] getRhombusNeighbours() {
 			QuaxTile[][] neighbours = new QuaxTile[2][2];
 
-			neighbours[0][0] = b.getOctagon(coord.x(), coord.y());
-			neighbours[0][1] = b.getOctagon(coord.x(), coord.y() + 1);
-			neighbours[1][0] = b.getOctagon(coord.x() + 1, coord.y());
-			neighbours[1][1] = b.getOctagon(coord.x() + 1, coord.y() + 1);
+			neighbours[0][0] = searchBoard.getOctagon(searchCoordinate.x(), searchCoordinate.y());
+			neighbours[0][1] = searchBoard.getOctagon(searchCoordinate.x(), searchCoordinate.y() + 1);
+			neighbours[1][0] = searchBoard.getOctagon(searchCoordinate.x() + 1, searchCoordinate.y());
+			neighbours[1][1] = searchBoard.getOctagon(searchCoordinate.x() + 1, searchCoordinate.y() + 1);
 
 			return neighbours;
 		}
 
 
-		private static QuaxTile[][] getOctagonNeighbours(QuaxCoordinate coordinate, QuaxBoard b) {
+		private QuaxTile[][] getOctagonNeighbours() {
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 
-			neighbours[0] = getLeftNeighbours(coordinate, b);
-			neighbours[1] = getVerticalNeighbours(coordinate, b);
-			neighbours[2] = getRightNeighbours(coordinate, b);
+			neighbours[0] = getLeftNeighbours();
+			neighbours[1] = getVerticalNeighbours();
+			neighbours[2] = getRightNeighbours();
 
 			return neighbours;
 		}
 
-		private static QuaxTile[] getLeftNeighbours(QuaxCoordinate coord, QuaxBoard b) {
-			int minusX = coord.x() - 1, minusY = coord.y() - 1, plusY = coord.y() + 1;
+		private QuaxTile[] getLeftNeighbours() {
+			int minusX = searchCoordinate.x() - 1,
+					minusY = searchCoordinate.y() - 1,
+					plusY = searchCoordinate.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (minusX >= 0) {
 				if (minusY >= 0) {
-					adjTiles[0] = b.getRhombus(minusX, minusY);
+					adjTiles[0] = searchBoard.getRhombus(minusX, minusY);
 				}
 
-				adjTiles[1] = b.getOctagon(minusX, coord.y());
+				adjTiles[1] = searchBoard.getOctagon(minusX, searchCoordinate.y());
 
 				if (plusY <= NUM_RHOMBUSES) {
-					adjTiles[2] = b.getRhombus(minusX, coord.y());
+					adjTiles[2] = searchBoard.getRhombus(minusX, searchCoordinate.y());
 				}
 			}
 
 			return adjTiles;
 		}
 
-		private static QuaxTile[] getRightNeighbours(QuaxCoordinate coord, QuaxBoard b) {
-			int plusX = coord.x() + 1, minusY = coord.y() - 1, plusY = coord.y() + 1;
+		private QuaxTile[] getVerticalNeighbours() {
+			int minusY = searchCoordinate.y() - 1,
+					plusY = searchCoordinate.y() + 1;
+			QuaxTile[] adjTiles = createOutOfBoundsRowWithHiddenCentre();
+
+			if (minusY >= 0) {
+				adjTiles[0] = searchBoard.getOctagon(searchCoordinate.x(), minusY);
+			}
+
+			if (plusY <= NUM_RHOMBUSES) {
+				adjTiles[2] = searchBoard.getOctagon(searchCoordinate.x(), plusY);
+			}
+
+			return adjTiles;
+		}
+
+		private QuaxTile[] getRightNeighbours() {
+			int plusX = searchCoordinate.x() + 1,
+					minusY = searchCoordinate.y() - 1,
+					plusY = searchCoordinate.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
 			if (plusX <= NUM_RHOMBUSES) {
 				if (minusY >= 0) {
-					adjTiles[0] = b.getRhombus(coord.x(), minusY);
+					adjTiles[0] = searchBoard.getRhombus(searchCoordinate.x(), minusY);
 				}
 
-				adjTiles[1] = b.octagonGrid[plusX][coord.y()];
+				adjTiles[1] = searchBoard.octagonGrid[plusX][searchCoordinate.y()];
 
 				if (plusY <= NUM_RHOMBUSES) {
-					adjTiles[2] = b.getRhombus(coord.x(), coord.y());
+					adjTiles[2] = searchBoard.getRhombus(searchCoordinate.x(), searchCoordinate.y());
 				}
 			}
 
 			return adjTiles;
 		}
 
-		private static QuaxTile[] getVerticalNeighbours(QuaxCoordinate coord, QuaxBoard b) {
-			int minusY = coord.y() - 1, plusY = coord.y() + 1;
-			QuaxTile[] adjTiles = createOutOfBoundsRowWithHiddenCenter();
-
-			if (minusY >= 0) {
-				adjTiles[0] = b.getOctagon(coord.x(), minusY);
-			}
-
-			if (plusY <= NUM_RHOMBUSES) {
-				adjTiles[2] = b.getOctagon(coord.x(), plusY);
-			}
-
-			return adjTiles;
-		}
 
 
-
-		private static QuaxTile[] createOutOfBoundsRow() {
+		private QuaxTile[] createOutOfBoundsRow() {
 			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE };
 		}
 		
-		private static QuaxTile[] createOutOfBoundsRowWithHiddenCenter() {
+		private QuaxTile[] createOutOfBoundsRowWithHiddenCentre() {
 			return new QuaxTile[] { QuaxTile.OUT_OF_BOUNDS_TILE,
 									QuaxTile.HIDDEN_TILE,
 									QuaxTile.OUT_OF_BOUNDS_TILE };
 		}
 
 
-		private static QuaxTile[][] getSquareOctagonNeighbours(QuaxCoordinate coordinate, QuaxBoard board) {
-			assert board != null && coordinate != null && coordinate.isOctagon();
+		// TODO - Definitely need a comment
+		private QuaxTile[][] getSquareOctagonNeighbours() {
+			assert searchBoard != null && searchCoordinate != null && searchCoordinate.isOctagon();
 
 			QuaxTile[][] neighbours = new QuaxTile[3][3];
 			for (int i = -1; i <= 1; i++) {
-				neighbours[i + 1] = createOctagonSquareNeighboursArray(coordinate, board, i);
+				neighbours[i + 1] = createOctagonSquareNeighboursArray(i);
 			}
 			return neighbours;
 		}
 		
-		private static QuaxTile[] createOctagonSquareNeighboursArray
-									(QuaxCoordinate center, QuaxBoard board, int verticalOffset) {
+		private QuaxTile[] createOctagonSquareNeighboursArray(int verticalOffset) {
 			QuaxTile[] array;
 			if (verticalOffset == 0) {
-				array = createOutOfBoundsRowWithHiddenCenter();
-			} else {
+				array = createOutOfBoundsRowWithHiddenCentre();
+			}
+			else {
 				array = createOutOfBoundsRow();
 			}
 			
-			int y = center.y() + verticalOffset;
+			int y = searchCoordinate.y() + verticalOffset;
+
 			if (y >= 0 && y < NUM_OCTAGONS) {
 				for (int i = -1; i <= 1; i++) {
-					int x = center.x() + i;
+					int x = searchCoordinate.x() + i;
 					if (x >= 0 && x < NUM_OCTAGONS) {
-						array[i+1] = board.getOctagon(x, y);
+						array[i+1] = searchBoard.getOctagon(x, y);
 					}
 					
 				}
@@ -538,39 +558,40 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
-	
+
+
 	public Iterator<Octagon> octagonIterator() {
 		return new QuaxBoardOctagonIterator(this);
 	}
-	
+
 	private static class QuaxBoardOctagonIterator implements Iterator<Octagon> {
 		private static final int NUM_ELEMENTS = NUM_OCTAGONS * NUM_OCTAGONS;
-		
+
 		private int cursor;
 		private final ArrayList<Octagon> elements;
-		
+
 		public QuaxBoardOctagonIterator(QuaxBoard source) {
 			this.cursor = 0;
 			this.elements = new ArrayList<>(NUM_ELEMENTS);
-			
+
 			for (int i = 0; i < NUM_OCTAGONS; i++) {
 				for (int j = 0; j < NUM_OCTAGONS; j++) {
 					this.elements.add(source.getOctagon(i, j));
 				}
 			}
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 			return cursor < NUM_ELEMENTS;
 		}
-		
+
 		@Override
 		public Octagon next() {
 			assert hasNext();
 			return elements.get(cursor++);
 		}
-		
+
 		private QuaxCoordinate nextCoordinate() {
 			return next().getCoordinates();
 		}
@@ -631,5 +652,4 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
-
 }

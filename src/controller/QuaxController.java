@@ -56,11 +56,11 @@ public class QuaxController {
 
     // Testing Constructor
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-    	
+
     	if (p1 == null || p2 == null) {
     		throw new IllegalArgumentException("Players cannot be null.");
     	}
-    	
+
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
 
@@ -94,7 +94,7 @@ public class QuaxController {
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
     	assert p1 != null && p2 != null;
-    	
+
         this.quaxBoard = new QuaxBoard();
         setQuaxPlayers(p1, p2);
 
@@ -105,7 +105,7 @@ public class QuaxController {
 
     private void setQuaxPlayers(QuaxPlayer p1, QuaxPlayer p2) {
     	assert p1 != null && p2 != null;
-    	
+
         this.quaxPlayers[0] = p1;
         this.quaxPlayers[1] = p2;
 
@@ -162,20 +162,21 @@ public class QuaxController {
         }
     }
 
-    public void attemptMove(QuaxCoordinate coords) {
-    	assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxBoard != null && quaxUserInterface != null;
-    	if (coords == null) {
-    		throw new IllegalArgumentException("Coordinates cannot be null.");
-    	}
-    	
-    	QuaxPlayer moveSubmitter = currentPlayer();
+    public void attemptMove(QuaxCoordinate coordsClicked) {
+        assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxBoard != null && quaxUserInterface != null;
+        if (coordsClicked == null) {
+            throw new IllegalArgumentException("Coordinates cannot be null.");
+        }
+
+
+        QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
 
-        if (quaxBoard.validMove(coords, moveColour)) {
-            quaxBoard.makeMove(coords, moveColour);
+        if (quaxBoard.validMove(coordsClicked, moveColour)) {
+            quaxBoard.makeMove(coordsClicked, moveColour);
 
             if (moveSubmitter instanceof BotPlayer bot) {
-            	quaxUserInterface.setBotChosenMove(coords);
+            	quaxUserInterface.setBotChosenMove(coordsClicked);
             	quaxUserInterface.setLinkedBot(bot);
             }
 

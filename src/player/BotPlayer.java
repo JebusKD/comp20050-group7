@@ -53,49 +53,61 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
 
-    // TODO - Less returns - Remove random group altogether?
     private LinkedList<QuaxTile> selectStrategyGroup(int move) {
     	assert move >= 0 && strategyGroups != null && strategyBuilder != null;
-    	
-        if (move == 0) {
-            return getStrategyGroupWithValue(VERY_LOW);
-        }
 
-        if (getStrategyGroupWithValue(WINNING).size() > 0) {
-            return getStrategyGroupWithValue(WINNING);
-        }
+        LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(move);
 
-        if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
-            return getStrategyGroupWithValue(OPPONENT_WINNING);
-        }
-        
-        if (getStrategyGroupWithValue(KEY).size() > 0) {
-            return getStrategyGroupWithValue(KEY);
-        }
-
-        StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
-        LinkedList<QuaxTile> choice = getStrategyGroupWithValue(randStrategyValue);
-
-        while (choice.isEmpty()) {
-            randStrategyValue = randStrategyValue.downgradeOne();
+        if (choice.isEmpty()) {
+            StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
             choice = getStrategyGroupWithValue(randStrategyValue);
+
+            while (choice.isEmpty()) {
+                randStrategyValue = randStrategyValue.downgradeOne();
+                choice = getStrategyGroupWithValue(randStrategyValue);
+            }
         }
 
         return choice;
     }
 
-    private LinkedList<QuaxTile> getStrategyGroupWithValue(int i) {
-        assert (i <= MAX_STRATEGIES && i > 0);
-        return strategyGroups.get(i - 1);
+    private LinkedList<QuaxTile> getPrioritisedStrategyGroup(int move) {
+    	assert move >= 0;
+    	
+        LinkedList<QuaxTile> strategyGroup = new LinkedList<>();
+
+        if (move == 0) {
+            strategyGroup = getStrategyGroupWithValue(VERY_LOW);
+        }
+
+        if (getStrategyGroupWithValue(WINNING).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(WINNING);
+        }
+
+        if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(OPPONENT_WINNING);
+        }
+
+        if (getStrategyGroupWithValue(KEY).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(KEY);
+        }
+
+        return strategyGroup;
     }
+
 
     public LinkedList<QuaxTile> getStrategyGroupWithValue(StrategyValue group) {
        	if (group == null) {
        		throw new IllegalArgumentException("null cannot be passed as StrategyValue parameter.");
        	}
-       	
-    	return getStrategyGroupWithValue(group.toInt());
+       	if (group == StrategyValue.IGNORE) {
+       		throw new IllegalArgumentException("Cannot get strategy group for the IGNORE values.");
+       	}
+
+        assert (group.toInt() <= MAX_STRATEGIES && group.toInt() > 0);
+        return strategyGroups.get(group.toInt() - 1);
     }
+
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
     	assert stratGroup != null;
@@ -118,6 +130,7 @@ public class BotPlayer extends QuaxPlayer {
         strategyBuilder.initialiseStrategy(board);
         strategyBuilder.refineStrategy(board);
     }
+
 
     public static void enableHaste() {
     	botHaste = true;

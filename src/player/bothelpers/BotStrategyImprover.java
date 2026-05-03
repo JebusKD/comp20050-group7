@@ -4,6 +4,7 @@ import java.util.*;
 
 import model.QuaxBoard;
 import types.*;
+import static types.StrategyValue.*;
 
 
 class BotStrategyImprover {
@@ -33,7 +34,7 @@ class BotStrategyImprover {
 
     /* Given the initial strategy from BasicBotStrategist,
      *  adjust the current strategy values on the board depending on how
-     *  important a move would be
+     *  important a move would be.
      */
     public void improveStrategy() {
     	assert smarterBoard != null && initialStrategy != null;
@@ -42,26 +43,26 @@ class BotStrategyImprover {
             if (tile.isFree() && isLowPriority(tile)) {
 
                 if (initialStrategy.isLowPriorityRhombus(tile, smarterBoard)) {
-                    assignStrategyValue(tile, StrategyValue.IGNORE);
+                    assignStrategyValue(tile, IGNORE);
                 }
 
                 else if (defendsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, StrategyValue.KEY);
+                    upgradeStrategy(tile, 2, KEY);
                 }
 
                 else if (exploitsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, StrategyValue.KEY);
+                    upgradeStrategy(tile, 2, KEY);
                 }
 
                 else if (createsOnlyOneVulnerableRhombus(tile, smarterBoard)) {
-                    downgradeStrategy(tile, 1, StrategyValue.KEY); // TODO - This was SV2 before
+                    downgradeStrategy(tile, 1, KEY); // TODO - This was SV2 before, mistake?
                 }
             }
         }
 
 
         PathFinder pf = new PathFinder();
-        pf.avoidWeakGroupContributions(2, StrategyValue.LOW);
+        pf.avoidWeakGroupContributions(2, LOW);
         pf.diagonalPathfinding();
     }
 
@@ -77,14 +78,14 @@ class BotStrategyImprover {
     	
         int strategyValueToIncrease = t.getStrategyValue().toInt();
         int maximum = max.toInt();
-        int limit = Math.max(maximum, StrategyValue.MAX_STRATEGIES);
+        int limit = Math.max(maximum, MAX_STRATEGIES);
 
         if (strategyValueToIncrease < limit) {
             if (strategyValueToIncrease + increase > limit) {
                 increase = limit - strategyValueToIncrease;
             }
 
-            assignStrategyValue(t, StrategyValue.fromInt(strategyValueToIncrease + increase));
+            assignStrategyValue(t, fromInt(strategyValueToIncrease + increase));
         }
     }
 
@@ -92,15 +93,15 @@ class BotStrategyImprover {
     	assert t != null && t.tileExists() && decrease > 0 && min != null;
     	
         if (isLowPriority(t)) {
-            int strategyToDecrease = t.getStrategyValue().toInt();
+            int strategyValueToDecrease = t.getStrategyValue().toInt();
             int minimum = min.toInt();
             int limit = Math.max(minimum, 0);
 
-            if (strategyToDecrease > limit) {
-                if (strategyToDecrease - decrease < limit) {
-                    decrease = strategyToDecrease - limit;
+            if (strategyValueToDecrease > limit) {
+                if (strategyValueToDecrease - decrease < limit) {
+                    decrease = strategyValueToDecrease - limit;
                 }
-                assignStrategyValue(t, StrategyValue.fromInt(strategyToDecrease - decrease));
+                assignStrategyValue(t, fromInt(strategyValueToDecrease - decrease));
             }
         }
     }
@@ -237,9 +238,9 @@ class BotStrategyImprover {
         	Iterator<Octagon> iterator = smarterBoard.octagonIterator();
 
         	while (iterator.hasNext()) {
-        		Octagon center = iterator.next();
-                if (center.isSameColour(botColour())) {
-                    QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
+        		Octagon centre = iterator.next();
+                if (centre.isSameColour(botColour())) {
+                    QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(centre);
 
                     adjustStrategyIfPathBlocked(neighbours);
                 }
@@ -252,8 +253,8 @@ class BotStrategyImprover {
             for (int i = -1; i <= 1; i++) {
                 if (opponentBlockingPath(neighbours, i)) {
                     for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                        if (ahead.tileExists() && ahead.getStrategyValue() == StrategyValue.BLOCKING) {
-                            upgradeStrategy(ahead, 1, StrategyValue.PROGRESS);
+                        if (ahead.tileExists() && ahead.getStrategyValue() == BLOCKING) {
+                            upgradeStrategy(ahead, 1, PROGRESS);
                         }
                     }
                 }
