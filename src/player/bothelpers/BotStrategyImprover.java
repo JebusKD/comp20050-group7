@@ -196,18 +196,18 @@ class BotStrategyImprover {
         }
 
         private void diagonalPathfinding() {
-            // TODO Octagon iterator
-            for (QuaxTile t : smarterBoard) {
-                if (t instanceof Octagon center) {
-                    if (center.isSameColour(botColour())) {
-                        QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
+        	Iterator<Octagon> iterator = smarterBoard.octagonIterator();
+        	
+        	while (iterator.hasNext()) {
+        		Octagon center = iterator.next();
+                if (center.isSameColour(botColour())) {
+                    QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
 
-                        for (int i = -1; i <= 1; i++) {
-                            if (opponentBlockingPath(neighbours, i)) {
-                                for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                                    if (ahead.tileExists() && ahead.getStrategyValue() == StrategyValue.BLOCKING) {
-                                        upgradeStrategy(ahead, 1, StrategyValue.PROGRESS);
-                                    }
+                    for (int i = -1; i <= 1; i++) {
+                        if (opponentBlockingPath(neighbours, i)) {
+                            for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
+                                if (ahead.tileExists() && ahead.getStrategyValue() == StrategyValue.BLOCKING) {
+                                    upgradeStrategy(ahead, 1, StrategyValue.PROGRESS);
                                 }
                             }
                         }

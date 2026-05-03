@@ -537,6 +537,43 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
+	
+	public Iterator<Octagon> octagonIterator() {
+		return new QuaxBoardOctagonIterator(this);
+	}
+	
+	private static class QuaxBoardOctagonIterator implements Iterator<Octagon> {
+		private static final int NUM_ELEMENTS = MAX_OCTAGONS * MAX_OCTAGONS;
+		
+		private int cursor;
+		private final ArrayList<Octagon> elements;
+		
+		public QuaxBoardOctagonIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
+			
+			for (int i = 0; i < MAX_OCTAGONS; i++) {
+				for (int j = 0; j < MAX_OCTAGONS; j++) {
+					this.elements.add(source.getOctagon(i, j));
+				}
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < NUM_ELEMENTS;
+		}
+		
+		@Override
+		public Octagon next() {
+			assert hasNext();
+			return elements.get(cursor++);
+		}
+		
+		private QuaxCoordinate nextCoordinate() {
+			return next().getCoordinates();
+		}
+	}
 
 
 	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
