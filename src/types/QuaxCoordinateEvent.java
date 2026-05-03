@@ -13,11 +13,20 @@ public class QuaxCoordinateEvent extends Event {
 
 
     public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
+    	if (t == null) {
+    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null EventType.");
+    	}
+    	if (q == null) {
+    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordiante.");
+    	}
+    	
         super(t);
         this.coordinate = q;
     }
 
     public QuaxCoordinate coordinate() {
+    	assert coordinate != null;
+    	
         return this.coordinate;
     }
 }
