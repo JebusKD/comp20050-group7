@@ -142,6 +142,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return getTile(previousMove).getTileGroup();
 	}
 
+
 	public boolean validMove(QuaxCoordinate coord, QuaxTileColour colour) {
 		if (!checkForWinningMove() && (coord.isOctagon() || isValidRhombusPlacement(coord, colour))) {
 			return getTile(coord).isFree();
@@ -153,6 +154,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	public boolean validMove(QuaxTile t) {
 		return validMove(t.getCoordinates(), currentColourTurn());
 	}
+
 
 	private QuaxTileColour currentColourTurn() {
 		QuaxTileColour result;

@@ -2,12 +2,11 @@ package player;
 
 import java.util.*;
 
-import controller.QuaxController;
 
 import static controller.QuaxController.RNG;
 import model.QuaxBoard;
-import player.bothelpers.StrategyBuilder;
-import player.bothelpers.StrategyValueProbabilities;
+import player.bothelpers.*;
+import static types.StrategyValue.*;
 import types.*;
 
 
@@ -24,14 +23,14 @@ public class BotPlayer extends QuaxPlayer {
 	public BotPlayer() {
 		super();
 		strategyBuilder = new StrategyBuilder(this);
-		strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
+		strategyGroups = new ArrayList<>(MAX_STRATEGIES);
         clearAllStrategyGroups();
 	}
 
     private void clearAllStrategyGroups() {
-        strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
+        strategyGroups = new ArrayList<>(MAX_STRATEGIES);
 
-        for (int i = 0 ; i < StrategyValue.MAX_STRATEGIES; i++) {
+        for (int i = 0 ; i < MAX_STRATEGIES; i++) {
         	strategyGroups.add(new LinkedList<>());
         }
     }
@@ -55,19 +54,19 @@ public class BotPlayer extends QuaxPlayer {
     // TODO - Less returns - Remove random group altogether?
     private LinkedList<QuaxTile> selectStrategyGroup(int move) {
         if (move == 0) {
-            return getStrategyGroupWithValue(StrategyValue.VERY_LOW);
+            return getStrategyGroupWithValue(VERY_LOW);
         }
 
-        if (getStrategyGroupWithValue(StrategyValue.WINNING).size() > 0) {
-            return getStrategyGroupWithValue(StrategyValue.WINNING);
+        if (getStrategyGroupWithValue(WINNING).size() > 0) {
+            return getStrategyGroupWithValue(WINNING);
         }
 
-        if (getStrategyGroupWithValue(StrategyValue.OPPONENT_WINNING).size() > 0) {
-            return getStrategyGroupWithValue(StrategyValue.OPPONENT_WINNING);
+        if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
+            return getStrategyGroupWithValue(OPPONENT_WINNING);
         }
         
-        if (getStrategyGroupWithValue(StrategyValue.KEY).size() > 0) {
-            return getStrategyGroupWithValue(StrategyValue.KEY);
+        if (getStrategyGroupWithValue(KEY).size() > 0) {
+            return getStrategyGroupWithValue(KEY);
         }
 
         StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
@@ -82,7 +81,7 @@ public class BotPlayer extends QuaxPlayer {
     }
 
     private LinkedList<QuaxTile> getStrategyGroupWithValue(int i) {
-        assert (i <= StrategyValue.MAX_STRATEGIES && i > 0);
+        assert (i <= MAX_STRATEGIES && i > 0);
         return strategyGroups.get(i - 1);
     }
 

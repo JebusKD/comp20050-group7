@@ -28,7 +28,10 @@ class BotStrategyImprover {
 
 
 
-    // TODO - Rename this, or give an explanation
+    /* Given the initial strategy from BasicBotStrategist,
+     *  adjust the current strategy values on the board depending on how
+     *  important a move would be
+     */
     public void improveStrategy() {
         for (QuaxTile tile : smarterBoard) {
             if (tile.isFree() && isLowPriority(tile)) {
@@ -148,7 +151,7 @@ class BotStrategyImprover {
 
     private class PathFinder {
 
-        private void avoidWeakGroupContributions(int decrease, int minimum) {
+        private void avoidWeakGroupContributions(int decrease, StrategyValue minimum) {
             for (QuaxTile tile : smarterBoard) {
                 List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, smarterBoard);
 
@@ -228,7 +231,7 @@ class BotStrategyImprover {
 
 
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
-            assert direction == -1 || direction == 1;
+            assert direction >= -1 && direction <= 1;
             boolean result = false;
 
             QuaxTile[] pathAhead = neighboursAhead(neighbours, direction);
@@ -242,7 +245,7 @@ class BotStrategyImprover {
 
 
         private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
-            assert neighbours.length == 3 && neighbours[0].length == 3 && (direction == -1 || direction == 1);
+            assert neighbours.length == 3 && neighbours[0].length == 3 && (direction >= -1 && direction <= 1);
 
             QuaxTile[] neighboursAhead;
             if (botColour() == QuaxTileColour.BLACK) {
