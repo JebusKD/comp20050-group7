@@ -77,8 +77,9 @@ public class StrategyBuilder {
     }
 
 
-    /* "Useless Rhombus" is defined as having at most 1
-     * nearby enemy tile.
+    /* "Low Priority Rhombus" is defined as having at most 1
+     * nearby enemy tile, so the bot may take it whenever needed without
+     * needing to worry about the human placing a tile there
      */
     boolean isLowPriorityRhombus(QuaxTile t, QuaxBoard b) {
         boolean result = false;
