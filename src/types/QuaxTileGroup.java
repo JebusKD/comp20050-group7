@@ -5,6 +5,8 @@ import java.util.*;
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
+	private static final QuaxTileGroup UNASSIGNED_GROUP = new PlaceholderGroup("unassigned");
+	
 	private final LinkedList<QuaxTile> groupMembers;
 
 	public QuaxTileGroup() {
@@ -15,7 +17,6 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		this();
 		this.addTile(initialMember);
 	}
-
 
 	public int size() {
 		return groupMembers.size();
@@ -76,5 +77,60 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	
 	public Iterator<QuaxTile> iterator() {
 		return groupMembers.iterator();
+	}
+	
+	public boolean groupExists() {
+		return this == UNASSIGNED_GROUP;
+	}
+	
+	private static class PlaceholderGroup extends QuaxTileGroup {
+		private String type;
+		
+		private PlaceholderGroup(String type) {
+			super();
+			assert type != null;
+			this.type = type;
+		}
+		
+		private UnsupportedOperationException placeholderUsedException() {
+			assert type != null;
+			return new UnsupportedOperationException("Cannot be invoked on " + type + " tilegroup.");
+		}
+		
+		@Override
+		public int size() {
+			throw placeholderUsedException();
+		}
+
+		@Override
+		public boolean isWinningGroup() {
+			throw placeholderUsedException();
+		}
+
+		@Override
+		public void addTile(QuaxTile tile) {
+			throw placeholderUsedException();
+		}
+
+		@Override
+		public void merge(QuaxTileGroup mergee) {
+			throw placeholderUsedException();
+		}
+
+		@Override
+		public int distanceToWalls() {
+			throw placeholderUsedException();
+		}
+
+		@Override
+		public QuaxTileColour getGroupColour() {
+			throw placeholderUsedException();
+		}
+		
+		@Override
+		public Iterator<QuaxTile> iterator() {
+			throw placeholderUsedException();
+		}
+		
 	}
 }
