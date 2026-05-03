@@ -331,7 +331,25 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/* Create an Iterable for all tiles in the board */
+	public Iterator<QuaxTile> iterator() {
+		BoardIterators bi = new BoardIterators(this);
+		return bi.iterator();
+	}
+
+	public static Iterator<QuaxCoordinate> coordinateIterator() {
+		return BoardIterators.coordinateIterator();
+	}
+
+	public Iterator<Octagon> octagonIterator() {
+		BoardIterators bi = new BoardIterators(this);
+		return bi.octagonIterator();
+	}
+
+	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
+		return BoardIterators.rhombusCoordinateIterator();
+	}
+
+	/* Create an Iterable for all tiles in the board *-/
 	public Iterator<QuaxTile> iterator() {
 		return new QuaxBoardIterator(this);
 	}
@@ -492,4 +510,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
+
+	 */
 }
