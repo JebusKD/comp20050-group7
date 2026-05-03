@@ -70,7 +70,7 @@ public class BotPlayer extends QuaxPlayer {
             return getStrategyGroupWithValue(StrategyValue.KEY);
         }
 
-        StrategyValue randStrategyValue = StrategyValueProbabilities.randomStrategyValue();
+        StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
         LinkedList<QuaxTile> choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.isEmpty()) {

@@ -21,6 +21,10 @@ public class StrategyBuilder {
         return linkedBot.getPlayerColour();
     }
 
+    public StrategyValue getRandomStrategyValue() {
+        return StrategyValueProbabilities.randomStrategyValue();
+    }
+
     private ArrayList<LinkedList<QuaxTile>> getBotStrategyGroups() {
         ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
 
