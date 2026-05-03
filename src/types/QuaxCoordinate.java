@@ -18,10 +18,24 @@ public class QuaxCoordinate {
 	}
 
 	public static QuaxCoordinate newOctagonCoordinate(int x, int y) {
+		if (x < 0 || x >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon coordinate must be constructed for x value in range [0," + (NUM_OCTAGONS-1) +"]. Was " + x + ".");
+		}
+		if (y < 0 || y >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon coordinate must be constructed for y value in range [0," + (NUM_OCTAGONS-1) +"]. Was " + y + ".");
+		}
+		
 		return new QuaxCoordinate(x, y, true);
 	}
 	
 	public static QuaxCoordinate newRhombusCoordinate(int x, int y) {
+		if (x < 0 || x >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus coordinate must be constructed for x value in range [0," + (NUM_RHOMBUSES-1) +"]. Was " + x + ".");
+		}
+		if (y < 0 || y >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus coordinate must be constructed for y value in range [0," + (NUM_RHOMBUSES-1) +"]. Was " + y + ".");
+		}
+		
 		return new QuaxCoordinate(x, y, false);
 	}
 
