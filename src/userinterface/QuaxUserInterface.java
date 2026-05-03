@@ -101,8 +101,8 @@ public class QuaxUserInterface implements UserInterface {
     }
 
 
-    public void showWinLabel(QuaxTileColour c) {
-        quaxUIWindow.showWinLabel(c);
+    public void showWinLabel(QuaxTileColour winnerColour) {
+        quaxUIWindow.showWinLabel(winnerColour);
     }
 
     public void hideTurnTracker() {
@@ -129,13 +129,13 @@ public class QuaxUserInterface implements UserInterface {
     }
 
 
-    public void setTile(QuaxCoordinate q, QuaxTileColour c) {
-        quaxUIBoard.setTile(q, c);
+    public void setTile(QuaxCoordinate tileCoord, QuaxTileColour colour) {
+        quaxUIBoard.setTile(tileCoord, colour);
     }
 
-    public void setQuaxUIBoard(QuaxBoard b) {
-        quaxUIBoard.setStackUIBoard(b);
-        setPieRuleVisibility(b.isPieRuleValid());
+    public void setQuaxUIBoard(QuaxBoard board) {
+        quaxUIBoard.setStackUIBoard(board);
+        setPieRuleVisibility(board.isPieRuleValid());
     }
 
     public void setPieRuleVisibility(boolean value) {
@@ -182,8 +182,8 @@ public class QuaxUserInterface implements UserInterface {
     }
 
     @Override
-    public void setBotChosenMove(QuaxCoordinate c) {
-    	assert c != null;
-        this.chosenMove = c;
+    public void setBotChosenMove(QuaxCoordinate botCoord) {
+    	assert botCoord != null;
+        this.chosenMove = botCoord;
     }
 }

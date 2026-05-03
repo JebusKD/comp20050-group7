@@ -176,7 +176,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				|| (n[1][0].isSameColour(colour) && n[0][1].isSameColour(colour));
     }
 	
-	public boolean isValidRhombusForBoth(QuaxCoordinate coord) {
+	public boolean isValidRhombusPlacementForBothPlayers(QuaxCoordinate coord) {
 		return isValidRhombusPlacement(coord, QuaxTileColour.BLACK)
 				&& isValidRhombusPlacement(coord, QuaxTileColour.WHITE);
 	}
@@ -197,7 +197,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	public void makeMove(QuaxCoordinate coordinate, QuaxTileColour c) {
+	public void makeMove(QuaxCoordinate coordinate, QuaxTileColour colour) {
 		QuaxTile tile;
 		GroupManager moveManager = new GroupManager();
 
@@ -208,7 +208,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			tile = this.rhombusGrid[coordinate.x()][coordinate.y()];
 		}
 
-		tile.setTileColour(c);
+		tile.setTileColour(colour);
 		moveManager.assignGroup(tile);
 		this.previousMove = coordinate;
 		this.moveNumber++;
@@ -333,7 +333,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	/*
 	 * Handle searching for neighbours
-	 * //TODO - make proper nested class - instance of Board, etc.?
 	 */
 	private static class NeighbourFinder {
 

@@ -10,7 +10,7 @@ import types.*;
 public class TestingEmptyInterface implements UserInterface {
 
 	@Override
-	public void showWinLabel(QuaxTileColour c) {
+	public void showWinLabel(QuaxTileColour winnerColour) {
 	}
 
 	@Override
@@ -23,11 +23,11 @@ public class TestingEmptyInterface implements UserInterface {
 	}
 
 	@Override
-	public void setTile(QuaxCoordinate q, QuaxTileColour c) {
+	public void setTile(QuaxCoordinate tileCoord, QuaxTileColour colour) {
 	}
 
 	@Override
-	public void setQuaxUIBoard(QuaxBoard b) {
+	public void setQuaxUIBoard(QuaxBoard board) {
 	}
 
 	@Override
@@ -48,6 +48,6 @@ public class TestingEmptyInterface implements UserInterface {
     }
     
     @Override
-    public void setBotChosenMove(QuaxCoordinate c) {
+    public void setBotChosenMove(QuaxCoordinate botCoord) {
     }
 }

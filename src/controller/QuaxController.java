@@ -37,7 +37,9 @@ public class QuaxController {
         this.quaxUserInterface = new QuaxUserInterface(stage);
         this.quaxPlayers = new QuaxPlayer[2];
 
-        QuaxEventHandler.setup(this, stage);
+        QuaxEventHandler.setupTileClickEvents(this, stage);
+        QuaxEventHandler.setupButtonEvents(this, stage);
+
 
         // TODO this statement is a bit weird.
         if (humanPlaysFirst) {

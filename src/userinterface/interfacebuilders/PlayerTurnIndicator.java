@@ -53,7 +53,7 @@ public class PlayerTurnIndicator {
     }
 
     public void hideTurnTrackerBox() {
-        turnTrackerBox.setVisible(false);
+        this.turnTrackerBox.setVisible(false);
     }
 
 

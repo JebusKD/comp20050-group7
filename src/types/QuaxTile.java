@@ -78,11 +78,6 @@ public abstract class QuaxTile {
 		
 		this.tileGroup = tileGroup;
 	}
-
-	// TODO Delete?
-	/*public void setStrategyValue(int value) {
-		this.strategyValue = StrategyValue.fromInt(value);
-	}*/
 	
 	public void setStrategyValue(StrategyValue value) {
 		if (value == null) {
@@ -127,6 +122,7 @@ public abstract class QuaxTile {
 		}
 		
 		return getTileColour() == c;
+
 	}
 
 	public boolean isOpponentColour(QuaxTileColour c) {
@@ -143,7 +139,11 @@ public abstract class QuaxTile {
 	public final boolean tileExists() {
 		return !(this instanceof PlaceholderTile);
 	}
-	
+
+	public boolean isLowPriority() {
+		return strategyValue.isLowPriority();
+	}
+
 	/* Placeholder tiles are used where a tile either exceeds
 	 * the bounds of the board (OUT_OF_BOUNDS_TILE) or where
 	 * code wishes to intentionally hide a tile from
@@ -226,12 +226,16 @@ public abstract class QuaxTile {
 		}
 
 		@Override
-		public boolean isSameColour(QuaxTileColour c) {
+		public boolean isSameColour(QuaxTileColour colour) {
 			throw placeholderUsedException();
 		}
 
 		@Override
-		public boolean isOpponentColour(QuaxTileColour c) {
+		public boolean isOpponentColour(QuaxTileColour colour) {
+			throw placeholderUsedException();
+		}
+
+		public boolean isLowPriority() {
 			throw placeholderUsedException();
 		}
 	}

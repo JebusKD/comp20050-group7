@@ -12,21 +12,21 @@ public class QuaxCoordinateEvent extends Event {
     private final QuaxCoordinate coordinate;
 
 
-    public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
-    	if (t == null) {
+    public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> clickedTile, QuaxCoordinate coord) {
+    	if (clickedTile == null) {
     		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null EventType.");
     	}
-    	if (q == null) {
+    	if (coord == null) {
     		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordiante.");
     	}
-    	
-        super(t);
-        this.coordinate = q;
+
+        super(clickedTile);
+        this.coordinate = coord;
     }
 
     public QuaxCoordinate coordinate() {
     	assert coordinate != null;
-    	
+
         return this.coordinate;
     }
 }

@@ -2,7 +2,6 @@ package player;
 
 import java.util.*;
 
-
 import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import player.bothelpers.*;
@@ -42,9 +41,8 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard board) {
-		assert board != null && strategyGroups != null;
-		
-        LinkedList<QuaxTile> choice = selectStrategyGroup(board.getMoveNumber());
+        assert board != null && strategyGroups != null;
+        LinkedList<QuaxTile> choice = selectStrategyGroup(board);
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
 
@@ -53,10 +51,9 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
 
-    private LinkedList<QuaxTile> selectStrategyGroup(int move) {
-    	assert move >= 0 && strategyGroups != null && strategyBuilder != null;
-
-        LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(move);
+    private LinkedList<QuaxTile> selectStrategyGroup(QuaxBoard board) {
+        assert strategyGroups != null && strategyBuilder != null;
+        LinkedList<QuaxTile> choice = checkPrioritisedStrategyGroups(board);
 
         if (choice.isEmpty()) {
             StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
@@ -71,12 +68,10 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
-    private LinkedList<QuaxTile> getPrioritisedStrategyGroup(int move) {
-    	assert move >= 0;
-    	
+    private LinkedList<QuaxTile> checkPrioritisedStrategyGroups(QuaxBoard board) {
         LinkedList<QuaxTile> strategyGroup = new LinkedList<>();
 
-        if (move == 0) {
+        if (board.isStartingMove()) {
             strategyGroup = getStrategyGroupWithValue(VERY_LOW);
         }
 
@@ -111,9 +106,9 @@ public class BotPlayer extends QuaxPlayer {
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
     	assert stratGroup != null;
-    	
+
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
-        
+
         for (QuaxTile t : stratGroup) {
             moves.add(t.getCoordinates());
         }
@@ -125,7 +120,7 @@ public class BotPlayer extends QuaxPlayer {
     // how the bot decides strategy vals for the tiles
     private void setUpStrategy(QuaxBoard board) {
     	assert board != null && strategyBuilder != null;
-    	
+
         clearAllStrategyGroups();
         strategyBuilder.initialiseStrategy(board);
         strategyBuilder.refineStrategy(board);
@@ -145,7 +140,7 @@ public class BotPlayer extends QuaxPlayer {
 		if (board.checkForWinningMove()) {
 			throw new IllegalStateException("Bot shouldn't be prompted for move after the game has ended.");
 		}
-		
+
         long startThinkingTime = System.currentTimeMillis();
 		
         this.getExecutor().execute(() -> {
