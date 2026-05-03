@@ -151,15 +151,15 @@ public class QuaxController {
         }
     }
 
-    public void attemptMove(QuaxCoordinate coords) {
+    public void attemptMove(QuaxCoordinate coordsClicked) {
     	QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
 
-        if (quaxBoard.validMove(coords, moveColour)) {
-            quaxBoard.makeMove(coords, moveColour);
+        if (quaxBoard.validMove(coordsClicked, moveColour)) {
+            quaxBoard.makeMove(coordsClicked, moveColour);
 
             if (moveSubmitter instanceof BotPlayer bot) {
-            	quaxUserInterface.setBotChosenMove(coords);
+            	quaxUserInterface.setBotChosenMove(coordsClicked);
             	quaxUserInterface.setLinkedBot(bot);
             }
 
