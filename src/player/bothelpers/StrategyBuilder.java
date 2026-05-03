@@ -5,6 +5,7 @@ import java.util.*;
 import model.QuaxBoard;
 import player.BotPlayer;
 import types.*;
+import static types.StrategyValue.*;
 
 
 public class StrategyBuilder {
@@ -26,9 +27,9 @@ public class StrategyBuilder {
     }
 
     private ArrayList<LinkedList<QuaxTile>> getBotStrategyGroups() {
-        ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
+        ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(MAX_STRATEGIES);
 
-        for (int i = 1 ; i <= StrategyValue.MAX_STRATEGIES ; i++) {
+        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
             strategyGroups.add(linkedBot.getStrategyGroupWithValue(StrategyValue.fromInt(i)));
         }
 
@@ -46,9 +47,9 @@ public class StrategyBuilder {
 
     private void initialiseAllStrategyGroups(QuaxBoard board) {
         for (QuaxTile t : board) {
-            t.setStrategyValue(StrategyValue.IGNORE);
+            t.setStrategyValue(IGNORE);
             if (isValidStrategicMove(t, board, botColour())) {
-                assignStrategyValue(t, StrategyValue.VERY_LOW);
+                assignStrategyValue(t, VERY_LOW);
             }
         }
     }

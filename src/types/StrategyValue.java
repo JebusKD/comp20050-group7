@@ -37,7 +37,8 @@ public enum StrategyValue {
 	public StrategyValue upgrade(int value) {
 		return fromInt(toInt() + value);
 	}
-	
+
+
 	public StrategyValue downgradeOne() {
 		return downgrade(1);
 	}
@@ -45,7 +46,8 @@ public enum StrategyValue {
 	public StrategyValue upgradeOne() {
 		return upgrade(1);
 	}
-	
+
+
 	public boolean isHighPriority() {
 		return this.compareTo(OPPONENT_WINNING) >= 0;
 	}
