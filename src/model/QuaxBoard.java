@@ -176,7 +176,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				|| (n[1][0].isSameColour(colour) && n[0][1].isSameColour(colour));
     }
 	
-	public boolean isValidRhombusForBoth(QuaxCoordinate coord) {
+	public boolean isValidRhombusPlacementForBothPlayers(QuaxCoordinate coord) {
 		return isValidRhombusPlacement(coord, QuaxTileColour.BLACK)
 				&& isValidRhombusPlacement(coord, QuaxTileColour.WHITE);
 	}

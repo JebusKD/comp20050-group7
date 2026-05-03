@@ -161,7 +161,7 @@ class BotStrategyImprover {
         int count = 0;
 
         while (iterator.hasNext()) {
-            if (board.isValidRhombusForBoth(iterator.next())) {
+            if (board.isValidRhombusPlacementForBothPlayers(iterator.next())) {
                 count++;
             }
         }
@@ -267,7 +267,7 @@ class BotStrategyImprover {
 
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
             // TODO - -1<=direction<=1?
-            assert ( direction == -1 || direction == 1 ) && neighbours != null;
+            assert (direction >= -1 && direction <= 1) && neighbours != null;
             boolean result = false;
 
             QuaxTile[] pathAhead = neighboursAhead(neighbours, direction);
@@ -282,7 +282,8 @@ class BotStrategyImprover {
 
         private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
             // TODO - -1<=direction<=1?
-            assert neighbours.length == 3 && neighbours[0].length == 3 && (direction == -1 || direction == 1);
+            assert neighbours.length == 3 && neighbours[0].length == 3
+                    && (direction >= -1 && direction <= 1);
 
             QuaxTile[] neighboursAhead;
             if (botColour() == QuaxTileColour.BLACK) {
@@ -295,14 +296,14 @@ class BotStrategyImprover {
         }
 
         private QuaxTile[] getNeighboursRow(QuaxTile[][] neighbours, int index) {
-        	assert neighbours.length > index && index > 0;
+        	//assert neighbours.length > index && index > 0;
 
             return neighbours[index];
         }
 
         // TODO maybe "3" is a magic number here?
         private QuaxTile[] getNeighboursColumn(QuaxTile[][] neighbours, int index) {
-        	assert neighbours.length == 3 && index > 0;
+        	//assert neighbours.length == 3 && index > 0;
 
             QuaxTile[] column = new QuaxTile[3];
             for (int i = 0; i < 3; i++) {
