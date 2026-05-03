@@ -4,7 +4,7 @@ package userinterface.interfacebuilders;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
-import static player.BotPlayer.MAX_STRATEGIES;
+import static types.StrategyValue.MAX_STRATEGIES;
 import types.*;
 
 

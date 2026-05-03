@@ -217,6 +217,7 @@ public class QuaxController {
      */
     private static class MultithreadedExecutor implements Executor {
     	public void execute(Runnable r) {
+    		// TODO add daemon to thread
 			new Thread(r).start();
 		}
     }

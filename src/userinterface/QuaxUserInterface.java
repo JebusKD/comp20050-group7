@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import model.QuaxBoard;
 import player.BotPlayer;
-import static player.BotPlayer.MAX_STRATEGIES;
+import static types.StrategyValue.MAX_STRATEGIES;
 import types.*;
 import userinterface.interfacebuilders.*;
 
@@ -157,7 +157,7 @@ public class QuaxUserInterface implements UserInterface {
     		quaxUIBoard.setBotChosenCell(chosenMove);
 
 	        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
-	            for (QuaxTile t : linkedBot.getStrategyGroupWithValue(i)) {
+	            for (QuaxTile t : linkedBot.getStrategyGroupWithValue(StrategyValue.fromInt(i))) {
 	                quaxUIBoard.setTileBorder(t.getCoordinates(), STRATEGY_GROUP_BORDERS[i - 1]);
 	            }
 	        }

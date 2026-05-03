@@ -2,18 +2,20 @@ package player;
 
 import java.util.*;
 
+import controller.QuaxController;
+
 import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import player.bothelpers.StrategyBuilder;
+import player.bothelpers.StrategyValueProbabilities;
 import types.*;
 
 
 public class BotPlayer extends QuaxPlayer {
 
-    public static final int MAX_STRATEGIES = 7;
-    // TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
+	// TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
 	private static final long MIN_THINKING_TIME = 1000;
-    private static boolean botHaste = false;
+	private static boolean botHaste = false;
 
     private final StrategyBuilder strategyBuilder;
     private ArrayList<LinkedList<QuaxTile>> strategyGroups;
@@ -22,14 +24,14 @@ public class BotPlayer extends QuaxPlayer {
 	public BotPlayer() {
 		super();
 		strategyBuilder = new StrategyBuilder(this);
-		strategyGroups = new ArrayList<>(MAX_STRATEGIES);
+		strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
         clearAllStrategyGroups();
 	}
 
     private void clearAllStrategyGroups() {
-        strategyGroups = new ArrayList<>(MAX_STRATEGIES);
+        strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
 
-        for (int i = 0 ; i < MAX_STRATEGIES; i++) {
+        for (int i = 0 ; i < StrategyValue.MAX_STRATEGIES; i++) {
         	strategyGroups.add(new LinkedList<>());
         }
     }
@@ -53,64 +55,40 @@ public class BotPlayer extends QuaxPlayer {
     // TODO - Less returns - Remove random group altogether?
     private LinkedList<QuaxTile> selectStrategyGroup(int move) {
         if (move == 0) {
-            return getStrategyGroupWithValue(1);
+            return getStrategyGroupWithValue(StrategyValue.VERY_LOW);
         }
 
-        if (getStrategyGroupWithValue(MAX_STRATEGIES).size() > 0) {
-            return getStrategyGroupWithValue(MAX_STRATEGIES);
+        if (getStrategyGroupWithValue(StrategyValue.WINNING).size() > 0) {
+            return getStrategyGroupWithValue(StrategyValue.WINNING);
         }
 
-        if (getStrategyGroupWithValue(MAX_STRATEGIES-1).size() > 0) {
-            return getStrategyGroupWithValue(MAX_STRATEGIES-1);
+        if (getStrategyGroupWithValue(StrategyValue.OPPONENT_WINNING).size() > 0) {
+            return getStrategyGroupWithValue(StrategyValue.OPPONENT_WINNING);
         }
         
-        if (getStrategyGroupWithValue(5).size() > 0) {
-            return getStrategyGroupWithValue(5);
+        if (getStrategyGroupWithValue(StrategyValue.KEY).size() > 0) {
+            return getStrategyGroupWithValue(StrategyValue.KEY);
         }
 
-        int randStrategyValue = chooseRandomStrategyValue();
+        StrategyValue randStrategyValue = StrategyValueProbabilities.randomStrategyValue();
         LinkedList<QuaxTile> choice = getStrategyGroupWithValue(randStrategyValue);
 
         while (choice.isEmpty()) {
-            randStrategyValue--;
+            randStrategyValue = randStrategyValue.downgradeOne();
             choice = getStrategyGroupWithValue(randStrategyValue);
         }
 
         return choice;
     }
 
-
-    /* //TODO - Decide on probabilities, are we keeping them as this? ALSO 1 return/method???
-    1% chance of strat val 1
-    14% chance of strat val 2
-    25% chance of strat val 3
-    60% chance of strat 4
-    */
-    private int chooseRandomStrategyValue() {
-        SplittableRandom random = new SplittableRandom();
-        int probability= random.nextInt(1,101);
-
-        if (probability <= 1) {
-            return 1;
-        }
-
-        if (probability <= 15) {
-            return 2;
-        }
-
-        if (probability <= 40) {
-            return 3;
-        }
-
-        return 4;
-    }
-
-
-    public LinkedList<QuaxTile> getStrategyGroupWithValue(int i) {
-        assert (i <= MAX_STRATEGIES && i > 0);
+    private LinkedList<QuaxTile> getStrategyGroupWithValue(int i) {
+        assert (i <= StrategyValue.MAX_STRATEGIES && i > 0);
         return strategyGroups.get(i - 1);
     }
 
+    public LinkedList<QuaxTile> getStrategyGroupWithValue(StrategyValue group) {
+    	return getStrategyGroupWithValue(group.toInt());
+    }
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();

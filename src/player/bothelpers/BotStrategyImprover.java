@@ -5,9 +5,6 @@ import java.util.*;
 import model.QuaxBoard;
 import types.*;
 
-
-import static player.BotPlayer.MAX_STRATEGIES;
-
 class BotStrategyImprover {
 
     private final QuaxBoard smarterBoard;
@@ -24,7 +21,7 @@ class BotStrategyImprover {
         return initialStrategy.botColour();
     }
 
-    private void assignStrategyValue(QuaxTile t, int value) {
+    private void assignStrategyValue(QuaxTile t, StrategyValue value) {
         initialStrategy.assignStrategyValue(t, value);
     }
 
@@ -36,58 +33,60 @@ class BotStrategyImprover {
             if (tile.isFree() && isLowPriority(tile)) {
 
                 if (initialStrategy.isLowPriorityRhombus(tile, smarterBoard)) {
-                    assignStrategyValue(tile, 0);
+                    assignStrategyValue(tile, StrategyValue.IGNORE);
                 }
 
                 else if (exploitsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, 5);
+                    upgradeStrategy(tile, 2, StrategyValue.KEY);
                 }
 
                 else if (defendsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, 5);
+                    upgradeStrategy(tile, 2, StrategyValue.KEY);
                 }
 
                 else if (createsOnlyOneVulnerableRhombus(tile, smarterBoard)) {
-                    downgradeStrategy(tile, 1, 2);
+                    downgradeStrategy(tile, 1, StrategyValue.KEY);
                 }
             }
         }
 
 
         PathFinder pf = new PathFinder();
-        pf.avoidWeakGroupContributions(2, 2);
+        pf.avoidWeakGroupContributions(2, StrategyValue.LOW);
         pf.diagonalPathfinding();
     }
 
-
+    // TODO Move into QuaxTile?
     private static boolean isLowPriority(QuaxTile t) {
-        return t.getStrategyValue() < MAX_STRATEGIES - 1;
+        return t.getStrategyValue().isLowPriority();
     }
 
 
-    private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
-        int prevValue = t.getStrategyValue();
-        int limit = Math.max(maximum, MAX_STRATEGIES);
+    private void upgradeStrategy(QuaxTile t, int increase, StrategyValue max) {
+        int prevValue = t.getStrategyValue().toInt();
+        int maximum = max.toInt();
+        int limit = Math.max(maximum, StrategyValue.MAX_STRATEGIES);
 
         if (prevValue < limit) {
             if (prevValue + increase > limit) {
                 increase = limit - prevValue;
             }
 
-            assignStrategyValue(t, prevValue + increase);
+            assignStrategyValue(t, StrategyValue.fromInt(prevValue + increase));
         }
     }
 
-    private void downgradeStrategy(QuaxTile t, int decrease, int minimum) {
+    private void downgradeStrategy(QuaxTile t, int decrease, StrategyValue min) {
         if (isLowPriority(t)) {
-            int prevValue = t.getStrategyValue();
+            int prevValue = t.getStrategyValue().toInt();
+            int minimum = min.toInt();
             int limit = Math.max(minimum, 0);
 
             if (prevValue > limit) {
                 if (prevValue - decrease < limit) {
                     decrease = prevValue - limit;
                 }
-                assignStrategyValue(t, prevValue - decrease);
+                assignStrategyValue(t, StrategyValue.fromInt(prevValue - decrease));
             }
         }
     }
@@ -177,7 +176,7 @@ class BotStrategyImprover {
         }
 
 
-        private void avoidWeakGroupContributions(int decrease, int minimum) {
+        private void avoidWeakGroupContributions(int decrease, StrategyValue minimum) {
             for (QuaxTile tile : smarterBoard) {
                 List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, smarterBoard);
                 // TODO better comment - Joining two groups together is fine
@@ -206,8 +205,8 @@ class BotStrategyImprover {
                         for (int i = -1; i <= 1; i++) {
                             if (opponentBlockingPath(neighbours, i)) {
                                 for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                                    if (ahead.tileExists() && ahead.getStrategyValue() == 3) {
-                                        upgradeStrategy(ahead, 1, 4);
+                                    if (ahead.tileExists() && ahead.getStrategyValue() == StrategyValue.BLOCKING) {
+                                        upgradeStrategy(ahead, 1, StrategyValue.PROGRESS);
                                     }
                                 }
                             }
