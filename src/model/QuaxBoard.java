@@ -34,7 +34,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		initialiseGrids();
 	}
 
-	// Copy constructor
 	public QuaxBoard(QuaxBoard copyBoard) {
 		this.octagonGrid = new Octagon[NUM_OCTAGONS][NUM_OCTAGONS];
 		this.rhombusGrid = new Rhombus[NUM_RHOMBUSES][NUM_RHOMBUSES];
