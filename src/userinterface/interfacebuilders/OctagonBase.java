@@ -1,8 +1,7 @@
 package userinterface.interfacebuilders;
 
 import javafx.scene.shape.Polygon;
-
-import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
+import static userinterface.interfacebuilders.BackgroundBoardBuilder.OCTAGON_WIDTH;
 
 
 abstract class OctagonBase extends Polygon {

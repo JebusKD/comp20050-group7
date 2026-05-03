@@ -8,12 +8,14 @@ import javafx.scene.shape.*;
 
 import static types.QuaxCoordinate.*;
 import static model.QuaxBoard.*;
-import static userinterface.QuaxUserInterface.*;
 import static userinterface.interfacebuilders.UserInterfaceBoard.*;
 
 
 class BackgroundBoardBuilder {
 
+    static final double OCTAGON_WIDTH = 40;
+
+    private static final double OCTAGON_GRID_GAP = 1;
     private static final double FRONT_HOURGLASS_GAP = 5.7;
     private static final double BACK_HOURGLASS_GAP = 11.4;
 
