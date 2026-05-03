@@ -1,5 +1,6 @@
 package types;
 
+import static types.QuaxTileGroup.UNASSIGNED_GROUP;
 
 public abstract class QuaxTile {
 	
@@ -17,7 +18,7 @@ public abstract class QuaxTile {
 
 	public QuaxTile(int x, int y) {
 		this.tileColour = QuaxTileColour.NONE;
-		this.tileGroup = null;
+		this.tileGroup = UNASSIGNED_GROUP;
 
 		this.strategyValue = StrategyValue.IGNORE;
 		this.xPosition = x;
@@ -30,7 +31,7 @@ public abstract class QuaxTile {
 		}
 		
 		this.tileColour = t.tileColour;
-		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
+		this.tileGroup = UNASSIGNED_GROUP; // Don't copy tile group, added in the board after object is constructed
 
 		this.strategyValue = t.strategyValue;
 		this.xPosition = t.xPosition;
@@ -49,7 +50,8 @@ public abstract class QuaxTile {
 	}
 
 	public QuaxTileGroup getTileGroup() {
-		if (tileGroup == null) {
+		assert tileGroup != null;
+		if (tileGroup == UNASSIGNED_GROUP) {
 			throw new IllegalStateException("TileGroup not initialised for tile.");
 		}
 		

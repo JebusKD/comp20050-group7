@@ -5,7 +5,7 @@ import java.util.*;
 
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
-	private static final QuaxTileGroup UNASSIGNED_GROUP = new PlaceholderGroup("unassigned");
+	public static final QuaxTileGroup UNASSIGNED_GROUP = new PlaceholderGroup("unassigned");
 	
 	private final LinkedList<QuaxTile> groupMembers;
 
