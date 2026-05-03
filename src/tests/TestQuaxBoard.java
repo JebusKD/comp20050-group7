@@ -124,7 +124,7 @@ class TestQuaxBoard {
 	}
 
 
-	// Checks if a correctly-sized array is created for octagon's neighbours. TODO - 1 assert/test?
+	// Checks if a correctly-sized array is created for octagon's neighbours
 	@Test
 	void testNeighboursArraySize1() {
 		QuaxTile[][] neighbours = testQuaxBoard.getNeighbours(newOctagonCoordinate(5, 5));

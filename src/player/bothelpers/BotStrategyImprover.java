@@ -50,7 +50,7 @@ class BotStrategyImprover {
                 }
 
                 else if (createsOnlyOneVulnerableRhombus(tile, smarterBoard)) {
-                    downgradeStrategy(tile, 1, KEY); // TODO - This was SV2 before, mistake?
+                    downgradeStrategy(tile, 1, LOW);
                 }
             }
         }
@@ -61,9 +61,9 @@ class BotStrategyImprover {
         pf.diagonalPathfinding();
     }
 
-    // TODO Move into QuaxTile? - Senan) Also LoD?
-    private static boolean isLowPriority(QuaxTile tile) {
-        return tile.getStrategyValue().isLowPriority();
+
+    private boolean isLowPriority(QuaxTile tile) {
+        return tile.isLowPriority();
     }
 
 
@@ -176,7 +176,6 @@ class BotStrategyImprover {
             return removeOpponentGroups(nearbyTileGroups(centre, board));
         }
 
-        // TODO - Correlate with getAdjacentGroups from QuaxBoard?
         private List<QuaxTileGroup> nearbyTileGroups(QuaxTile centreTile, QuaxBoard board) {
             LinkedList<QuaxTileGroup> groups = new LinkedList<>();
 
