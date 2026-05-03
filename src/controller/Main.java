@@ -4,9 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-/*
- * Launch the game of Quax
- */
+/* Launch the game of Quax */
 public class Main extends Application {
 
 	@Override

@@ -3,15 +3,15 @@ package model;
 import static model.QuaxBoard.*;
 import types.*;
 
-/*
- * Handle searching for neighbours
- */
+/* Handle searching for neighbours */
 class NeighbourFinder {
 
     private final QuaxBoard searchBoard;
     private final QuaxCoordinate searchCoordinate;
 
     NeighbourFinder(QuaxBoard board, QuaxCoordinate coordinate) {
+        assert board != null && coordinate != null;
+
         this.searchBoard = board;
         this.searchCoordinate = coordinate;
     }
@@ -29,6 +29,7 @@ class NeighbourFinder {
     }
 
 
+    /* Rhombus neighbours refer to the four octagon tiles connected diagonally */
     private QuaxTile[][] getRhombusNeighbours() {
         QuaxTile[][] neighbours = new QuaxTile[2][2];
 
@@ -40,7 +41,10 @@ class NeighbourFinder {
         return neighbours;
     }
 
-
+    /* Octagon neighbours refer to:
+     * The four octagon tiles directly connected horizontally and vertically
+     * The four rhombus tiles connected diagonally
+     */
     private QuaxTile[][] getOctagonNeighbours() {
         QuaxTile[][] neighbours = new QuaxTile[3][3];
 

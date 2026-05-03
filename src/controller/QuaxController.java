@@ -11,9 +11,7 @@ import types.*;
 import userinterface.*;
 
 
-/*
- * Handle all technical aspects of the game
- */
+/* Handle all technical aspects of the game */
 public class QuaxController {
 
     public static final Random RNG = new Random();

@@ -328,7 +328,9 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/* Create Iterables of different types for the board*/
+	/* Create Iterables of different types for the board,
+	 * For easier for loops, primarily in the bot strategy
+	 */
 	public Iterator<QuaxTile> iterator() {
 		BoardIterators bi = new BoardIterators(this);
 		return bi.iterator();

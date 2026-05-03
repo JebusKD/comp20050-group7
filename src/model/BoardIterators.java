@@ -15,7 +15,7 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
-    /* Create an Iterable for all tiles in the board */
+    /* Iterate through all tiles in the board */
     public Iterator<QuaxTile> iterator() {
         return new QuaxBoardIterator(iteratorBoard);
     }
@@ -61,7 +61,10 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
-
+    /* Iterate through all tile *coordinates* in the board.
+     *  This is not dependent on the board state, and is used exclusively when
+     *   showing the bot's strategy
+     */
     public static Iterator<QuaxCoordinate> coordinateIterator() {
         return new QuaxBoardCoordinateIterator();
     }
@@ -85,7 +88,10 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
-
+    /* Iterate through all octagon tiles in the board.
+     *  Dependent on the board state
+     *  Used when refining the bot's strategy
+     */
     public Iterator<Octagon> octagonIterator() {
         return new QuaxBoardOctagonIterator(iteratorBoard);
     }
@@ -124,7 +130,10 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
-
+    /* Iterate through all octagon tiles in the board.
+     *  Independent of the board state
+     *  Used when refining the bot's strategy
+     */
     public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
         return new QuaxBoardRhombusCoordinateIterator();
     }
