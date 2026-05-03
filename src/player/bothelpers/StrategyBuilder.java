@@ -6,7 +6,6 @@ import model.QuaxBoard;
 import player.BotPlayer;
 import types.*;
 import static types.StrategyValue.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static types.QuaxTileColour.*;
 
 

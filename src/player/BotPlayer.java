@@ -53,7 +53,7 @@ public class BotPlayer extends QuaxPlayer {
 
     private LinkedList<QuaxTile> selectStrategyGroup(QuaxBoard board) {
         assert strategyGroups != null && strategyBuilder != null;
-        LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(board);
+        LinkedList<QuaxTile> choice = checkPrioritisedStrategyGroups(board);
 
         if (choice.isEmpty()) {
             StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
@@ -68,7 +68,7 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
-    private LinkedList<QuaxTile> getPrioritisedStrategyGroup(QuaxBoard board) {
+    private LinkedList<QuaxTile> checkPrioritisedStrategyGroups(QuaxBoard board) {
         LinkedList<QuaxTile> strategyGroup = new LinkedList<>();
 
         if (board.isStartingMove()) {

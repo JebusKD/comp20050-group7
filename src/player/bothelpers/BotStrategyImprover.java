@@ -296,14 +296,14 @@ class BotStrategyImprover {
         }
 
         private QuaxTile[] getNeighboursRow(QuaxTile[][] neighbours, int index) {
-        	//assert neighbours.length > index && index > 0;
+        	assert neighbours.length > index && index >= 0;
 
             return neighbours[index];
         }
 
         // TODO maybe "3" is a magic number here?
         private QuaxTile[] getNeighboursColumn(QuaxTile[][] neighbours, int index) {
-        	//assert neighbours.length == 3 && index > 0;
+        	assert neighbours.length == 3 && index >= 0;
 
             QuaxTile[] column = new QuaxTile[3];
             for (int i = 0; i < 3; i++) {
