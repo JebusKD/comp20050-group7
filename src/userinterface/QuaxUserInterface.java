@@ -15,9 +15,6 @@ import userinterface.interfacebuilders.*;
 
 public class QuaxUserInterface implements UserInterface {
 
-    public static final double OCTAGON_WIDTH = 40;
-    public static final double OCTAGON_GRID_GAP = 1;
-    
     public static final QuaxTileBorder[] STRATEGY_GROUP_BORDERS = new QuaxTileBorder[] {
             QuaxTileBorder.NONE, QuaxTileBorder.BLUE,
             QuaxTileBorder.GREEN, QuaxTileBorder.RED,
@@ -36,8 +33,8 @@ public class QuaxUserInterface implements UserInterface {
     private Scene interfaceScene;
 
     private final UserInterfaceBoard quaxUIBoard;
-    private PlayerTurnIndicator turnIndicator;
-    private WindowManager quaxUIWindow;
+    private final PlayerTurnIndicator turnIndicator;
+    private final WindowManager quaxUIWindow;
 
     private BotPlayer linkedBot;
     private QuaxCoordinate chosenMove;
@@ -48,7 +45,11 @@ public class QuaxUserInterface implements UserInterface {
 
     public QuaxUserInterface(Stage stage) {
         this.quaxUIStage = stage;
+
         this.quaxUIBoard = new UserInterfaceBoard();
+        this.turnIndicator = new PlayerTurnIndicator();
+        this.quaxUIWindow = new WindowManager();
+
         this.showingStrategy = false;
         this.hasLinkedBot = false;
 
@@ -74,13 +75,10 @@ public class QuaxUserInterface implements UserInterface {
 
 
     private void initialiseWindow() {
-        quaxUIWindow = new WindowManager();
-
         VBox sideBar = quaxUIWindow.initialiseButtons();
         quaxUIWindow.initialiseWinLabel();
         quaxUIWindow.initialiseStrategyColourCoding();
 
-        turnIndicator = new PlayerTurnIndicator();
 
         sideBar.getChildren().addAll(turnIndicator.getTurnTrackerBox(),
                                         quaxUIWindow.getWinLabel(),
@@ -163,7 +161,6 @@ public class QuaxUserInterface implements UserInterface {
 	        }
     	}
     }
-
 
     @Override
     public void hideStrategy(QuaxBoard board) {

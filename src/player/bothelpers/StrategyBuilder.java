@@ -5,6 +5,7 @@ import java.util.*;
 import model.QuaxBoard;
 import player.BotPlayer;
 import types.*;
+import static types.StrategyValue.*;
 
 
 public class StrategyBuilder {
@@ -21,10 +22,14 @@ public class StrategyBuilder {
         return linkedBot.getPlayerColour();
     }
 
-    private ArrayList<LinkedList<QuaxTile>> getBotStrategyGroups() {
-        ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(StrategyValue.MAX_STRATEGIES);
+    public StrategyValue getRandomStrategyValue() {
+        return StrategyValueProbabilities.randomStrategyValue();
+    }
 
-        for (int i = 1 ; i <= StrategyValue.MAX_STRATEGIES ; i++) {
+    private ArrayList<LinkedList<QuaxTile>> getBotStrategyGroups() {
+        ArrayList<LinkedList<QuaxTile>> strategyGroups = new ArrayList<>(MAX_STRATEGIES);
+
+        for (int i = 1 ; i <= MAX_STRATEGIES ; i++) {
             strategyGroups.add(linkedBot.getStrategyGroupWithValue(StrategyValue.fromInt(i)));
         }
 
@@ -42,9 +47,9 @@ public class StrategyBuilder {
 
     private void initialiseAllStrategyGroups(QuaxBoard board) {
         for (QuaxTile t : board) {
-            t.setStrategyValue(StrategyValue.IGNORE);
+            t.setStrategyValue(IGNORE);
             if (isValidStrategicMove(t, board, botColour())) {
-                assignStrategyValue(t, StrategyValue.VERY_LOW);
+                assignStrategyValue(t, VERY_LOW);
             }
         }
     }
@@ -76,8 +81,9 @@ public class StrategyBuilder {
     }
 
 
-    /* "Useless Rhombus" is defined as having at most 1
-     * nearby enemy tile.
+    /* "Low Priority Rhombus" is defined as having at most 1
+     * nearby enemy tile, so the bot may take it whenever needed without
+     * needing to worry about the human placing a tile there
      */
     boolean isLowPriorityRhombus(QuaxTile t, QuaxBoard b) {
         boolean result = false;

@@ -118,11 +118,11 @@ public class QuaxController {
 
 
     public QuaxPlayer currentPlayer() {
-        return quaxPlayers[getMoveNumber() % 2];
+        return this.quaxPlayers[getMoveNumber() % 2];
     }
 
     public int getMoveNumber() {
-        return quaxBoard.getMoveNumber();
+        return this.quaxBoard.getMoveNumber();
     }
 
     public QuaxBoard getQuaxBoard() {
@@ -140,13 +140,13 @@ public class QuaxController {
     // for testing purposes
     public QuaxTileColour getFirstPlayerColour() {
         assert quaxPlayers[0] != null;
-        return quaxPlayers[0].getPlayerColour();
+        return this.quaxPlayers[0].getPlayerColour();
     }
 
     // for testing purposes
     public QuaxTileColour getSecondPlayerColour() {
         assert quaxPlayers[1] != null;
-        return quaxPlayers[1].getPlayerColour();
+        return this.quaxPlayers[1].getPlayerColour();
     }
 
 

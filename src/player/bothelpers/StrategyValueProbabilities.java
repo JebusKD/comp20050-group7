@@ -6,7 +6,8 @@ import java.util.TreeMap;
 import static controller.QuaxController.RNG;
 import types.StrategyValue;
 
-public class StrategyValueProbabilities {
+
+class StrategyValueProbabilities {
 	private StrategyValueProbabilities() {
 	}
 	
@@ -24,5 +25,4 @@ public class StrategyValueProbabilities {
 	public static StrategyValue randomStrategyValue() {
 		return STRATEGY_PROBABILITY_MAP.ceilingEntry(RNG.nextDouble()).getValue();
 	}
-
 }

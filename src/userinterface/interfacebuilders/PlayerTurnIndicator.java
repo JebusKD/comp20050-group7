@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import types.QuaxTileColour;
-import static userinterface.QuaxUserInterface.OCTAGON_WIDTH;
+import static userinterface.interfacebuilders.BackgroundBoardBuilder.OCTAGON_WIDTH;
 
 
 public class PlayerTurnIndicator {

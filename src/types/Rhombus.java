@@ -19,5 +19,4 @@ public class Rhombus extends QuaxTile {
 	public QuaxCoordinate getCoordinates() {
 		return QuaxCoordinate.newRhombusCoordinate(xPosition, yPosition);
 	}
-
 }
