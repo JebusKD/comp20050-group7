@@ -25,6 +25,10 @@ public abstract class QuaxTile {
 	}
 
 	public QuaxTile(QuaxTile t) {
+		if (t == null) {
+			throw new IllegalArgumentException("QuaxTile cannot be constructed from null copy.");
+		}
+		
 		this.tileColour = t.tileColour;
 		this.tileGroup = null; // Don't copy tile group, added in the board after object is constructed
 
@@ -33,7 +37,7 @@ public abstract class QuaxTile {
 		this.yPosition = t.yPosition;
 	}
 
-	/* Private constructor used exclusively to construct OutOfBoundsTile. */
+	/* Private constructor used exclusively to construct PlaceholderTiles. */
 	private QuaxTile() {
 		this.xPosition = -1;
 		this.yPosition = -1;
@@ -45,24 +49,41 @@ public abstract class QuaxTile {
 	}
 
 	public QuaxTileGroup getTileGroup() {
+		if (tileGroup == null) {
+			throw new IllegalStateException("TileGroup not initialised for tile.");
+		}
+		
 		return this.tileGroup;
 	}
 
 	public StrategyValue getStrategyValue() {
+		assert strategyValue != null;
+		
 		return this.strategyValue;
 	}
 
 
 	public void setTileColour(QuaxTileColour colour) {
-		assert colour != null;
+		if (colour == null) {
+			throw new IllegalArgumentException("QuaxTile cannot be assigned null colour.");
+		}
+		
 		this.tileColour = colour;
 	}
 
 	public void setTileGroup(QuaxTileGroup tileGroup) {
+		if (tileGroup == null) {
+			throw new IllegalArgumentException("QuaxTile cannot be assigned null QuaxTileGroup.");
+		}
+		
 		this.tileGroup = tileGroup;
 	}
 	
 	public void setStrategyValue(StrategyValue value) {
+		if (value == null) {
+			throw new IllegalArgumentException("QuaxTile cannot be assigned null StrategyValue.");
+		}
+		
 		this.strategyValue = value;
 	}
 
@@ -72,6 +93,8 @@ public abstract class QuaxTile {
 
 	/* Following are shorthand boolean checks for brevity */
 	public boolean isFree() {
+		assert getTileColour() != null;
+		
 		return getTileColour() == QuaxTileColour.NONE;
 	}
 	public boolean isOccupied() {
@@ -79,20 +102,36 @@ public abstract class QuaxTile {
 	}
 
 	public boolean isBlack() {
+		assert getTileColour() != null;
+		
 		return getTileColour() == QuaxTileColour.BLACK;
 	}
 	public boolean isWhite() {
+		assert getTileColour() != null;
+		
 		return getTileColour() == QuaxTileColour.WHITE;
 	}
 
-	public boolean isSameColour(QuaxTileColour colour) {
-		assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
-		return getTileColour() == colour;
+	public boolean isSameColour(QuaxTileColour c) {
+		assert this.getTileColour() != null;
+		
+		if (c == null) {
+			throw new IllegalArgumentException("null cannot be passed as argument into isSameColour.");
+		}
+		
+		return getTileColour() == c;
+
 	}
 
-	public boolean isOpponentColour(QuaxTileColour colour) {
-		assert colour != QuaxTileColour.NONE;
-		return getTileColour() == colour.flip();
+	public boolean isOpponentColour(QuaxTileColour c) {
+		if (c == null) {
+			throw new IllegalArgumentException("null cannot be passed as argument into isOpponentColour.");
+		}
+		if (c == QuaxTileColour.NONE) {
+			throw new IllegalArgumentException("No opponent colour exists for NONE tile colour.");
+		}
+		
+		return getTileColour() == c.flip();
 	}
 
 
@@ -118,11 +157,13 @@ public abstract class QuaxTile {
 
 		private PlaceholderTile(String type) {
 			super();
+			assert type != null;
 			this.type = type;
 		}
 
 
 		private UnsupportedOperationException placeholderUsedException() {
+			assert type != null;
 			return new UnsupportedOperationException("Cannot be invoked on " + type + " tile.");
 		}
 
