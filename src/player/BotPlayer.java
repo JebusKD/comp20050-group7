@@ -41,6 +41,7 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard board) {
+        assert board != null && strategyGroups != null;
         LinkedList<QuaxTile> choice = selectStrategyGroup(board);
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
@@ -51,6 +52,7 @@ public class BotPlayer extends QuaxPlayer {
 
 
     private LinkedList<QuaxTile> selectStrategyGroup(QuaxBoard board) {
+        assert strategyGroups != null && strategyBuilder != null;
         LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(board);
 
         if (choice.isEmpty()) {
@@ -90,12 +92,21 @@ public class BotPlayer extends QuaxPlayer {
 
 
     public LinkedList<QuaxTile> getStrategyGroupWithValue(StrategyValue group) {
+       	if (group == null) {
+       		throw new IllegalArgumentException("null cannot be passed as StrategyValue parameter.");
+       	}
+       	if (group == StrategyValue.IGNORE) {
+       		throw new IllegalArgumentException("Cannot get strategy group for the IGNORE values.");
+       	}
+
         assert (group.toInt() <= MAX_STRATEGIES && group.toInt() > 0);
         return strategyGroups.get(group.toInt() - 1);
     }
 
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
+    	assert stratGroup != null;
+
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
 
         for (QuaxTile t : stratGroup) {
@@ -108,6 +119,8 @@ public class BotPlayer extends QuaxPlayer {
 
     // how the bot decides strategy vals for the tiles
     private void setUpStrategy(QuaxBoard board) {
+    	assert board != null && strategyBuilder != null;
+
         clearAllStrategyGroups();
         strategyBuilder.initialiseStrategy(board);
         strategyBuilder.refineStrategy(board);
@@ -121,6 +134,13 @@ public class BotPlayer extends QuaxPlayer {
 
 	@Override
 	public void movePrompt(QuaxBoard board) {
+		if (board == null) {
+			throw new IllegalArgumentException("Passed board cannot be null.");
+		}
+		if (board.checkForWinningMove()) {
+			throw new IllegalStateException("Bot shouldn't be prompted for move after the game has ended.");
+		}
+
         long startThinkingTime = System.currentTimeMillis();
 		
         this.getExecutor().execute(() -> {
