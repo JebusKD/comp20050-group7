@@ -73,13 +73,12 @@ class BotStrategyImprover {
     }
 
 
-    private void upgradeStrategy(QuaxTile valuableTile, int increase, StrategyValue max) {
+    private void upgradeStrategy(QuaxTile valuableTile, int increase, StrategyValue maxSV) {
         assert valuableTile != null && valuableTile.tileExists()
-                && increase > 0 && max != null;
+                && increase > 0 && maxSV != null;
 
         int strategyValueToIncrease = valuableTile.getStrategyValue().toInt();
-        int maximum = max.toInt();
-        int limit = Math.max(maximum, MAX_STRATEGIES);
+        int limit = Math.max(maxSV.toInt(), MAX_STRATEGIES);
 
         if (strategyValueToIncrease < limit) {
             if (strategyValueToIncrease + increase > limit) {
@@ -110,6 +109,13 @@ class BotStrategyImprover {
 
 
     // TODO - Explain these
+    /* Check what would happen if the other player made the same move, and how it would
+     *  affect the bot's strategy. A "Vulnerable Rhombus" is one that both players are able to take, as so;
+     *      BLACK_OCT |  WHITE_OCT |
+     *          |  VUL_RHOM  |
+     *      WHITE_OCT |  BLACK_OCT |
+     *
+     */
     private boolean defendsVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
         assert nextTileMove != null && nextTileMove.tileExists() && board != null;
 
@@ -119,6 +125,15 @@ class BotStrategyImprover {
         return exploitsVulnerableRhombuses(nextTileMove, copy);
     }
 
+    /* Exploiting a vulnerable rhombus would be something like:
+     *
+     *      HUMAN_OCT |   FREE_OCT   |  HUMAN_OCT       HUMAN_OCT | *BOT_OCT* | HUMAN_OCT
+     *            FREE_RHOM   |  FREE_RHOM       ===>       FREE_RHOM   |  FREE_RHOM
+     *       BOT_OCT  |   HUMAN_OCT  |  BOT_OCT         BOT_OCT   | HUMAN_OC  |  BOT_OCT
+     *
+     * This forces the human player to take only one of the rhombus tiles,
+     * and on the next move the bot may take the other. This increases the strategy value of the tile
+     */
     private boolean exploitsVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
         assert nextTileMove != null && nextTileMove.tileExists() && board != null;
 
@@ -132,12 +147,23 @@ class BotStrategyImprover {
     }
 
 
+    /* Creating only one vulnerable rhombus would be something like:
+     *
+     *      HUMAN_OCT |  FREE_OCT  |          HUMAN_OCT |  *BOT_OCT* |
+     *          |  VUL_RHOM  |       ===>         |  VUL_RHOM  |
+     *       BOT_OCT  | HUMAN_OCT |           BOT_OCT  |  HUMAN_OC  |
+     *
+     * The human player can then take the rhombus tile, wasting the bot's move, so
+     *  this decreases the strategy value of the tile
+     */
     private boolean createsOnlyOneVulnerableRhombus(QuaxTile nextTileMove, QuaxBoard board) {
         assert nextTileMove != null && nextTileMove.tileExists() && board != null;
         return changeInVulnerableRhombuses(nextTileMove, board) == 1;
     }
 
-
+    /* Check what would happen if the other player made the same move, and how it would
+     *  affect the bot's strategy
+     */
     private int changeInVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
         assert nextTileMove != null && nextTileMove.tileExists() && board != null;
 
@@ -153,6 +179,7 @@ class BotStrategyImprover {
 
         return result;
     }
+
 
     private int vulnerableRhombusCount(QuaxBoard board) {
         assert board != null;
@@ -173,13 +200,22 @@ class BotStrategyImprover {
 
     private class PathFinder {
 
+        // TODO - Rename
+        private static final int NEIGHBOURING_OCTAGON_SQUARE_LENGTH = 3;
+
+
         private void avoidWeakGroupContributions(int decrease, StrategyValue minimum) {
         	assert smarterBoard != null && decrease > 0 && minimum != null;
 
             for (QuaxTile tile : smarterBoard) {
                 List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, smarterBoard);
 
-                // TODO better comment - Joining two groups together is fine
+                /* If a tile can be placed that will expand a group, check to see if placing the tile
+                 *  will result in actual progress (i.e. the distance to the borders decreases).
+                 *  This also takes into account actual joining two tile groups together
+                 *
+                 * If not, decrease the tiles strategy value
+                 */
                 if (tile.isFree() && nearbyGroupsBefore.size() == 1) {
                     QuaxTileGroup groupBefore = nearbyGroupsBefore.getFirst();
 
@@ -245,28 +281,35 @@ class BotStrategyImprover {
                 if (centre.isSameColour(botColour())) {
                     QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(centre);
 
-                    adjustStrategyIfPathBlocked(neighbours);
+                    checkIfPathBlocked(neighbours);
                 }
             }
         }
 
-        private void adjustStrategyIfPathBlocked(QuaxTile[][] neighbours) {
+        private void checkIfPathBlocked(QuaxTile[][] neighbours) {
         	assert neighbours.length == 3 && neighbours[0].length == 3;
 
             for (int i = -1; i <= 1; i++) {
                 if (opponentBlockingPath(neighbours, i)) {
-                    for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                        if (ahead.tileExists() && ahead.getStrategyValue() == BLOCKING) {
-                            upgradeStrategy(ahead, 1, PROGRESS);
-                        }
-                    }
+                    adjustStrategyIfPathBlocked(neighbours, i);
+                }
+            }
+        }
+
+        private void adjustStrategyIfPathBlocked(QuaxTile[][] neighbours, int direction) {
+            assert neighbours.length == 3 && neighbours[0].length == 3;
+
+            for (QuaxTile ahead : neighboursAhead(neighbours, direction)) {
+                if (ahead.tileExists() && ahead.getStrategyValue() == BLOCKING) {
+                    upgradeStrategy(ahead, 1, PROGRESS);
                 }
             }
         }
 
 
+
+
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
-            // TODO - -1<=direction<=1?
             assert (direction >= -1 && direction <= 1) && neighbours != null;
             boolean result = false;
 
@@ -281,8 +324,8 @@ class BotStrategyImprover {
 
 
         private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
-            // TODO - -1<=direction<=1?
-            assert neighbours.length == 3 && neighbours[0].length == 3
+            assert neighbours.length == NEIGHBOURING_OCTAGON_SQUARE_LENGTH
+                    && neighbours[0].length == NEIGHBOURING_OCTAGON_SQUARE_LENGTH
                     && (direction >= -1 && direction <= 1);
 
             QuaxTile[] neighboursAhead;
@@ -301,12 +344,11 @@ class BotStrategyImprover {
             return neighbours[index];
         }
 
-        // TODO maybe "3" is a magic number here?
         private QuaxTile[] getNeighboursColumn(QuaxTile[][] neighbours, int index) {
-        	assert neighbours.length == 3 && index >= 0;
+        	assert neighbours.length == NEIGHBOURING_OCTAGON_SQUARE_LENGTH && index >= 0;
 
-            QuaxTile[] column = new QuaxTile[3];
-            for (int i = 0; i < 3; i++) {
+            QuaxTile[] column = new QuaxTile[NEIGHBOURING_OCTAGON_SQUARE_LENGTH];
+            for (int i = 0; i < NEIGHBOURING_OCTAGON_SQUARE_LENGTH; i++) {
                 column[i] = neighbours[i][index];
             }
             return column;

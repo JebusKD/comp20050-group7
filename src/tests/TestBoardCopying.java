@@ -45,7 +45,13 @@ class TestBoardCopying {
 		b.makeMove(QuaxCoordinate.newOctagonCoordinate(5, 4), QuaxTileColour.BLACK);
 		
 		Octagon c = new Octagon(b.getOctagon(5, 4));
-		assertNull(c.getTileGroup());
+		IllegalStateException exception = assertThrows(IllegalStateException.class,
+														() -> { c.getTileGroup(); } );
+
+		String expectedMessage = "TileGroup not initialised for tile.";
+		String actualMessage = exception.getMessage();
+
+		assertEquals(0, actualMessage.compareTo(expectedMessage));
 	}
 	
 	@Test
@@ -84,6 +90,12 @@ class TestBoardCopying {
 		b.makeMove(QuaxCoordinate.newRhombusCoordinate(5, 4), QuaxTileColour.BLACK);
 		
 		Rhombus c = new Rhombus(b.getRhombus(5, 4));
-		assertNull(c.getTileGroup());
+		IllegalStateException exception = assertThrows(IllegalStateException.class,
+				() -> { c.getTileGroup(); } );
+
+		String expectedMessage = "TileGroup not initialised for tile.";
+		String actualMessage = exception.getMessage();
+
+		assertEquals(0, actualMessage.compareTo(expectedMessage));
 	}
 }

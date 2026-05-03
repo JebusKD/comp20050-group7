@@ -123,22 +123,30 @@ class NeighbourFinder {
     }
 
 
-    // TODO - Definitely need a comment
-    public QuaxTile[][] getSquareOctagonNeighbours() {
+    /* Create the array representing the 3 x 3 square of octagons surrounding a tile
+     * This is different from the regular neighbours and does not include rhombus tiles
+     *
+     *      ON[0][0]  |  ON[0][1]  | ON[0][2]
+     *      ON[1][0]  |   Centre   | ON[1][2]
+     *      ON[2][0]  |  ON[2][1]  | ON[2][2]
+     */
+    public QuaxTile[][] getSquareOfAdjacentOctagonNeighbours() {
         assert searchBoard != null && searchCoordinate != null && searchCoordinate.isOctagon();
 
         QuaxTile[][] neighbours = new QuaxTile[3][3];
         for (int i = -1; i <= 1; i++) {
-            neighbours[i + 1] = createOctagonSquareNeighboursArray(i);
+            neighbours[i + 1] = createRowOfSquareOfAdjacentOctagonNeighbours(i);
         }
         return neighbours;
     }
 
-    private QuaxTile[] createOctagonSquareNeighboursArray(int verticalOffset) {
+
+    private QuaxTile[] createRowOfSquareOfAdjacentOctagonNeighbours(int verticalOffset) {
         QuaxTile[] array;
         if (verticalOffset == 0) {
             array = createOutOfBoundsRowWithHiddenCentre();
-        } else {
+        }
+        else {
             array = createOutOfBoundsRow();
         }
 

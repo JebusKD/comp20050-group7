@@ -4,9 +4,6 @@ import static model.QuaxBoard.NUM_OCTAGONS;
 import model.QuaxBoard;
 
 
-/*
- * Represent the Octagon tiles on the board
- */
 public class Octagon extends QuaxTile {
 
 	public Octagon(int x, int y) {
@@ -31,39 +28,42 @@ public class Octagon extends QuaxTile {
 
 	@Override
 	public QuaxCoordinate getCoordinates() {
-		assert xPosition >= 0 && xPosition < NUM_OCTAGONS && yPosition >= 0 && yPosition < NUM_OCTAGONS;
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
 		
-		return QuaxCoordinate.newOctagonCoordinate(xPosition, yPosition);
+		return QuaxCoordinate.newOctagonCoordinate(getXPosition(), getYPosition());
 	}
 
 
 	public int distanceToLowWall() {
-		assert xPosition >= 0 && xPosition < NUM_OCTAGONS && yPosition >= 0 && yPosition < NUM_OCTAGONS;
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
 		
 		if (isFree()) {
 			throw new IllegalStateException("Distance to Low Wall cannot be evaluated for free Octagons.");
 		}
 		
 		if (getTileColour() == QuaxTileColour.BLACK) {
-			return yPosition;
+			return getYPosition();
 		}
 		else {
-			return xPosition;
+			return getXPosition();
 		}
 	}
 
 	public int distanceToHighWall() {
-		assert xPosition >= 0 && xPosition < NUM_OCTAGONS && yPosition >= 0 && yPosition < NUM_OCTAGONS;
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
 		
 		if (isFree()) {
 			throw new IllegalStateException("Distance to High Wall cannot be evaluated for free Octagons.");
 		}
 		
 		if (getTileColour() == QuaxTileColour.BLACK) {
-			return QuaxBoard.NUM_OCTAGONS - (yPosition + 1);
+			return QuaxBoard.NUM_OCTAGONS - (getYPosition() + 1);
 		}
 		else {
-			return QuaxBoard.NUM_OCTAGONS - (xPosition + 1);
+			return QuaxBoard.NUM_OCTAGONS - (getXPosition() + 1);
 		}
 	}
 }

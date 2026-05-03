@@ -1,9 +1,6 @@
 package types;
 
 
-/*
- * Represent the Rhombus tiles on the board
- */
 public class Rhombus extends QuaxTile {
 
 	public Rhombus(int x, int y) {
@@ -17,6 +14,6 @@ public class Rhombus extends QuaxTile {
 
 	@Override
 	public QuaxCoordinate getCoordinates() {
-		return QuaxCoordinate.newRhombusCoordinate(xPosition, yPosition);
+		return QuaxCoordinate.newRhombusCoordinate(getXPosition(), getYPosition());
 	}
 }

@@ -11,9 +11,8 @@ public abstract class QuaxTile {
 	private QuaxTileGroup tileGroup;
 
 	private StrategyValue strategyValue;
-	// TODO should these be private and accessed downstream via a getXPosition()/YPosition()?
-	protected final int xPosition;
-	protected final int yPosition;
+	private final int xPosition;
+	private final int yPosition;
 
 
 	public QuaxTile(int x, int y) {
@@ -64,6 +63,14 @@ public abstract class QuaxTile {
 		return this.strategyValue;
 	}
 
+	public int getXPosition() {
+		return xPosition;
+	}
+
+	public int getYPosition() {
+		return yPosition;
+	}
+
 
 	public void setTileColour(QuaxTileColour colour) {
 		if (colour == null) {
@@ -93,9 +100,7 @@ public abstract class QuaxTile {
 	public abstract QuaxCoordinate getCoordinates();
 
 
-	/*
-	 * Shorthand boolean checks for brevity
-	 */
+	/* Following are shorthand boolean checks for brevity */
 	public boolean isFree() {
 		assert getTileColour() != null;
 		
@@ -137,7 +142,8 @@ public abstract class QuaxTile {
 		
 		return getTileColour() == c.flip();
 	}
-	
+
+
 	public final boolean tileExists() {
 		return !(this instanceof PlaceholderTile);
 	}
