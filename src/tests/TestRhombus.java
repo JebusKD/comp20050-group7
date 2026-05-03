@@ -153,7 +153,14 @@ class TestRhombus {
 	@Test
 	void testRhombusUnassignedGroup() {
 		QuaxTile t = new Rhombus(5, 5);
-		assertNull(t.getTileGroup());
+
+		IllegalStateException exception = assertThrows(IllegalStateException.class,
+				() -> { t.getTileGroup(); } );
+
+		String expectedMessage = "TileGroup not initialised for tile.";
+		String actualMessage = exception.getMessage();
+
+		assertEquals(0, actualMessage.compareTo(expectedMessage));
 	}
 	
 	@Test
