@@ -10,7 +10,7 @@ public abstract class QuaxTile {
 	private QuaxTileGroup tileGroup;
 
 	private StrategyValue strategyValue;
-
+	// TODO should these be private and accessed downstream via a getXPosition()/YPosition()?
 	protected final int xPosition;
 	protected final int yPosition;
 
