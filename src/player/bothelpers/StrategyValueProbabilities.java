@@ -23,6 +23,8 @@ class StrategyValueProbabilities {
 					));
 	
 	public static StrategyValue randomStrategyValue() {
+		assert RNG != null && STRATEGY_PROBABILITY_MAP.ceilingEntry(1.0) != null;
+		
 		return STRATEGY_PROBABILITY_MAP.ceilingEntry(RNG.nextDouble()).getValue();
 	}
 }
