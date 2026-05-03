@@ -1,9 +1,6 @@
 package types;
 
 
-/*
- * Represent the Rhombus tiles on the board
- */
 public class Rhombus extends QuaxTile {
 
 	public Rhombus(int x, int y) {

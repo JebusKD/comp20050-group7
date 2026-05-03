@@ -25,11 +25,22 @@ public class QuaxController {
     private final QuaxPlayer[] quaxPlayers;
 
 
-    // Start Game against Bot
+    // Start Game against Bot - Main application used
     public QuaxController(Stage stage) {
-        this(stage, true, false);
+        this.quaxExecutor = new MultithreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
+
+        this.quaxUserInterface = new QuaxUserInterface(stage);
+        this.quaxPlayers = new QuaxPlayer[2];
+
+        QuaxEventHandler.setupTileClickEvents(this, stage);
+        QuaxEventHandler.setupButtonEvents(this, stage);
+
+        startGameAgainstBot();
     }
 
+
+    // Testing Constructor to manipulate which player might go first
     public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
         this.quaxExecutor = new MultithreadedExecutor();
         this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
@@ -40,13 +51,10 @@ public class QuaxController {
         QuaxEventHandler.setupTileClickEvents(this, stage);
         QuaxEventHandler.setupButtonEvents(this, stage);
 
-
-        // TODO this statement is a bit weird.
         if (humanPlaysFirst) {
             startGame(new HumanPlayer(), new BotPlayer());
         }
         else {
-            // TODO - Remove on final submission
             if (againstBot) {
                 startGameAgainstBot();
             }
@@ -56,7 +64,7 @@ public class QuaxController {
         }
     }
 
-    // Testing Constructor
+    // Two-Player Testing Constructor
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
 
     	if (p1 == null || p2 == null) {
@@ -73,7 +81,6 @@ public class QuaxController {
     }
 
 
-    // TODO - Remove on final submission
     private void startTwoPlayerGame() {
         QuaxPlayer p1 = new HumanPlayer();
         QuaxPlayer p2 = new HumanPlayer();
