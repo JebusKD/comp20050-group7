@@ -9,6 +9,9 @@ import static types.StrategyValue.*;
 
 class BotStrategyImprover {
 
+    // TODO - Rename
+    private static final int NEIGHBOURS_ARRAY_LENGTH = 3;
+
     private final QuaxBoard smarterBoard;
     private final StrategyBuilder initialStrategy;
 
@@ -245,28 +248,35 @@ class BotStrategyImprover {
                 if (centre.isSameColour(botColour())) {
                     QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(centre);
 
-                    adjustStrategyIfPathBlocked(neighbours);
+                    checkIfPathBlocked(neighbours);
                 }
             }
         }
 
-        private void adjustStrategyIfPathBlocked(QuaxTile[][] neighbours) {
+        private void checkIfPathBlocked(QuaxTile[][] neighbours) {
         	assert neighbours.length == 3 && neighbours[0].length == 3;
 
             for (int i = -1; i <= 1; i++) {
                 if (opponentBlockingPath(neighbours, i)) {
-                    for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                        if (ahead.tileExists() && ahead.getStrategyValue() == BLOCKING) {
-                            upgradeStrategy(ahead, 1, PROGRESS);
-                        }
-                    }
+                    adjustStrategyIfPathBlocked(neighbours, i);
+                }
+            }
+        }
+
+        private void adjustStrategyIfPathBlocked(QuaxTile[][] neighbours, int direction) {
+            assert neighbours.length == 3 && neighbours[0].length == 3;
+
+            for (QuaxTile ahead : neighboursAhead(neighbours, direction)) {
+                if (ahead.tileExists() && ahead.getStrategyValue() == BLOCKING) {
+                    upgradeStrategy(ahead, 1, PROGRESS);
                 }
             }
         }
 
 
+
+
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
-            // TODO - -1<=direction<=1?
             assert (direction >= -1 && direction <= 1) && neighbours != null;
             boolean result = false;
 
@@ -281,8 +291,8 @@ class BotStrategyImprover {
 
 
         private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
-            // TODO - -1<=direction<=1?
-            assert neighbours.length == 3 && neighbours[0].length == 3
+            assert neighbours.length == NEIGHBOURS_ARRAY_LENGTH
+                    && neighbours[0].length == NEIGHBOURS_ARRAY_LENGTH
                     && (direction >= -1 && direction <= 1);
 
             QuaxTile[] neighboursAhead;
@@ -301,12 +311,11 @@ class BotStrategyImprover {
             return neighbours[index];
         }
 
-        // TODO maybe "3" is a magic number here?
         private QuaxTile[] getNeighboursColumn(QuaxTile[][] neighbours, int index) {
-        	assert neighbours.length == 3 && index >= 0;
+        	assert neighbours.length == NEIGHBOURS_ARRAY_LENGTH && index >= 0;
 
-            QuaxTile[] column = new QuaxTile[3];
-            for (int i = 0; i < 3; i++) {
+            QuaxTile[] column = new QuaxTile[NEIGHBOURS_ARRAY_LENGTH];
+            for (int i = 0; i < NEIGHBOURS_ARRAY_LENGTH; i++) {
                 column[i] = neighbours[i][index];
             }
             return column;

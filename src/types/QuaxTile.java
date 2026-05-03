@@ -70,9 +70,7 @@ public abstract class QuaxTile {
 	public abstract QuaxCoordinate getCoordinates();
 
 
-	/*
-	 * Shorthand boolean checks for brevity
-	 */
+	/* Following are shorthand boolean checks for brevity */
 	public boolean isFree() {
 		return getTileColour() == QuaxTileColour.NONE;
 	}
@@ -96,7 +94,8 @@ public abstract class QuaxTile {
 		assert colour != QuaxTileColour.NONE;
 		return getTileColour() == colour.flip();
 	}
-	
+
+
 	public final boolean tileExists() {
 		return !(this instanceof PlaceholderTile);
 	}

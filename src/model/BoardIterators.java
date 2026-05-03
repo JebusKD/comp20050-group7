@@ -61,6 +61,7 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
+
     public static Iterator<QuaxCoordinate> coordinateIterator() {
         return new QuaxBoardCoordinateIterator();
     }
@@ -82,6 +83,7 @@ class BoardIterators implements Iterable<QuaxTile> {
             return boardIterator.nextCoordinate();
         }
     }
+
 
 
     public Iterator<Octagon> octagonIterator() {
@@ -120,6 +122,7 @@ class BoardIterators implements Iterable<QuaxTile> {
             return next().getCoordinates();
         }
     }
+
 
 
     public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
