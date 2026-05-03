@@ -10,6 +10,10 @@ public class ButtonClickEvent extends Event {
     public static final EventType<ButtonClickEvent> HIDE_STRATEGY_CLICKED_EVENT = new EventType<>("hideStrategyClickedEvent");
 
     public ButtonClickEvent(EventType<ButtonClickEvent> t) {
+    	if (t == null) {
+    		throw new IllegalArgumentException("ButtonClickEvent cannot be constructed with null EventType.");
+    	}
+    	
         super(t);
     }
 }
