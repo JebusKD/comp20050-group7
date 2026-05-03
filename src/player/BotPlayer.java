@@ -42,6 +42,8 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard board) {
+		assert board != null && strategyGroups != null;
+		
         LinkedList<QuaxTile> choice = selectStrategyGroup(board.getMoveNumber());
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
@@ -53,6 +55,8 @@ public class BotPlayer extends QuaxPlayer {
 
     // TODO - Less returns - Remove random group altogether?
     private LinkedList<QuaxTile> selectStrategyGroup(int move) {
+    	assert move >= 0 && strategyGroups != null && strategyBuilder != null;
+    	
         if (move == 0) {
             return getStrategyGroupWithValue(VERY_LOW);
         }
@@ -86,12 +90,18 @@ public class BotPlayer extends QuaxPlayer {
     }
 
     public LinkedList<QuaxTile> getStrategyGroupWithValue(StrategyValue group) {
+       	if (group == null) {
+       		throw new IllegalArgumentException("null cannot be passed as StrategyValue parameter.");
+       	}
+       	
     	return getStrategyGroupWithValue(group.toInt());
     }
 
     private ArrayList<QuaxCoordinate> getPotentialMoves(LinkedList<QuaxTile> stratGroup) {
+    	assert stratGroup != null;
+    	
         ArrayList<QuaxCoordinate> moves = new ArrayList<>();
-
+        
         for (QuaxTile t : stratGroup) {
             moves.add(t.getCoordinates());
         }
@@ -102,6 +112,8 @@ public class BotPlayer extends QuaxPlayer {
 
     // how the bot decides strategy vals for the tiles
     private void setUpStrategy(QuaxBoard board) {
+    	assert board != null && strategyBuilder != null;
+    	
         clearAllStrategyGroups();
         strategyBuilder.initialiseStrategy(board);
         strategyBuilder.refineStrategy(board);
@@ -114,6 +126,13 @@ public class BotPlayer extends QuaxPlayer {
 
 	@Override
 	public void movePrompt(QuaxBoard board) {
+		if (board == null) {
+			throw new IllegalArgumentException("Passed board cannot be null.");
+		}
+		if (board.checkForWinningMove()) {
+			throw new IllegalStateException("Bot shouldn't be prompted for move after the game has ended.");
+		}
+		
         long startThinkingTime = System.currentTimeMillis();
 		
         this.getExecutor().execute(() -> {
