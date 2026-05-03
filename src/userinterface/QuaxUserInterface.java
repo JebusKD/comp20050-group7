@@ -78,11 +78,13 @@ public class QuaxUserInterface implements UserInterface {
         VBox sideBar = quaxUIWindow.initialiseButtons();
         quaxUIWindow.initialiseWinLabel();
         quaxUIWindow.initialiseStrategyColourCoding();
+        quaxUIWindow.initialiseStrategyDescription();
 
 
         sideBar.getChildren().addAll(turnIndicator.getTurnTrackerBox(),
                                         quaxUIWindow.getWinLabel(),
-                                        quaxUIWindow.getStrategyIndicator());
+                                        quaxUIWindow.getStrategyIndicator(),
+                                        quaxUIWindow.getStrategyDescription());
         sideBar.getStyleClass().add("vbox");
 
 
@@ -95,6 +97,7 @@ public class QuaxUserInterface implements UserInterface {
         outer.add(quaxUIWindow.createTitle(),0,0);
         outer.add(quaxUIBoard.getStackUIBoard(),0,1);
         outer.add(extrasBar,1,1);
+        //outer.add(quaxUIWindow.getStrategyDescription(), 0, 2);
 
         outer.setAlignment(Pos.CENTER);
         return outer;

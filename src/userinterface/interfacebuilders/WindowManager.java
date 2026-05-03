@@ -16,6 +16,7 @@ public class WindowManager {
 
     private Label boardWinLabel;
     private VBox strategyColourIndicator;
+    private VBox strategyDescription;
 
 
     public Label getWinLabel() {
@@ -24,6 +25,10 @@ public class WindowManager {
 
     public VBox getStrategyIndicator() {
         return strategyColourIndicator;
+    }
+
+    public VBox getStrategyDescription() {
+        return strategyDescription;
     }
 
 
@@ -118,6 +123,47 @@ public class WindowManager {
         return labels;
     }
 
+    //TODO - Add test & fix
+    public void initialiseStrategyDescription() {
+        strategyDescription = new VBox(5);
+
+        Label simpleStrategy = describeSimpleStrategy();
+        Label complexStrategy = describeImprovedStrategy();
+
+        strategyDescription.getChildren().addAll(simpleStrategy, complexStrategy);
+        strategyDescription.getStyleClass().add("vbox");
+        strategyDescription.setVisible(false);
+        strategyDescription.setId("StrategyDescriptionBox");
+    }
+
+    private Label describeSimpleStrategy() {
+        Label description = new Label("Bot Strategy Description:\n" +
+                "Starts Simple: Checks each tile on the board, setting each to minimum SV1\n" +
+                "All surrounding tiles of owned tiles have SV = 2\n" +
+                "If tile would directly impede opponent, SV = 3\n" +
+                "If tile would directly progress bot, SV = 4\n" +
+                "If tile would intercept one of opponent's group, SV = 5 - \"Key Move\"\n" +
+                "If the opponent would win with tile, SV = 6\n" +
+                "If the bot would win with tile, SV = 7, max value\n");
+
+        description.getStyleClass().add("stratLabel");
+        return description;
+
+    }
+
+    private Label describeImprovedStrategy() {
+        Label description = new Label("\nBuilds on Simple Strategy\n" +
+                "Evaluates tiles based on potential future value, for example taking vulnerable rhombus tiles\n" +
+                "Analyse a tile based on how much it would progress the bot, \n\teither by merging groups or " +
+                "avoiding the human player's groups\n"
+                );
+
+        description.getStyleClass().add("stratLabel");
+        return description;
+
+    }
+
+
 
     public Label createTitle() {
         Label title = new Label("Quax (Human V Bot)");
@@ -134,6 +180,7 @@ public class WindowManager {
 
     public void setStrategyVisibility(boolean visibility) {
         this.strategyColourIndicator.setVisible(visibility);
+        this.strategyDescription.setVisible(visibility);
     }
 
     public void showWinLabel(QuaxTileColour c) {
