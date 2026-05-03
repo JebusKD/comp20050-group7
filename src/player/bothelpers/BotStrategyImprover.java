@@ -3,10 +3,9 @@ package player.bothelpers;
 import java.util.*;
 
 import model.QuaxBoard;
+import static player.BotPlayer.MAX_STRATEGIES;
 import types.*;
 
-
-import static player.BotPlayer.MAX_STRATEGIES;
 
 class BotStrategyImprover {
 
@@ -14,7 +13,7 @@ class BotStrategyImprover {
     private final StrategyBuilder initialStrategy;
 
 
-    protected BotStrategyImprover(QuaxBoard board, StrategyBuilder startingStrategy) {
+    BotStrategyImprover(QuaxBoard board, StrategyBuilder startingStrategy) {
         this.smarterBoard = board;
         this.initialStrategy = startingStrategy;
     }
@@ -39,11 +38,11 @@ class BotStrategyImprover {
                     assignStrategyValue(tile, 0);
                 }
 
-                else if (exploitsVulnerableRhombuses(tile, smarterBoard)) {
+                else if (defendsVulnerableRhombuses(tile, smarterBoard)) {
                     upgradeStrategy(tile, 2, 5);
                 }
 
-                else if (defendsVulnerableRhombuses(tile, smarterBoard)) {
+                else if (exploitsVulnerableRhombuses(tile, smarterBoard)) {
                     upgradeStrategy(tile, 2, 5);
                 }
 
@@ -60,51 +59,60 @@ class BotStrategyImprover {
     }
 
 
-    private static boolean isLowPriority(QuaxTile t) {
-        return t.getStrategyValue() < MAX_STRATEGIES - 1;
+    private boolean isLowPriority(QuaxTile t) {
+        return t.getStrategyValue() < MAX_STRATEGIES - 2;
     }
 
 
     private void upgradeStrategy(QuaxTile t, int increase, int maximum) {
-        int prevValue = t.getStrategyValue();
+        int strategyValueToIncrease = t.getStrategyValue();
         int limit = Math.max(maximum, MAX_STRATEGIES);
 
-        if (prevValue < limit) {
-            if (prevValue + increase > limit) {
-                increase = limit - prevValue;
+        if (strategyValueToIncrease < limit) {
+            if (strategyValueToIncrease + increase > limit) {
+                increase = limit - strategyValueToIncrease;
             }
 
-            assignStrategyValue(t, prevValue + increase);
+            assignStrategyValue(t, strategyValueToIncrease + increase);
         }
     }
 
     private void downgradeStrategy(QuaxTile t, int decrease, int minimum) {
         if (isLowPriority(t)) {
-            int prevValue = t.getStrategyValue();
+            int strategyToDecrease = t.getStrategyValue();
             int limit = Math.max(minimum, 0);
 
-            if (prevValue > limit) {
-                if (prevValue - decrease < limit) {
-                    decrease = prevValue - limit;
+            if (strategyToDecrease > limit) {
+                if (strategyToDecrease - decrease < limit) {
+                    decrease = strategyToDecrease - limit;
                 }
-                assignStrategyValue(t, prevValue - decrease);
+                assignStrategyValue(t, strategyToDecrease - decrease);
             }
         }
     }
 
 
     // TODO - Explain these
-    private int vulnerableRhombusCount(QuaxBoard b) {
-        Iterator<QuaxCoordinate> iterator = QuaxBoard.rhombusCoordinateIterator();
-        int count = 0;
+    private boolean defendsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        QuaxBoard copy = new QuaxBoard(b);
+        copy.skipTurn();
 
-        while (iterator.hasNext()) {
-            if (b.isValidRhombusForBoth(iterator.next())) {
-                count++;
-            }
+        return exploitsVulnerableRhombuses(t, copy);
+    }
+
+    private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+        boolean result = false;
+
+        if (b.validMove(t)) {
+            result = changeInVulnerableRhombuses(t, b) >= 2;
         }
 
-        return count;
+        return result;
+    }
+
+
+    private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
+        return changeInVulnerableRhombuses(t, b) == 1;
     }
 
 
@@ -122,31 +130,49 @@ class BotStrategyImprover {
         return result;
     }
 
-    private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
-        boolean result = false;
+    private int vulnerableRhombusCount(QuaxBoard b) {
+        Iterator<QuaxCoordinate> iterator = QuaxBoard.rhombusCoordinateIterator();
+        int count = 0;
 
-        if (b.validMove(t)) {
-            result = changeInVulnerableRhombuses(t, b) >= 2;
+        while (iterator.hasNext()) {
+            if (b.isValidRhombusForBoth(iterator.next())) {
+                count++;
+            }
         }
 
-        return result;
-    }
-
-    private boolean defendsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
-        QuaxBoard copy = new QuaxBoard(b);
-        copy.skipTurn();
-
-        return exploitsVulnerableRhombuses(t, copy);
-    }
-
-    private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
-        return changeInVulnerableRhombuses(t, b) == 1;
+        return count;
     }
 
 
 
     private class PathFinder {
-        private static List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
+
+        private void avoidWeakGroupContributions(int decrease, int minimum) {
+            for (QuaxTile tile : smarterBoard) {
+                List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, smarterBoard);
+
+                // TODO better comment - Joining two groups together is fine
+                if (tile.isFree() && nearbyGroupsBefore.size() == 1) {
+                    QuaxTileGroup groupBefore = nearbyGroupsBefore.getFirst();
+
+                    QuaxBoard copy = new QuaxBoard(smarterBoard);
+                    copy.makeMove(tile);
+
+                    QuaxTileGroup groupAfter = ownedNearbyGroups(tile, copy).getFirst();
+
+                    if (groupBefore.distanceToWalls() == groupAfter.distanceToWalls()) {
+                        downgradeStrategy(tile, decrease, minimum);
+                    }
+                }
+            }
+        }
+
+        private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile t, QuaxBoard b) {
+            return removeOpponentGroups(nearbyTileGroups(t, b));
+        }
+
+        // TODO - Correlate with getAdjacentGroups from QuaxBoard?
+        private List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
             LinkedList<QuaxTileGroup> groups = new LinkedList<>();
             for (QuaxTile n : b.getNeighboursList(t)) {
                 if (n.isOccupied()) {
@@ -172,29 +198,7 @@ class BotStrategyImprover {
             return copy;
         }
 
-        private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile t, QuaxBoard b) {
-            return removeOpponentGroups(nearbyTileGroups(t, b));
-        }
 
-
-        private void avoidWeakGroupContributions(int decrease, int minimum) {
-            for (QuaxTile tile : smarterBoard) {
-                List<QuaxTileGroup> nearbyGroupsBefore = ownedNearbyGroups(tile, smarterBoard);
-                // TODO better comment - Joining two groups together is fine
-                if (tile.isFree() && nearbyGroupsBefore.size() == 1) {
-                    QuaxTileGroup groupBefore = nearbyGroupsBefore.getFirst();
-
-                    QuaxBoard copy = new QuaxBoard(smarterBoard);
-                    copy.makeMove(tile);
-
-                    QuaxTileGroup groupAfter = ownedNearbyGroups(tile, copy).getFirst();
-
-                    if (groupBefore.distanceToWalls() == groupAfter.distanceToWalls()) {
-                        downgradeStrategy(tile, decrease, minimum);
-                    }
-                }
-            }
-        }
 
         private void diagonalPathfinding() {
             // TODO Octagon iterator
@@ -203,19 +207,24 @@ class BotStrategyImprover {
                     if (center.isSameColour(botColour())) {
                         QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
 
-                        for (int i = -1; i <= 1; i++) {
-                            if (opponentBlockingPath(neighbours, i)) {
-                                for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
-                                    if (ahead.tileExists() && ahead.getStrategyValue() == 3) {
-                                        upgradeStrategy(ahead, 1, 4);
-                                    }
-                                }
-                            }
+                        adjustStrategyIfPathBlocked(neighbours);
+                    }
+                }
+            }
+        }
+
+        private void adjustStrategyIfPathBlocked(QuaxTile[][] neighbours) {
+            for (int i = -1; i <= 1; i++) {
+                if (opponentBlockingPath(neighbours, i)) {
+                    for (QuaxTile ahead : neighboursAhead(neighbours, i)) {
+                        if (ahead.tileExists() && ahead.getStrategyValue() == 3) {
+                            upgradeStrategy(ahead, 1, 4);
                         }
                     }
                 }
             }
         }
+
 
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {
             assert direction == -1 || direction == 1;
@@ -229,6 +238,7 @@ class BotStrategyImprover {
 
             return result;
         }
+
 
         private QuaxTile[] neighboursAhead(QuaxTile[][] neighbours, int direction) {
             assert neighbours.length == 3 && neighbours[0].length == 3 && (direction == -1 || direction == 1);
