@@ -9,7 +9,7 @@ public abstract class QuaxTile {
 	private QuaxTileColour tileColour;
 	private QuaxTileGroup tileGroup;
 
-	private int strategyValue;
+	private StrategyValue strategyValue;
 
 	protected final int xPosition;
 	protected final int yPosition;
@@ -19,7 +19,7 @@ public abstract class QuaxTile {
 		this.tileColour = QuaxTileColour.NONE;
 		this.tileGroup = null;
 
-		this.strategyValue = 0;
+		this.strategyValue = StrategyValue.IGNORE;
 		this.xPosition = x;
 		this.yPosition = y;
 	}
@@ -48,7 +48,7 @@ public abstract class QuaxTile {
 		return this.tileGroup;
 	}
 
-	public int getStrategyValue() {
+	public StrategyValue getStrategyValue() {
 		return this.strategyValue;
 	}
 
@@ -62,7 +62,12 @@ public abstract class QuaxTile {
 		this.tileGroup = tileGroup;
 	}
 
-	public void setStrategyValue(int value) {
+	// TODO Delete?
+	/*public void setStrategyValue(int value) {
+		this.strategyValue = StrategyValue.fromInt(value);
+	}*/
+	
+	public void setStrategyValue(StrategyValue value) {
 		this.strategyValue = value;
 	}
 
@@ -134,7 +139,7 @@ public abstract class QuaxTile {
 
 
 		@Override
-		public int getStrategyValue() {
+		public StrategyValue getStrategyValue() {
 			throw placeholderUsedException();
 		}
 
@@ -149,7 +154,7 @@ public abstract class QuaxTile {
 		}
 
 		@Override
-		public void setStrategyValue(int value) {
+		public void setStrategyValue(StrategyValue value) {
 			throw placeholderUsedException();
 		}
 
