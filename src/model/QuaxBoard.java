@@ -8,8 +8,8 @@ import types.*;
 /* Manage the game board state during the program */
 public class QuaxBoard implements Iterable<QuaxTile> {
 
-    public static final int MAX_OCTAGONS = 11;
-    public static final int MAX_RHOMBUSES = 10;
+    public static final int NUM_OCTAGONS = 11;
+    public static final int NUM_RHOMBUSES = 10;
 	private static final int MAX_ADJACENT_TILE_GROUPS = 4;
 
 	private final Octagon[][] octagonGrid;
@@ -22,8 +22,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	public QuaxBoard() {
-		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
-		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
+		this.octagonGrid = new Octagon[NUM_OCTAGONS][NUM_OCTAGONS];
+		this.rhombusGrid = new Rhombus[NUM_RHOMBUSES][NUM_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
 
@@ -36,8 +36,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 	// Copy constructor
 	public QuaxBoard(QuaxBoard copyBoard) {
-		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
-		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
+		this.octagonGrid = new Octagon[NUM_OCTAGONS][NUM_OCTAGONS];
+		this.rhombusGrid = new Rhombus[NUM_RHOMBUSES][NUM_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
 
@@ -50,28 +50,28 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 	private void initialiseGrids() {
-		for (int i = 0; i < MAX_OCTAGONS; i++) {
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
+		for (int i = 0; i < NUM_OCTAGONS; i++) {
+			for (int j = 0; j < NUM_OCTAGONS; j++) {
 				this.octagonGrid[i][j] = new Octagon(i, j);
 			}
 		}
 
-		for (int i = 0; i < MAX_RHOMBUSES; i++) {
-			for (int j = 0; j < MAX_RHOMBUSES; j++) {
+		for (int i = 0; i < NUM_RHOMBUSES; i++) {
+			for (int j = 0; j < NUM_RHOMBUSES; j++) {
 				this.rhombusGrid[i][j] = new Rhombus(i, j);
 			}
 		}
 	}
 
 	private void initialiseGrids(QuaxBoard copyBoard) {
-		for (int i = 0; i < MAX_OCTAGONS; i++) {
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
+		for (int i = 0; i < NUM_OCTAGONS; i++) {
+			for (int j = 0; j < NUM_OCTAGONS; j++) {
 				this.octagonGrid[i][j] = new Octagon(copyBoard.getOctagon(i, j));
 			}
 		}
 
-		for (int i = 0; i < MAX_RHOMBUSES; i++) {
-			for (int j = 0; j < MAX_RHOMBUSES; j++) {
+		for (int i = 0; i < NUM_RHOMBUSES; i++) {
+			for (int j = 0; j < NUM_RHOMBUSES; j++) {
 				this.rhombusGrid[i][j] = new Rhombus(copyBoard.getRhombus(i, j));
 			}
 		}
@@ -380,7 +380,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 				adjTiles[1] = b.getOctagon(minusX, coord.y());
 
-				if (plusY <= MAX_RHOMBUSES) {
+				if (plusY <= NUM_RHOMBUSES) {
 					adjTiles[2] = b.getRhombus(minusX, coord.y());
 				}
 			}
@@ -392,14 +392,14 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			int plusX = coord.x() + 1, minusY = coord.y() - 1, plusY = coord.y() + 1;
 			QuaxTile[] adjTiles = createOutOfBoundsRow();
 
-			if (plusX <= MAX_RHOMBUSES) {
+			if (plusX <= NUM_RHOMBUSES) {
 				if (minusY >= 0) {
 					adjTiles[0] = b.getRhombus(coord.x(), minusY);
 				}
 
 				adjTiles[1] = b.octagonGrid[plusX][coord.y()];
 
-				if (plusY <= MAX_RHOMBUSES) {
+				if (plusY <= NUM_RHOMBUSES) {
 					adjTiles[2] = b.getRhombus(coord.x(), coord.y());
 				}
 			}
@@ -415,7 +415,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 				adjTiles[0] = b.getOctagon(coord.x(), minusY);
 			}
 
-			if (plusY <= MAX_RHOMBUSES) {
+			if (plusY <= NUM_RHOMBUSES) {
 				adjTiles[2] = b.getOctagon(coord.x(), plusY);
 			}
 
@@ -457,10 +457,10 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			}
 			
 			int y = center.y() + verticalOffset;
-			if (y >= 0 && y < MAX_OCTAGONS) {
+			if (y >= 0 && y < NUM_OCTAGONS) {
 				for (int i = -1; i <= 1; i++) {
 					int x = center.x() + i;
-					if (x >= 0 && x < MAX_OCTAGONS) {
+					if (x >= 0 && x < NUM_OCTAGONS) {
 						array[i+1] = board.getOctagon(x, y);
 					}
 					
@@ -478,7 +478,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 	private static class QuaxBoardIterator implements Iterator<QuaxTile> {
-		private static final int NUM_ELEMENTS = (MAX_OCTAGONS*MAX_OCTAGONS) + (MAX_RHOMBUSES*MAX_RHOMBUSES);
+		private static final int NUM_ELEMENTS = (NUM_OCTAGONS*NUM_OCTAGONS) + (NUM_RHOMBUSES*NUM_RHOMBUSES);
 
 		private int cursor;
 		private final ArrayList<QuaxTile> elements;
@@ -487,16 +487,16 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			this.cursor = 0;
 			this.elements = new ArrayList<>(NUM_ELEMENTS);
 
-			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
-				for (int j = 0; j < MAX_OCTAGONS; j++) {
+			for (int i = 0; i < NUM_OCTAGONS - 1 ; i++) {
+				for (int j = 0; j < NUM_OCTAGONS; j++) {
 					this.elements.add(source.getOctagon(i, j));
 				}
-				for (int j = 0; j < MAX_RHOMBUSES; j++) {
+				for (int j = 0; j < NUM_RHOMBUSES; j++) {
 					this.elements.add(source.getRhombus(i, j));
 				}
 			}
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				this.elements.add(source.getOctagon(MAX_OCTAGONS - 1, j));
+			for (int j = 0; j < NUM_OCTAGONS; j++) {
+				this.elements.add(source.getOctagon(NUM_OCTAGONS - 1, j));
 			}
 		}
 
@@ -539,6 +539,43 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			return boardIterator.nextCoordinate();
 		}
 	}
+	
+	public Iterator<Octagon> octagonIterator() {
+		return new QuaxBoardOctagonIterator(this);
+	}
+	
+	private static class QuaxBoardOctagonIterator implements Iterator<Octagon> {
+		private static final int NUM_ELEMENTS = NUM_OCTAGONS * NUM_OCTAGONS;
+		
+		private int cursor;
+		private final ArrayList<Octagon> elements;
+		
+		public QuaxBoardOctagonIterator(QuaxBoard source) {
+			this.cursor = 0;
+			this.elements = new ArrayList<>(NUM_ELEMENTS);
+			
+			for (int i = 0; i < NUM_OCTAGONS; i++) {
+				for (int j = 0; j < NUM_OCTAGONS; j++) {
+					this.elements.add(source.getOctagon(i, j));
+				}
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor < NUM_ELEMENTS;
+		}
+		
+		@Override
+		public Octagon next() {
+			assert hasNext();
+			return elements.get(cursor++);
+		}
+		
+		private QuaxCoordinate nextCoordinate() {
+			return next().getCoordinates();
+		}
+	}
 
 
 	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
@@ -546,7 +583,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 	private static class QuaxBoardRhombusIterator implements Iterator<QuaxTile> {
-		private static final int NUM_ELEMENTS = MAX_RHOMBUSES * MAX_RHOMBUSES;
+		private static final int NUM_ELEMENTS = NUM_RHOMBUSES * NUM_RHOMBUSES;
 		
 		private int cursor;
 		private final ArrayList<QuaxTile> elements;
@@ -555,8 +592,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			this.cursor = 0;
 			this.elements = new ArrayList<>(NUM_ELEMENTS);
 			
-			for (int i = 0; i < MAX_RHOMBUSES; i++) {
-				for (int j = 0; j < MAX_RHOMBUSES; j++) {
+			for (int i = 0; i < NUM_RHOMBUSES; i++) {
+				for (int j = 0; j < NUM_RHOMBUSES; j++) {
 					this.elements.add(source.getRhombus(i, j));
 				}
 			}
@@ -596,37 +633,4 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-
-	// TODO - Is this used?
-	public static class QuaxBoardPermutationIterator implements Iterator<QuaxBoard> {
-		private final ArrayList<QuaxBoard> elements;
-		private int cursor;
-		
-		private QuaxBoardPermutationIterator(QuaxBoard b) {
-			this.elements = new ArrayList<>();
-			this.cursor = 0;
-			populatePermutations(b);
-		}
-		
-		private void populatePermutations(QuaxBoard b) {
-			for (QuaxTile t : b) {
-				QuaxBoard copy = new QuaxBoard(b);
-				QuaxCoordinate coordinate = t.getCoordinates();
-				if (copy.validMove(coordinate)) {
-					copy.makeMove(coordinate);
-				}
-				elements.addLast(copy);
-			}
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return cursor < elements.size();
-		}
-		
-		@Override
-		public QuaxBoard next() {
-			return elements.get(cursor);
-		}
-	}
 }

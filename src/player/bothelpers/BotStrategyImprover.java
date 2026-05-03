@@ -205,14 +205,14 @@ class BotStrategyImprover {
 
 
         private void diagonalPathfinding() {
-            // TODO Octagon iterator
-            for (QuaxTile t : smarterBoard) {
-                if (t instanceof Octagon center) {
-                    if (center.isSameColour(botColour())) {
-                        QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
+        	Iterator<Octagon> iterator = smarterBoard.octagonIterator();
 
-                        adjustStrategyIfPathBlocked(neighbours);
-                    }
+        	while (iterator.hasNext()) {
+        		Octagon center = iterator.next();
+                if (center.isSameColour(botColour())) {
+                    QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(center);
+
+                    adjustStrategyIfPathBlocked(neighbours);
                 }
             }
         }

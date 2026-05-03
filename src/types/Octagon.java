@@ -36,10 +36,10 @@ public class Octagon extends QuaxTile {
 	public int distanceToHighWall() {
 		assert isOccupied();
 		if (getTileColour() == QuaxTileColour.BLACK) {
-			return QuaxBoard.MAX_OCTAGONS - (yPosition + 1);
+			return QuaxBoard.NUM_OCTAGONS - (yPosition + 1);
 		}
 		else {
-			return QuaxBoard.MAX_OCTAGONS - (xPosition + 1);
+			return QuaxBoard.NUM_OCTAGONS - (xPosition + 1);
 		}
 	}
 }

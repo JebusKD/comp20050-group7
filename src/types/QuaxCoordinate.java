@@ -10,8 +10,8 @@ public class QuaxCoordinate {
 	private final boolean isOctagon;
 
 	private QuaxCoordinate(int x, int y, boolean isOctagon) {
-		assert x < MAX_OCTAGONS && x > -1;
-		assert y < MAX_OCTAGONS && y > -1;
+		assert x < NUM_OCTAGONS && x > -1;
+		assert y < NUM_OCTAGONS && y > -1;
 		this.x = x;
 		this.y = y;
 		this.isOctagon = isOctagon;

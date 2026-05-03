@@ -34,8 +34,8 @@ class BackgroundBoardBuilder {
 
 
     private Rectangle createGradientBackground() {
-        double size = OCTAGON_WIDTH * (MAX_OCTAGONS + 1)
-                + (MAX_RHOMBUSES * OCTAGON_GRID_GAP);
+        double size = OCTAGON_WIDTH * (NUM_OCTAGONS + 1)
+                + (NUM_RHOMBUSES * OCTAGON_GRID_GAP);
 
         Stop[] stops = new Stop[] {
                 new Stop(0, Color.NAVY),
@@ -51,7 +51,7 @@ class BackgroundBoardBuilder {
 
     private Rectangle createBehindHourglass() {
         double size = (OCTAGON_WIDTH * BACK_HOURGLASS_GAP)
-                + ((BACK_HOURGLASS_GAP - (MAX_OCTAGONS - MAX_RHOMBUSES)*2) * OCTAGON_GRID_GAP)
+                + ((BACK_HOURGLASS_GAP - (NUM_OCTAGONS - NUM_RHOMBUSES)*2) * OCTAGON_GRID_GAP)
                 + (OCTAGON_WIDTH / 2);
 
         Rectangle background = new Rectangle(size, size);
@@ -62,7 +62,7 @@ class BackgroundBoardBuilder {
 
     private Polygon createHourglass() {
         double distance = (FRONT_HOURGLASS_GAP * OCTAGON_WIDTH)
-                + ((FRONT_HOURGLASS_GAP - (MAX_OCTAGONS - MAX_RHOMBUSES)) * OCTAGON_GRID_GAP)
+                + ((FRONT_HOURGLASS_GAP - (NUM_OCTAGONS - NUM_RHOMBUSES)) * OCTAGON_GRID_GAP)
                 + (OCTAGON_WIDTH / 4);
 
         Polygon hourglass = new Polygon(-distance,distance,
@@ -75,9 +75,9 @@ class BackgroundBoardBuilder {
     }
 
     private Rectangle createGridBackground() {
-        double size = ((MAX_OCTAGONS - 1) * OCTAGON_WIDTH)
+        double size = ((NUM_OCTAGONS - 1) * OCTAGON_WIDTH)
                 + OctagonBase.calculateSideLength(OCTAGON_WIDTH)
-                + (MAX_RHOMBUSES * OCTAGON_GRID_GAP);
+                + (NUM_RHOMBUSES * OCTAGON_GRID_GAP);
 
         Rectangle background = new Rectangle(size, size);
         background.setFill(Color.OLDLACE);
@@ -93,7 +93,7 @@ class BackgroundBoardBuilder {
 
     private static class CoordinateBuilder {
 
-        private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (MAX_OCTAGONS + 1);
+        private static final double GRIDPANE_PADDING = OCTAGON_WIDTH / (NUM_OCTAGONS + 1);
 
         private GridPane coordinateGrid;
 
@@ -116,12 +116,12 @@ class BackgroundBoardBuilder {
 
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints
-                                            ((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
+                                            ((NUM_OCTAGONS*OCTAGON_WIDTH)+(NUM_RHOMBUSES*OCTAGON_GRID_GAP)));
             this.coordinateGrid.getColumnConstraints().add(new ColumnConstraints());
 
             this.coordinateGrid.getRowConstraints().add(new RowConstraints());
             this.coordinateGrid.getRowConstraints().add(new RowConstraints
-                                            ((MAX_OCTAGONS*OCTAGON_WIDTH)+(MAX_RHOMBUSES*OCTAGON_GRID_GAP)));
+                                            ((NUM_OCTAGONS*OCTAGON_WIDTH)+(NUM_RHOMBUSES*OCTAGON_GRID_GAP)));
             this.coordinateGrid.getRowConstraints().add(new RowConstraints());
         }
 
@@ -138,7 +138,7 @@ class BackgroundBoardBuilder {
             bottom.setHgap(OCTAGON_GRID_GAP);
             bottom.setAlignment(Pos.CENTER);
 
-            for (int i = 0; i < MAX_OCTAGONS; i++) {
+            for (int i = 0; i < NUM_OCTAGONS; i++) {
                 top.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
                 bottom.getColumnConstraints().add(new ColumnConstraints(OCTAGON_WIDTH));
 
@@ -174,7 +174,7 @@ class BackgroundBoardBuilder {
             right.setVgap(OCTAGON_GRID_GAP);
             right.setAlignment(Pos.CENTER);
 
-            for (int j = 0 ; j < MAX_OCTAGONS; j++) {
+            for (int j = 0 ; j < NUM_OCTAGONS; j++) {
                 left.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
                 right.getRowConstraints().add(new RowConstraints(OCTAGON_WIDTH));
 
@@ -221,7 +221,7 @@ class BackgroundBoardBuilder {
 
 
         private GridPane createOctagonGrid() {
-            buildingOctagonGrid = new OctagonTile[MAX_OCTAGONS][MAX_OCTAGONS];
+            buildingOctagonGrid = new OctagonTile[NUM_OCTAGONS][NUM_OCTAGONS];
             octagonGrid = new GridPane();
             positionBoardTileGrid(octagonGrid);
 
@@ -232,7 +232,7 @@ class BackgroundBoardBuilder {
         }
 
         private void initialiseOctagonGridRowColumns() {
-            for (int i = 0; i < MAX_OCTAGONS ; i++) {
+            for (int i = 0; i < NUM_OCTAGONS ; i++) {
                 ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
                 octagonGrid.getColumnConstraints().add(column);
 
@@ -242,8 +242,8 @@ class BackgroundBoardBuilder {
         }
 
         private void initialiseOctagonGridCells() {
-            for (int i = 0; i < MAX_OCTAGONS ; i++) {
-                for (int j = 0; j < MAX_OCTAGONS ; j++) {
+            for (int i = 0; i < NUM_OCTAGONS ; i++) {
+                for (int j = 0; j < NUM_OCTAGONS ; j++) {
                     OctagonTile newTile = new OctagonTile(newOctagonCoordinate(i, j));
                     newTile.setId("octagon" + i + "-" + j);
 
@@ -263,7 +263,7 @@ class BackgroundBoardBuilder {
 
 
         private GridPane createRhombusGrid() {
-            buildingRhombusGrid = new RhombusTile[MAX_RHOMBUSES][MAX_RHOMBUSES];
+            buildingRhombusGrid = new RhombusTile[NUM_RHOMBUSES][NUM_RHOMBUSES];
             rhombusGrid = new GridPane();
             positionBoardTileGrid(rhombusGrid);
 
@@ -282,7 +282,7 @@ class BackgroundBoardBuilder {
         }
 
         private void initialiseRhombusGridRowColumns() {
-            for (int i = 0; i < MAX_RHOMBUSES; i++) {
+            for (int i = 0; i < NUM_RHOMBUSES; i++) {
                 ColumnConstraints column = new ColumnConstraints(OCTAGON_WIDTH);
                 rhombusGrid.getColumnConstraints().add(column);
 
@@ -293,8 +293,8 @@ class BackgroundBoardBuilder {
         }
 
         private void initialiseRhombusGridCells() {
-            for (int i = 0; i < MAX_RHOMBUSES; i++) {
-                for (int j = 0; j < MAX_RHOMBUSES; j++) {
+            for (int i = 0; i < NUM_RHOMBUSES; i++) {
+                for (int j = 0; j < NUM_RHOMBUSES; j++) {
                     RhombusTile newTile = new RhombusTile(newRhombusCoordinate(i, j));
                     newTile.setId("rhombus" + i + "-" + j);
 
