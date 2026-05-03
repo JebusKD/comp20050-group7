@@ -5,7 +5,9 @@ import javafx.event.*;
 
 public class QuaxCoordinateEvent extends Event {
 
-    public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
+	private static final long serialVersionUID = 1L;
+
+	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
 
     private final QuaxCoordinate coordinate;
 
