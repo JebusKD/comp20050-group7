@@ -39,6 +39,7 @@ public class QuaxController {
 
         QuaxEventHandler.setup(this, stage);
 
+        // TODO this statement is a bit weird.
         if (humanPlaysFirst) {
             startGame(new HumanPlayer(), new BotPlayer());
         }
@@ -55,6 +56,11 @@ public class QuaxController {
 
     // Testing Constructor
     public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
+
+    	if (p1 == null || p2 == null) {
+    		throw new IllegalArgumentException("Players cannot be null.");
+    	}
+
         this.quaxExecutor = new SingleThreadExecutor();
         this.quaxMoveSubmitter = new SingleThreadExecutor();
 
@@ -87,6 +93,8 @@ public class QuaxController {
 
 
     private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
+    	assert p1 != null && p2 != null;
+
         this.quaxBoard = new QuaxBoard();
         setQuaxPlayers(p1, p2);
 
@@ -96,6 +104,8 @@ public class QuaxController {
     }
 
     private void setQuaxPlayers(QuaxPlayer p1, QuaxPlayer p2) {
+    	assert p1 != null && p2 != null;
+
         this.quaxPlayers[0] = p1;
         this.quaxPlayers[1] = p2;
 
@@ -142,6 +152,7 @@ public class QuaxController {
 
 
     public void doPieRule() {
+    	assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxUserInterface != null;
         if (quaxBoard.attemptPieRule()) {
             quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
             quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
@@ -152,7 +163,13 @@ public class QuaxController {
     }
 
     public void attemptMove(QuaxCoordinate coordsClicked) {
-    	QuaxPlayer moveSubmitter = currentPlayer();
+        assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxBoard != null && quaxUserInterface != null;
+        if (coordsClicked == null) {
+            throw new IllegalArgumentException("Coordinates cannot be null.");
+        }
+
+
+        QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
 
         if (quaxBoard.validMove(coordsClicked, moveColour)) {
@@ -178,10 +195,12 @@ public class QuaxController {
 
 
     public void showStrategy() {
+    	assert quaxUserInterface != null;
         quaxUserInterface.showStrategy();
     }
 
     public void hideStrategy() {
+    	assert quaxUserInterface != null && quaxBoard != null;
         quaxUserInterface.hideStrategy(quaxBoard);
     }
 
@@ -204,6 +223,7 @@ public class QuaxController {
      */
     private static class SingleThreadExecutor implements Executor {
         public void execute(Runnable r) {
+        	assert r != null;
             r.run();
         }
     }
@@ -217,8 +237,10 @@ public class QuaxController {
      */
     private static class MultithreadedExecutor implements Executor {
     	public void execute(Runnable r) {
-    		// TODO add daemon to thread
-			new Thread(r).start();
+    		assert r != null;
+    		Thread t = new Thread(r);
+    		t.setDaemon(true);
+			t.start();
 		}
     }
     
@@ -231,6 +253,7 @@ public class QuaxController {
      */
     private static class JavaFXPlatformExecutor implements Executor {
     	public void execute(Runnable r) {
+    		assert r != null;
     		Platform.runLater(r);
     	}
     }
