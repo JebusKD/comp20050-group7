@@ -10,9 +10,9 @@ public class QuaxCoordinateEvent extends Event {
     private final QuaxCoordinate coordinate;
 
 
-    public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
-        super(t);
-        this.coordinate = q;
+    public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> clickedTile, QuaxCoordinate coord) {
+        super(clickedTile);
+        this.coordinate = coord;
     }
 
     public QuaxCoordinate coordinate() {

@@ -9,7 +9,7 @@ public class ButtonClickEvent extends Event {
     public static final EventType<ButtonClickEvent> SHOW_STRATEGY_CLICKED_EVENT = new EventType<>("showStrategyClickedEvent");
     public static final EventType<ButtonClickEvent> HIDE_STRATEGY_CLICKED_EVENT = new EventType<>("hideStrategyClickedEvent");
 
-    public ButtonClickEvent(EventType<ButtonClickEvent> t) {
-        super(t);
+    public ButtonClickEvent(EventType<ButtonClickEvent> buttonClicked) {
+        super(buttonClicked);
     }
 }

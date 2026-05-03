@@ -127,9 +127,9 @@ public class WindowManager {
     }
 
 
-    public void setPieRuleVisibility(boolean value) {
-        pieRuleButton.setDisable(!value);
-        pieRuleButton.setVisible(value);
+    public void setPieRuleVisibility(boolean visibility) {
+        pieRuleButton.setDisable(!visibility);
+        pieRuleButton.setVisible(visibility);
     }
 
     public void setStrategyVisibility(boolean visibility) {

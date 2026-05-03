@@ -2,7 +2,6 @@ package player;
 
 import java.util.*;
 
-
 import static controller.QuaxController.RNG;
 import model.QuaxBoard;
 import player.bothelpers.*;
@@ -42,7 +41,7 @@ public class BotPlayer extends QuaxPlayer {
       one move at random of the group.
      */
 	private QuaxCoordinate decideMove(QuaxBoard board) {
-        LinkedList<QuaxTile> choice = selectStrategyGroup(board.getMoveNumber());
+        LinkedList<QuaxTile> choice = selectStrategyGroup(board);
 
         ArrayList<QuaxCoordinate> candidateMoves = getPotentialMoves(choice);
 
@@ -51,8 +50,8 @@ public class BotPlayer extends QuaxPlayer {
 	}
 
 
-    private LinkedList<QuaxTile> selectStrategyGroup(int move) {
-        LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(move);
+    private LinkedList<QuaxTile> selectStrategyGroup(QuaxBoard board) {
+        LinkedList<QuaxTile> choice = getPrioritisedStrategyGroup(board);
 
         if (choice.isEmpty()) {
             StrategyValue randStrategyValue = strategyBuilder.getRandomStrategyValue();
@@ -67,10 +66,10 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
-    private LinkedList<QuaxTile> getPrioritisedStrategyGroup(int move) {
+    private LinkedList<QuaxTile> getPrioritisedStrategyGroup(QuaxBoard board) {
         LinkedList<QuaxTile> strategyGroup = new LinkedList<>();
 
-        if (move == 0) {
+        if (board.isStartingMove()) {
             strategyGroup = getStrategyGroupWithValue(VERY_LOW);
         }
 

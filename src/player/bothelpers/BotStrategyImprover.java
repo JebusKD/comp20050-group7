@@ -23,8 +23,8 @@ class BotStrategyImprover {
         return initialStrategy.botColour();
     }
 
-    private void assignStrategyValue(QuaxTile t, StrategyValue value) {
-        initialStrategy.assignStrategyValue(t, value);
+    private void assignStrategyValue(QuaxTile tile, StrategyValue value) {
+        initialStrategy.assignStrategyValue(tile, value);
     }
 
 
@@ -62,13 +62,13 @@ class BotStrategyImprover {
     }
 
     // TODO Move into QuaxTile? - Senan) Also LoD?
-    private static boolean isLowPriority(QuaxTile t) {
-        return t.getStrategyValue().isLowPriority();
+    private static boolean isLowPriority(QuaxTile tile) {
+        return tile.getStrategyValue().isLowPriority();
     }
 
 
-    private void upgradeStrategy(QuaxTile t, int increase, StrategyValue max) {
-        int strategyValueToIncrease = t.getStrategyValue().toInt();
+    private void upgradeStrategy(QuaxTile valuableTile, int increase, StrategyValue max) {
+        int strategyValueToIncrease = valuableTile.getStrategyValue().toInt();
         int maximum = max.toInt();
         int limit = Math.max(maximum, MAX_STRATEGIES);
 
@@ -77,13 +77,13 @@ class BotStrategyImprover {
                 increase = limit - strategyValueToIncrease;
             }
 
-            assignStrategyValue(t, fromInt(strategyValueToIncrease + increase));
+            assignStrategyValue(valuableTile, fromInt(strategyValueToIncrease + increase));
         }
     }
 
-    private void downgradeStrategy(QuaxTile t, int decrease, StrategyValue min) {
-        if (isLowPriority(t)) {
-            int strategyValueToDecrease = t.getStrategyValue().toInt();
+    private void downgradeStrategy(QuaxTile lowPriorityTile, int decrease, StrategyValue min) {
+        if (isLowPriority(lowPriorityTile)) {
+            int strategyValueToDecrease = lowPriorityTile.getStrategyValue().toInt();
             int minimum = min.toInt();
             int limit = Math.max(minimum, 0);
 
@@ -91,56 +91,56 @@ class BotStrategyImprover {
                 if (strategyValueToDecrease - decrease < limit) {
                     decrease = strategyValueToDecrease - limit;
                 }
-                assignStrategyValue(t, fromInt(strategyValueToDecrease - decrease));
+                assignStrategyValue(lowPriorityTile, fromInt(strategyValueToDecrease - decrease));
             }
         }
     }
 
 
     // TODO - Explain these
-    private boolean defendsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
-        QuaxBoard copy = new QuaxBoard(b);
+    private boolean defendsVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
+        QuaxBoard copy = new QuaxBoard(board);
         copy.skipTurn();
 
-        return exploitsVulnerableRhombuses(t, copy);
+        return exploitsVulnerableRhombuses(nextTileMove, copy);
     }
 
-    private boolean exploitsVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+    private boolean exploitsVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
         boolean result = false;
 
-        if (b.validMove(t)) {
-            result = changeInVulnerableRhombuses(t, b) >= 2;
+        if (board.validMove(nextTileMove)) {
+            result = changeInVulnerableRhombuses(nextTileMove, board) >= 2;
         }
 
         return result;
     }
 
 
-    private boolean createsOnlyOneVulnerableRhombus(QuaxTile t, QuaxBoard b) {
-        return changeInVulnerableRhombuses(t, b) == 1;
+    private boolean createsOnlyOneVulnerableRhombus(QuaxTile nextTileMove, QuaxBoard board) {
+        return changeInVulnerableRhombuses(nextTileMove, board) == 1;
     }
 
 
-    private int changeInVulnerableRhombuses(QuaxTile t, QuaxBoard b) {
+    private int changeInVulnerableRhombuses(QuaxTile nextTileMove, QuaxBoard board) {
         int result = 0;
 
-        if (b.validMove(t)) {
-            QuaxBoard copy = new QuaxBoard(b);
+        if (board.validMove(nextTileMove)) {
+            QuaxBoard copy = new QuaxBoard(board);
             int vulnerableCountBefore = vulnerableRhombusCount(copy);
 
-            copy.makeMove(t);
+            copy.makeMove(nextTileMove);
             result = vulnerableRhombusCount(copy) - vulnerableCountBefore;
         }
 
         return result;
     }
 
-    private int vulnerableRhombusCount(QuaxBoard b) {
+    private int vulnerableRhombusCount(QuaxBoard board) {
         Iterator<QuaxCoordinate> iterator = QuaxBoard.rhombusCoordinateIterator();
         int count = 0;
 
         while (iterator.hasNext()) {
-            if (b.isValidRhombusForBoth(iterator.next())) {
+            if (board.isValidRhombusForBoth(iterator.next())) {
                 count++;
             }
         }
@@ -172,14 +172,15 @@ class BotStrategyImprover {
             }
         }
 
-        private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile t, QuaxBoard b) {
-            return removeOpponentGroups(nearbyTileGroups(t, b));
+        private List<QuaxTileGroup> ownedNearbyGroups(QuaxTile centre, QuaxBoard board) {
+            return removeOpponentGroups(nearbyTileGroups(centre, board));
         }
 
         // TODO - Correlate with getAdjacentGroups from QuaxBoard?
-        private List<QuaxTileGroup> nearbyTileGroups(QuaxTile t, QuaxBoard b) {
+        private List<QuaxTileGroup> nearbyTileGroups(QuaxTile centreTile, QuaxBoard board) {
             LinkedList<QuaxTileGroup> groups = new LinkedList<>();
-            for (QuaxTile n : b.getNeighboursList(t)) {
+
+            for (QuaxTile n : board.getNeighboursList(centreTile)) {
                 if (n.isOccupied()) {
                     QuaxTileGroup tileGroup = n.getTileGroup();
                     if (!groups.contains(tileGroup)) {
@@ -187,11 +188,12 @@ class BotStrategyImprover {
                     }
                 }
             }
+
             return groups;
         }
 
-        private List<QuaxTileGroup> removeOpponentGroups(List<QuaxTileGroup> list) {
-            LinkedList<QuaxTileGroup> copy = new LinkedList<>(list);
+        private List<QuaxTileGroup> removeOpponentGroups(List<QuaxTileGroup> neighbourList) {
+            LinkedList<QuaxTileGroup> copy = new LinkedList<>(neighbourList);
             LinkedList<QuaxTileGroup> found = new LinkedList<>();
 
             for (QuaxTileGroup g : copy) {

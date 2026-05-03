@@ -7,16 +7,16 @@ import types.*;
 
 public interface UserInterface {
 
-	void showWinLabel(QuaxTileColour c);
+	void showWinLabel(QuaxTileColour winnerColour);
 
 	void hideTurnTracker();
 
 
 	void updateFromPreviousMove(QuaxBoard board);
 
-	void setTile(QuaxCoordinate q, QuaxTileColour c);
+	void setTile(QuaxCoordinate tileCoord, QuaxTileColour colour);
 	
-	void setQuaxUIBoard(QuaxBoard b);
+	void setQuaxUIBoard(QuaxBoard board);
 	
 	void setPieRuleVisibility(boolean visibility);
 
@@ -27,5 +27,5 @@ public interface UserInterface {
 	
 	void setLinkedBot(BotPlayer bot);
 	
-	void setBotChosenMove(QuaxCoordinate c);
+	void setBotChosenMove(QuaxCoordinate botCoord);
 }

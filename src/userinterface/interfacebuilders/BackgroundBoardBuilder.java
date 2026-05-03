@@ -150,15 +150,15 @@ class BackgroundBoardBuilder {
             this.coordinateGrid.add(bottom, 1, 2);
         }
 
-        private StackPane addLetterCoordinateLabel(int i) {
-            Label letterCLabel = new Label(String.valueOf((char) ('A' + i)));
+        private StackPane addLetterCoordinateLabel(int columnNumber) {
+            Label letterCoordinateLabel = new Label(String.valueOf((char) ('A' + columnNumber)));
 
-            letterCLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            letterCLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            letterCLabel.getStyleClass().add("coordinate-letter-style");
-            letterCLabel.setAlignment(Pos.CENTER);
+            letterCoordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            letterCoordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            letterCoordinateLabel.getStyleClass().add("coordinate-letter-style");
+            letterCoordinateLabel.setAlignment(Pos.CENTER);
 
-            return new StackPane(letterCLabel);
+            return new StackPane(letterCoordinateLabel);
         }
 
 
@@ -186,14 +186,14 @@ class BackgroundBoardBuilder {
             this.coordinateGrid.add(right, 2, 1);
         }
 
-        private StackPane addNumberCoordinateLabel(int j) {
-            Label numCLabel = new Label(String.valueOf(11 - j));
+        private StackPane addNumberCoordinateLabel(int rowNumber) {
+            Label numberCoordinateLabel = new Label(String.valueOf(11 - rowNumber));
 
-            numCLabel.getStyleClass().add("coordinate-number-style");
-            numCLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            numCLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            numberCoordinateLabel.getStyleClass().add("coordinate-number-style");
+            numberCoordinateLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            numberCoordinateLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
-            return new StackPane(numCLabel);
+            return new StackPane(numberCoordinateLabel);
         }
     }
 
