@@ -631,37 +631,4 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		}
 	}
 
-
-	// TODO - Is this used?
-	public static class QuaxBoardPermutationIterator implements Iterator<QuaxBoard> {
-		private final ArrayList<QuaxBoard> elements;
-		private int cursor;
-		
-		private QuaxBoardPermutationIterator(QuaxBoard b) {
-			this.elements = new ArrayList<>();
-			this.cursor = 0;
-			populatePermutations(b);
-		}
-		
-		private void populatePermutations(QuaxBoard b) {
-			for (QuaxTile t : b) {
-				QuaxBoard copy = new QuaxBoard(b);
-				QuaxCoordinate coordinate = t.getCoordinates();
-				if (copy.validMove(coordinate)) {
-					copy.makeMove(coordinate);
-				}
-				elements.addLast(copy);
-			}
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return cursor < elements.size();
-		}
-		
-		@Override
-		public QuaxBoard next() {
-			return elements.get(cursor);
-		}
-	}
 }
