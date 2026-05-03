@@ -1,10 +1,11 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import types.*;
+import static types.StrategyValue.*;
+
 
 class TestRhombus {
 
@@ -158,7 +159,7 @@ class TestRhombus {
 	@Test
 	void testRhombusStrategyValue() {
 		QuaxTile t = new Rhombus(3, 2);
-		t.setStrategyValue(6);
-		assertEquals(6, t.getStrategyValue());
+		t.setStrategyValue(OPPONENT_WINNING);
+		assertEquals(fromInt(6), t.getStrategyValue());
 	}
 }

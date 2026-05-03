@@ -1,13 +1,11 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
-import types.Octagon;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
+import types.*;
+import static types.StrategyValue.*;
+
 
 class TestOctagon {
 
@@ -219,7 +217,7 @@ class TestOctagon {
 	@Test
 	void testOctagonStrategyValue() {
 		QuaxTile t = new Octagon(3, 2);
-		t.setStrategyValue(5);
-		assertEquals(5, t.getStrategyValue());
+		t.setStrategyValue(KEY);
+		assertEquals(StrategyValue.fromInt(5), t.getStrategyValue());
 	}
 }

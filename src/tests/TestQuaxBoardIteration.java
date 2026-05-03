@@ -6,8 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.QuaxBoard;
-import static types.QuaxCoordinate.*;
 import types.QuaxTile;
+import static types.QuaxCoordinate.*;
+import static types.StrategyValue.*;
+
 
 public class TestQuaxBoardIteration {
 
@@ -54,8 +56,8 @@ public class TestQuaxBoardIteration {
 	@Test
 	void testIterateStrategyValues() {
 		for (QuaxTile t : iteratorTestBoard) {
-			t.setStrategyValue(21);
+			t.setStrategyValue(KEY);
 		}
-		assertEquals(21, iteratorTestBoard.getTile(newOctagonCoordinate(1, 9)).getStrategyValue());
+		assertEquals(fromInt(5), iteratorTestBoard.getTile(newOctagonCoordinate(1, 9)).getStrategyValue());
 	}
 }
