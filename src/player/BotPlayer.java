@@ -60,6 +60,13 @@ public class BotPlayer extends QuaxPlayer {
 
             while (choice.isEmpty()) {
                 randStrategyValue = randStrategyValue.downgradeOne();
+                /* If no SV1 on the board, loop back around to SV4
+                 * Very rare occurrence, as this would mean nearly every tile on the board
+                 *  is taken and any remaining free tiles have a higher strategy value
+                 */
+                if (randStrategyValue == IGNORE) {
+                    randStrategyValue = PROGRESS;
+                }
                 choice = getStrategyGroupWithValue(randStrategyValue);
             }
         }
