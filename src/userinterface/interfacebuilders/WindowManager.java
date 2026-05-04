@@ -182,19 +182,19 @@ public class WindowManager {
         complexDes[1] = new Label("Evaluates tiles based on potential future value");
         complexDes[1].getStyleClass().add("stratDescription");
 
-        complexDes[2] = new Label("- taking vulnerable rhombus tiles");
+        complexDes[2] = new Label("\t- taking vulnerable rhombus tiles");
         complexDes[2].getStyleClass().add("stratDescription");
 
-        complexDes[3] = new Label("- cutting off opponent");
+        complexDes[3] = new Label("\t- cutting off opponent");
         complexDes[3].getStyleClass().add("stratDescription");
 
         complexDes[4] = new Label("Adjust simple tile SV based on actual value");
         complexDes[4].getStyleClass().add("stratDescription");
 
-        complexDes[5] = new Label(" - merging groups");
+        complexDes[5] = new Label("\t- merging groups");
         complexDes[5].getStyleClass().add("stratDescription");
 
-        complexDes[6] = new Label(" - avoiding the human player's groups");
+        complexDes[6] = new Label("\t- avoiding the human player's groups");
         complexDes[6].getStyleClass().add("stratDescription");
 
         return new VBox(complexDes);
