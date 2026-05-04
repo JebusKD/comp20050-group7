@@ -24,7 +24,7 @@ public class TestQuaxBoardIteration {
 	@Test
 	void testIterationSize() {
 		int count = 0;
-		for (QuaxTile t : iteratorTestBoard) {
+		for (QuaxTile _ : iteratorTestBoard) {
 			count++;
 		}
 		assertEquals(221, count);
