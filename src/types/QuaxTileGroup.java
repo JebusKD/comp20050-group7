@@ -108,7 +108,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 	public boolean groupExists() {
-		return this == UNASSIGNED_GROUP;
+		return this != UNASSIGNED_GROUP;
 	}
 	
     /* Placeholder groups are used similarly to PlaceholderTiles where

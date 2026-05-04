@@ -44,12 +44,12 @@ public abstract class QuaxPlayer {
 
 
     public QuaxTileColour getPlayerColour() {
-        assert this.playerColour.isValidColour();
+        assert this.playerColour.isPlayerColour();
         return this.playerColour;
     }
 
     public void setPlayerColour(QuaxTileColour colour) {
-        if (!colour.isValidColour()) {
+        if (!colour.isPlayerColour()) {
         	throw new IllegalArgumentException("Player cannot be assigned to no colour.");
         }
         

@@ -64,7 +64,7 @@ public class PlayerTurnIndicator {
     private interface TurnIndicatorShape extends Styleable {
 
         default void setTurnTileColour(QuaxTileColour colour) {
-            assert colour.isValidColour();
+            assert colour.isPlayerColour();
 
             this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
                                             QuaxTileColour.WHITE.tilecolourStyle());
@@ -112,7 +112,7 @@ public class PlayerTurnIndicator {
         }
 
         public void setTurnColour(QuaxTileColour colour) {
-            assert colour.isValidColour();
+            assert colour.isPlayerColour();
             this.setText(colour + " to play");
         }
     }

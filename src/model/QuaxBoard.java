@@ -294,7 +294,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	private class GroupManager {
 
 		private void trackGroup(QuaxTileGroup g) {
-			assert g != null && g.groupExists();
+			assert g != null;
+			assert g.groupExists();
 			
 			trackedGroups.addFirst(g);
 		}
@@ -320,7 +321,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour colour) {
-			assert neighbours != null && (colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE);
+			assert neighbours != null && colour.isPlayerColour();
 			
 			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(MAX_ADJACENT_TILE_GROUPS);
 
@@ -339,7 +340,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 		private boolean tileNotMemberOfGroup(ArrayList<QuaxTileGroup> groups, QuaxTile t) {
 			assert groups != null && t != null && t.tileExists();
-			
+
 			return !(groups.contains(t.getTileGroup()));
 		}
 
@@ -361,7 +362,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 			assert adjGroups != null;
 			
 			int maxSize = -1;
-			QuaxTileGroup biggestGroup = null;
+			QuaxTileGroup biggestGroup = QuaxTileGroup.UNASSIGNED_GROUP;
 
 			for (QuaxTileGroup g : adjGroups) {
 				if (g.size() > maxSize) {
@@ -378,7 +379,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 					&& adjacentGroups != null;
 			
 			for (QuaxTileGroup g : adjacentGroups) {
-				if (g != largest) {
+				if (g != largest && g.groupExists()) {
 					largest.merge(g);
 					untrackGroup(g);
 				}

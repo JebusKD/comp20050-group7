@@ -268,7 +268,7 @@ public class StrategyBuilder {
         }
 
         private boolean checkForWin(QuaxCoordinate coord, QuaxTileColour colour) {
-        	assert coord != null && simpleBoard != null && colour.isValidColour();
+        	assert coord != null && simpleBoard != null && colour.isPlayerColour();
 
             QuaxBoard copyBoard = new QuaxBoard(simpleBoard);
             copyBoard.makeMove(coord, colour);

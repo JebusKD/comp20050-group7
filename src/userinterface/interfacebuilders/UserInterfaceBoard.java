@@ -120,8 +120,8 @@ public class UserInterfaceBoard {
     	}
     	
         default void setColour(QuaxTileColour colour) {
-            assert colour.isValidColour();
-
+            assert colour != null;
+            
         	this.removeTileColour();
             this.getStyleClass().add(colour.tilecolourStyle());
         }

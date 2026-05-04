@@ -233,8 +233,6 @@ class BackgroundBoardBuilder {
 
 
         private GridPane createOctagonGrid() {
-        	assert buildingOctagonGrid != null && octagonGrid != null;
-        	
             buildingOctagonGrid = new OctagonTile[NUM_OCTAGONS][NUM_OCTAGONS];
             octagonGrid = new GridPane();
             positionBoardTileGrid(octagonGrid);

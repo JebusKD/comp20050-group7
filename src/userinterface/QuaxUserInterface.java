@@ -113,7 +113,7 @@ public class QuaxUserInterface implements UserInterface {
 
 
     public void showWinLabel(QuaxTileColour winnerColour) {
-    	if (winnerColour != QuaxTileColour.BLACK || winnerColour != QuaxTileColour.WHITE) {
+    	if (!winnerColour.isPlayerColour()) {
     		throw new IllegalArgumentException("Cannot showWinLabel for " + winnerColour + " colour.");
     	}
     	assert quaxUISideBarManager != null;
