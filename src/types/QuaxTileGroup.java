@@ -15,12 +15,21 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 	
 	public QuaxTileGroup(QuaxTile initialMember) {
+		if (initialMember == null) {
+			throw new IllegalArgumentException("QuaxTileGroup cannot be initialised with a null member.");
+		}
+		if (!initialMember.tileExists()) {
+			throw new IllegalArgumentException("Initial Member does not exist.");
+		}
+		
 		this();
 		this.addTile(initialMember);
 	}
 
 
 	public int size() {
+		assert groupMembers != null;
+		
 		return groupMembers.size();
 	}
 
@@ -30,14 +39,31 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 
 	public void addTile(QuaxTile tile) {
+		if (tile == null) {
+			throw new IllegalArgumentException("Cannot add null tile to QuaxTileGroup.");
+		}
+		if (!tile.tileExists()) {
+			throw new IllegalArgumentException("Non-existing tile cannot be added to QuaxTileGroup.");
+		}
+		
 		tile.setTileGroup(this);
 		groupMembers.addFirst(tile);
 	}
 
 	public void merge(QuaxTileGroup mergee) {
+		if (mergee == null) {
+			throw new IllegalArgumentException("Cannot merge null group.");
+		}
+		if (!mergee.groupExists()) {
+			throw new IllegalArgumentException("Cannot merge with non-existing group.");
+		}
+		
+		assert this.groupMembers != null && mergee.groupMembers != null;
+		
 		this.groupMembers.addAll(mergee.groupMembers);
 
 		for (QuaxTile t : mergee.groupMembers) {
+			assert t != null && t.tileExists();
 			t.setTileGroup(this);
 		}
 	}
@@ -78,14 +104,13 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 	
 	public Iterator<QuaxTile> iterator() {
+		assert groupMembers != null;
 		return groupMembers.iterator();
 	}
 
-	// TODO - If not used, remove
-	public boolean groupExists() {
+	private boolean groupExists() {
 		return this == UNASSIGNED_GROUP;
 	}
-
 
 	private static class PlaceholderGroup extends QuaxTileGroup {
 		private String type;
