@@ -16,7 +16,8 @@ public class WindowManager {
 
     private Label boardWinLabel;
     private VBox strategyColourIndicator;
-    private VBox strategyDescription;
+
+    private VBox[] strategyDescription;
 
 
     public Label getWinLabel() {
@@ -27,7 +28,7 @@ public class WindowManager {
         return strategyColourIndicator;
     }
 
-    public VBox getStrategyDescription() {
+    public VBox[] getStrategyDescription() {
         return strategyDescription;
     }
 
@@ -123,45 +124,82 @@ public class WindowManager {
         return labels;
     }
 
+
+
     //TODO - Add test & fix
     public void initialiseStrategyDescription() {
-        strategyDescription = new VBox(5);
+        strategyDescription = new VBox[2];
 
-        Label simpleStrategy = describeSimpleStrategy();
-        Label complexStrategy = describeImprovedStrategy();
+        strategyDescription[0] = describeSimpleStrategy();
+        strategyDescription[1] = describeImprovedStrategy();
 
-        strategyDescription.getChildren().addAll(simpleStrategy, complexStrategy);
-        strategyDescription.getStyleClass().add("vbox");
-        strategyDescription.setVisible(false);
-        strategyDescription.setId("StrategyDescriptionBox");
+        strategyDescription[0].getStyleClass().add("vbox");
+        strategyDescription[1].getStyleClass().add("vbox");
+
+        strategyDescription[0].setVisible(false);
+        strategyDescription[1].setVisible(false);
+
+        strategyDescription[0].setId("SimpleStrategyDescription");
+        strategyDescription[1].setId("ComplexStrategyDescription");
     }
 
-    private Label describeSimpleStrategy() {
-        Label description = new Label("Bot Strategy Description:\n" +
-                "Starts Simple: Checks each tile on the board, setting each to minimum SV1\n" +
-                "All surrounding tiles of owned tiles have SV = 2\n" +
-                "If tile would directly impede opponent, SV = 3\n" +
-                "If tile would directly progress bot, SV = 4\n" +
-                "If tile would intercept one of opponent's group, SV = 5 - \"Key Move\"\n" +
-                "If the opponent would win with tile, SV = 6\n" +
-                "If the bot would win with tile, SV = 7, max value\n");
+    private VBox describeSimpleStrategy() {
+        Label[] simpleDes = new Label[MAX_STRATEGIES + 1];
 
-        description.getStyleClass().add("stratLabel");
-        return description;
+        simpleDes[0] = new Label("Bot Strategy Description - Simple Start");
+        simpleDes[0].getStyleClass().add("stratDescription");
 
+        simpleDes[1] = new Label("Checks each tile on the board, setting each to minimum SV1");
+        simpleDes[1].getStyleClass().add("stratDescription");
+
+        simpleDes[2] = new Label("All surrounding tiles of owned tiles have SV = 2");
+        simpleDes[2].getStyleClass().add("stratTwo");
+
+        simpleDes[3] = new Label("Tile would directly impede opponent: SV = 3");
+        simpleDes[3].getStyleClass().add("stratThree");
+
+        simpleDes[4] = new Label("Tile would directly progress bot: SV = 4");
+        simpleDes[4].getStyleClass().add("stratFour");
+
+        simpleDes[5] = new Label("Tile intercepts or disrupts human massively: SV = 5 - \"Key Move\"");
+        simpleDes[5].getStyleClass().add("stratFive");
+
+        simpleDes[6] = new Label("Tile is winning move for human, SV = 6");
+        simpleDes[6].getStyleClass().add("stratSix");
+
+        simpleDes[7] = new Label("Tile is winning move for bot, SV = 7, max value");
+        simpleDes[7].getStyleClass().add("stratSeven");
+
+        return new VBox(simpleDes);
     }
 
-    private Label describeImprovedStrategy() {
-        Label description = new Label("\nBuilds on Simple Strategy\n" +
-                "Evaluates tiles based on potential future value, for example taking vulnerable rhombus tiles\n" +
-                "Analyse a tile based on how much it would progress the bot, \n\teither by merging groups or " +
-                "avoiding the human player's groups\n"
-                );
+    private VBox describeImprovedStrategy() {
+        Label[] complexDes = new Label[MAX_STRATEGIES];
 
-        description.getStyleClass().add("stratLabel");
-        return description;
+        complexDes[0] = new Label("Bot then builds on Simple Strategy");
+        complexDes[0].getStyleClass().add("stratDescription");
 
+        complexDes[1] = new Label("Evaluates tiles based on potential future value");
+        complexDes[1].getStyleClass().add("stratDescription");
+
+        complexDes[2] = new Label("- taking vulnerable rhombus tiles");
+        complexDes[2].getStyleClass().add("stratDescription");
+
+        complexDes[3] = new Label("- cutting off opponent");
+        complexDes[3].getStyleClass().add("stratDescription");
+
+        complexDes[4] = new Label("Adjust simple tile SV based on actual value");
+        complexDes[4].getStyleClass().add("stratDescription");
+
+        complexDes[5] = new Label(" - merging groups");
+        complexDes[5].getStyleClass().add("stratDescription");
+
+        complexDes[6] = new Label(" - avoiding the human player's groups");
+        complexDes[6].getStyleClass().add("stratDescription");
+
+        return new VBox(complexDes);
     }
+
 
 
 
@@ -180,11 +218,12 @@ public class WindowManager {
 
     public void setStrategyVisibility(boolean visibility) {
         this.strategyColourIndicator.setVisible(visibility);
-        this.strategyDescription.setVisible(visibility);
+        this.strategyDescription[0].setVisible(visibility);
+        this.strategyDescription[1].setVisible(visibility);
     }
 
-    public void showWinLabel(QuaxTileColour c) {
-        boardWinLabel.setText(c + " wins");
+    public void showWinLabel(QuaxTileColour winnerColour) {
+        boardWinLabel.setText(winnerColour + " wins");
         boardWinLabel.setVisible(true);
     }
 }

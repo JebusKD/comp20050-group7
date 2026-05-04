@@ -47,6 +47,12 @@
     -fx-font-weight: bold;
 }
 
+.stratDescription{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
 .stratTwo{
     -fx-font-family : "Georgia";
     -fx-font-size: 14px;

@@ -108,7 +108,6 @@ class BotStrategyImprover {
     }
 
 
-    // TODO - Explain these
     /* Check what would happen if the other player made the same move, and how it would
      *  affect the bot's strategy. A "Vulnerable Rhombus" is one that both players are able to take, as so;
      *      BLACK_OCT |  WHITE_OCT |
@@ -200,7 +199,6 @@ class BotStrategyImprover {
 
     private class PathFinder {
 
-        // TODO - Rename
         private static final int NEIGHBOURING_OCTAGON_SQUARE_LENGTH = 3;
 
 
