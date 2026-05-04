@@ -17,6 +17,8 @@ class NeighbourFinder {
     }
 
     public QuaxTile[][] getCoordinateNeighbours() {
+    	assert searchCoordinate != null;
+    	
         QuaxTile[][] neighbours;
 
         if (searchCoordinate.isOctagon()) {
@@ -31,6 +33,8 @@ class NeighbourFinder {
 
     /* Rhombus neighbours refer to the four octagon tiles connected diagonally */
     private QuaxTile[][] getRhombusNeighbours() {
+    	assert searchBoard != null && searchCoordinate != null;
+    	
         QuaxTile[][] neighbours = new QuaxTile[2][2];
 
         neighbours[0][0] = searchBoard.getOctagon(searchCoordinate.x(), searchCoordinate.y());
@@ -56,6 +60,8 @@ class NeighbourFinder {
     }
 
     private QuaxTile[] getLeftNeighbours() {
+    	assert searchCoordinate != null && searchBoard != null;
+    	
         int minusX = searchCoordinate.x() - 1,
                 minusY = searchCoordinate.y() - 1,
                 plusY = searchCoordinate.y() + 1;
@@ -77,6 +83,8 @@ class NeighbourFinder {
     }
 
     private QuaxTile[] getVerticalNeighbours() {
+    	assert searchCoordinate != null && searchBoard != null;
+    	
         int minusY = searchCoordinate.y() - 1,
                 plusY = searchCoordinate.y() + 1;
         QuaxTile[] adjTiles = createOutOfBoundsRowWithHiddenCentre();
@@ -93,6 +101,8 @@ class NeighbourFinder {
     }
 
     private QuaxTile[] getRightNeighbours() {
+    	assert searchCoordinate != null && searchBoard != null;
+    	
         int plusX = searchCoordinate.x() + 1,
                 minusY = searchCoordinate.y() - 1,
                 plusY = searchCoordinate.y() + 1;
@@ -117,13 +127,13 @@ class NeighbourFinder {
     /* Create special objects for out of bounds tiles
      * Allows less null checks
      */
-    private QuaxTile[] createOutOfBoundsRow() {
+    private static QuaxTile[] createOutOfBoundsRow() {
         return new QuaxTile[]{QuaxTile.OUT_OF_BOUNDS_TILE,
                 QuaxTile.OUT_OF_BOUNDS_TILE,
                 QuaxTile.OUT_OF_BOUNDS_TILE};
     }
 
-    private QuaxTile[] createOutOfBoundsRowWithHiddenCentre() {
+    private static QuaxTile[] createOutOfBoundsRowWithHiddenCentre() {
         return new QuaxTile[]{QuaxTile.OUT_OF_BOUNDS_TILE,
                 QuaxTile.HIDDEN_TILE,
                 QuaxTile.OUT_OF_BOUNDS_TILE};
@@ -149,6 +159,8 @@ class NeighbourFinder {
 
 
     private QuaxTile[] createRowOfSquareOfAdjacentOctagonNeighbours(int verticalOffset) {
+    	assert searchCoordinate != null && searchBoard != null;
+    	
         QuaxTile[] array;
         if (verticalOffset == 0) {
             array = createOutOfBoundsRowWithHiddenCentre();
