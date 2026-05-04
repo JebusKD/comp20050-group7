@@ -148,7 +148,11 @@ public abstract class QuaxTile {
 
 
 	public final boolean tileExists() {
-		return !(this instanceof PlaceholderTile);
+		return !tileDoesNotExist();
+	}
+	
+	public final boolean tileDoesNotExist() {
+		return this instanceof PlaceholderTile;
 	}
 
 	public boolean isLowPriority() {
