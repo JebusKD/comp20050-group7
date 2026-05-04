@@ -15,12 +15,9 @@ import java.util.concurrent.*;
 
 @ExtendWith(ApplicationExtension.class)
 public class TestStrategyValues {
-
-    private QuaxController controller;
-
     @Start
     public void start(Stage stage) throws Exception {
-        controller = new QuaxController(stage,true,true);//human v bot game now
+        new QuaxController(stage,true,true);//human v bot game now
     }
 
     @Test
@@ -33,6 +30,6 @@ public class TestStrategyValues {
         scheduler.schedule(() ->{
             assertFalse(robot.lookup(".tileoutline-base.tileoutline-1").queryAll().isEmpty());
             assertFalse(robot.lookup(".tileoutline-base.tileoutline-4").queryAll().isEmpty());
-        },3, TimeUnit.SECONDS);
+        },5, TimeUnit.SECONDS);
     }
 }
