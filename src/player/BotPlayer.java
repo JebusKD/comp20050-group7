@@ -12,7 +12,7 @@ import types.*;
 public class BotPlayer extends QuaxPlayer {
 
 	// TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
-	private static final long MIN_THINKING_TIME = 3000;
+	private static final long MIN_THINKING_TIME = 1000;
 	private static boolean botHaste = false;
 
     private final StrategyBuilder strategyBuilder;
@@ -74,17 +74,14 @@ public class BotPlayer extends QuaxPlayer {
         if (board.isStartingMove()) {
             strategyGroup = getStrategyGroupWithValue(VERY_LOW);
         }
-
-        if (getStrategyGroupWithValue(KEY).size() > 0) {
-            strategyGroup = getStrategyGroupWithValue(KEY);
+        else if (getStrategyGroupWithValue(WINNING).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(WINNING);
         }
-
-        if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
+        else if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
             strategyGroup = getStrategyGroupWithValue(OPPONENT_WINNING);
         }
-
-        if (getStrategyGroupWithValue(WINNING).size() > 0) {
-            strategyGroup = getStrategyGroupWithValue(WINNING);
+        else if (getStrategyGroupWithValue(KEY).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(KEY);
         }
 
         return strategyGroup;
