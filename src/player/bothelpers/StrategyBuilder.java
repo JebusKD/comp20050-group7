@@ -35,7 +35,9 @@ public class StrategyBuilder {
 
 
     public void initialiseStrategy(QuaxBoard currentBoard) {
-        assert currentBoard != null;
+        if (currentBoard == null) {
+        	throw new IllegalArgumentException("initialiseStrategy cannot be executed on null QuaxBoard.");
+        }
 
         initialiseAllStrategyGroups(currentBoard);
         BasicBotStrategist simpleBot = new BasicBotStrategist(currentBoard);
@@ -276,7 +278,10 @@ public class StrategyBuilder {
 
 
     public void refineStrategy(QuaxBoard strategyRefiningBoard) {
-        assert strategyRefiningBoard != null;
+        if (strategyRefiningBoard == null) {
+        	throw new IllegalArgumentException("refineStrategy cannot be executed on null QuaxBoard.");
+        }
+    	
         BotStrategyImprover smarterBot = new BotStrategyImprover(strategyRefiningBoard, this);
 
         smarterBot.improveStrategy();
