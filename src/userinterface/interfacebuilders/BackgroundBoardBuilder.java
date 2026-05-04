@@ -49,6 +49,7 @@ class BackgroundBoardBuilder {
         return background;
     }
 
+
     private Rectangle createWhiteCoordinateHourglassBehind() {
         double size = (OCTAGON_WIDTH * BACK_HOURGLASS_GAP)
                 + ((BACK_HOURGLASS_GAP - (NUM_OCTAGONS - NUM_RHOMBUSES)*2) * OCTAGON_GRID_GAP)
@@ -59,6 +60,7 @@ class BackgroundBoardBuilder {
 
         return background;
     }
+
 
     private Polygon createBlackCoordinateHourglass() {
         double distance = (FRONT_HOURGLASS_GAP * OCTAGON_WIDTH)
@@ -73,6 +75,7 @@ class BackgroundBoardBuilder {
 
         return hourglass;
     }
+
 
     private Rectangle createGridBackground() {
         double size = ((NUM_OCTAGONS - 1) * OCTAGON_WIDTH)

@@ -24,6 +24,7 @@ public class QuaxEventHandler {
     }
 
     public static void setupButtonEvents(QuaxController controller, Stage stage) {
+
         stage.addEventHandler(PIE_RULE_CLICKED_EVENT, new EventHandler<>() {
             @Override
             public void handle(ButtonClickEvent event) {

@@ -82,6 +82,11 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 
+    /* Placeholder groups are used similarly to PlaceholderTiles where
+     * they are used as a special object instead of null references in
+     * methods that change or otherwise access a tile's group
+     *
+     */
 	private static class PlaceholderGroup extends QuaxTileGroup {
 		private String type;
 		

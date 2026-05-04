@@ -77,7 +77,6 @@ public class QuaxController {
         this.quaxUserInterface = new TestingEmptyInterface();
 
         startGame(p1, p2);
-        //startTwoPlayerGame();
     }
 
 
@@ -91,7 +90,6 @@ public class QuaxController {
     private void startGameAgainstBot() {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BotPlayer();
-
 
         BotPlayer.enableHaste();
 
@@ -180,7 +178,6 @@ public class QuaxController {
         if (coordsClicked == null) {
             throw new IllegalArgumentException("Coordinates cannot be null.");
         }
-
 
         QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
