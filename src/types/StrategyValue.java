@@ -18,14 +18,14 @@ public enum StrategyValue {
 	
 	public static StrategyValue fromInt(int value) {
 		return switch(value) {
-		case 0 -> StrategyValue.IGNORE;
-		case 1 -> StrategyValue.VERY_LOW;
-		case 2 -> StrategyValue.LOW;
-		case 3 -> StrategyValue.BLOCKING;
-		case 4 -> StrategyValue.PROGRESS;
-		case 5 -> StrategyValue.KEY;
-		case 6 -> StrategyValue.OPPONENT_WINNING;
-		case 7 -> StrategyValue.WINNING;
+		case 0 -> IGNORE;
+		case 1 -> VERY_LOW;
+		case 2 -> LOW;
+		case 3 -> BLOCKING;
+		case 4 -> PROGRESS;
+		case 5 -> KEY;
+		case 6 -> OPPONENT_WINNING;
+		case 7 -> WINNING;
 		default -> throw new IllegalArgumentException("Value " + value + " exceeded strategy value bounds.");
 		};
 	}
@@ -40,6 +40,10 @@ public enum StrategyValue {
 
 
 	public StrategyValue downgradeOne() {
+		if (this == IGNORE) {
+			throw new IllegalStateException("downgradeOne cannot be called on IGNORE StrategyValue.");
+		}
+		
 		return downgrade(1);
 	}
 	
