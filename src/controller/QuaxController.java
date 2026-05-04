@@ -91,8 +91,6 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BotPlayer();
 
-        BotPlayer.enableHaste();
-
         if (RNG.nextInt() % 2 == 0) {
             startGame(human, bot);
         }
