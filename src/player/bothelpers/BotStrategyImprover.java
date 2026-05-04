@@ -78,31 +78,32 @@ class BotStrategyImprover {
                 && increase > 0 && maxSV != null;
 
         int strategyValueToIncrease = valuableTile.getStrategyValue().toInt();
-        int limit = Math.max(maxSV.toInt(), MAX_STRATEGIES);
+        int limit = Math.min(maxSV.toInt(), MAX_STRATEGIES);
 
         if (strategyValueToIncrease < limit) {
             if (strategyValueToIncrease + increase > limit) {
-                increase = limit - strategyValueToIncrease;
+            	assignStrategyValue(valuableTile, fromInt(limit));
+            } else {
+            	assignStrategyValue(valuableTile, fromInt(strategyValueToIncrease + increase));
             }
-
-            assignStrategyValue(valuableTile, fromInt(strategyValueToIncrease + increase));
         }
     }
 
-    private void downgradeStrategy(QuaxTile lowPriorityTile, int decrease, StrategyValue min) {
+    private void downgradeStrategy(QuaxTile lowPriorityTile, int decrease, StrategyValue minSV) {
         assert lowPriorityTile != null && lowPriorityTile.tileExists()
-                && decrease > 0 && min != null;
+                && decrease > 0 && minSV != null;
 
         if (isLowPriority(lowPriorityTile)) {
             int strategyValueToDecrease = lowPriorityTile.getStrategyValue().toInt();
-            int minimum = min.toInt();
+            int minimum = minSV.toInt();
             int limit = Math.max(minimum, 0);
 
             if (strategyValueToDecrease > limit) {
                 if (strategyValueToDecrease - decrease < limit) {
-                    decrease = strategyValueToDecrease - limit;
+                	assignStrategyValue(lowPriorityTile, fromInt(limit));
+                } else {
+                	assignStrategyValue(lowPriorityTile, fromInt(strategyValueToDecrease - decrease));
                 }
-                assignStrategyValue(lowPriorityTile, fromInt(strategyValueToDecrease - decrease));
             }
         }
     }
@@ -353,5 +354,6 @@ class BotStrategyImprover {
         }
 
     }
+
 }
 
