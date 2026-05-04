@@ -179,7 +179,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-
 	public boolean attemptPieRule() {
 		if (isPieRuleValid()) {
 			this.pieRuleDone = true;
@@ -322,7 +321,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 		return result;
 	}
 	
-	public QuaxTile[][] getSquareOctagonNeighbours(Octagon o) {
+	public QuaxTile[][] getSquareOfOctagonNeighbours(Octagon o) {
 		NeighbourFinder nf = new NeighbourFinder(this, o.getCoordinates());
 		return nf.getSquareOfAdjacentOctagonNeighbours();
 	}

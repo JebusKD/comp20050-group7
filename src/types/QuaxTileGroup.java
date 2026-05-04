@@ -9,6 +9,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	
 	private final LinkedList<QuaxTile> groupMembers;
 
+
 	public QuaxTileGroup() {
 		this.groupMembers = new LinkedList<>();
 	}
@@ -17,6 +18,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		this();
 		this.addTile(initialMember);
 	}
+
 
 	public int size() {
 		return groupMembers.size();
@@ -45,7 +47,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 	/*
-	 * Calculate the minimum distance of the given tile group to  the edges of the board,
+	 * Calculate the minimum distance of the given tile group to the edges of the board,
 	 * 	so the bot may find a more optimal tile to progress
 	 */
 	private int distanceToLowWall() {
@@ -78,11 +80,13 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	public Iterator<QuaxTile> iterator() {
 		return groupMembers.iterator();
 	}
-	
+
+	// TODO - If not used, remove
 	public boolean groupExists() {
 		return this == UNASSIGNED_GROUP;
 	}
-	
+
+
 	private static class PlaceholderGroup extends QuaxTileGroup {
 		private String type;
 		

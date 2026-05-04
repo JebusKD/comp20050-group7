@@ -1,7 +1,6 @@
 package player.bothelpers;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static controller.QuaxController.RNG;
 import types.StrategyValue;
@@ -23,7 +22,7 @@ class StrategyValueProbabilities {
 					));
 	
 	public static StrategyValue randomStrategyValue() {
-		assert RNG != null && STRATEGY_PROBABILITY_MAP.ceilingEntry(1.0) != null;
+		assert STRATEGY_PROBABILITY_MAP.ceilingEntry(1.0) != null;
 		
 		return STRATEGY_PROBABILITY_MAP.ceilingEntry(RNG.nextDouble()).getValue();
 	}

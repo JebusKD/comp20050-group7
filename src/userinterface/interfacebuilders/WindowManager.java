@@ -2,7 +2,7 @@ package userinterface.interfacebuilders;
 
 
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import static types.StrategyValue.MAX_STRATEGIES;
 import types.*;

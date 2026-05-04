@@ -139,7 +139,10 @@ public class StrategyBuilder {
             this.simpleBoard = botBoard;
         }
 
-
+        /* Iterate through board and set tile SV
+         *  This is to give a basic strategy first, which is developed in
+         *  BotStrategyImprover
+         */
         private void createSimpleStrategy() {
         	assert simpleBoard != null;
 

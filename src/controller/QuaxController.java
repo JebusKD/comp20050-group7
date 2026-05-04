@@ -160,6 +160,7 @@ public class QuaxController {
 
     public void doPieRule() {
     	assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxUserInterface != null;
+
         if (quaxBoard.attemptPieRule()) {
             quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
             quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);

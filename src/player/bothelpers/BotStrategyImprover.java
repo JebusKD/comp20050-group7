@@ -210,7 +210,7 @@ class BotStrategyImprover {
 
                 /* If a tile can be placed that will expand a group, check to see if placing the tile
                  *  will result in actual progress (i.e. the distance to the borders decreases).
-                 *  This also takes into account actual joining two tile groups together
+                 *  This also takes into account joining two tile groups together
                  *
                  * If not, decrease the tiles strategy value
                  */
@@ -268,7 +268,7 @@ class BotStrategyImprover {
         }
 
 
-
+        // TODO - Comments
         private void diagonalPathfinding() {
         	assert smarterBoard != null;
 
@@ -277,7 +277,7 @@ class BotStrategyImprover {
         	while (iterator.hasNext()) {
         		Octagon centre = iterator.next();
                 if (centre.isSameColour(botColour())) {
-                    QuaxTile[][] neighbours = smarterBoard.getSquareOctagonNeighbours(centre);
+                    QuaxTile[][] neighbours = smarterBoard.getSquareOfOctagonNeighbours(centre);
 
                     checkIfPathBlocked(neighbours);
                 }
@@ -303,8 +303,6 @@ class BotStrategyImprover {
                 }
             }
         }
-
-
 
 
         private boolean opponentBlockingPath(QuaxTile[][] neighbours, int direction) {

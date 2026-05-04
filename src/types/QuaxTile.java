@@ -2,6 +2,7 @@ package types;
 
 import static types.QuaxTileGroup.UNASSIGNED_GROUP;
 
+
 public abstract class QuaxTile {
 	
 	public static final QuaxTile OUT_OF_BOUNDS_TILE = new PlaceholderTile("out-of-bounds");

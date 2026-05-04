@@ -1,7 +1,6 @@
 package userinterface;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
@@ -100,8 +99,8 @@ public class QuaxUserInterface implements UserInterface {
         outer.add(extrasBar,1,1);
 
         // TODO - Add bot coloured tile to legend
-        //outer.add(quaxUIWindow.getStrategyDescription()[0], 0, 2);
-        //outer.add(quaxUIWindow.getStrategyDescription()[1], 1, 2);
+        outer.add(quaxUIWindow.getStrategyDescription()[0], 0, 2);
+        outer.add(quaxUIWindow.getStrategyDescription()[1], 1, 2);
 
         outer.setAlignment(Pos.CENTER);
         return outer;

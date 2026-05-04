@@ -34,7 +34,10 @@ public class Octagon extends QuaxTile {
 		return QuaxCoordinate.newOctagonCoordinate(getXPosition(), getYPosition());
 	}
 
-
+	/* Return the distance from
+	 *  The bottom border if BLACK
+	 *  The left border if WHITE
+	 */
 	public int distanceToLowWall() {
 		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
 				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
@@ -51,6 +54,10 @@ public class Octagon extends QuaxTile {
 		}
 	}
 
+	/* Return the distance from
+	 *  The top border if BLACK
+	 *  The right border if WHITE
+	 */
 	public int distanceToHighWall() {
 		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
 				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;

@@ -34,7 +34,7 @@ public abstract class QuaxPlayer {
         return this.playerController.getQuaxExecutor();
     }
     
-    private final Executor getSubmitter() {
+    private Executor getSubmitter() {
     	if (playerController == null) {
         	throw new IllegalStateException("Player has yet to be assigned corresponding controller.");
         }

@@ -114,6 +114,9 @@ class NeighbourFinder {
     }
 
 
+    /* Create special objects for out of bounds tiles
+     * Allows less null checks
+     */
     private QuaxTile[] createOutOfBoundsRow() {
         return new QuaxTile[]{QuaxTile.OUT_OF_BOUNDS_TILE,
                 QuaxTile.OUT_OF_BOUNDS_TILE,
