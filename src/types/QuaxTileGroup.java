@@ -15,6 +15,8 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 	
 	public QuaxTileGroup(QuaxTile initialMember) {
+		this();
+		
 		if (initialMember == null) {
 			throw new IllegalArgumentException("QuaxTileGroup cannot be initialised with a null member.");
 		}
@@ -22,7 +24,6 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 			throw new IllegalArgumentException("Initial Member does not exist.");
 		}
 		
-		this();
 		this.addTile(initialMember);
 	}
 
