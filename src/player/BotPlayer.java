@@ -75,16 +75,16 @@ public class BotPlayer extends QuaxPlayer {
             strategyGroup = getStrategyGroupWithValue(VERY_LOW);
         }
 
-        else if (getStrategyGroupWithValue(WINNING).size() > 0) {
-            strategyGroup = getStrategyGroupWithValue(WINNING);
+        if (getStrategyGroupWithValue(KEY).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(KEY);
         }
 
-        else if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
+        if (getStrategyGroupWithValue(OPPONENT_WINNING).size() > 0) {
             strategyGroup = getStrategyGroupWithValue(OPPONENT_WINNING);
         }
 
-        else if (getStrategyGroupWithValue(KEY).size() > 0) {
-            strategyGroup = getStrategyGroupWithValue(KEY);
+        if (getStrategyGroupWithValue(WINNING).size() > 0) {
+            strategyGroup = getStrategyGroupWithValue(WINNING);
         }
 
         return strategyGroup;
