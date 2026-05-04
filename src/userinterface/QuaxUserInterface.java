@@ -34,7 +34,7 @@ public class QuaxUserInterface implements UserInterface {
 
     private final UserInterfaceBoard quaxUIBoard;
     private final PlayerTurnIndicator turnIndicator;
-    private final WindowManager quaxUIWindow;
+    private final SideBarUtilityManager quaxUISideBarManager;
 
     private BotPlayer linkedBot;
     private QuaxCoordinate chosenMove;
@@ -48,12 +48,12 @@ public class QuaxUserInterface implements UserInterface {
 
         this.quaxUIBoard = new UserInterfaceBoard();
         this.turnIndicator = new PlayerTurnIndicator();
-        this.quaxUIWindow = new WindowManager();
+        this.quaxUISideBarManager = new SideBarUtilityManager();
 
         this.showingStrategy = false;
         this.hasLinkedBot = false;
 
-        initialiseWindow();
+        initialiseSideBar();
         initialiseStylesheets();
 
         setupStage();
@@ -74,14 +74,14 @@ public class QuaxUserInterface implements UserInterface {
     }
 
 
-    private void initialiseWindow() {
-        VBox sideBar = quaxUIWindow.initialiseButtons();
-        quaxUIWindow.initialiseWinLabel();
-        quaxUIWindow.initialiseStrategyColourCoding();
+    private void initialiseSideBar() {
+        VBox sideBar = quaxUISideBarManager.initialiseButtons();
+        quaxUISideBarManager.initialiseWinLabel();
+        quaxUISideBarManager.initialiseStrategyColourCoding();
 
         sideBar.getChildren().addAll(turnIndicator.getTurnTrackerBox(),
-                                        quaxUIWindow.getWinLabel(),
-                                        quaxUIWindow.getStrategyIndicator()
+                                        quaxUISideBarManager.getWinLabel(),
+                                        quaxUISideBarManager.getStrategyIndicator()
                                     );
         sideBar.getStyleClass().add("vbox");
 
@@ -89,10 +89,11 @@ public class QuaxUserInterface implements UserInterface {
         interfaceScene = new Scene(createOuterGrid(sideBar));
     }
 
+    /* Create Stage layout - Title, Board and SideBar */
     private GridPane createOuterGrid(VBox extrasBar) {
         GridPane outer = new GridPane();
 
-        outer.add(quaxUIWindow.createTitle(),0,0);
+        outer.add(quaxUISideBarManager.createTitle(),0,0);
         outer.add(quaxUIBoard.getStackUIBoard(),0,1);
         outer.add(extrasBar,1,1);
 
@@ -102,7 +103,7 @@ public class QuaxUserInterface implements UserInterface {
 
 
     public void showWinLabel(QuaxTileColour winnerColour) {
-        quaxUIWindow.showWinLabel(winnerColour);
+        quaxUISideBarManager.showWinLabel(winnerColour);
     }
 
     public void hideTurnTracker() {
@@ -139,14 +140,14 @@ public class QuaxUserInterface implements UserInterface {
     }
 
     public void setPieRuleVisibility(boolean value) {
-        quaxUIWindow.setPieRuleVisibility(value);
+        quaxUISideBarManager.setPieRuleVisibility(value);
     }
 
 
     public void showStrategy() {
     	showingStrategy = true;
         updateStrategy();
-        quaxUIWindow.setStrategyVisibility(true);
+        quaxUISideBarManager.setStrategyVisibility(true);
     }
     
     private void updateStrategy() {
@@ -171,7 +172,7 @@ public class QuaxUserInterface implements UserInterface {
             this.quaxUIBoard.setTileBorder(t.getCoordinates(), QuaxTileBorder.NONE);
         }
 
-        quaxUIWindow.setStrategyVisibility(false);
+        quaxUISideBarManager.setStrategyVisibility(false);
     }
 
     @Override

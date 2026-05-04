@@ -19,7 +19,7 @@ public class QuaxCoordinateEvent extends Event {
     		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null EventType.");
     	}
     	if (coord == null) {
-    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordiante.");
+    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordinate.");
     	}
 
         super(clickedTile);

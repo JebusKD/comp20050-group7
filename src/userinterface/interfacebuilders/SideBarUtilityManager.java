@@ -8,7 +8,8 @@ import static types.StrategyValue.MAX_STRATEGIES;
 import types.*;
 
 
-public class WindowManager {
+/* Handle creation and managing of the Side Bar during the game */
+public class SideBarUtilityManager {
 
     private Button showStrategyButton;
     private Button hideStrategyButton;

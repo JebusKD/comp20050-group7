@@ -2,7 +2,7 @@ package types;
 
 import java.util.*;
 
-
+/* Represent a collection of connected Tiles of the same colour */
 public class QuaxTileGroup implements Iterable<QuaxTile> {
 
 	public static final QuaxTileGroup UNASSIGNED_GROUP = new PlaceholderGroup("unassigned");
@@ -43,14 +43,14 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 	public int distanceToWalls() {
-		return distanceToLowWall() + distanceToHighWall();
+		return groupDistanceToLowWall() + groupDistanceToHighWall();
 	}
 
 	/*
 	 * Calculate the minimum distance of the given tile group to the edges of the board,
-	 * 	so the bot may find a more optimal tile to progress
+	 * 	primarily so the bot may find a more optimal tile to progress
 	 */
-	private int distanceToLowWall() {
+	private int groupDistanceToLowWall() {
 		int minimumDistance = 10;
 		for (QuaxTile t : this) {
 			if (t instanceof Octagon o) {
@@ -60,7 +60,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		return minimumDistance;
 	}
 
-	private int distanceToHighWall() {
+	private int groupDistanceToHighWall() {
 		int minimumDistance = 10;
 		for (QuaxTile t : this) {
 			if (t instanceof Octagon o) {

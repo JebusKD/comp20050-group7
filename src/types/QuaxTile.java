@@ -31,7 +31,7 @@ public abstract class QuaxTile {
 		}
 		
 		this.tileColour = t.tileColour;
-		this.tileGroup = UNASSIGNED_GROUP; // Don't copy tile group, added in the board after object is constructed
+		this.tileGroup = UNASSIGNED_GROUP; // Doesn't copy tile group, added in the board after object is constructed
 
 		this.strategyValue = t.strategyValue;
 		this.xPosition = t.xPosition;
@@ -107,6 +107,7 @@ public abstract class QuaxTile {
 		
 		return getTileColour() == QuaxTileColour.NONE;
 	}
+
 	public boolean isOccupied() {
 		return !isFree();
 	}
@@ -116,6 +117,7 @@ public abstract class QuaxTile {
 		
 		return getTileColour() == QuaxTileColour.BLACK;
 	}
+
 	public boolean isWhite() {
 		assert getTileColour() != null;
 		

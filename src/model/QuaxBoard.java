@@ -124,9 +124,8 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 
-	/* Move validation checks */
+	/* Following are all move validation checks */
 	public boolean checkForWinningMove() {
-		// Cannot win on first move
 		if (isStartingMove()) {
 			return false;
 		}
@@ -179,6 +178,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
+	/* Following are all board state changing methods */
 	public boolean attemptPieRule() {
 		if (isPieRuleValid()) {
 			this.pieRuleDone = true;
@@ -219,7 +219,6 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 	}
 
 
-	/* Manage adding a tile to a group */
 	private class GroupManager {
 
 		private void trackGroup(QuaxTileGroup g) {
@@ -328,7 +327,7 @@ public class QuaxBoard implements Iterable<QuaxTile> {
 
 
 	/* Create Iterables of different types for the board,
-	 * For easier for loops, primarily in the bot strategy
+	 * Enables easier for loops, primarily in the bot strategy
 	 */
 	public Iterator<QuaxTile> iterator() {
 		BoardIterators bi = new BoardIterators(this);

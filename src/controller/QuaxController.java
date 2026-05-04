@@ -38,7 +38,8 @@ public class QuaxController {
     }
 
 
-    // Testing Constructor to manipulate which player might go first
+    // Constructor for testing to manipulate the type of game played
+    //     (Bot V Human or Human V Human) and also which player goes first
     public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
         this.quaxExecutor = new MultithreadedExecutor();
         this.quaxMoveSubmitter = new JavaFXPlatformExecutor();

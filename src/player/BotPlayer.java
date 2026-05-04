@@ -114,7 +114,7 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
-    // how the bot decides strategy vals for the tiles
+    // how the bot decides strategy values for the tiles
     private void setUpStrategy(QuaxBoard board) {
     	assert board != null && strategyBuilder != null;
 
@@ -124,6 +124,7 @@ public class BotPlayer extends QuaxPlayer {
     }
 
 
+    /* Utility to speed up the time it takes for the bot to move. Used for testing */
     public static void enableHaste() {
     	botHaste = true;
     }
