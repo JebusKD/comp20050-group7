@@ -133,9 +133,6 @@ class BoardIterators implements Iterable<QuaxTile> {
             return elements.get(cursor++);
         }
 
-        private QuaxCoordinate nextCoordinate() {
-            return next().getCoordinates();
-        }
     }
 
 
