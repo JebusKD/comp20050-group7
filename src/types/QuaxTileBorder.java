@@ -1,8 +1,5 @@
 package types;
 
-
-import java.security.PublicKey;
-
 public enum QuaxTileBorder {
     NONE {
         public String tileBorderStyle() {
