@@ -38,6 +38,7 @@ public class QuaxEventHandler {
     }
 
     public static void setupButtonEvents(QuaxController controller, Stage stage) {
+
     	if (controller == null) {
     		throw new IllegalArgumentException("QuaxEventHandler cannot be setup for null QuaxController.");
     	}

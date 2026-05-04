@@ -7,22 +7,21 @@ import model.QuaxBoard;
 public class Octagon extends QuaxTile {
 
 	public Octagon(int x, int y) {
-		if (x < 0 || x >= NUM_OCTAGONS) {
+        super(x, y);
+
+        if (x < 0 || x >= NUM_OCTAGONS) {
 			throw new IllegalArgumentException("Octagon must be constructed with x coordinate in range [0," + (NUM_OCTAGONS-1) + "].");
 		}
 		if (y < 0 || y >= NUM_OCTAGONS) {
 			throw new IllegalArgumentException("Octagon must be constructed with y coordinate in range [0," + (NUM_OCTAGONS-1) + "].");
 		}
-		
-		super(x, y);
 	}
 	
 	public Octagon(Octagon o) {
-		if (o == null) {
+        super(o);
+        if (o == null) {
 			throw new IllegalArgumentException("Octagon cannot be constructed using null Octagon as copy.");
 		}
-		
-		super(o);
 	}
 
 

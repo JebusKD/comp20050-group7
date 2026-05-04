@@ -15,5 +15,9 @@ abstract class RhombusBase extends Polygon {
                 0, radius,
                 radius, 0,
                 0, -radius);
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Invalid polygon length received");
+        }
     }
 }

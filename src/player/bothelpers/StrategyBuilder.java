@@ -191,7 +191,8 @@ public class StrategyBuilder {
         }
 
         private void setProgressStrategy(Octagon o, QuaxTile n, QuaxTile[][] neighbours) {
-        	assert o != null && o.tileExists() && n != null && n.tileExists() && neighbours.length == 3 && neighbours[0].length == 3;
+        	assert o != null && o.tileExists() && n != null
+                    && n.tileExists() && neighbours.length == 3 && neighbours[0].length == 3;
 
             if (o.isBlack()) {
                 progressVertically(n, neighbours);
@@ -267,7 +268,7 @@ public class StrategyBuilder {
         }
 
         private boolean checkForWin(QuaxCoordinate coord, QuaxTileColour colour) {
-        	assert coord != null && simpleBoard != null && (colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE);
+        	assert coord != null && simpleBoard != null && colour.isValidColour();
 
             QuaxBoard copyBoard = new QuaxBoard(simpleBoard);
             copyBoard.makeMove(coord, colour);

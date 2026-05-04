@@ -42,14 +42,30 @@ public class UserInterfaceBoard {
 
 
     public void setTile(QuaxCoordinate tileCoord, QuaxTileColour colour) {
+        if (tileCoord == null) {
+            throw new IllegalStateException("Setting coordinate cannot be null");
+        }
+        if (colour == null) {
+            throw new IllegalStateException("Setting colour cannot be null");
+        }
+
         getTileFromCoordinate(tileCoord).setColour(colour);
     }
 
     public void setTileBorder(QuaxCoordinate tileCoord, QuaxTileBorder border) {
+        if (tileCoord == null) {
+            throw new IllegalStateException("Setting coordinate cannot be null");
+        }
+        if (border == null) {
+            throw new IllegalStateException("Setting border cannot be null");
+        }
+
         getTileFromCoordinate(tileCoord).setBorder(border);
     }
 
     private Tile getTileFromCoordinate(QuaxCoordinate tileCoord) {
+        assert tileCoord != null;
+
         Tile tile;
         if (tileCoord.isOctagon()) {
             tile = this.octagonGridCells[tileCoord.x()][tileCoord.y()];
@@ -63,6 +79,10 @@ public class UserInterfaceBoard {
 
 
     public void setBotChosenCell(QuaxCoordinate botCoord) {
+        if (botCoord == null) {
+            throw new IllegalStateException("Tile selected is invalid");
+        }
+
         clearBotChosenMove();
         getTileFromCoordinate(botCoord).setPreviousMove();
     }
@@ -76,6 +96,8 @@ public class UserInterfaceBoard {
     }
 
     private void clearBotChosenCell(QuaxCoordinate prevBotCoord) {
+        assert prevBotCoord != null;
+
         getTileFromCoordinate(prevBotCoord).clearPreviousMove();
     }
 
@@ -98,11 +120,15 @@ public class UserInterfaceBoard {
     	}
     	
         default void setColour(QuaxTileColour colour) {
+            assert colour.isValidColour();
+
         	this.removeTileColour();
             this.getStyleClass().add(colour.tilecolourStyle());
         }
         
         default void setBorder(QuaxTileBorder border) {
+            assert border != null;
+
             this.clearBorder();
             this.getStyleClass().addAll("tileoutline-base", border.tileBorderStyle());
         }
@@ -125,6 +151,10 @@ public class UserInterfaceBoard {
 
         public OctagonTile(QuaxCoordinate coordinate) {
             super();
+            if (coordinate == null) {
+                throw new IllegalArgumentException("Invalid Octagon Coordinate");
+            }
+
             this.getStyleClass().addAll("tile", "tiletype-octagon");
             this.setColour(QuaxTileColour.NONE);
             this.setBorder(QuaxTileBorder.NONE);
@@ -160,6 +190,10 @@ public class UserInterfaceBoard {
 
         public RhombusTile(QuaxCoordinate coordinate) {
             super();
+            if (coordinate == null) {
+                throw new IllegalArgumentException("Invalid Rhombus Coordinate");
+            }
+
             this.getStyleClass().addAll("tile", "tiletype-rhombus");
             this.setColour(QuaxTileColour.NONE);
             this.setBorder(QuaxTileBorder.NONE);

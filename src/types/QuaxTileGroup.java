@@ -57,9 +57,8 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		if (!mergee.groupExists()) {
 			throw new IllegalArgumentException("Cannot merge with non-existing group.");
 		}
-		
 		assert this.groupMembers != null && mergee.groupMembers != null;
-		
+
 		this.groupMembers.addAll(mergee.groupMembers);
 
 		for (QuaxTile t : mergee.groupMembers) {
@@ -111,7 +110,12 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	public boolean groupExists() {
 		return this == UNASSIGNED_GROUP;
 	}
-
+	
+    /* Placeholder groups are used similarly to PlaceholderTiles where
+     * they are used as a special object instead of null references in
+     * methods that change or otherwise access a tile's group
+     *
+     */
 	private static class PlaceholderGroup extends QuaxTileGroup {
 		private String type;
 		

@@ -147,15 +147,27 @@ public class SideBarUtilityManager {
 
 
     public void setPieRuleVisibility(boolean visibility) {
+        if (visibility != true && visibility != false) {
+            throw new IllegalArgumentException("Invalid visibility received");
+        }
+
         pieRuleButton.setDisable(!visibility);
         pieRuleButton.setVisible(visibility);
     }
 
     public void setStrategyVisibility(boolean visibility) {
+        if (visibility != true && visibility != false) {
+            throw new IllegalArgumentException("Invalid visibility received");
+        }
+
         this.strategyIndicator.setVisible(visibility);
     }
 
     public void showWinLabel(QuaxTileColour winnerColour) {
+        if (winnerColour != QuaxTileColour.BLACK && winnerColour != QuaxTileColour.WHITE) {
+            throw new IllegalStateException("Indicator can only be BLACK or WHITE");
+        }
+
         boardWinLabel.setText(winnerColour + " wins");
         boardWinLabel.setVisible(true);
     }

@@ -15,14 +15,15 @@ public class QuaxCoordinateEvent extends Event {
 
 
     public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> clickedTile, QuaxCoordinate coord) {
-    	if (clickedTile == null) {
+        super(clickedTile);
+
+        if (clickedTile == null) {
     		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null EventType.");
     	}
     	if (coord == null) {
     		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordinate.");
     	}
 
-        super(clickedTile);
         this.coordinate = coord;
     }
 

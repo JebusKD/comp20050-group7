@@ -268,7 +268,9 @@ class BotStrategyImprover {
         }
 
 
-        // TODO - Comments
+        /* If a bot tile is blocked by the human player, check the tiles adjacent to the
+         * impeding tile. If they have a SV of BLOCKING, upgrade to PROGRESS, otherwise ignore
+         */
         private void diagonalPathfinding() {
         	assert smarterBoard != null;
 

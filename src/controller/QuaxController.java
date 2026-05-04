@@ -91,7 +91,6 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BotPlayer();
 
-        // TODO - Uncomment on submission
         BotPlayer.enableHaste();
 
         if (RNG.nextInt() % 2 == 0) {
@@ -179,7 +178,6 @@ public class QuaxController {
         if (coordsClicked == null) {
             throw new IllegalArgumentException("Coordinates cannot be null.");
         }
-
 
         QuaxPlayer moveSubmitter = currentPlayer();
         QuaxTileColour moveColour = moveSubmitter.getPlayerColour();

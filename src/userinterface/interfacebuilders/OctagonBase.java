@@ -15,14 +15,25 @@ abstract class OctagonBase extends Polygon {
 
     public OctagonBase(double width) {
         super(generatePolygonPoints(width));
+        if (width <= 0) {
+            throw new IllegalArgumentException("Invalid Octagon Width received");
+        }
     }
 
 
     public static double calculateSideLength(double width) {
+        if (width <= 0) {
+            throw new IllegalArgumentException("Invalid polygon length received");
+        }
+
         return width / (1 + (2 / Math.sqrt(2)));
     }
 
     private static double[] generatePolygonPoints(double width) {
+        if (width <= 0) {
+            throw new IllegalArgumentException("Invalid polygon length received");
+        }
+
         double sideLength = calculateSideLength(width);
         double halfSide = sideLength / 2;
         double radius = width / 2;

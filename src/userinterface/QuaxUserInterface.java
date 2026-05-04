@@ -68,7 +68,7 @@ public class QuaxUserInterface implements UserInterface {
     	assert quaxUIStage != null && interfaceScene != null;
     	
         this.quaxUIStage.setScene(this.interfaceScene);
-        this.quaxUIStage.setMaximized(true);
+        this.quaxUIStage.setMaximized(false);
         this.quaxUIStage.show();
     }
 
