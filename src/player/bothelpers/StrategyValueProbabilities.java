@@ -15,9 +15,9 @@ class StrategyValueProbabilities {
 	 */
 	private static final TreeMap<Double, StrategyValue> STRATEGY_PROBABILITY_MAP =
 			new TreeMap<>(Map.ofEntries(
-						Map.entry(0.01, StrategyValue.VERY_LOW),
-						Map.entry(0.15, StrategyValue.LOW),
-						Map.entry(0.4, StrategyValue.BLOCKING),
+						Map.entry(0.005, StrategyValue.VERY_LOW),
+						Map.entry(0.07, StrategyValue.LOW),
+						Map.entry(0.3, StrategyValue.BLOCKING),
 						Map.entry(1.0, StrategyValue.PROGRESS)
 					));
 	
