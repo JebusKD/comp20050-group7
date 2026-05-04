@@ -81,11 +81,6 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		return groupMembers.iterator();
 	}
 
-	// TODO - If not used, remove
-	public boolean groupExists() {
-		return this == UNASSIGNED_GROUP;
-	}
-
 
 	private static class PlaceholderGroup extends QuaxTileGroup {
 		private String type;

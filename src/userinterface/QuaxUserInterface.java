@@ -62,7 +62,7 @@ public class QuaxUserInterface implements UserInterface {
 
     private void setupStage() {
         this.quaxUIStage.setScene(this.interfaceScene);
-        this.quaxUIStage.setMaximized(true);
+        this.quaxUIStage.setMaximized(false);
         this.quaxUIStage.show();
     }
 

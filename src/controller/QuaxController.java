@@ -77,6 +77,7 @@ public class QuaxController {
         this.quaxUserInterface = new TestingEmptyInterface();
 
         startGame(p1, p2);
+        //startTwoPlayerGame();
     }
 
 
@@ -91,7 +92,7 @@ public class QuaxController {
         QuaxPlayer human = new HumanPlayer();
         QuaxPlayer bot = new BotPlayer();
 
-        // TODO - Uncomment on submission
+
         BotPlayer.enableHaste();
 
         if (RNG.nextInt() % 2 == 0) {

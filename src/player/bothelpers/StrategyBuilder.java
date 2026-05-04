@@ -189,7 +189,8 @@ public class StrategyBuilder {
         }
 
         private void setProgressStrategy(Octagon o, QuaxTile n, QuaxTile[][] neighbours) {
-        	assert o != null && o.tileExists() && n != null && n.tileExists() && neighbours.length == 3 && neighbours[0].length == 3;
+        	assert o != null && o.tileExists() && n != null
+                    && n.tileExists() && neighbours.length == 3 && neighbours[0].length == 3;
 
             if (o.isBlack()) {
                 progressVertically(n, neighbours);

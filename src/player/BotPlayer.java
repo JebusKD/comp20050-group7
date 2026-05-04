@@ -11,8 +11,7 @@ import types.*;
 
 public class BotPlayer extends QuaxPlayer {
 
-	// TODO for final submission MIN_THINKING_TIME will need to be upped to the 3-5 second range (Confirm)
-	private static final long MIN_THINKING_TIME = 1000;
+	private static final long MIN_THINKING_TIME = 3500;
 	private static boolean botHaste = false;
 
     private final StrategyBuilder strategyBuilder;
@@ -68,6 +67,7 @@ public class BotPlayer extends QuaxPlayer {
         return choice;
     }
 
+    /* Certain Strategy Groups have immediate priority, so select them if populated */
     private LinkedList<QuaxTile> checkPrioritisedStrategyGroups(QuaxBoard board) {
         LinkedList<QuaxTile> strategyGroup = new LinkedList<>();
 
