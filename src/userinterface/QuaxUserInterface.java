@@ -78,8 +78,6 @@ public class QuaxUserInterface implements UserInterface {
         VBox sideBar = quaxUIWindow.initialiseButtons();
         quaxUIWindow.initialiseWinLabel();
         quaxUIWindow.initialiseStrategyColourCoding();
-        quaxUIWindow.initialiseStrategyDescription();
-
 
         sideBar.getChildren().addAll(turnIndicator.getTurnTrackerBox(),
                                         quaxUIWindow.getWinLabel(),
@@ -97,10 +95,6 @@ public class QuaxUserInterface implements UserInterface {
         outer.add(quaxUIWindow.createTitle(),0,0);
         outer.add(quaxUIBoard.getStackUIBoard(),0,1);
         outer.add(extrasBar,1,1);
-
-        // TODO - Add bot coloured tile to legend
-        outer.add(quaxUIWindow.getStrategyDescription()[0], 0, 2);
-        outer.add(quaxUIWindow.getStrategyDescription()[1], 1, 2);
 
         outer.setAlignment(Pos.CENTER);
         return outer;

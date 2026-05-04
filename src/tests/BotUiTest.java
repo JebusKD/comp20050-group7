@@ -76,14 +76,14 @@ public class BotUiTest {
 
     @Test
     void testStrategyColourIndicatorInvisibleOnGameStart(FxRobot robot){
-        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
+        assertFalse(robot.lookup("#StrategyIndicator").query().isVisible());
     }
 
     @Test
     void testStrategyColourIndicatorAppearsWhenShowStrategyActive(FxRobot robot) {
         robot.clickOn("#showStrat");
 
-        assertTrue(robot.lookup("#ColourIndicator").query().isVisible());
+        assertTrue(robot.lookup("#StrategyIndicator").query().isVisible());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class BotUiTest {
         robot.clickOn("#showStrat");
         robot.clickOn("#hideStrat");
 
-        assertFalse(robot.lookup("#ColourIndicator").query().isVisible());
+        assertFalse(robot.lookup("#StrategyIndicator").query().isVisible());
     }
 
     @Test
@@ -101,7 +101,4 @@ public class BotUiTest {
 
         assertEquals(221, robot.lookup(".tileoutline-base").queryAll().size());
     }
-
-
-    // TODO - Add testBotStrategyDescriptionShows
 }

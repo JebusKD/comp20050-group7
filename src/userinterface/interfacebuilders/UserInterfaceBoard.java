@@ -61,6 +61,7 @@ public class UserInterfaceBoard {
     }
 
 
+
     public void setBotChosenCell(QuaxCoordinate botCoord) {
         clearBotChosenMove();
         getTileFromCoordinate(botCoord).setPreviousMove();

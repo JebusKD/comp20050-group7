@@ -15,9 +15,7 @@ public class WindowManager {
     private Button pieRuleButton;
 
     private Label boardWinLabel;
-    private VBox strategyColourIndicator;
-
-    private VBox[] strategyDescription;
+    private VBox strategyIndicator;
 
 
     public Label getWinLabel() {
@@ -25,11 +23,7 @@ public class WindowManager {
     }
 
     public VBox getStrategyIndicator() {
-        return strategyColourIndicator;
-    }
-
-    public VBox[] getStrategyDescription() {
-        return strategyDescription;
+        return strategyIndicator;
     }
 
 
@@ -90,17 +84,25 @@ public class WindowManager {
     public void initialiseStrategyColourCoding() {
         Label[] stratLabels = initialiseStrategyLabels();
 
-        strategyColourIndicator = new VBox(10);
-        strategyColourIndicator.getChildren().addAll(stratLabels);
-        strategyColourIndicator.getStyleClass().add("vbox");
-        strategyColourIndicator.setVisible(false);
-        strategyColourIndicator.setId("ColourIndicator");
+        Label descriptionTitle = new Label("\nBot Strategy Description:");
+        descriptionTitle.getStyleClass().add("stratLabel");
+        Label description = initialiseStrategyDescription();
+
+        strategyIndicator = new VBox(10);
+
+        strategyIndicator.getChildren().addAll(stratLabels);
+        strategyIndicator.getChildren().add(descriptionTitle);
+        strategyIndicator.getChildren().add(description);
+
+        strategyIndicator.getStyleClass().add("vbox");
+        strategyIndicator.setVisible(false);
+        strategyIndicator.setId("StrategyIndicator");
     }
 
     private Label[] initialiseStrategyLabels() {
         Label[] labels = new Label[MAX_STRATEGIES];
 
-        labels[0] = new Label("Strategy Value - SV");
+        labels[0] = new Label("Strategy Value - SV\nGreen Tile is bot's move");
         labels[0].getStyleClass().add("stratLabel");
 
         labels[1] = new Label("SV2 - Low priority surrounding tile ");
@@ -125,82 +127,14 @@ public class WindowManager {
     }
 
 
+    private Label initialiseStrategyDescription() {
+        Label simpleDes = new Label("Set SVs of all tiles on the board as above," +
+                "\nThen adjust SVs dynamically based on other factors,\n " +
+                "e.g. merging groups or takeable rhombuses");
+        simpleDes.getStyleClass().add("stratDescription");
 
-    //TODO - Add test & fix
-    public void initialiseStrategyDescription() {
-        strategyDescription = new VBox[2];
-
-        strategyDescription[0] = describeSimpleStrategy();
-        strategyDescription[1] = describeImprovedStrategy();
-
-        strategyDescription[0].getStyleClass().add("vbox");
-        strategyDescription[1].getStyleClass().add("vbox");
-
-        strategyDescription[0].setVisible(false);
-        strategyDescription[1].setVisible(false);
-
-        strategyDescription[0].setId("SimpleStrategyDescription");
-        strategyDescription[1].setId("ComplexStrategyDescription");
+        return simpleDes;
     }
-
-    private VBox describeSimpleStrategy() {
-        Label[] simpleDes = new Label[MAX_STRATEGIES + 1];
-
-        simpleDes[0] = new Label("Bot Strategy Description - Simple Start");
-        simpleDes[0].getStyleClass().add("stratDescription");
-
-        simpleDes[1] = new Label("Checks each tile on the board, setting each to minimum SV1");
-        simpleDes[1].getStyleClass().add("stratDescription");
-
-        simpleDes[2] = new Label("All surrounding tiles of owned tiles have SV = 2");
-        simpleDes[2].getStyleClass().add("stratTwo");
-
-        simpleDes[3] = new Label("Tile would directly impede opponent: SV = 3");
-        simpleDes[3].getStyleClass().add("stratThree");
-
-        simpleDes[4] = new Label("Tile would directly progress bot: SV = 4");
-        simpleDes[4].getStyleClass().add("stratFour");
-
-        simpleDes[5] = new Label("Tile intercepts or disrupts human massively: SV = 5 - \"Key Move\"");
-        simpleDes[5].getStyleClass().add("stratFive");
-
-        simpleDes[6] = new Label("Tile is winning move for human, SV = 6");
-        simpleDes[6].getStyleClass().add("stratSix");
-
-        simpleDes[7] = new Label("Tile is winning move for bot, SV = 7, max value");
-        simpleDes[7].getStyleClass().add("stratSeven");
-
-        return new VBox(simpleDes);
-    }
-
-    private VBox describeImprovedStrategy() {
-        Label[] complexDes = new Label[MAX_STRATEGIES];
-
-        complexDes[0] = new Label("Bot then builds on Simple Strategy");
-        complexDes[0].getStyleClass().add("stratDescription");
-
-        complexDes[1] = new Label("Evaluates tiles based on potential future value");
-        complexDes[1].getStyleClass().add("stratDescription");
-
-        complexDes[2] = new Label("\t- taking vulnerable rhombus tiles");
-        complexDes[2].getStyleClass().add("stratDescription");
-
-        complexDes[3] = new Label("\t- cutting off opponent");
-        complexDes[3].getStyleClass().add("stratDescription");
-
-        complexDes[4] = new Label("Adjust simple tile SV based on actual value");
-        complexDes[4].getStyleClass().add("stratDescription");
-
-        complexDes[5] = new Label("\t- merging groups");
-        complexDes[5].getStyleClass().add("stratDescription");
-
-        complexDes[6] = new Label("\t- avoiding the human player's groups");
-        complexDes[6].getStyleClass().add("stratDescription");
-
-        return new VBox(complexDes);
-    }
-
-
 
 
     public Label createTitle() {
@@ -217,9 +151,7 @@ public class WindowManager {
     }
 
     public void setStrategyVisibility(boolean visibility) {
-        this.strategyColourIndicator.setVisible(visibility);
-        this.strategyDescription[0].setVisible(visibility);
-        this.strategyDescription[1].setVisible(visibility);
+        this.strategyIndicator.setVisible(visibility);
     }
 
     public void showWinLabel(QuaxTileColour winnerColour) {
