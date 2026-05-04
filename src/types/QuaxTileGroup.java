@@ -108,7 +108,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 		return groupMembers.iterator();
 	}
 
-	private boolean groupExists() {
+	public boolean groupExists() {
 		return this == UNASSIGNED_GROUP;
 	}
 
