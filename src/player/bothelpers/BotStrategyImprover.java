@@ -47,11 +47,11 @@ class BotStrategyImprover {
                 }
 
                 else if (defendsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, KEY);
+                    upgradeStrategy(tile, 3, KEY);
                 }
 
                 else if (exploitsVulnerableRhombuses(tile, smarterBoard)) {
-                    upgradeStrategy(tile, 2, KEY);
+                    upgradeStrategy(tile, 3, KEY);
                 }
 
                 else if (createsOnlyOneVulnerableRhombus(tile, smarterBoard)) {
