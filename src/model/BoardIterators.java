@@ -11,6 +11,8 @@ class BoardIterators implements Iterable<QuaxTile> {
     private final QuaxBoard iteratorBoard;
 
     BoardIterators(QuaxBoard board) {
+    	assert board != null;
+    	
         iteratorBoard = board;
     }
 
@@ -27,6 +29,8 @@ class BoardIterators implements Iterable<QuaxTile> {
         private final ArrayList<QuaxTile> elements;
 
         public QuaxBoardIterator(QuaxBoard source) {
+        	assert source != null;
+        	
             this.cursor = 0;
             this.elements = new ArrayList<>(NUM_ELEMENTS);
 
@@ -50,12 +54,14 @@ class BoardIterators implements Iterable<QuaxTile> {
 
         @Override
         public QuaxTile next() {
-            assert hasNext();
+            if (!hasNext()) {
+            	throw new NoSuchElementException("End of board reached.");
+            }
+            
             return elements.get(cursor++);
         }
 
         private QuaxCoordinate nextCoordinate() {
-            assert hasNext();
             return next().getCoordinates();
         }
     }
@@ -120,7 +126,10 @@ class BoardIterators implements Iterable<QuaxTile> {
 
         @Override
         public Octagon next() {
-            assert hasNext();
+        	if (!hasNext()) {
+            	throw new NoSuchElementException("End of board reached.");
+            }
+        	
             return elements.get(cursor++);
         }
 
@@ -130,7 +139,7 @@ class BoardIterators implements Iterable<QuaxTile> {
     }
 
 
-    /* Iterate through all octagon tiles in the board.
+    /* Iterate through all rhombus tiles in the board and returns their coordinates.
      *  Independent of the board state
      *  Used when refining the bot's strategy
      */
@@ -145,6 +154,7 @@ class BoardIterators implements Iterable<QuaxTile> {
         private final ArrayList<QuaxTile> elements;
 
         public QuaxBoardRhombusIterator(QuaxBoard source) {
+        	assert source != null;
             this.cursor = 0;
             this.elements = new ArrayList<>(NUM_ELEMENTS);
 
