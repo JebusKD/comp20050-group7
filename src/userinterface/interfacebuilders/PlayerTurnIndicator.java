@@ -42,6 +42,10 @@ public class PlayerTurnIndicator {
 
 
     public void setIndicatorColour(QuaxTileColour colour) {
+        if (colour != QuaxTileColour.BLACK && colour != QuaxTileColour.WHITE) {
+            throw new IllegalStateException("Indicator can only be BLACK or WHITE");
+        }
+
         this.octagonIndicator.setTurnTileColour(colour);
         this.rhombusIndicator.setTurnTileColour(colour);
         this.turnText.setTurnColour(colour);
@@ -60,7 +64,7 @@ public class PlayerTurnIndicator {
     private interface TurnIndicatorShape extends Styleable {
 
         default void setTurnTileColour(QuaxTileColour colour) {
-            assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+            assert colour.isValidColour();
 
             this.getStyleClass().removeAll(QuaxTileColour.BLACK.tilecolourStyle(),
                                             QuaxTileColour.WHITE.tilecolourStyle());
@@ -77,6 +81,11 @@ public class PlayerTurnIndicator {
 
         public OctagonTurnIndicator(double width) {
             super(width);
+
+            if (width <= 0) {
+                throw new IllegalArgumentException("Invalid Octagon Turn Indicator length");
+            }
+
             this.setId("Octagon-Turn-Indicator");
             this.getStyleClass().add("turn-indicator-shape");
             this.setTurnTileColour(QuaxTileColour.BLACK);
@@ -103,7 +112,7 @@ public class PlayerTurnIndicator {
         }
 
         public void setTurnColour(QuaxTileColour colour) {
-            assert colour == QuaxTileColour.BLACK || colour == QuaxTileColour.WHITE;
+            assert colour.isValidColour();
             this.setText(colour + " to play");
         }
     }

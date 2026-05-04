@@ -15,10 +15,9 @@ public class ButtonClickEvent extends Event {
 
 
     public ButtonClickEvent(EventType<ButtonClickEvent> buttonClicked) {
+        super(buttonClicked);
     	if (buttonClicked == null) {
     		throw new IllegalArgumentException("ButtonClickEvent cannot be constructed with null EventType.");
     	}
-
-        super(buttonClicked);
     }
 }

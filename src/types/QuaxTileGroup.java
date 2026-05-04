@@ -35,6 +35,7 @@ public class QuaxTileGroup implements Iterable<QuaxTile> {
 	}
 
 	public void merge(QuaxTileGroup mergee) {
+
 		this.groupMembers.addAll(mergee.groupMembers);
 
 		for (QuaxTile t : mergee.groupMembers) {

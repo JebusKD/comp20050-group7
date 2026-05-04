@@ -34,4 +34,8 @@ public enum QuaxTileColour {
 
 	public abstract QuaxTileColour flip();
 	public abstract String tilecolourStyle();
+
+    public boolean isValidColour() {
+        return this == BLACK || this == WHITE;
+    }
 }
