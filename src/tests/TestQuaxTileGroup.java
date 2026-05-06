@@ -2,10 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import types.Octagon;
@@ -21,7 +17,7 @@ class TestQuaxTileGroup {
 		QuaxTileGroup g = new QuaxTileGroup();
 		QuaxTile t = new Octagon(3, 6);
 		g.addTile(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
@@ -29,23 +25,24 @@ class TestQuaxTileGroup {
 		QuaxTileGroup g = new QuaxTileGroup();
 		QuaxTile t = new Rhombus(2, 0);
 		g.addTile(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
 	void testIsTileMember3() {
 		QuaxTile t = new Octagon(3, 6);
 		QuaxTileGroup g = new QuaxTileGroup(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
 	
 	@Test
 	void testIsTileMember4() {
 		QuaxTile t = new Rhombus(2, 0);
 		QuaxTileGroup g = new QuaxTileGroup(t);
-		assertTrue(g == t.getGroup());
+		assertTrue(g == t.getTileGroup());
 	}
-	
+
+
 	@Test
 	void testSize1() {
 		QuaxTileGroup g = new QuaxTileGroup();
@@ -76,13 +73,14 @@ class TestQuaxTileGroup {
 		assertEquals(5, g.size());
 	}
 
+
 	@Test
 	void testIsWinningGroup1() {
 		QuaxTileGroup g = new QuaxTileGroup();
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g.addTile(t);
 		}
 		
@@ -95,7 +93,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g.addTile(t);
 		}
 		
@@ -108,7 +106,7 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 8);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g.addTile(t);
 		}
 		
@@ -121,15 +119,16 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 8);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g.addTile(t);
 		}
 		
 		assertTrue(g.isWinningGroup());
 	}
-	
+
+
 	@Test
-	void testMerge1() {
+	void testMergeGroups1() {
 		QuaxTileGroup g1 = new QuaxTileGroup(new Octagon(0, 1));
 		QuaxTileGroup g2 = new QuaxTileGroup();
 		
@@ -139,7 +138,7 @@ class TestQuaxTileGroup {
 	}
 	
 	@Test
-	void testMerge2() {
+	void testMergeGroups2() {
 		QuaxTileGroup g1 = new QuaxTileGroup(new Octagon(0, 1));
 		QuaxTileGroup g2 = new QuaxTileGroup(new Octagon(5, 6));
 		
@@ -149,7 +148,7 @@ class TestQuaxTileGroup {
 	}
 	
 	@Test
-	void testMerge3() {
+	void testMergeGroups3() {
 		QuaxTileGroup g1 = new QuaxTileGroup();
 		QuaxTileGroup g2 = new QuaxTileGroup();
 		
@@ -165,7 +164,8 @@ class TestQuaxTileGroup {
 		
 		assertEquals(7, g1.size());
 	}
-	
+
+
 	@Test
 	void testMergeWinningGroup1() {
 		QuaxTileGroup g1 = new QuaxTileGroup();
@@ -173,13 +173,13 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i <= 6; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g1.addTile(t);
 		}
 		
 		for (int i = 7; i < 11; i++) {
 			QuaxTile t = new Octagon(5, i);
-			t.setColour(QuaxTileColour.BLACK);
+			t.setTileColour(QuaxTileColour.BLACK);
 			g2.addTile(t);
 		}
 		
@@ -194,13 +194,13 @@ class TestQuaxTileGroup {
 		
 		for (int i = 0; i <= 7; i++) {
 			QuaxTile t = new Octagon(i, 3);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g1.addTile(t);
 		}
 		
 		for (int i = 8; i < 11; i++) {
 			QuaxTile t = new Octagon(i, 3);
-			t.setColour(QuaxTileColour.WHITE);
+			t.setTileColour(QuaxTileColour.WHITE);
 			g2.addTile(t);
 		}
 		

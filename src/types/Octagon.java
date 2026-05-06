@@ -1,50 +1,75 @@
 package types;
 
+import static model.QuaxBoard.NUM_OCTAGONS;
+import model.QuaxBoard;
+
+
 public class Octagon extends QuaxTile {
 
-	private final int xPosition;
-	private final int yPosition;
-	
 	public Octagon(int x, int y) {
-		super();
-		this.xPosition = x;
-		this.yPosition = y;
+        super(x, y);
+
+        if (x < 0 || x >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon must be constructed with x coordinate in range [0," + (NUM_OCTAGONS-1) + "].");
+		}
+		if (y < 0 || y >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon must be constructed with y coordinate in range [0," + (NUM_OCTAGONS-1) + "].");
+		}
 	}
 	
 	public Octagon(Octagon o) {
-		super(o);
-		this.xPosition = o.xPosition;
-		this.yPosition = o.yPosition;
+        super(o);
+        if (o == null) {
+			throw new IllegalArgumentException("Octagon cannot be constructed using null Octagon as copy.");
+		}
 	}
-	
+
+
 	@Override
 	public QuaxCoordinate getCoordinates() {
-		return new QuaxCoordinate(xPosition, yPosition, true);
-	}
-	
-	@Override
-	public boolean onLow() {
-		if (isFree()) {
-            return false;
-        }
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
 		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 10;
-        }
-
-		return xPosition == 0;
+		return QuaxCoordinate.newOctagonCoordinate(getXPosition(), getYPosition());
 	}
-	
-	@Override
-	public boolean onHigh() {
-		if (isFree()) {
-            return false;
-        }
-		
-		if (getColour() == QuaxTileColour.BLACK) {
-            return yPosition == 0;
-        }
 
-        return xPosition == 10;
+	/* Return the distance from
+	 *  The bottom border if BLACK
+	 *  The left border if WHITE
+	 */
+	public int distanceToLowWall() {
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
+		
+		if (isFree()) {
+			throw new IllegalStateException("Distance to Low Wall cannot be evaluated for free Octagons.");
+		}
+		
+		if (getTileColour() == QuaxTileColour.BLACK) {
+			return getYPosition();
+		}
+		else {
+			return getXPosition();
+		}
+	}
+
+	/* Return the distance from
+	 *  The top border if BLACK
+	 *  The right border if WHITE
+	 */
+	public int distanceToHighWall() {
+		assert getXPosition() >= 0 && getXPosition() < NUM_OCTAGONS
+				&& getYPosition() >= 0 && getYPosition() < NUM_OCTAGONS;
+		
+		if (isFree()) {
+			throw new IllegalStateException("Distance to High Wall cannot be evaluated for free Octagons.");
+		}
+		
+		if (getTileColour() == QuaxTileColour.BLACK) {
+			return QuaxBoard.NUM_OCTAGONS - (getYPosition() + 1);
+		}
+		else {
+			return QuaxBoard.NUM_OCTAGONS - (getXPosition() + 1);
+		}
 	}
 }

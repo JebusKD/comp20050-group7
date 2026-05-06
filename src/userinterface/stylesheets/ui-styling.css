@@ -14,6 +14,7 @@
 
 }
 
+
 .rectangle-colour{
     -fx-fill: #FFFF
 }
@@ -32,12 +33,62 @@
     -fx-background-color:#9F99ED;
 }
 
+
 .custom-title{
     -fx-font-family : "Georgia";
-    -fx-font-size: 35px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
+
+.stratLabel{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.stratDescription{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.stratTwo{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill:blue ;
+}
+
+.stratThree{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: green;
+}
+
+.stratFour{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill:red ;
+}
+
+.stratFive{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill:cyan;
+}
+
+.stratSix{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: purple;
+}
+
+.stratSeven{
+    -fx-font-family : "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: deeppink;
+}
+
 
 .board-border{
     -fx-border-color: #000
@@ -65,4 +116,33 @@
     -fx-stroke : #0F496B;
     -fx-stroke-type:inside;
     -fx-stroke-width: 3;
+}
+
+.tileoutline-base {
+    -fx-stroke-type:inside;
+    -fx-stroke-width:3;
+}
+
+.tileoutline-base.tileoutline-2 {
+    -fx-stroke:blue;
+}
+
+.tileoutline-base.tileoutline-3 {
+    -fx-stroke:green;
+}
+
+.tileoutline-base.tileoutline-4 {
+    -fx-stroke:red;
+}
+
+.tileoutline-base.tileoutline-5 {
+    -fx-stroke: cyan;
+}
+
+.tileoutline-base.tileoutline-6 {
+    -fx-stroke:purple;
+}
+
+.tileoutline-base.tileoutline-7 {
+    -fx-stroke: hotpink;
 }

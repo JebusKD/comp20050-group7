@@ -1,156 +1,268 @@
 package controller;
 
-import java.util.Random;
 import java.util.concurrent.Executor;
-
+import java.util.Random;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+
 import model.QuaxBoard;
 import player.*;
 import types.*;
 import userinterface.*;
 
+
+/* Handle all technical aspects of the game */
 public class QuaxController {
-	
-	static final Random RNG = new Random();
 
-	private final UserInterface ui;
+    public static final Random RNG = new Random();
+    private final Executor quaxExecutor;
+    private final Executor quaxMoveSubmitter;
 
-	private QuaxBoard board;
-	
-	private final QuaxPlayer[] players;
-	
-	private final Executor executor;
-	
-	public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
-		players = new QuaxPlayer[2];
-		
-		this.ui = new EmptyUserInterface();
-		
-		this.executor = new SingleThreadExecutor();
-		
-		startGame(p1, p2);
-	}
-	
-	public QuaxController(Stage stage) {
-		this(stage, true);
-	}
-	
-	public QuaxController(Stage stage, boolean againstBot) {
-		ui = new QuaxUserInterface(stage);
-		
-		players = new QuaxPlayer[2];
-		
-		this.executor = new JavaFXThreadedExecutor();
-		
-		QuaxEventHandler.setup(this, stage);
-		
-		if (againstBot) startGameAgainstBot();
-		else startTwoPlayerGame();
-	}
+    private final UserInterface quaxUserInterface;
+    private QuaxBoard quaxBoard;
+    private final QuaxPlayer[] quaxPlayers;
 
-    // TODO Keep for testing - Remove on final submission
-	public void startTwoPlayerGame() {
-		
-		QuaxPlayer p1 = new HumanPlayer();
-		QuaxPlayer p2 = new HumanPlayer();
-		
-		startGame(p1, p2);
-	}
-	
-	private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
-		this.board = new QuaxBoard();
-		
-		players[0] = p1;
-		players[1] = p2;
-		
-		p1.setColour(QuaxTileColour.BLACK);
-		p2.setColour(QuaxTileColour.WHITE);
-		
-		p1.setController(this);
-		p2.setController(this);
-		
-		ui.setBoard(board);
-	
-		curPlayer().movePrompt(board);
-	}
-	
-	public void startGameAgainstBot() {
-		QuaxPlayer human = new HumanPlayer();
-		QuaxPlayer bot = new BogoBot();
-		
-		if (RNG.nextInt() % 2 == 0) {
-			startGame(human, bot);
+
+    // Start Game against Bot - Main application used
+    public QuaxController(Stage stage) {
+        this.quaxExecutor = new MultithreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
+
+        this.quaxUserInterface = new QuaxUserInterface(stage);
+        this.quaxPlayers = new QuaxPlayer[2];
+
+        QuaxEventHandler.setupTileClickEvents(this, stage);
+        QuaxEventHandler.setupButtonEvents(this, stage);
+
+        startGameAgainstBot();
+    }
+
+
+    // Constructor for testing to manipulate the type of game played
+    //     (Bot V Human or Human V Human) and also which player goes first
+    public QuaxController(Stage stage, boolean againstBot, boolean humanPlaysFirst) {
+        this.quaxExecutor = new MultithreadedExecutor();
+        this.quaxMoveSubmitter = new JavaFXPlatformExecutor();
+
+        this.quaxUserInterface = new QuaxUserInterface(stage);
+        this.quaxPlayers = new QuaxPlayer[2];
+
+        QuaxEventHandler.setupTileClickEvents(this, stage);
+        QuaxEventHandler.setupButtonEvents(this, stage);
+
+        if (humanPlaysFirst) {
+            startGame(new HumanPlayer(), new BotPlayer());
+        }
+        else {
+            if (againstBot) {
+                startGameAgainstBot();
+            }
+            else {
+                startTwoPlayerGame();
+            }
+        }
+    }
+
+    // Two-Player Testing Constructor
+    public QuaxController(QuaxPlayer p1, QuaxPlayer p2) {
+
+    	if (p1 == null || p2 == null) {
+    		throw new IllegalArgumentException("Players cannot be null.");
+    	}
+
+        this.quaxExecutor = new SingleThreadExecutor();
+        this.quaxMoveSubmitter = new SingleThreadExecutor();
+
+        this.quaxPlayers = new QuaxPlayer[2];
+        this.quaxUserInterface = new TestingEmptyInterface();
+
+        startGame(p1, p2);
+    }
+
+
+    private void startTwoPlayerGame() {
+        QuaxPlayer p1 = new HumanPlayer();
+        QuaxPlayer p2 = new HumanPlayer();
+
+        startGame(p1, p2);
+    }
+
+    private void startGameAgainstBot() {
+        QuaxPlayer human = new HumanPlayer();
+        QuaxPlayer bot = new BotPlayer();
+
+        if (RNG.nextInt() % 2 == 0) {
+            startGame(human, bot);
+        }
+        else {
+            startGame(bot, human);
+        }
+    }
+
+
+    private void startGame(QuaxPlayer p1, QuaxPlayer p2) {
+    	assert p1 != null && p2 != null;
+
+        this.quaxBoard = new QuaxBoard();
+        setQuaxPlayers(p1, p2);
+
+        this.quaxUserInterface.setQuaxUIBoard(quaxBoard);
+
+        currentPlayer().movePrompt(quaxBoard);
+    }
+
+    private void setQuaxPlayers(QuaxPlayer p1, QuaxPlayer p2) {
+    	assert p1 != null && p2 != null;
+
+        this.quaxPlayers[0] = p1;
+        this.quaxPlayers[1] = p2;
+
+        quaxPlayers[0].setPlayerColour(QuaxTileColour.BLACK);
+        quaxPlayers[1].setPlayerColour(QuaxTileColour.WHITE);
+
+        quaxPlayers[0].setPlayerController(this);
+        quaxPlayers[1].setPlayerController(this);
+    }
+
+
+    public QuaxPlayer currentPlayer() {
+        return this.quaxPlayers[getMoveNumber() % 2];
+    }
+
+    public int getMoveNumber() {
+        return this.quaxBoard.getMoveNumber();
+    }
+
+    public QuaxBoard getQuaxBoard() {
+        return this.quaxBoard;
+    }
+
+    public Executor getQuaxExecutor() {
+        return this.quaxExecutor;
+    }
+
+    public Executor getQuaxMoveSubmitter() {
+        return this.quaxMoveSubmitter;
+    }
+
+    // for testing purposes
+    public QuaxTileColour getFirstPlayerColour() {
+        assert quaxPlayers[0] != null;
+        return this.quaxPlayers[0].getPlayerColour();
+    }
+
+    // for testing purposes
+    public QuaxTileColour getSecondPlayerColour() {
+        assert quaxPlayers[1] != null;
+        return this.quaxPlayers[1].getPlayerColour();
+    }
+
+
+
+    public void doPieRule() {
+    	assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxUserInterface != null;
+
+        if (quaxBoard.attemptPieRule()) {
+            quaxPlayers[0].setPlayerColour(QuaxTileColour.WHITE);
+            quaxPlayers[1].setPlayerColour(QuaxTileColour.BLACK);
+
+            quaxUserInterface.setPieRuleVisibility(false);
+            currentPlayer().movePrompt(getQuaxBoard());
+        }
+    }
+
+    public void attemptMove(QuaxCoordinate coordsClicked) {
+        assert quaxPlayers[0] != null & quaxPlayers[1] != null && quaxBoard != null && quaxUserInterface != null;
+        if (coordsClicked == null) {
+            throw new IllegalArgumentException("Coordinates cannot be null.");
+        }
+
+        QuaxPlayer moveSubmitter = currentPlayer();
+        QuaxTileColour moveColour = moveSubmitter.getPlayerColour();
+
+        if (quaxBoard.validMove(coordsClicked, moveColour)) {
+            quaxBoard.makeMove(coordsClicked, moveColour);
+
+            if (moveSubmitter instanceof BotPlayer bot) {
+            	quaxUserInterface.setBotChosenMove(coordsClicked);
+            	quaxUserInterface.setLinkedBot(bot);
+            }
+
+            quaxUserInterface.updateFromPreviousMove(quaxBoard);
+
+            if (quaxBoard.checkForWinningMove()) {
+                quaxUserInterface.showWinLabel(moveColour);
+                quaxUserInterface.hideTurnTracker();
+            }
+            else {
+                currentPlayer().movePrompt(quaxBoard);
+            }
+        }
+    }
+
+
+
+    public void showStrategy() {
+    	assert quaxUserInterface != null;
+        quaxUserInterface.showStrategy();
+    }
+
+    public void hideStrategy() {
+    	assert quaxUserInterface != null && quaxBoard != null;
+        quaxUserInterface.hideStrategy(quaxBoard);
+    }
+
+
+
+    /*
+     * These three executor classes allow us to choose how
+     * players (particularly bots) interact with the threads
+     * in the JVM. Without these, there will be situations
+     * where test cases finish before bots can make their
+     * moves and JavaFX will freeze or crash.
+     */
+
+    /*
+     * The SingleThreadedExecutor will run on the main thread,
+     * blocking JavaFX and any other operations until the
+     * execution is done.
+     * 
+     * This is used in integration tests not involving the UI.
+     */
+    private static class SingleThreadExecutor implements Executor {
+        public void execute(Runnable r) {
+        	assert r != null;
+            r.run();
+        }
+    }
+
+    /*
+     * The MultithreadedExecutor will run on a separate thread
+     * than the JavaFX Application, which means the window won't
+     * freeze while a long operation is happening.
+     * 
+     * This is used for bots to compute their moves.
+     */
+    private static class MultithreadedExecutor implements Executor {
+    	public void execute(Runnable r) {
+    		assert r != null;
+    		Thread t = new Thread(r);
+    		t.setDaemon(true);
+			t.start();
 		}
-		else {
-			startGame(bot, human);
-		}
-	}
-	
-	public QuaxPlayer curPlayer() {
-		return players[getMoveNumber() % 2];
-	}
-	
-	// for testing purposes
-	public QuaxTileColour getPlayerColour(int i){
-		if (i == 0 || i == 1) return players[i].getColour();
-		else throw new IllegalArgumentException("Only players 0 and 1 exist.");
-	}
-	
-	public int getMoveNumber() {
-		return board.getMoveNumber();
-	}
-	
-	public void makeMove(QuaxCoordinate coords) {
-		QuaxTileColour c = curPlayer().getColour();
-		if (board.validMove(coords, c)) {
-			board.makeMove(coords, c);
-
-			ui.updateFromPreviousMove(board);
-			
-			if (board.checkForWinningMove()) {
-				ui.showWinLabel(c);
-				ui.hideTurnTracker();
-			}
-			else {
-				curPlayer().movePrompt(board);
-			}
-		}
-	}
-
-	public QuaxBoard getBoard() {
-		return this.board;
-	}
-
-	public boolean doPieRule() {
-		if (board.attemptPieRule()) {
-			players[0].setColour(QuaxTileColour.WHITE);
-			players[1].setColour(QuaxTileColour.BLACK);
-			ui.setPieRuleVisibility(false);
-			curPlayer().movePrompt(getBoard());
-			return true;
-		}
-		else return false;
-	}
-	
-	public Executor getExecutor() {
-		return this.executor;
-	}
-	
-	public void setPieRuleVisibility(boolean visibility) {
-		ui.setPieRuleVisibility(visibility);
-	}
-	
-	public static class SingleThreadExecutor implements Executor {
-		public void execute(Runnable r) {
-			r.run();
-		}
-	}
-	
-	public static class JavaFXThreadedExecutor implements Executor {
-		public void execute(Runnable r) {
-			Platform.runLater(r);
-		}
-	}
-
+    }
+    
+    /*
+     * The JavaFXPlatformExecutor allows us to rejoin operations
+     * made off the main JavaFX application thread by queuing them
+     * for when JavaFX is idle.
+     * 
+     * This is used for bots to submit computed moves.
+     */
+    private static class JavaFXPlatformExecutor implements Executor {
+    	public void execute(Runnable r) {
+    		assert r != null;
+    		Platform.runLater(r);
+    	}
+    }
 }

@@ -6,56 +6,61 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import controller.QuaxController;
-import player.HumanPlayer;
-import player.QuaxPlayer;
-import types.QuaxCoordinate;
+import player.*;
+import static types.QuaxCoordinate.*;
 import types.QuaxTileColour;
+
 
 class TestPieRule {
 
-	QuaxController controller;
-	QuaxPlayer p1;
-	QuaxPlayer p2;
+	QuaxController testQuaxController;
+	QuaxPlayer tester1;
+	QuaxPlayer tester2;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		p1 = new HumanPlayer();
-		p2 = new HumanPlayer();
-		controller = new QuaxController(p1, p2);
+		tester1 = new HumanPlayer();
+		tester2 = new HumanPlayer();
+		testQuaxController = new QuaxController(tester1, tester2);
 	}
-	
+
+
 	@Test
 	void testPieRuleSuccess() {
-		controller.makeMove(new QuaxCoordinate(3, 3, true));
-		controller.doPieRule();
-		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getColour());
-		assertEquals(p1, controller.curPlayer());
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 3));
+		testQuaxController.doPieRule();
+
+		assertEquals(QuaxTileColour.WHITE, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
-	
+
+
 	@Test
 	void testPieRuleFailure1() {
-		controller.doPieRule();
-		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getColour());
-		assertEquals(p1, controller.curPlayer());
+		testQuaxController.doPieRule();
+
+		assertEquals(QuaxTileColour.BLACK, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
 	
 	@Test
 	void testPieRuleFailure2() {
-		controller.makeMove(new QuaxCoordinate(3, 3, true));
-		controller.makeMove(new QuaxCoordinate(3, 4, true));
-		controller.doPieRule();
-		assertEquals(QuaxTileColour.BLACK, controller.curPlayer().getColour());
-		assertEquals(p1, controller.curPlayer());
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 3));
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 4));
+		testQuaxController.doPieRule();
+
+		assertEquals(QuaxTileColour.BLACK, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester1, testQuaxController.currentPlayer());
 	}
 	
 	@Test
 	void testPieRuleFailure3() {
-		controller.makeMove(new QuaxCoordinate(3, 3, true));
-		controller.makeMove(new QuaxCoordinate(3, 4, true));
-		controller.makeMove(new QuaxCoordinate(3, 5, true));
-		controller.doPieRule();
-		assertEquals(QuaxTileColour.WHITE, controller.curPlayer().getColour());
-		assertEquals(p2, controller.curPlayer());
-	}
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 3));
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 4));
+		testQuaxController.attemptMove(newOctagonCoordinate(3, 5));
+		testQuaxController.doPieRule();
 
+		assertEquals(QuaxTileColour.WHITE, testQuaxController.currentPlayer().getPlayerColour());
+		assertEquals(tester2, testQuaxController.currentPlayer());
+	}
 }

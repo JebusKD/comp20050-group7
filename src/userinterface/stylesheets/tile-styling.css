@@ -4,11 +4,13 @@
 }
 
 .tilecolour-black {
-    -fx-fill:#191970;
     -fx-fill:#000;
 }
 
 .tilecolour-white {
-    -fx-fill:#fff5ee;
     -fx-fill:#F5FAFB;
+}
+
+.tilecolour-green {
+    -fx-fill:#00ff00;
 }

@@ -1,37 +1,35 @@
 package types;
 
-import javafx.event.Event;
-import javafx.event.EventType;
+import java.io.Serial;
+import javafx.event.*;
+
 
 public class QuaxCoordinateEvent extends Event {
-	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
-	
+
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	private QuaxCoordinate coord;
-	
-	public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> t, QuaxCoordinate q) {
-		super(t);
-		this.coord = q;
-	}
-	
-	public int x() {
-		return coord.x();
-	}
-	
-	public int y() {
-		return coord.y();
-	}
-	
-	public boolean octagon() {
-		return coord.isOctagonMove();
-	}
-	
-	public boolean rhombus() {
-		return coord.isRhombusMove();
-	}
-	
-	public QuaxCoordinate coords() {
-		return this.coord;
-	}
+	public static final EventType<QuaxCoordinateEvent> TILE_CLICKED_EVENT = new EventType<>("tileClickedEvent");
+
+    private final QuaxCoordinate coordinate;
+
+
+    public QuaxCoordinateEvent(EventType<QuaxCoordinateEvent> clickedTile, QuaxCoordinate coord) {
+        super(clickedTile);
+
+        if (clickedTile == null) {
+    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null EventType.");
+    	}
+    	if (coord == null) {
+    		throw new IllegalArgumentException("QuaxCoordinateEvent cannot be constructed with null QuaxCoordinate.");
+    	}
+
+        this.coordinate = coord;
+    }
+
+    public QuaxCoordinate coordinate() {
+    	assert coordinate != null;
+
+        return this.coordinate;
+    }
 }

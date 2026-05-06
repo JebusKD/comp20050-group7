@@ -1,34 +1,34 @@
 package types;
 
+import static model.QuaxBoard.NUM_RHOMBUSES;
+
 public class Rhombus extends QuaxTile {
 
-	private final int xPosition;
-	private final int yPosition;
-	
 	public Rhombus(int x, int y) {
-		super();
-		this.xPosition = x;
-		this.yPosition = y;
+		super(x, y);
+		
+		if (x < 0 || x >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus must be constructed with x coordinate in range [0," + (NUM_RHOMBUSES-1) + "].");
+		}
+		if (y < 0 || y >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus must be constructed with y coordinate in range [0," + (NUM_RHOMBUSES-1) + "].");
+		}
 	}
 	
 	public Rhombus(Rhombus r) {
 		super(r);
-		this.xPosition = r.xPosition;
-		this.yPosition = r.yPosition;
-	}
-	
-	@Override
-	public QuaxCoordinate getCoordinates() {
-		return new QuaxCoordinate(xPosition, yPosition, false);
-	}
-	
-	@Override
-	public boolean onLow() {
-		return false;
+		
+		if (r == null) {
+			throw new IllegalArgumentException("Rhombus cannot be constructed using null Rhombus as copy.");
+		}
 	}
 
+
 	@Override
-	public boolean onHigh() {
-		return false;
+	public QuaxCoordinate getCoordinates() {
+		assert getXPosition() >= 0 && getXPosition() < NUM_RHOMBUSES
+				&& getYPosition() >= 0 && getYPosition() < NUM_RHOMBUSES;
+				
+		return QuaxCoordinate.newRhombusCoordinate(getXPosition(), getYPosition());
 	}
 }

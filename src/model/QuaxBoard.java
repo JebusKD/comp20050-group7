@@ -1,312 +1,454 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import types.*;
 
+
+/* Manage the game board state during the program */
 public class QuaxBoard implements Iterable<QuaxTile> {
 
-    public static final int MAX_OCTAGONS = 11;
-    public static final int MAX_RHOMBUSES = 10;
+    public static final int NUM_OCTAGONS = 11;
+    public static final int NUM_RHOMBUSES = 10;
+	private static final int MAX_ADJACENT_TILE_GROUPS = 4;
 
-	private Octagon[][] octagonGrid;
-	private Rhombus[][] rhombusGrid;
-	
+	private final Octagon[][] octagonGrid;
+	private final Rhombus[][] rhombusGrid;
+	private final LinkedList<QuaxTileGroup> trackedGroups;
 	private QuaxCoordinate previousMove;
-	
+
 	private int moveNumber;
 	private boolean pieRuleDone;
-	
-	private LinkedList<QuaxTileGroup> trackedGroups;
-	
+
+
 	public QuaxBoard() {
-		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
-		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
+		this.octagonGrid = new Octagon[NUM_OCTAGONS][NUM_OCTAGONS];
+		this.rhombusGrid = new Rhombus[NUM_RHOMBUSES][NUM_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
-		
+
+		this.previousMove = null;
 		this.moveNumber = 0;
 		this.pieRuleDone = false;
-		
-		for (int i = 0; i < MAX_OCTAGONS; i++) {
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				octagonGrid[i][j] = new Octagon(i, j);
-			}
-		}
-		
-		for (int i = 0; i < MAX_RHOMBUSES; i++) {
-			for (int j = 0; j < MAX_RHOMBUSES; j++) {
-				rhombusGrid[i][j] = new Rhombus(i, j);
-			}
-		}
-		
-		this.previousMove = null;
+
+		initialiseGrids();
 	}
-	
-	// Copy constructor
-	public QuaxBoard(QuaxBoard b) {
-		this.octagonGrid = new Octagon[MAX_OCTAGONS][MAX_OCTAGONS];
-		this.rhombusGrid = new Rhombus[MAX_RHOMBUSES][MAX_RHOMBUSES];
+
+	public QuaxBoard(QuaxBoard copyBoard) {
+		if (copyBoard == null) {
+			throw new IllegalArgumentException("Cannot create board copy from null QuaxBoard.");
+		}
+		
+		this.octagonGrid = new Octagon[NUM_OCTAGONS][NUM_OCTAGONS];
+		this.rhombusGrid = new Rhombus[NUM_RHOMBUSES][NUM_RHOMBUSES];
 		
 		this.trackedGroups = new LinkedList<>();
+
+		this.previousMove = copyBoard.previousMove;
+		this.moveNumber = copyBoard.moveNumber;
+		this.pieRuleDone = copyBoard.pieRuleDone;
+
+		initialiseGrids(copyBoard);
+		initialiseGroups(copyBoard);
+	}
+
+	private void initialiseGrids() {
+		assert octagonGrid != null && rhombusGrid != null;
 		
-		this.moveNumber = b.moveNumber;
-		this.pieRuleDone = b.pieRuleDone;
-		
-		for (int i = 0; i < MAX_OCTAGONS; i++) {
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				octagonGrid[i][j] = new Octagon(b.octagonGrid[i][j]);
+		for (int i = 0; i < NUM_OCTAGONS; i++) {
+			for (int j = 0; j < NUM_OCTAGONS; j++) {
+				this.octagonGrid[i][j] = new Octagon(i, j);
 			}
 		}
-		
-		for (int i = 0; i < MAX_RHOMBUSES; i++) {
-			for (int j = 0; j < MAX_RHOMBUSES; j++) {
-				rhombusGrid[i][j] = new Rhombus(b.rhombusGrid[i][j]);
+
+		for (int i = 0; i < NUM_RHOMBUSES; i++) {
+			for (int j = 0; j < NUM_RHOMBUSES; j++) {
+				this.rhombusGrid[i][j] = new Rhombus(i, j);
 			}
 		}
+	}
+
+	private void initialiseGrids(QuaxBoard copyBoard) {
+		assert copyBoard != null &&
+				octagonGrid != null && rhombusGrid != null;
 		
-		this.previousMove = b.previousMove;
+		for (int i = 0; i < NUM_OCTAGONS; i++) {
+			for (int j = 0; j < NUM_OCTAGONS; j++) {
+				this.octagonGrid[i][j] = new Octagon(copyBoard.getOctagon(i, j));
+			}
+		}
+
+		for (int i = 0; i < NUM_RHOMBUSES; i++) {
+			for (int j = 0; j < NUM_RHOMBUSES; j++) {
+				this.rhombusGrid[i][j] = new Rhombus(copyBoard.getRhombus(i, j));
+			}
+		}
+	}
+
+	private void initialiseGroups(QuaxBoard copyBoard) {
+		assert copyBoard != null;
 		
-		for (QuaxTileGroup g : b.trackedGroups) {
+		for (QuaxTileGroup g : copyBoard.trackedGroups) {
 			QuaxTileGroup newGroup = new QuaxTileGroup();
-			this.trackGroup(newGroup);
+			GroupManager gm = new GroupManager();
+			gm.trackGroup(newGroup);
+
 			for (QuaxTile t : g) {
 				newGroup.addTile(getTile(t.getCoordinates()));
 			}
 		}
 	}
-	
+
+
 	public Octagon getOctagon(int x, int y) {
-		return octagonGrid[x][y];
+		assert octagonGrid != null;
+		if (x < 0 || x >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("getOctagon must be called for x coordinate in range [0," + NUM_OCTAGONS + "]. Was " + x + ".");
+		}
+		if (y < 0 || y >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("getOctagon must be called for y coordinate in range [0," + NUM_OCTAGONS + "]. Was " + y + ".");
+		}
+		
+		return this.octagonGrid[x][y];
 	}
 	
 	public Rhombus getRhombus(int x, int y) {
-		return rhombusGrid[x][y];
-	}
-	
-	public QuaxTile getTile(QuaxCoordinate c) {
-		if (c.isOctagonMove()) return octagonGrid[c.x()][c.y()];
-		else return rhombusGrid[c.x()][c.y()];
-	}
-	
-	public boolean validMove(QuaxCoordinate q, QuaxTileColour t) {
-		if (checkForWinningMove()) {
-            return false;
-        }
-
-		if (q.isOctagonMove()) {
-			Octagon tile = getOctagon(q.x(), q.y());
-			if (tile.getColour() != QuaxTileColour.NONE){
-                return false;
-            }
+		assert rhombusGrid != null;
+		if (x < 0 || x >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("getRhombus must be called for x coordinate in range [0," + NUM_RHOMBUSES + "]. Was " + x + ".");
 		}
-        else {
-			if(!isValidRhombusPlacement(q, t)) {
-                return false;
-            }
-			Rhombus tile = getRhombus(q.x(), q.y());
-			if (tile.getColour() != QuaxTileColour.NONE){
-                return false;
-            }
+		if (y < 0 || y >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("getRhombus must be called for y coordinate in range [0," + NUM_RHOMBUSES + "]. Was " + y + ".");
 		}
-		return true;
-	}
-	
-	public boolean isValidRhombusPlacement(QuaxCoordinate q, QuaxTileColour c){
-        QuaxTile[][] n = neighbours(q);
-
-        if (n[0][0].getColour() == c && n[1][1].getColour() == c) {
-            return true;
-        }
-        if (n[1][0].getColour() == c &&  n[0][1].getColour() == c) {
-            return true;
-        }
-        return false;
-    }
-
-    // TODO - Too long
-	public QuaxTile[][] neighbours(QuaxCoordinate q) {
 		
-		QuaxTile[][] neighbours;
-		if (q.isOctagonMove()) {
-			neighbours = new QuaxTile[3][3];
-			int minusX = q.x() - 1,
-				plusX = q.x() + 1,
-				minusY = q.y() - 1,
-				plusY = q.y() + 1;
-
-			if (minusX >= 0) {
-				if (minusY >= 0) {
-                    neighbours[0][0] = rhombusGrid[minusX][minusY];
-                }
-				neighbours[0][1] = octagonGrid[minusX][q.y()];
-				if (plusY <= MAX_RHOMBUSES) {
-                    neighbours[0][2] = rhombusGrid[minusX][q.y()];
-                }
-			}
-
-			if (plusX <= MAX_RHOMBUSES) {
-				if (minusY >= 0) {
-                    neighbours[2][0] = rhombusGrid[q.x()][minusY];
-                }
-				neighbours[2][1] = octagonGrid[plusX][q.y()];
-				if (plusY <= MAX_RHOMBUSES) {
-                    neighbours[2][2] = rhombusGrid[q.x()][q.y()];
-                }
-			}
-			if (minusY >= 0) {
-                neighbours[1][0] = octagonGrid[q.x()][minusY];
-            }
-			if (plusY <= MAX_RHOMBUSES) {
-                neighbours[1][2] = octagonGrid[q.x()][plusY];
-            }
+		return this.rhombusGrid[x][y];
+	}
+	
+	public QuaxTile getTile(QuaxCoordinate coord) {
+		if (coord == null) {
+			throw new IllegalArgumentException("getTile cannot be called for null coordiante.");
+		}
+		
+		if (coord.isOctagon()) {
+			return getOctagon(coord.x(), coord.y());
 		}
 		else {
-			neighbours = new Octagon[2][2];
-			int plusX = q.x() + 1,
-				plusY = q.y() + 1;
-			neighbours[0][0] = octagonGrid[q.x()][q.y()];
-			neighbours[0][1] = octagonGrid[q.x()][plusY];
-			neighbours[1][0] = octagonGrid[plusX][q.y()];
-			neighbours[1][1] = octagonGrid[plusX][plusY];
+			return getRhombus(coord.x(), coord.y());
 		}
-		return neighbours;
+	}
+	
+	public QuaxTileColour getTileColour(QuaxCoordinate coord) {
+		if (coord == null) {
+			throw new IllegalArgumentException("getTileColour cannot be called for null coordiante.");
+		}
+		
+		return getTile(coord).getTileColour();
 	}
 
 	public int getMoveNumber() {
 		return this.moveNumber;
 	}
 
-    // TODO - Change neighbours variable name, also too long
-	private void assignGroup(QuaxTile newTile) {
-		QuaxTile[][] neighbours = neighbours(newTile.getCoordinates());
-		
-		QuaxTileColour c = newTile.getColour();
-		if (c == QuaxTileColour.NONE) {
-            throw new IllegalArgumentException("Tile with no colour cannot be a member of a group.");
-        }
-		
-		ArrayList<QuaxTileGroup> nearGroups = new ArrayList<>(4);
-		
-		for (QuaxTile[] tileArray : neighbours) {
-			for (QuaxTile tile : tileArray) {
-				if (tile != null && tile.getColour().equals(c) && !(nearGroups.contains(tile.getGroup())))
-					nearGroups.add(tile.getGroup());
-			}
+	public QuaxCoordinate previousMove() {
+		return previousMove;
+	}
+
+	public boolean isStartingMove() {
+		return previousMove == null;
+	}
+
+
+
+	/* Following are all move validation checks */
+	public boolean checkForWinningMove() {
+		if (isStartingMove()) {
+			return false;
+		}
+
+		return previousGroup().isWinningGroup();
+	}
+
+	private QuaxTileGroup previousGroup() {
+		assert previousMove != null;
+		return getTile(previousMove).getTileGroup();
+	}
+
+
+	public boolean validMove(QuaxCoordinate coord, QuaxTileColour colour) {
+		if (coord == null) {
+			throw new IllegalArgumentException("Cannot check validity of move for null coordinate.");
+		}
+		if (colour == null || colour == QuaxTileColour.NONE) {
+			throw new IllegalArgumentException("Cannot check validity of move for " + colour + " colour.");
 		}
 		
-		if (nearGroups.isEmpty()){
-            trackGroup(new QuaxTileGroup(newTile));
-        }
+		if (!checkForWinningMove() && (coord.isOctagon() || isValidRhombusPlacement(coord, colour))) {
+			return getTile(coord).isFree();
+		}
+
+		return false;
+	}
+
+	public boolean validMove(QuaxTile tile) {
+		if (tile == null) {
+			throw new IllegalArgumentException("Cannot check validity of move for null tile.");
+		}
+		if (tile.tileDoesNotExist()) {
+			throw new IllegalArgumentException("Cannot check validity of move for non-existing tile.");
+		}
+		
+		return validMove(tile.getCoordinates(), currentColourTurn());
+	}
+
+
+	private QuaxTileColour currentColourTurn() {
+		QuaxTileColour result;
+
+		if (isStartingMove()) {
+			result = QuaxTileColour.BLACK;
+		}
 		else {
+			assert previousMove() != null;
+			result = getTileColour(previousMove()).flip();
+		}
+
+		return result;
+	}
+
+	private boolean isValidRhombusPlacement(QuaxCoordinate coord, QuaxTileColour colour) {
+		assert coord.isRhombus();
+        QuaxTile[][] n = getNeighbours(coord);
+
+        return (n[0][0].isSameColour(colour) && n[1][1].isSameColour(colour))
+				|| (n[1][0].isSameColour(colour) && n[0][1].isSameColour(colour));
+    }
+	
+	public boolean isValidRhombusPlacementForBothPlayers(QuaxCoordinate coord) {
+		if (coord == null) {
+			throw new IllegalArgumentException("Cannot check validity of rhombus placement for null coordinates.");
+		}
+		if (coord.isOctagon()) {
+			throw new IllegalArgumentException("Cannot check validity of rhombus placement for Octagon coordinates.");
+		}
+		
+		return isValidRhombusPlacement(coord, QuaxTileColour.BLACK)
+				&& isValidRhombusPlacement(coord, QuaxTileColour.WHITE);
+	}
+
+
+	/* Following are all board state changing methods */
+	public boolean attemptPieRule() {
+		if (isPieRuleValid()) {
+			this.pieRuleDone = true;
+			this.moveNumber++;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isPieRuleValid() {
+		return this.moveNumber == 1 && !this.pieRuleDone;
+	}
+
+
+	public void makeMove(QuaxCoordinate coordinate, QuaxTileColour colour) {
+		if (coordinate == null) {
+			throw new IllegalArgumentException("Cannot make move onto null coordinate.");
+		}
+		if (colour != QuaxTileColour.BLACK && colour != QuaxTileColour.WHITE) {
+			throw new IllegalArgumentException("Cannot make move to " + colour + " colour.");
+		}
+		
+		QuaxTile tile;
+		GroupManager moveManager = new GroupManager();
+
+		if (coordinate.isOctagon()) {
+			tile = this.octagonGrid[coordinate.x()][coordinate.y()];
+		}
+		else {
+			tile = this.rhombusGrid[coordinate.x()][coordinate.y()];
+		}
+
+		tile.setTileColour(colour);
+		moveManager.assignGroup(tile);
+		this.previousMove = coordinate;
+		this.moveNumber++;
+	}
+
+	public void makeMove(QuaxTile t) {
+		if (t == null) {
+			throw new IllegalArgumentException("Cannot make move with null tile.");
+		}
+		if (t.tileDoesNotExist()) {
+			throw new IllegalArgumentException("Cannot make move with non-existing tile.");
+		}
+		
+		makeMove(t.getCoordinates(), currentColourTurn());
+	}
+	
+	public void skipTurn() {
+		this.moveNumber++;
+	}
+
+
+	private class GroupManager {
+
+		private void trackGroup(QuaxTileGroup g) {
+			assert g != null;
+			assert g.groupExists();
+			
+			trackedGroups.addFirst(g);
+		}
+
+		private void untrackGroup(QuaxTileGroup g) {
+			assert g != null && g.groupExists();
+			
+			trackedGroups.remove(g);
+		}
+
+
+		private void assignGroup(QuaxTile newTile) {
+			assert newTile != null && newTile.tileExists();
+			
+			QuaxTileColour c = newTile.getTileColour();
+			assert c != QuaxTileColour.NONE;
+			
+			QuaxTile[][] neighbours = getNeighbours(newTile.getCoordinates());
+
+			ArrayList<QuaxTileGroup> nearGroups = getAdjacentGroups(neighbours, c);
+			expandLargestGroup(newTile, nearGroups);
+		}
+
+
+		private ArrayList<QuaxTileGroup> getAdjacentGroups(QuaxTile[][] neighbours, QuaxTileColour colour) {
+			assert neighbours != null && colour.isPlayerColour();
+			
+			ArrayList<QuaxTileGroup> nearbyGroups = new ArrayList<>(MAX_ADJACENT_TILE_GROUPS);
+
+			for (QuaxTile[] tileArray : neighbours) {
+				for (QuaxTile tile : tileArray) {
+					if (tile.tileExists() && tile.isSameColour(colour)
+							&& tileNotMemberOfGroup(nearbyGroups, tile)) {
+
+						nearbyGroups.add(tile.getTileGroup());
+					}
+				}
+			}
+
+			return nearbyGroups;
+		}
+
+		private boolean tileNotMemberOfGroup(ArrayList<QuaxTileGroup> groups, QuaxTile t) {
+			assert groups != null && t != null && t.tileExists();
+
+			return !(groups.contains(t.getTileGroup()));
+		}
+
+
+		private void expandLargestGroup(QuaxTile tile, ArrayList<QuaxTileGroup> adjacentGroups) {
+			assert tile != null && tile.tileExists() && adjacentGroups != null;
+			
+			if (adjacentGroups.isEmpty()) {
+				trackGroup(new QuaxTileGroup(tile));
+			}
+			else {
+				QuaxTileGroup largestGroup = getBiggestGroup(adjacentGroups);
+				largestGroup.addTile(tile);
+				mergeNearbyGroups(largestGroup, adjacentGroups);
+			}
+		}
+
+		private QuaxTileGroup getBiggestGroup(ArrayList<QuaxTileGroup> adjGroups) {
+			assert adjGroups != null;
+			
 			int maxSize = -1;
-			QuaxTileGroup biggestGroup = null;
-			for (QuaxTileGroup g : nearGroups) {
+			QuaxTileGroup biggestGroup = QuaxTileGroup.UNASSIGNED_GROUP;
+
+			for (QuaxTileGroup g : adjGroups) {
 				if (g.size() > maxSize) {
 					biggestGroup = g;
 					maxSize = g.size();
 				}
 			}
 
-			biggestGroup.addTile(newTile);
-			for (QuaxTileGroup g : nearGroups) {
-				if (g != biggestGroup) {
-					biggestGroup.merge(g);
+			return biggestGroup;
+		}
+
+		private void mergeNearbyGroups(QuaxTileGroup largest, ArrayList<QuaxTileGroup> adjacentGroups) {
+			assert largest != null && largest.groupExists()
+					&& adjacentGroups != null;
+			
+			for (QuaxTileGroup g : adjacentGroups) {
+				if (g != largest && g.groupExists()) {
+					largest.merge(g);
 					untrackGroup(g);
 				}
 			}
 		}
+
 	}
-	
-	private void trackGroup(QuaxTileGroup g) {
-		this.trackedGroups.addFirst(g);
-	}
-	
-	private void untrackGroup(QuaxTileGroup g) {
-		this.trackedGroups.remove(g);
-	}
-	
-	public void makeMove(QuaxCoordinate q, QuaxTileColour c) {
-		QuaxTile tile;
-		if (q.isOctagonMove()) {
-			tile = octagonGrid[q.x()][q.y()];
+
+
+
+	/* Use NeighbourFinder class for strategy and group handling */
+	public QuaxTile[][] getNeighbours(QuaxCoordinate centreCoord) {
+		if (centreCoord == null) {
+			throw new IllegalArgumentException("Centre Coordinate cannot be null.");
 		}
-		else {
-            tile = rhombusGrid[q.x()][q.y()];
+		
+		NeighbourFinder nf = new NeighbourFinder(this, centreCoord);
+		return nf.getCoordinateNeighbours();
+	}
+
+	public List<QuaxTile> getNeighboursList(QuaxTile centreTile) {
+		if (centreTile == null) {
+			throw new IllegalArgumentException("getNeighboursList cannot be run for null centre tile.");
 		}
-        tile.setColour(c);
-		assignGroup(tile);
-		this.previousMove = q;
-		this.moveNumber++;
+		if (centreTile.tileDoesNotExist()) {
+			throw new IllegalArgumentException("getNeighboursList cannot be run for non-existing centre tile.");
+		}
+		
+		LinkedList<QuaxTile> result = new LinkedList<>();
+
+		for (QuaxTile[] arr : getNeighbours(centreTile.getCoordinates())) {
+			for (QuaxTile n : arr) {
+				if (n.tileExists()) {
+					result.add(n);
+				}
+			}
+		}
+
+		return result;
 	}
 	
-	public boolean attemptPieRule() {
-		if (isPieRuleValid()) {
-			pieRuleDone = true;
-			moveNumber++;
-			return true;
-		} else return false;
+	public QuaxTile[][] getSquareOfOctagonNeighbours(Octagon o) {
+		if (o == null) {
+			throw new IllegalArgumentException("getSquareOfOctagonNeighbours cannot be run for null Octagon.");
+		}
+		
+		NeighbourFinder nf = new NeighbourFinder(this, o.getCoordinates());
+		return nf.getSquareOfAdjacentOctagonNeighbours();
 	}
-	
-	public boolean isPieRuleValid() {
-		return moveNumber == 1 && !pieRuleDone;
-	}
-	
-	public List<QuaxTileGroup> getGroups() {
-		return this.trackedGroups;
-	}
-	
-	public boolean checkForWinningMove() {
-		if (this.previousMove == null) {
-            return false;
-        }
-		return getTile(this.previousMove).getGroup().isWinningGroup();
-	}
-	
-	public QuaxCoordinate previousMove() {
-		return previousMove;
-	}
-	
+
+
+	/* Create Iterables of different types for the board,
+	 * Enables easier for loops, primarily in the bot strategy
+	 */
 	public Iterator<QuaxTile> iterator() {
-		return new QuaxBoardIterator(this);
+		BoardIterators bi = new BoardIterators(this);
+		return bi.iterator();
 	}
-	
-	public static class QuaxBoardIterator implements Iterator<QuaxTile> {
-		private static final int MAX_ELEMENTS = 221;
-		
-		private int cursor;
-		private ArrayList<QuaxTile> elements;
-		
-		public QuaxBoardIterator(QuaxBoard source) {
-			this.cursor = 0;
-			this.elements = new ArrayList<>(MAX_ELEMENTS);
-			
-			for (int i = 0; i < MAX_OCTAGONS - 1 ; i++) {
-				for (int j = 0; j < MAX_OCTAGONS; j++) {
-					this.elements.add(source.getOctagon(i, j));
-				}
-				for (int j = 0; j < MAX_RHOMBUSES; j++) {
-					this.elements.add(source.getRhombus(i, j));
-				}
-			}
-			for (int j = 0; j < MAX_OCTAGONS; j++) {
-				this.elements.add(source.getOctagon(10, j));
-			}
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return cursor < MAX_ELEMENTS;
-		}
-		
-		@Override
-		public QuaxTile next() {
-			if (!hasNext()) throw new NoSuchElementException("No more elements in iteration.");
-			return elements.get(cursor++);
-		}
+
+	public static Iterator<QuaxCoordinate> coordinateIterator() {
+		return BoardIterators.coordinateIterator();
+	}
+
+	public Iterator<Octagon> octagonIterator() {
+		BoardIterators bi = new BoardIterators(this);
+		return bi.octagonIterator();
+	}
+
+	public static Iterator<QuaxCoordinate> rhombusCoordinateIterator() {
+		return BoardIterators.rhombusCoordinateIterator();
 	}
 }

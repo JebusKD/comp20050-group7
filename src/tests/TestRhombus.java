@@ -1,240 +1,172 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import types.Rhombus;
-import types.Octagon;
-import types.QuaxCoordinate;
-import types.QuaxTile;
-import types.QuaxTileColour;
+import types.*;
+import static types.StrategyValue.*;
+
 
 class TestRhombus {
 
 	@Test
-	void testOctagonCoordinates1() {
+	void testRhombusCoordinates1() {
 		QuaxTile t = new Rhombus(5, 2);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(5, q.x());
 	}
 	
 	@Test
-	void testOctagonCoordinates2() {
+	void testRhombusCoordinates2() {
 		QuaxTile t = new Rhombus(1, 0);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(1, q.x());
 	}
 	
 	@Test
-	void testOctagonCoordinates3() {
+	void testRhombusCoordinates3() {
 		QuaxTile t = new Rhombus(8, 7);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(8, q.x());
 	}
 	
 	@Test
-	void testOctagonCoordinates4() {
+	void testRhombusCoordinates4() {
 		QuaxTile t = new Rhombus(0, 7);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(0, q.x());
 	}
 	
 	@Test
-	void testOctagonCoordinates5() {
+	void testRhombusCoordinates5() {
 		QuaxTile t = new Rhombus(5, 2);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(2, q.y());
 	}
 	
 	@Test
-	void testOctagonCoordinates6() {
+	void testRhombusCoordinates6() {
 		QuaxTile t = new Rhombus(1, 0);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(0, q.y());
 	}
 	
 	@Test
-	void testOctagonCoordinates7() {
+	void testRhombusCoordinates7() {
 		QuaxTile t = new Rhombus(8, 7);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(7, q.y());
 	}
 	
 	@Test
-	void testOctagonCoordinates8() {
+	void testRhombusCoordinates8() {
 		QuaxTile t = new Rhombus(0, 7);
 		QuaxCoordinate q = t.getCoordinates();
 		assertEquals(7, q.y());
 	}
 
+
 	@Test
-	void testOnLow1() {
-		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow2() {
-		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow3() {
-		QuaxTile t = new Rhombus(3, 10);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow4() {
-		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow5() {
-		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow6() {
-		QuaxTile t = new Rhombus(0, 4);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow7() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow8() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnLow9() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onLow());
-	}
-	
-	@Test
-	void testOnHigh1() {
-		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh2() {
-		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh3() {
-		QuaxTile t = new Rhombus(3, 0);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh4() {
-		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh5() {
-		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh6() {
-		QuaxTile t = new Rhombus(9, 4);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh7() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.BLACK);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh8() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.WHITE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testOnHigh9() {
-		QuaxTile t = new Rhombus(4, 6);
-		t.setColour(QuaxTileColour.NONE);
-		assertFalse(t.onHigh());
-	}
-	
-	@Test
-	void testIsFree1() {
+	void testRhombusIsFree1() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.BLACK);
+		t.setTileColour(QuaxTileColour.BLACK);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
-	void testIsFree2() {
+	void testRhombusIsFree2() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.WHITE);
+		t.setTileColour(QuaxTileColour.WHITE);
 		assertFalse(t.isFree());
 	}
 	
 	@Test
-	void testIsFree3() {
+	void testRhombusIsFree3() {
 		QuaxTile t = new Rhombus(5, 5);
-		t.setColour(QuaxTileColour.NONE);
+		t.setTileColour(QuaxTileColour.NONE);
 		assertTrue(t.isFree());
 	}
 	
 	@Test
-	void testIsFree4() {
+	void testRhombusIsFree4() {
 		QuaxTile t = new Rhombus(5, 5);
 		assertTrue(t.isFree());
 	}
-	
+
+
 	@Test
-	void testUnassignedGroup() {
+	void testRhombusIsBlack1() {
 		QuaxTile t = new Rhombus(5, 5);
-		assertNull(t.getGroup());
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertTrue(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack2() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack3() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsBlack4() {
+		QuaxTile t = new Rhombus(5, 5);
+		assertFalse(t.isBlack());
+	}
+
+	@Test
+	void testRhombusIsWhite1() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.BLACK);
+		assertFalse(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite2() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.WHITE);
+		assertTrue(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite3() {
+		QuaxTile t = new Rhombus(5, 5);
+		t.setTileColour(QuaxTileColour.NONE);
+		assertFalse(t.isWhite());
+	}
+
+	@Test
+	void testRhombusIsWhite4() {
+		QuaxTile t = new Rhombus(5, 5);
+		assertFalse(t.isWhite());
+	}
+
+
+
+	@Test
+	void testRhombusUnassignedGroup() {
+		QuaxTile t = new Rhombus(5, 5);
+
+		IllegalStateException exception = assertThrows(IllegalStateException.class,
+				() -> { t.getTileGroup(); } );
+
+		String expectedMessage = "TileGroup not initialised for tile.";
+		String actualMessage = exception.getMessage();
+
+		assertEquals(0, actualMessage.compareTo(expectedMessage));
 	}
 	
 	@Test
-	void testStrategyValue() {
+	void testRhombusStrategyValue() {
 		QuaxTile t = new Rhombus(3, 2);
-		t.setStrategyValue(6);
-		assertEquals(6, t.getStrategyValue());
+		t.setStrategyValue(OPPONENT_WINNING);
+		assertEquals(fromInt(6), t.getStrategyValue());
 	}
 }

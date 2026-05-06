@@ -1,18 +1,45 @@
 package types;
 
+import static model.QuaxBoard.*;
+
+
 public class QuaxCoordinate {
+
 	private final int x;
 	private final int y;
-	private final boolean octagonMove;
-	
-	// TODO Flag argument, see clean code "Error Handling"
-	// Change this constructor to private and construct via static methods
-	public QuaxCoordinate(int x, int y, boolean octagonMove) {
+	private final boolean isOctagon;
+
+	private QuaxCoordinate(int x, int y, boolean isOctagon) {
+		assert x < NUM_OCTAGONS && x > -1;
+		assert y < NUM_OCTAGONS && y > -1;
 		this.x = x;
 		this.y = y;
-		this.octagonMove = octagonMove;
+		this.isOctagon = isOctagon;
+	}
+
+	public static QuaxCoordinate newOctagonCoordinate(int x, int y) {
+		if (x < 0 || x >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon coordinate must be constructed for x value in range [0," + (NUM_OCTAGONS-1) +"]. Was " + x + ".");
+		}
+		if (y < 0 || y >= NUM_OCTAGONS) {
+			throw new IllegalArgumentException("Octagon coordinate must be constructed for y value in range [0," + (NUM_OCTAGONS-1) +"]. Was " + y + ".");
+		}
+		
+		return new QuaxCoordinate(x, y, true);
 	}
 	
+	public static QuaxCoordinate newRhombusCoordinate(int x, int y) {
+		if (x < 0 || x >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus coordinate must be constructed for x value in range [0," + (NUM_RHOMBUSES-1) +"]. Was " + x + ".");
+		}
+		if (y < 0 || y >= NUM_RHOMBUSES) {
+			throw new IllegalArgumentException("Rhombus coordinate must be constructed for y value in range [0," + (NUM_RHOMBUSES-1) +"]. Was " + y + ".");
+		}
+		
+		return new QuaxCoordinate(x, y, false);
+	}
+
+
 	public int x() {
 		return this.x;
 	}
@@ -21,11 +48,11 @@ public class QuaxCoordinate {
 		return this.y;
 	}
 	
-	public boolean isOctagonMove() {
-		return octagonMove;
+	public boolean isOctagon() {
+		return isOctagon;
 	}
 	
-	public boolean isRhombusMove() {
-		return !octagonMove;
+	public boolean isRhombus() {
+		return !isOctagon();
 	}
 }

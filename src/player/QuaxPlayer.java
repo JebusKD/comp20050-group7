@@ -6,50 +6,71 @@ import controller.QuaxController;
 import model.QuaxBoard;
 import types.*;
 
+
 public abstract class QuaxPlayer {
 
-	private QuaxTileColour colour;
-	private QuaxController controller;
-	
-	public QuaxPlayer() {
-		this.colour = null;
-		this.controller = null;
-	}
-	
-	public void setController(QuaxController controller) {
-		this.controller = controller;
-	}
-	
-	protected Executor getExecutor() {
-		if (controller == null) {
-			throw new IllegalStateException("Player not initialised to a controller.");
-		}
-		else {
-			return controller.getExecutor();
-		}
-	}
-	
-	public QuaxTileColour getColour() {
-		if (this.colour == null) {
-			throw new IllegalStateException("Player not initialised to a controller.");
-		}
-		else {
-			return this.colour;
-		}
-	}
-	
-	public void setColour(QuaxTileColour colour) {
-		if (colour == QuaxTileColour.NONE || colour == null) {
-            throw new IllegalArgumentException("Invalid colour assigned to player " + colour);
+    private QuaxTileColour playerColour;
+    private QuaxController playerController;
+
+    public QuaxPlayer() {
+        this.playerColour = null;
+        this.playerController = null;
+    }
+
+
+    public void setPlayerController(QuaxController controller) {
+        if (controller == null) {
+        	throw new IllegalArgumentException("Controller cannot be null.");
         }
-		else {
-            this.colour = colour;
+        
+        this.playerController = controller;
+    }
+
+    protected final Executor getExecutor() {
+        if (playerController == null) {
+        	throw new IllegalStateException("Player has yet to be assigned corresponding controller.");
         }
-	}
-	
-	public abstract void movePrompt(QuaxBoard b);
-	
-	protected void submitMove(QuaxCoordinate move) {
-		controller.makeMove(move);
+        
+        return this.playerController.getQuaxExecutor();
+    }
+    
+    private Executor getSubmitter() {
+    	if (playerController == null) {
+        	throw new IllegalStateException("Player has yet to be assigned corresponding controller.");
+        }
+    	
+        return this.playerController.getQuaxMoveSubmitter();
+    }
+
+
+    public QuaxTileColour getPlayerColour() {
+        assert this.playerColour.isPlayerColour();
+        return this.playerColour;
+    }
+
+    public void setPlayerColour(QuaxTileColour colour) {
+        if (!colour.isPlayerColour()) {
+        	throw new IllegalArgumentException("Player cannot be assigned to no colour.");
+        }
+        
+        this.playerColour = colour;
+    }
+
+    public abstract void movePrompt(QuaxBoard board);
+
+    protected final void submitMove(QuaxCoordinate move) {
+    	if (move == null) {
+    		throw new IllegalArgumentException("Move coordinate cannot be null.");
+    	}
+    	if (playerController.currentPlayer() != this) {
+    		throw new IllegalStateException("Move cannot be submitted when not player's turn.");
+    	}
+    	
+    	getSubmitter().execute(new Runnable() {
+			@Override
+			public void run() {
+				playerController.attemptMove(move);
+			}
+		});
 	}
 }
