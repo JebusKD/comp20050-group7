@@ -23,7 +23,8 @@ https://gluonhq.com/products/javafx/
 
 In the extracted SDK folder, navigate to the `lib` folder and note the folder directory, replacing `<JAVAFX-libdir>` with the directory in the following commands.
 
-Download the `QuaxGame.jar` file from releases, or compile the source code yourself into a JAR.
+Download the `QuaxGame.jar` file from releases, or compile the source code yourself into a JAR.<br>
+https://github.com/JebusKD/comp20050-group7/releases/tag/v1.0.0
 
 **Windows:**<br>
 Open Command Prompt, navigate to the directory where `QuaxGame.jar` is located and run the following command, replacing `<JAVAFX-libdir>` with the directory of the JavaFX library.<br>
